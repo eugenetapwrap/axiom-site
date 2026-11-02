@@ -29,6 +29,8 @@ export function t(input: string): string {
   s = s.replace(/(\d[\d,.%+]*) (?=[^\s\d])/g, `$1${NBSP}`);
   // «млрд IDR», «млн IDR» не разрываем.
   s = s.replace(/(млрд|млн|тыс\.) (IDR|USD|THB|AED)/g, `$1${NBSP}$2`);
+  // Диапазон чисел не разрываем: 3–5 дней.
+  s = s.replace(/(\d)–(\d)/g, '$1–\u2060$2');
   // № и число.
   s = s.replace(/№ (\d)/g, `№${NBSP}$1`);
   return s;
