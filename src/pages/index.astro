@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import HeroBand from '../components/HeroBand.astro';
 import PracticeWidget from '../components/PracticeWidget.astro';
 import SankeyFlow from '../components/SankeyFlow.astro';
 import PaymentBoard from '../components/PaymentBoard.astro';
@@ -22,7 +21,16 @@ const faqLd = {
   })),
 };
 
-const [titleFirst, ...titleRest] = hero.title.split(' ');
+const titleWords = hero.title.split(' ');
+const titleAccent = titleWords.slice(0, hero.accent).join(' ');
+const titleRest = titleWords.slice(hero.accent).join(' ');
+
+const serviceIcons: Record<string, string> = {
+  models: 'M2 13.5h12M3.5 11l3-3.5 2.5 2 4-5',
+  audit: 'M11.2 11.2 14 14M7 11.5a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z',
+  accounting: 'M2 4.5h12v8H2zM2 7.5h12M5 10.5h3',
+  advisory: 'M3 13V8M6.3 13V5M9.7 13V9.5M13 13V3',
+};
 const widgetFor = {
   models: 'models',
   audit: 'audit',
@@ -32,32 +40,50 @@ const widgetFor = {
 ---
 
 <Base title="Axiom — финансовый консалтинг для девелопмента и строительства" jsonLd={[faqLd]}>
-  <!-- Первый экран -->
-  <section class="hero gridded">
-    <div class="container hero-head">
-      <p class="eyebrow">{hero.eyebrow} · Юго-Восточная Азия и СНГ</p>
-      <h1><span class="h1-accent">{titleFirst}</span> {t(titleRest.join(' '))}</h1>
-      <p class="hero-lead">{t(hero.lead)}</p>
-    </div>
-    <HeroBand />
+  <!-- Первый экран: кто мы, для кого и четыре услуги -->
+  <section class="hero">
     <div class="container">
+      <p class="eyebrow">{hero.eyebrow}</p>
+      <h1><span class="h1-accent">{titleAccent}</span> {t(titleRest)}</h1>
+      <p class="hero-lead">{t(hero.lead)}</p>
+      <div class="btn-row hero-btns">
+        <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
+        <a class="btn btn-secondary" href="#practices">Все направления</a>
+      </div>
+
+      <ul class="services">
+        {practices.map((p) => (
+          <li>
+            <a class="service ui-card" href={`#${p.id}`}>
+              <span class="service-top">
+                <span class="service-num">{p.num}</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d={serviceIcons[p.id]} fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </span>
+              <span class="service-title">{t(p.title)}</span>
+              <span class="service-lead">{t(p.lead)}</span>
+              <span class="service-more">Подробнее</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
       <dl class="facts">
-        {hero.facts.map((f) => (
-          <div>
-            <dt>{f.value}</dt>
-            <dd>{t(f.text)}</dd>
-          </div>
+          {hero.facts.map((f) => (
+            <div>
+              <dt>{f.value}</dt>
+              <dd>{t(f.text)}</dd>
+            </div>
         ))}
       </dl>
     </div>
   </section>
 
   <!-- Направления: текст слева, живой интерфейс справа -->
-  <section class="section section--alt gridded" id="practices">
+  <section class="section section--alt" id="practices">
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Направления</p>
-        <h2>Четыре практики для девелоперов, генподрядчиков и инвесторов</h2>
+        <h2>Что входит в каждое направление</h2>
       </div>
       {practices.map((p) => (
         <article class="practice" id={p.id}>
@@ -82,7 +108,7 @@ const widgetFor = {
   </section>
 
   <!-- Ключевые цифры -->
-  <section class="section section--dark gridded" aria-labelledby="stats-title">
+  <section class="section section--dark" aria-labelledby="stats-title">
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Результаты</p>
@@ -100,7 +126,7 @@ const widgetFor = {
   </section>
 
   <!-- Движение денег -->
-  <section class="section section--white gridded" id="accounting-system">
+  <section class="section section--white" id="accounting-system">
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Система учёта</p>
@@ -112,7 +138,7 @@ const widgetFor = {
   </section>
 
   <!-- Контроль платежей -->
-  <section class="section section--alt gridded" id="payments">
+  <section class="section section--alt" id="payments">
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Система учёта</p>
@@ -126,14 +152,14 @@ const widgetFor = {
   </section>
 
   <!-- Внедрение за 40 дней -->
-  <section class="section gridded" id="rollout">
+  <section class="section" id="rollout">
     <div class="container">
       <RolloutStory />
     </div>
   </section>
 
   <!-- Экспертиза и география -->
-  <section class="section section--white gridded" id="expertise">
+  <section class="section section--white" id="expertise">
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">{expertise.title}</p>
@@ -166,7 +192,7 @@ const widgetFor = {
   </section>
 
   <!-- Кейсы -->
-  <section class="section section--alt gridded" id="cases">
+  <section class="section section--alt" id="cases">
     <div class="container">
       <div class="section-head section-head--row" data-reveal>
         <div>
@@ -214,7 +240,7 @@ const widgetFor = {
   </section>
 
   <!-- Как работаем -->
-  <section class="section gridded" id="approach">
+  <section class="section" id="approach">
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Подход</p>
@@ -233,7 +259,7 @@ const widgetFor = {
   </section>
 
   <!-- Команда -->
-  <section class="section section--white gridded" id="team">
+  <section class="section section--white" id="team">
     <div class="container team">
       <div data-reveal>
         <p class="eyebrow">{team.title}</p>
@@ -253,7 +279,7 @@ const widgetFor = {
   </section>
 
   <!-- Продукт: бот -->
-  <section class="section section--dark gridded" id="bot">
+  <section class="section section--dark" id="bot">
     <div class="container bot">
       <div class="bot-visual" data-reveal>
         <BotMessage />
@@ -275,7 +301,7 @@ const widgetFor = {
   </section>
 
   <!-- FAQ -->
-  <section class="section gridded" id="faq">
+  <section class="section" id="faq">
     <div class="container faq-wrap">
       <div data-reveal>
         <p class="eyebrow">Вопросы</p>
@@ -294,7 +320,7 @@ const widgetFor = {
   </section>
 
   <!-- Финальный блок -->
-  <section class="section section--dark gridded final" id="contact">
+  <section class="section section--dark final" id="contact">
     <div class="container final-inner" data-reveal>
       <p class="eyebrow">Контакты</p>
       <h2>{finalCta.title}</h2>
@@ -349,29 +375,53 @@ const widgetFor = {
 
 <style>
   /* Первый экран */
-  .hero { padding: var(--s6) 0 var(--s6); background-color: var(--bg); }
-  .hero-head { text-align: center; }
-  .hero-head p { margin-left: auto; margin-right: auto; }
-  .hero h1 { max-width: 14em; margin: 0 auto; }
+  .hero { padding: var(--s6) 0; background-color: var(--bg); }
+  .hero h1 { max-width: 17em; font-size: clamp(32px, 4.6vw, 58px); }
   .h1-accent { color: var(--accent); }
-  .hero-lead { margin-top: var(--s3); max-width: 38em; color: var(--ink-2); font-size: 1.08em; }
-  @media (max-width: 719px) {
-    .hero { padding-top: var(--s6); }
-    .hero-head { text-align: left; }
-    .hero-head p { margin-left: 0; }
-    .hero h1 { margin: 0; }
+  .hero-lead { margin-top: var(--s3); max-width: 34em; color: var(--ink-2); font-size: 1.1em; }
+
+  .services {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--s5);
+    display: grid;
+    gap: var(--s2);
   }
+  @media (min-width: 640px) { .services { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .services { grid-template-columns: repeat(4, 1fr); } }
+  .services li { display: flex; }
+  .service {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: var(--s3);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+  }
+  .service:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .service-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .service-num { font-size: 15px; font-weight: 700; color: var(--gold-ink); }
+  .service-top svg { width: 22px; height: 22px; color: var(--accent); }
+  .service-title { font-size: 20px; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; }
+  .service-lead { color: var(--ink-2); font-size: 15px; line-height: 1.45; }
+  .service-more { margin-top: auto; padding-top: var(--s1); color: var(--accent); font-size: 15px; font-weight: 600; }
+  .service-more::after { content: ' →'; }
+
+  .hero-btns { margin-top: var(--s4); }
 
   .facts {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--s4) var(--s3);
+    gap: var(--s3);
     margin-top: var(--s5);
+    padding-top: var(--s4);
+    border-top: 1px solid var(--line);
   }
-  @media (min-width: 1024px) { .facts { grid-template-columns: repeat(4, 1fr); gap: 0; text-align: center; } }
-  .facts dt { font-size: clamp(30px, 3.2vw, 40px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--accent); }
-  .facts dd { margin: var(--s1) auto 0; max-width: 16em; color: var(--ink-2); font-size: 15px; line-height: 1.45; }
-  @media (max-width: 1023px) { .facts dd { margin-left: 0; } }
+  @media (min-width: 720px) { .facts { grid-template-columns: repeat(4, 1fr); } }
+  .facts dt { font-size: clamp(26px, 2.6vw, 34px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--accent); }
+  .facts dd { margin-top: 4px; max-width: 17em; color: var(--ink-2); font-size: 15px; line-height: 1.4; }
 
   /* Направления */
   .practice {
@@ -401,7 +451,7 @@ const widgetFor = {
   .stat-unit { display: block; margin-top: var(--s1); font-size: 18px; font-weight: 600; color: var(--on-deep); }
   .stat dd { margin-top: 6px; color: var(--on-deep-2); font-size: 15px; max-width: 18em; }
 
-  /* Сетка из четырёх колонок по линиям страницы */
+  /* Четыре колонки */
   .cols4 { display: grid; gap: var(--s4) 0; list-style: none; padding: 0; }
   @media (min-width: 720px) { .cols4 { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1024px) { .cols4 { grid-template-columns: repeat(4, 1fr); } }
@@ -450,7 +500,7 @@ const widgetFor = {
   .case-dl dt { color: var(--ink-3); font-size: 13px; margin-top: var(--s1); }
   .case-result { font-weight: 700; color: var(--accent); }
 
-  /* Подход: номера на линиях сетки */
+  /* Подход */
   .approach .col { position: relative; }
   .approach-num {
     display: grid;
@@ -464,10 +514,6 @@ const widgetFor = {
     font-weight: 700;
     font-size: 15px;
     box-shadow: 0 0 0 6px var(--accent-soft);
-  }
-  @media (min-width: 1024px) {
-    .approach .col { padding-left: var(--s4); }
-    .approach-num { margin-left: calc(-1 * var(--s4) - 18px); }
   }
   .approach h3 { font-size: 21px; }
   .approach p { margin-top: 6px; font-size: 16px; }

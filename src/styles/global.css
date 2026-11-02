@@ -1,7 +1,7 @@
 /*
   Дизайн-система Axiom, версия 5.
-  Референс по подаче: видимая сетка страницы, «лента» на первом экране,
-  блоки «текст слева, живой интерфейс справа», тёмные полосы для цифр и контактов.
+  Подача по референсу: блоки «текст слева, живой интерфейс справа»,
+  тёмные полосы для цифр и контактов, плавные появления при прокрутке.
   Палитра: тёмно-зелёный из логотипа и презентаций, тёплый белый, золото для акцентов.
   Красный и зелёный статусы только в данных.
 */
@@ -14,7 +14,6 @@
   --ink-2: #4b5754;
   --ink-3: #7c8784;
   --line: #e3e1da;
-  --grid: #d9d6cc;
 
   --accent: #0b5345;
   --accent-2: #12705d;
@@ -110,43 +109,10 @@ p { max-width: var(--measure); text-wrap: pretty; }
   padding: 0 var(--gutter);
 }
 
-/*
-  Видимая сетка: пунктирные вертикали по краям контейнера и между четырьмя колонками.
-  Рисуется фоном у каждой секции, поэтому проходит и через тёмные полосы.
-*/
-.gridded {
-  --gl: var(--grid);
-  --gx0: max(var(--gutter), calc(50% - var(--page) / 2));
-  --gw: min(calc(100% - 2 * var(--gutter)), var(--page));
-  background-image:
-    linear-gradient(var(--gl) 50%, transparent 0),
-    linear-gradient(var(--gl) 50%, transparent 0),
-    linear-gradient(var(--gl) 50%, transparent 0),
-    linear-gradient(var(--gl) 50%, transparent 0),
-    linear-gradient(var(--gl) 50%, transparent 0);
-  background-size: 1px 8px;
-  background-repeat: repeat-y;
-  background-position:
-    var(--gx0) 0,
-    calc(var(--gx0) + var(--gw) * 0.25) 0,
-    calc(var(--gx0) + var(--gw) * 0.5) 0,
-    calc(var(--gx0) + var(--gw) * 0.75) 0,
-    calc(var(--gx0) + var(--gw) - 1px) 0;
-}
-@media (max-width: 719px) {
-  .gridded {
-    background-image:
-      linear-gradient(var(--gl) 50%, transparent 0),
-      linear-gradient(var(--gl) 50%, transparent 0);
-    background-position: var(--gx0) 0, calc(var(--gx0) + var(--gw) - 1px) 0;
-  }
-}
-
 .section { padding: var(--s7) 0; background-color: var(--bg); }
 .section--alt { background-color: var(--bg-alt); }
 .section--white { background-color: var(--surface); }
 .section--dark {
-  --gl: rgba(255, 255, 255, 0.09);
   background-color: var(--deep);
   color: var(--on-deep);
 }

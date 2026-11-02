@@ -1,6 +1,6 @@
 ---
 // Внедрение учёта за 40 дней: заголовок слева «прилипает», шаги справа идут при прокрутке.
-// Номера шагов стоят на центральной линии сетки.
+// Номера шагов стоят на линии между колонками.
 import { rollout } from '../data/home';
 import { site } from '../data/site';
 import { t } from '../lib/typo';
@@ -126,7 +126,7 @@ import { t } from '../lib/typo';
   .sv-tree div { display: grid; gap: 4px; align-content: start; }
   .sv-tree b { padding: 6px 8px; border-radius: 6px; background: var(--accent); color: #fff; font-size: 13px; }
   .sv-tree span { position: relative; margin-left: 12px; padding: 4px 8px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-size: 13px; }
-  .sv-tree span::before { content: ''; position: absolute; left: -9px; top: 50%; width: 8px; height: 1px; background: var(--grid); }
+  .sv-tree span::before { content: ''; position: absolute; left: -9px; top: 50%; width: 8px; height: 1px; background: var(--line); }
 
   .sv-route { list-style: none; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
   .sv-route li { padding: 6px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-weight: 600; font-size: 13px; }
@@ -179,8 +179,9 @@ import { t } from '../lib/typo';
     .story-index li::before { content: counter(si); width: 1.2em; color: inherit; }
     .story-index li.is-on { color: var(--ink); }
     .story-index li.is-on::before { color: var(--gold-ink); }
-    .story-steps { gap: var(--s6); padding: var(--s4) 0; }
-    /* Номер шага на центральной линии сетки */
+    .story-steps { position: relative; gap: var(--s6); padding: var(--s4) 0; }
+    /* Линия шагов между колонками */
+    .story-steps::before { content: ''; position: absolute; left: -57px; top: var(--s4); bottom: var(--s4); width: 2px; background: var(--accent-soft); }
     .story-num { position: absolute; left: -74px; top: var(--s3); }
     .story-step { padding: var(--s4); }
   }
