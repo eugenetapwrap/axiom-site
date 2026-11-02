@@ -7,10 +7,12 @@ interface Props {
 const { variant } = Astro.props;
 
 const models = [
-  { name: 'Продажа', price: '3 200', pace: '4', mat: '6%', p1: 64, p2: 50, p3: 40, irr: '24,6%', npv: '1,8 млн', moic: '1,6×', cf: [-40, -70, -55, 20, 60, 85, 70, 40] },
-  { name: 'Аренда', price: '2 900', pace: '2', mat: '6%', p1: 52, p2: 28, p3: 40, irr: '14,2%', npv: '2,4 млн', moic: '2,1×', cf: [-45, -75, -30, 15, 25, 32, 38, 44] },
-  { name: 'Смешанный', price: '3 050', pace: '3', mat: '8%', p1: 58, p2: 38, p3: 55, irr: '19,8%', npv: '2,1 млн', moic: '1,8×', cf: [-42, -72, -40, 18, 45, 58, 52, 46] },
+  { name: 'Продажа', price: '3 200', pace: '4', mat: '6%', p1: 64, p2: 50, p3: 40, irr: '24,6%', npv: '1,8 млн', moic: '1,6×', cf: [-15, -27, -20, 100, 0, 0, 0, 0] },
+  { name: 'Аренда', price: '2 900', pace: '2', mat: '6%', p1: 52, p2: 28, p3: 40, irr: '14,2%', npv: '2,4 млн', moic: '2,1×', cf: [-18, -30, -22, 24, 27, 30, 32, 34] },
+  { name: 'Смешанный', price: '3 050', pace: '3', mat: '8%', p1: 58, p2: 38, p3: 55, irr: '19,8%', npv: '2,1 млн', moic: '1,8×', cf: [-16, -28, -22, 60, 12, 14, 15, 18] },
 ];
+// Cash Flow по годам (демо): три года стройки, затем продажа одним платежом,
+// аренда равными поступлениями или часть продаж плюс аренда. Сумма плюсов к минусам ≈ MOIC.
 const years = ['2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033'];
 const m0 = models[0];
 const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
@@ -187,9 +189,9 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const MODELS = [
-    { price: '3 200', pace: '4', mat: '6%', p1: 64, p2: 50, p3: 40, irr: '24,6%', npv: '1,8 млн', moic: '1,6×', cf: [-40, -70, -55, 20, 60, 85, 70, 40] },
-    { price: '2 900', pace: '2', mat: '6%', p1: 52, p2: 28, p3: 40, irr: '14,2%', npv: '2,4 млн', moic: '2,1×', cf: [-45, -75, -30, 15, 25, 32, 38, 44] },
-    { price: '3 050', pace: '3', mat: '8%', p1: 58, p2: 38, p3: 55, irr: '19,8%', npv: '2,1 млн', moic: '1,8×', cf: [-42, -72, -40, 18, 45, 58, 52, 46] },
+    { price: '3 200', pace: '4', mat: '6%', p1: 64, p2: 50, p3: 40, irr: '24,6%', npv: '1,8 млн', moic: '1,6×', cf: [-15, -27, -20, 100, 0, 0, 0, 0] },
+    { price: '2 900', pace: '2', mat: '6%', p1: 52, p2: 28, p3: 40, irr: '14,2%', npv: '2,4 млн', moic: '2,1×', cf: [-18, -30, -22, 24, 27, 30, 32, 34] },
+    { price: '3 050', pace: '3', mat: '8%', p1: 58, p2: 38, p3: 55, irr: '19,8%', npv: '2,1 млн', moic: '1,8×', cf: [-16, -28, -22, 60, 12, 14, 15, 18] },
   ];
   const OBJECTS = [
     { a: '1,35 млн', b: '1,41 млн', wa: 78, wb: 84, win: 'a', yld: '8,1%', pb: '11,2 года', tax: '10%' },
@@ -381,12 +383,13 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
   }
 
   .pw-cf-panel { display: grid; gap: 10px; }
-  .pw-cf { position: relative; display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; height: 84px; }
-  .pw-cf::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--line); }
+  .pw-cf { position: relative; display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; height: 110px; }
+  .pw-cf::after { content: ''; position: absolute; left: 0; right: 0; top: 70%; height: 1px; background: var(--line); }
   .pw-cf span { position: relative; height: 100%; }
-  .pw-cf span::before { content: ''; position: absolute; left: 0; right: 0; height: calc(var(--h) / 2); border-radius: 2px; transition: height .6s cubic-bezier(.2, .8, .2, 1); }
-  .pw-cf .pos::before { bottom: 50%; background: var(--accent-2); }
-  .pw-cf .neg::before { top: 50%; background: #d7c9a8; }
+  /* Один масштаб для плюсов и минусов: ноль на 70% высоты, 100 единиц = 68% высоты */
+  .pw-cf span::before { content: ''; position: absolute; left: 0; right: 0; height: calc(var(--h) * 0.68); border-radius: 2px; transition: height .6s cubic-bezier(.2, .8, .2, 1); }
+  .pw-cf .pos::before { bottom: 30%; background: var(--accent-2); }
+  .pw-cf .neg::before { top: 70%; background: #d7c9a8; }
   .pw-cf-axis { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--ink-3); }
   .pw-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .pw-kpis div { padding: 4px 0 0; border-top: 2px solid var(--accent-soft); }
