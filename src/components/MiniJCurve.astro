@@ -1,7 +1,9 @@
 ---
-// Пример дашборда для финансового планирования: показатели, накопленный Cash Flow и структура бюджета.
+// Пример дашборда для финансового планирования: шесть показателей, накопленный Cash Flow с подписями
+// ключевых точек и структура бюджета горизонтальными столбиками (Евгений 02.11.2026).
 // Демо-проект «Смешанный» из src/lib/finmodel.ts: 48 апартаментов, 3 120 м², стройка 2026–2028,
-// аренда, продажа в 2035. IRR, MOIC и NPV считаются из тех же потоков, что нарисованы.
+// аренда 2029–2035, продажа в 2035. Все показатели считаются из тех же потоков, что нарисованы:
+// прибыль = сумма потоков, пик вложений = минимум накопленного итога, окупаемость = год, когда итог выше нуля.
 // Бюджет 6,6 млн USD = сумма затрат сценария (1,6 + 2,8 + 2,2), разбивка по статьям демонстрационная:
 // стройка 3,6 млн ≈ 1 150 USD/м², земля 1,2 млн, мебель и оснащение 0,4 млн (как в finmodel.ts).
 import { SCENARIOS, YEARS, kpis } from '../lib/finmodel';
@@ -13,56 +15,75 @@ const r2 = (v: number) => Math.round(v * 100) / 100;
 let c = 0;
 const cum = cf.map((v) => (c = r2(c + v)));
 const fmt = (v: number) => v.toFixed(1).replace('.', ',').replace('-', '−');
+const sign = (v: number) => (v > 0 ? `+${fmt(v)}` : fmt(v));
+const nb = (s: string) => s.replace(/ /g, ' ');
+
+const last = cf.length - 1;
+const trough = cum.indexOf(Math.min(...cum));
+const profit = cum[last];
+const peak = -cum[trough];
+const payIdx = cum.findIndex((v, i) => v > 0 && i > 0);
+const rent = cf.slice(3, last);
+const rentAvg = rent.reduce((s, v) => s + v, 0) / rent.length;
+
+const metrics = [
+  { t: 'IRR', v: k.irr },
+  { t: 'MOIC', v: k.moic },
+  { t: 'NPV при 12%', v: nb(`${k.npv} USD`) },
+  { t: 'Чистая прибыль', v: nb(`${fmt(profit)} млн USD`) },
+  { t: 'Пик вложений', v: nb(`${fmt(peak)} млн USD`) },
+  { t: 'Окупаемость', v: nb(`${YEARS[payIdx]} год`) },
+];
 
 // Геометрия в пикселях колонки: подписи остаются 11 px
-const W = 340;
-const H = 150;
-const L = 10;
-const R = 10;
-const T = 10;
-const B = 22;
+const W = 440;
+const H = 196;
+const L = 12;
+const R = 12;
+const T = 22;
+const B = 36;
 const hi = Math.max(0, ...cf, ...cum);
 const lo = Math.min(0, ...cf, ...cum);
 const y = (v: number) => T + ((hi - v) / (hi - lo)) * (H - T - B);
 const slot = (W - L - R) / cf.length;
-const bw = Math.min(16, slot * 0.5);
+const bw = Math.min(18, slot * 0.5);
 const x = (i: number) => L + slot * (i + 0.5);
 const f = (n: number) => n.toFixed(1);
 const y0 = y(0);
-const last = cf.length - 1;
-const trough = cum.indexOf(Math.min(...cum));
 const pts = cum.map((v, i) => `${f(x(i))},${f(y(v))}`).join(' ');
 const bars = cf.map((v, i) => ({
   x: x(i) - bw / 2,
   y: v < 0 ? y0 : y(v),
   h: Math.abs(y(v) - y0),
   cls: v < 0 ? 'neg' : i === last ? 'exit' : 'pos',
-  title: `${YEARS[i]}: ${v > 0 ? '+' : ''}${fmt(v)} млн USD, накопленный итог ${fmt(cum[i])}`,
+  title: `${YEARS[i]}: ${sign(v)} млн USD, накопленный итог ${fmt(cum[i])}`,
 }));
-const npvText = `${k.npv} USD`.replace(/ /g, ' ');
+const rentMid = (x(3) + x(last - 1)) / 2;
+const rentTop = Math.min(...rent.map((v) => y(v)));
 
+// Бюджет по убыванию: самая крупная статья сверху
 const budget = [
-  { name: 'Земля', v: 1.2 },
   { name: 'Строительство', v: 3.6 },
+  { name: 'Земля', v: 1.2 },
   { name: 'Проектирование и инжиниринг', v: 0.4 },
   { name: 'Мебель и оснащение', v: 0.4 },
   { name: 'Налоги и сборы', v: 0.4 },
-  { name: 'Маркетинг и запуск', v: 0.2 },
   { name: 'Резерв', v: 0.4 },
+  { name: 'Маркетинг и запуск', v: 0.2 },
 ];
 const total = r2(budget.reduce((s, b) => s + b.v, 0));
 const spent = r2(-cf.filter((v) => v < 0).reduce((s, v) => s + v, 0));
 if (Math.abs(total - spent) > 0.01) throw new Error(`Бюджет ${total} не равен затратам сценария ${spent}`);
+if (Math.abs(peak - spent) > 0.01) throw new Error(`Пик вложений ${peak} не равен затратам ${spent}`);
+const maxB = Math.max(...budget.map((b) => b.v));
 const pctOf = (v: number) => `${Math.round((v / total) * 100)}%`;
 ---
 
-<figure class="mini" aria-label={`Пример: накопленный Cash Flow демо-проекта. Пик вложений ${fmt(cum[trough])} млн USD, продажа в ${YEARS[last]}. IRR ${k.irr}, MOIC ${k.moic}, NPV при 12% ${k.npv} USD`}>
+<figure class="mini" aria-label={`Пример дашборда по модели: IRR ${k.irr}, MOIC ${k.moic}, NPV при 12% ${k.npv} USD, чистая прибыль ${fmt(profit)} млн USD, пик вложений ${fmt(peak)} млн USD в ${YEARS[trough]}, окупаемость в ${YEARS[payIdx]}. Бюджет ${fmt(total)} млн USD, больше всего строительство`}>
   <div class="mj-a">
     <p class="mini-head">Демо-проект: 48 апартаментов, 3 120 м²</p>
-    <dl class="mini-kpis mini-kpis--top">
-      <div><dt>IRR</dt><dd>{k.irr}</dd></div>
-      <div><dt>MOIC</dt><dd>{k.moic}</dd></div>
-      <div><dt>NPV при 12%</dt><dd>{npvText}</dd></div>
+    <dl class="mini-kpis">
+      {metrics.map((m) => <div><dt>{m.t}</dt><dd>{m.v}</dd></div>)}
     </dl>
   </div>
   <div class="mj-b">
@@ -72,35 +93,33 @@ const pctOf = (v: number) => `${Math.round((v / total) * 100)}%`;
       {bars.map((b) => <rect class={`mj-${b.cls}`} x={f(b.x)} y={f(b.y)} width={f(bw)} height={f(Math.max(b.h, 0.5))} rx="1.5"><title>{b.title}</title></rect>)}
       <polyline class="mj-line" points={pts}></polyline>
       {cum.map((v, i) => <circle class={`mj-dot${i === last ? ' mj-dot--end' : ''}`} cx={f(x(i))} cy={f(y(v))} r={i === last ? 3.5 : 2.5}></circle>)}
-      <text class="mj-lab" x={f(x(trough))} y={f(y(cum[trough]) + 14)} text-anchor="middle">{fmt(cum[trough])}</text>
-      <text class="mj-yr" x={f(x(0))} y={H - 6} text-anchor="middle">{YEARS[0]}</text>
-      <text class="mj-yr" x={f(x(last))} y={H - 6} text-anchor="middle">{YEARS[last]}</text>
+      <!-- Ключевые точки: пик вложений, аренда, продажа, итог -->
+      <text class="mj-lab mj-lab--neg" x={f(x(trough))} y={f(y(cum[trough]) + 17)} text-anchor="middle">{fmt(cum[trough])} пик вложений</text>
+      <text class="mj-lab mj-lab--mute" x={f(rentMid)} y={f(rentTop - 8)} text-anchor="middle">аренда ≈ {fmt(rentAvg)} в год</text>
+      <text class="mj-lab" x={f(x(last))} y={f(y(cf[last]) - 7)} text-anchor="middle">{sign(cf[last])}</text>
+      <text class="mj-lab mj-lab--end" x={f(x(last) - bw / 2 - 6)} y={f(y(cum[last]) + 4)} text-anchor="end">итог {sign(cum[last])}</text>
+      <text class="mj-yr" x={f(x(0))} y={H - 4} text-anchor="middle">{YEARS[0]}</text>
+      <text class="mj-yr" x={f(x(last))} y={H - 4} text-anchor="middle">{YEARS[last]}</text>
     </svg>
   </div>
   <div class="mj-c">
-    <p class="mini-sub">Структура бюджета, {String(total).replace('.', ',')} млн USD</p>
-    <div class="mb-bar" aria-hidden="true">
-      {budget.map((b, i) => <i style={`flex-grow:${b.v};background:var(--th-${i + 1})`} title={`${b.name}: ${String(b.v).replace('.', ',')} млн USD`}></i>)}
-    </div>
-    <ul class="mb-list">
-      {budget.map((b, i) => <li><i style={`background:var(--th-${i + 1})`}></i><span>{b.name}</span><b>{pctOf(b.v)}</b></li>)}
+    <p class="mini-sub">Структура бюджета, {fmt(total)} млн USD</p>
+    <ul class="mh">
+      {budget.map((b) => (
+        <li title={`${b.name}: ${fmt(b.v)} млн USD`}>
+          <span class="mh-track"><i style={`width:${((b.v / maxB) * 100).toFixed(1)}%`}></i></span>
+          <span class="mh-name">{b.name}</span>
+          <b>{pctOf(b.v)}</b>
+        </li>
+      ))}
     </ul>
   </div>
-  <figcaption>Пример дашборда по модели, демо-данные. Стройка {YEARS[0]}–{YEARS[2]}, аренда, продажа в {YEARS[last]}</figcaption>
 </figure>
 
 <style>
-  /* Карточка примера растягивается на высоту соседнего блока, части расходятся равномерно */
-  .mini { display: flex; flex-direction: column; justify-content: space-between; gap: 6px; height: 100%; margin: 0; padding: 18px 20px 14px; border-radius: 8px; background: var(--bg); }
+  /* Карточка примера растягивается на высоту, части расходятся равномерно */
+  .mini { display: flex; flex-direction: column; justify-content: space-between; gap: 14px; height: 100%; margin: 0; padding: 18px 20px; border-radius: 8px; background: var(--bg); }
   .mini svg { display: block; width: 100%; max-width: 460px; height: auto; margin-inline: auto; overflow: visible; }
-  /* Широкая карточка (пример под текстом): показатели, график и бюджет в три колонки */
-  @container (min-width: 1000px) {
-    .mini { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 440px) minmax(0, 1.2fr); column-gap: 40px; align-items: start; padding: 22px 24px 16px; }
-    .mini figcaption { grid-column: 1 / -1; }
-    .mj-b .mini-sub, .mj-c .mini-sub { margin-top: 0; }
-    .mini-kpis--top { grid-template-columns: 1fr; gap: 14px; }
-    .mini-kpis--top dd { font-size: 24px; }
-  }
   .mj-zero { stroke: var(--ink-3); stroke-width: 1; }
   .mj-neg { fill: var(--c-neg); fill-opacity: .7; }
   .mj-pos { fill: var(--c-pos); fill-opacity: .85; }
@@ -108,20 +127,28 @@ const pctOf = (v: number) => `${Math.round((v / total) * 100)}%`;
   .mj-line { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; }
   .mj-dot { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
   .mj-dot--end { fill: var(--ink); }
-  .mj-lab { font: 500 11px var(--font); fill: var(--c-neg); }
+  .mj-lab { font: 600 11px var(--font); fill: var(--ink); }
+  .mj-lab--neg { fill: var(--c-neg); }
+  .mj-lab--mute { font-weight: 400; fill: var(--ink-3); }
   .mj-yr { font: 400 11px var(--font); fill: var(--ink-3); }
   .mini-head { font-size: 13px; font-weight: 600; color: var(--ink-2); }
-  .mini-sub { margin: 14px 0 6px; font-size: 12px; color: var(--ink-3); }
-  .mini-kpis { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 8px; margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
-  .mb-bar { display: flex; height: 12px; gap: 2px; border-radius: 3px; overflow: hidden; }
-  .mb-bar i { display: block; min-width: 3px; }
-  .mb-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; margin: 10px 0 0; padding: 0; list-style: none; font-size: 12.5px; color: var(--ink-2); }
-  .mb-list li { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
-  .mb-list i { width: 8px; height: 8px; border-radius: 2px; }
-  .mb-list b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
-  @container (max-width: 440px) { .mb-list { grid-template-columns: 1fr; } }
+  .mini-sub { margin: 0 0 8px; font-size: 12px; color: var(--ink-3); }
+  .mini-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 16px; margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
   .mini-kpis dt { font-size: 12px; color: var(--ink-3); }
-  .mini-kpis dd { margin: 0; font-size: 16px; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .mini figcaption { margin-top: 8px; font-size: 12.5px; line-height: 1.4; color: var(--ink-3); }
-  @media (max-width: 479px) { .mj-lab, .mj-yr { font-size: 13.5px; } }
+  .mini-kpis dd { margin: 2px 0 0; font-size: 16px; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  /* Бюджет: столбик, название, доля. Столбики в одной колонке, чтобы длины сравнивались */
+  .mh { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--ink-2); }
+  .mh li { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr) auto; gap: 12px; align-items: center; }
+  .mh-track { display: block; height: 12px; }
+  .mh-track i { display: block; height: 100%; min-width: 3px; border-radius: 2px; background: var(--c-pos); }
+  .mh li:first-child .mh-track i { background: var(--c-pos-strong); }
+  .mh b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+  @container (max-width: 440px) { .mh li { grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.5fr) auto; } .mini-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 479px) { .mj-lab, .mj-yr { font-size: 15px; } }
+  /* Широкая карточка (пример под текстом): показатели, график и бюджет в три колонки */
+  @container (min-width: 1000px) {
+    .mini { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 420px) minmax(0, 1.15fr); column-gap: 40px; align-content: center; padding: 22px 24px; }
+    .mini-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px; }
+    .mini-kpis dd { font-size: 20px; }
+  }
 </style>

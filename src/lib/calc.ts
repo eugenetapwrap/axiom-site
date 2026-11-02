@@ -192,6 +192,26 @@ export function villaChart(o: VillaOut, W = VC.W, H = VC.H) {
     if (i !== n - 1 && (i % every || n - 1 - i < every)) return;
     s += `<text class="vc-xlab" x="${f(cx(i))}" y="${H - 10}" text-anchor="middle">${r.year}</text>`;
   });
+  // Ключевые суммы прямо на графике вместо таблицы (Евгений 02.11.2026): покупка, аренда, продажа, итог.
+  // У подписи светлая обводка, чтобы она читалась поверх линии и сетки
+  const lab = (x: number, yy: number, text: string, cls: string, anchor = 'middle') =>
+    `<text class="vc-lab ${cls}" x="${f(x)}" y="${f(yy)}" text-anchor="${anchor}">${text}</text>`;
+  const first = rows[0];
+  if (first.cf < 0) s += lab(cx(0) + bw / 2 + 6, (y0 + y(first.cf)) / 2 + 4, `покупка ${usdK(first.cf)}`, 'vc-lab--buy', 'start');
+  const rentRows = rows.filter((r, i) => i > 0 && i < n - 1 && r.net > 0);
+  if (rentRows.length >= 3) {
+    const avg = rentRows.reduce((a, r) => a + r.net, 0) / rentRows.length;
+    const i0 = rows.indexOf(rentRows[0]);
+    const i1 = rows.indexOf(rentRows[rentRows.length - 1]);
+    const topNet = Math.max(...rentRows.map((r) => r.net));
+    s += lab((cx(i0) + cx(i1)) / 2, y(topNet) - 8, `аренда ≈ ${usdK(avg)} в год`, 'vc-lab--mute');
+  }
+  const end = rows[n - 1];
+  if (end.sale > 0) {
+    const topEnd = Math.max(0, end.net) + end.sale;
+    s += lab(cx(n - 1) + bw / 2, y(topEnd) - 6, `продажа +${usdK(end.sale)}`, 'vc-lab--sale', 'end');
+  }
+  s += lab(cx(n - 1) - bw / 2 - 6, y(end.cum) + 4, `итог ${end.cum > 0 ? '+' : ''}${usdK(end.cum)}`, end.cum < 0 ? 'vc-lab--neg' : 'vc-lab--end', 'end');
   // Невидимые зоны наведения шире столбика
   rows.forEach((_, i) => {
     s += `<rect class="vc-hit" data-vc-i="${i}" x="${f(L + slot * i)}" y="${T}" width="${f(slot)}" height="${ph}"/>`;

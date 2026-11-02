@@ -1,8 +1,8 @@
 ---
-// Нити для управленческого учёта, вертикально: отчёт собственнику за декабрь.
-// Сверху поступления пяти проектов сходятся в один счёт, снизу расходятся по статьям.
-// Длина прямого участка нити пропорциональна сумме, как у столбика; толщина тоже. Подписи сумм на концах нитей,
-// названия статей в легенде под схемой (восемь подписей рядом не поместятся).
+// Нити для управленческого учёта: отчёт собственнику за декабрь. Поступления пяти проектов сходятся в один счёт
+// и расходятся по статьям. Длина прямого участка нити пропорциональна сумме, как у столбика; толщина тоже.
+// В широкой карточке схема горизонтальная, с названиями и суммами на концах нитей (Евгений 02.11.2026).
+// В узкой колонке и на телефоне вертикальная: восемь подписей в ряд не помещаются, названия в легенде.
 // Данные демонстрационные (src/lib/sankey.ts), те же, что у больших нитей. Геометрия своя, в пикселях колонки.
 import { SERIES, MONTHS } from '../lib/sankey';
 import { frame, PROJ_NAMES, COST_NAMES, PROJ_COLORS, COST_COLORS, fmt2 } from '../lib/threads';
@@ -61,6 +61,40 @@ const bottom = c.map((v, k) => {
   return { v, w, x, y, d: ribbon(xa, x, Math.max(w, 1.4), y0, y0, Y2, y) };
 });
 
+// Горизонтальная схема: та же лента, оси x и y меняются местами
+const HW = 920;
+const HK = 15;
+const LX = 118; // место под подписи проектов слева
+const HLMAX = 150;
+const HX1 = LX + HLMAX;
+const HBEND = 150;
+const HPX = HX1 + HBEND;
+const HX2 = HPX + NW + HBEND;
+const HRMAX = 130;
+const HLSTEP = 50;
+const HRSTEP = 30;
+const HCY = 126;
+const HH = 252;
+const swap = (d: string) => d.replace(/(-?[\d.]+),(-?[\d.]+)/g, '$2,$1');
+let hacc = HCY - (total * HK) / 2;
+const left = p.map((v, k) => {
+  const w = v * HK;
+  const y = HCY + (k - (p.length - 1) / 2) * HLSTEP;
+  const x = HX1 - (v / maxP) * HLMAX;
+  const yb = hacc + w / 2;
+  hacc += w;
+  return { v, y, x, d: swap(ribbon(y, yb, w, x, HX1, HPX, HPX)) };
+});
+hacc = HCY - (total * HK) / 2;
+const right = c.map((v, k) => {
+  const w = v * HK;
+  const y = HCY + (k - (c.length - 1) / 2) * HRSTEP;
+  const x = HX2 + (v / maxC) * HRMAX;
+  const ya = hacc + w / 2;
+  hacc += w;
+  return { v, y, x, d: swap(ribbon(ya, y, Math.max(w, 1.4), HPX + NW, HPX + NW, HX2, x)) };
+});
+
 const share = (v: number) => `${Math.round((v / total) * 100)}%`;
 const build = c[0] + c[1] + c[2];
 const rest = c[c.length - 1];
@@ -68,12 +102,21 @@ const rest = c[c.length - 1];
 
 <figure class="mini" aria-label={`Пример отчёта для собственника: ${MONTHS[M].toLowerCase()}, поступления ${fmt2(total)} млрд IDR от пяти проектов. На стройку ушло ${fmt2(build)}, на счетах осталось ${fmt2(rest)}`}>
   <div class="mt-a">
-    <p class="mini-head">Отчёт собственнику: {MONTHS[M].toLowerCase()}, пять проектов</p>
+    <p class="mini-head">Отчёт собственнику за {MONTHS[M].toLowerCase()}, млрд IDR</p>
     <dl class="mini-kpis">
       <div><dt>Поступления</dt><dd>{fmt2(total)}</dd></div>
       <div><dt>На стройку</dt><dd>{fmt2(build)}</dd></div>
       <div><dt>Осталось на счетах</dt><dd>{fmt2(rest)}</dd></div>
     </dl>
+  </div>
+  <div class="mt-h">
+    <svg viewBox={`0 0 ${HW} ${HH}`} aria-hidden="true">
+      {left.map((t, i) => <path class="mt" d={t.d} fill={PROJ_COLORS[i]}><title>{PROJ_NAMES[i]}: {fmt2(t.v)} млрд IDR</title></path>)}
+      {right.map((t, i) => <path class="mt" d={t.d} fill={COST_COLORS[i]}><title>{COST_NAMES[i]}: {fmt2(t.v)} млрд IDR, {share(t.v)}</title></path>)}
+      <rect class="mt-bar" x={HPX} y={f(HCY - (total * HK) / 2 - 6)} width={NW} height={f(total * HK + 12)} rx="1.5"></rect>
+      {left.map((t, i) => <text class="mt-hl" x={f(t.x - 10)} y={f(t.y + 4.5)} text-anchor="end">{PROJ_NAMES[i]} <tspan class="mt-hv">{fmt2(t.v)}</tspan></text>)}
+      {right.map((t, i) => <text class="mt-hl" x={f(t.x + 10)} y={f(t.y + 4.5)}>{COST_NAMES[i]} <tspan class="mt-hv">{fmt2(t.v)}</tspan> <tspan class="mt-hs">{share(t.v)}</tspan></text>)}
+    </svg>
   </div>
   <div class="mt-b">
     <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
@@ -94,23 +137,24 @@ const rest = c[c.length - 1];
       {fr.right.map((t, i) => <li><i style={`background:${COST_COLORS[i]}`}></i><span>{COST_NAMES[i]}</span><b>{share(t.v)}</b></li>)}
     </ul>
   </div>
-  <figcaption>Пример, демо-данные, млрд IDR. Сверху поступления по проектам, снизу куда ушли деньги</figcaption>
 </figure>
 
 <style>
-  .mini { display: flex; flex-direction: column; justify-content: space-between; gap: 6px; height: 100%; margin: 0; padding: 18px 20px 14px; border-radius: 8px; background: var(--bg); }
-  .mini svg { display: block; width: 100%; max-width: 460px; height: auto; margin: 14px auto 0; overflow: visible; }
-  /* Широкая карточка: показатели слева, схема в центре, статьи справа */
+  .mini { display: flex; flex-direction: column; justify-content: space-between; gap: 14px; height: 100%; margin: 0; padding: 18px 20px; border-radius: 8px; background: var(--bg); }
+  .mini svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .mt-b svg { max-width: 460px; margin-inline: auto; }
+  .mt-h { display: none; }
+  /* Широкая карточка: показатели слева, горизонтальная схема с подписями справа; вертикальная схема и легенда не нужны */
   @container (min-width: 1000px) {
-    .mini { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 440px) minmax(0, 1fr); column-gap: 40px; align-items: center; padding: 22px 24px 16px; }
-    .mini figcaption { grid-column: 1 / -1; }
-    .mini svg { margin-top: 0; }
-    .mt-a .mini-kpis { grid-template-columns: 1fr; gap: 14px; }
-    .mt-a .mini-kpis dd { font-size: 24px; }
-    .mt-c .mb-list { grid-template-columns: 1fr; gap: 8px; margin: 0; font-size: 13.5px; }
+    .mini { display: grid; grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr); column-gap: 40px; align-items: center; align-content: center; padding: 22px 24px; }
+    .mt-h { display: block; }
+    .mt-h svg { max-width: 840px; margin-inline: auto; }
+    .mt-b, .mt-c { display: none; }
+    .mt-a .mini-kpis { grid-template-columns: 1fr; gap: 12px; }
+    .mt-a .mini-kpis dd { font-size: 22px; }
   }
   .mini-head { font-size: 13px; font-weight: 600; color: var(--ink-2); }
-  .mb-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 12.5px; color: var(--ink-2); }
+  .mb-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; margin: 0; padding: 0; list-style: none; font-size: 12.5px; color: var(--ink-2); }
   .mb-list li { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
   .mb-list i { width: 8px; height: 8px; border-radius: 2px; }
   .mb-list b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
@@ -121,6 +165,9 @@ const rest = c[c.length - 1];
   .mt-bar { fill: var(--ink); }
   .mt-lab { font: 400 11px var(--font); fill: var(--ink-3); }
   .mt-val { font: 600 11px var(--font); fill: var(--ink); }
+  .mt-hl { font: 400 13px var(--font); fill: var(--ink-2); }
+  .mt-hv { font-weight: 600; fill: var(--ink); }
+  .mt-hs { fill: var(--ink-3); }
   /* На телефоне схема ужимается, подписи в единицах схемы делаем крупнее, чтобы на экране они остались читаемыми */
   @media (max-width: 479px) { .mt-lab, .mt-val { font-size: 13.5px; } }
   .mini-kpis { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 8px; margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }

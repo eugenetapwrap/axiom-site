@@ -1,12 +1,11 @@
 ---
-// Блок «Посчитайте сами»: пять вкладок, три калькулятора работают, рост стоимости и оценка виллы пока заготовки.
-// 1. Рассрочка или скидка (для девелопера, первая вкладка): коридор скидки при двух ставках.
-// 2. Вилла: кэшфлоу инвестора по годам, продажа в конце срока, IRR, NPV, MOIC.
-// 3. Дубли и ошибки: ориентир по клиентам Axiom (около 0,9% затрат), в IDR или USD.
+// Блок «Посчитайте сами»: четыре вкладки. Работают вилла и рассрочка, рост стоимости и оценка виллы пока заготовки.
+// Вилла: кэшфлоу инвестора по годам, продажа в конце срока, IRR, NPV, MOIC; ключевые суммы подписаны на графике.
+// Рассрочка или скидка (для девелопера): коридор скидки при двух ставках.
 // Считает браузер посетителя, данные никуда не уходят. При сборке страница получает расчёт по умолчанию.
 import {
-  villa, villaChart, villaTable, VILLA_DEFAULT, installment, INST_DEFAULT, dupes, DUP_DEFAULT,
-  usd, pct, group, idr,
+  villa, villaChart, VILLA_DEFAULT, installment, INST_DEFAULT,
+  usd, pct, group,
 } from '../lib/calc';
 import { tgLink } from '../data/site';
 import { t } from '../lib/typo';
@@ -39,18 +38,13 @@ const instFields: Field[] = [
   { k: 'dev', label: 'Ставка девелопера', unit: '% годовых', hint: 'сколько стоят деньги кредита или инвестора' },
   { k: 'buy', label: 'Ставка покупателя', unit: '% годовых', hint: 'сколько деньги приносят ему сейчас, например на депозите' },
 ];
-const dupFields: Field[] = [
-  { k: 'spend', label: 'Расходы проекта в месяц', unit: 'IDR' },
-  { k: 'months', label: 'Срок стройки', unit: 'мес.' },
-];
 
-// Вкладки в порядке Евгения: вилла, рост стоимости, оценка, рассрочка; дубли — наш ориентир по клиентам
+// Вкладки в порядке Евгения: вилла, рост стоимости, оценка, рассрочка. «Дубли и ошибки» он убрал 02.11.2026
 const TABS = [
   { id: 'villa', label: 'Доходность виллы' },
   { id: 'growth', label: 'Рост стоимости' },
   { id: 'value', label: 'Оценка виллы' },
   { id: 'inst', label: 'Рассрочка или скидка' },
-  { id: 'dup', label: 'Дубли и ошибки' },
 ];
 // Заготовки (идеи Евгения 02.11.2026). Поля и выводы взяты из его описания, расчёт пока не делаем
 const STUBS = [
@@ -73,7 +67,6 @@ const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace(
 const vo = villa(VILLA_DEFAULT);
 const vc = villaChart(vo);
 const io = installment(INST_DEFAULT);
-const dx = dupes(DUP_DEFAULT);
 // Положение на шкале скидки: от 0 до max
 const scaleMax = (...v: number[]) => Math.max(0.1, Math.ceil((Math.max(...v) * 100 + 1) / 5) * 0.05);
 const iMax = scaleMax(io.evenDev, INST_DEFAULT.disc / 100);
@@ -198,50 +191,9 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
       </p>
       <p class="calc-warn" data-v="lease" hidden></p>
 
-      <details class="calc-table">
-        <summary>Кэшфлоу по годам</summary>
-        <div class="table-wrap"><table data-v="table" set:html={villaTable(vo)}></table></div>
-      </details>
-
       <div class="calc-cta">
         <a class="btn btn-primary" data-tg="villa" href={tgLink('Здравствуйте! Посчитал доходность виллы на сайте, хочу обсудить расчёт.')}>Обсудить расчёт</a>
         <p class="caption">{t('Ориентировочный расчёт без кредита и курсовых разниц, цены покупки и продажи в USD. Модель проекта мы строим по месяцам и по вашим данным.')}</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3. Дубли и ошибки -->
-  <div class="calc-panel ui-card" id="cp-dup" role="tabpanel" aria-labelledby="ct-dup" data-cp="dup" hidden>
-    <form class="calc-form" data-form="dup" onsubmit="return false">
-      <p class="calc-q">{t('Сколько может уйти на дубли и ошибки в оплатах')}</p>
-      <div class="cur" role="group" aria-label="Валюта">
-        <button type="button" data-cur="IDR" aria-pressed="true">IDR</button>
-        <button type="button" data-cur="USD" aria-pressed="false">USD</button>
-      </div>
-      <div class="cf-grid">
-        {dupFields.map((f) => (
-          <label class="cf">
-            <span class="cf-l">{t(f.label)}</span>
-            <span class="cf-box"><input inputmode="decimal" autocomplete="off" value={show((DUP_DEFAULT as any)[f.k])} data-k={f.k} /><i data-unit={f.k === 'spend' ? '' : undefined}>{f.unit}</i></span>
-          </label>
-        ))}
-      </div>
-      <p class="caption cf-note">{t('У наших клиентов дубли и ошибки, которые система остановила до оплаты, составили 3,55 млрд IDR, около 0,9% затрат.')}</p>
-    </form>
-
-    <div class="calc-out">
-      <div class="dup-main">
-        <p class="dup-value" data-d="total">{idr(dx.total)}</p>
-        <p class="dup-text">за <span data-d="months">{dx.months}</span> мес. на дублях и ошибках, если доля как у наших клиентов: около 0,9% затрат</p>
-      </div>
-      <dl class="kpis kpis--2">
-        <div><dt>В месяц</dt><dd data-d="month">{idr(dx.month)}</dd></div>
-        <div><dt>Все расходы за срок</dt><dd data-d="volume">{idr(dx.volume)}</dd></div>
-      </dl>
-
-      <div class="calc-cta">
-        <a class="btn btn-primary" data-tg="dup" href={tgLink('Здравствуйте! Интересует управленческий учёт и контроль платежей.')}>Обсудить контроль платежей</a>
-        <p class="caption">Ориентир по проектам наших клиентов, а не прогноз для вашего проекта.</p>
       </div>
     </div>
   </div>
@@ -251,8 +203,8 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
 
 <script>
   import {
-    villa, villaChart, villaTable, villaTip, villaAdrFor, VILLA_DEFAULT, installment, INST_DEFAULT, dupes, DUP_DEFAULT, DUP_DEFAULT_USD,
-    usd, pct, group, idr, parseNum, type VillaIn, type InstIn, type DupIn, type VillaOut,
+    villa, villaChart, villaTip, villaAdrFor, VILLA_DEFAULT, installment, INST_DEFAULT,
+    usd, pct, group, parseNum, type VillaIn, type InstIn, type VillaOut,
   } from '../lib/calc';
   import { tgLink } from '../data/site';
 
@@ -264,31 +216,7 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
     spend: [0, 1e13],
   };
   const clamp = (k: string, v: number) => Math.min(LIM[k][1], Math.max(LIM[k][0], v));
-  // Вкладки в порядке Евгения: вилла, рост стоимости, оценка, рассрочка; дубли — наш ориентир по клиентам
-const TABS = [
-  { id: 'villa', label: 'Доходность виллы' },
-  { id: 'growth', label: 'Рост стоимости' },
-  { id: 'value', label: 'Оценка виллы' },
-  { id: 'inst', label: 'Рассрочка или скидка' },
-  { id: 'dup', label: 'Дубли и ошибки' },
-];
-// Заготовки (идеи Евгения 02.11.2026). Поля и выводы взяты из его описания, расчёт пока не делаем
-const STUBS = [
-  {
-    id: 'growth',
-    q: 'Сколько будет стоить объект через 1–5 лет',
-    inputs: ['Цена сегодня', 'Горизонт прогноза, 1–5 лет', 'Факторы роста', 'Факторы падения'],
-    outputs: ['Прогноз цены по годам', 'Рост за весь срок', 'Рост в среднем за год'],
-  },
-  {
-    id: 'value',
-    q: 'Сколько стоит вилла: затратный и доходный методы',
-    inputs: ['Земля', 'Строительство', 'Износ', 'Чистый операционный доход, NOI', 'Ставка капитализации', 'Ставка дисконтирования'],
-    outputs: ['Стоимость по затратному методу', 'Стоимость по NOI', 'Стоимость по DCF'],
-  },
-];
-
-const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace('.', ','));
+  const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace('.', ','));
   const yWord = (y: number) => (y % 10 === 1 && y % 100 !== 11 ? 'год' : [2, 3, 4].includes(y % 10) && ![12, 13, 14].includes(y % 100) ? 'года' : 'лет');
 
   function read<T extends Record<string, number>>(form: HTMLFormElement, base: T): T {
@@ -390,7 +318,6 @@ const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace(
         : vIn.lease > 0
           ? `Лизхолд: к продаже остаётся ${group(vIn.lease - y)} ${yWord(vIn.lease - y)} из ${group(vIn.lease)}, цена продажи снижена пропорционально.`
           : '';
-      root.querySelector('[data-v="table"]')!.innerHTML = villaTable(vo);
       const a = root.querySelector<HTMLAnchorElement>('[data-tg="villa"]')!;
       a.href = tgLink(`Здравствуйте! Посчитал виллу на сайте: цена ${usd(vIn.price)}, ночь ${usd(vIn.adr)}, загрузка ${group(vIn.occ)}%, УК ${group(vIn.mgmt)}%, постоянные расходы ${usd(vIn.fixed)} в год, ${y} ${yWord(y)}${vIn.lease > 0 ? `, лизхолд ${group(vIn.lease)} ${yWord(vIn.lease)}` : ''}. IRR ${$v('irr').textContent}, NPV ${usd(vo.npv)}. Хочу обсудить расчёт.`);
       drawVilla();
@@ -461,37 +388,6 @@ const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace(
     }
     iForm.addEventListener('input', renderInst);
     renderInst();
-
-    // ---------- 3. Дубли ----------
-    const dForm = root.querySelector<HTMLFormElement>('[data-form="dup"]')!;
-    const $d = (k: string) => root.querySelector<HTMLElement>(`[data-d="${k}"]`)!;
-    // Валюта: рупии по умолчанию (доказательства на сайте в IDR), доллары по кнопке
-    let cur: 'IDR' | 'USD' = 'IDR';
-    const spendEl = dForm.querySelector<HTMLInputElement>('[data-k="spend"]')!;
-    const unitEl = dForm.querySelector<HTMLElement>('[data-unit]')!;
-    const money = (v: number) => (cur === 'IDR' ? idr(v) : usd(v));
-    dForm.querySelectorAll<HTMLButtonElement>('[data-cur]').forEach((b) => b.addEventListener('click', () => {
-      const next = b.dataset.cur as 'IDR' | 'USD';
-      if (next === cur) return;
-      cur = next;
-      dForm.querySelectorAll<HTMLButtonElement>('[data-cur]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-      unitEl.textContent = cur;
-      spendEl.value = show((cur === 'IDR' ? DUP_DEFAULT : DUP_DEFAULT_USD).spend);
-      renderDup();
-    }));
-    function renderDup() {
-      const v: DupIn = read(dForm, cur === 'IDR' ? DUP_DEFAULT : DUP_DEFAULT_USD);
-      const o = dupes(v);
-      $d('total').textContent = money(o.total);
-      $d('months').textContent = String(o.months);
-      $d('month').textContent = money(o.month);
-      $d('volume').textContent = money(o.volume);
-      root.querySelector<HTMLAnchorElement>('[data-tg="dup"]')!.href = tgLink(
-        `Здравствуйте! Расходы проекта около ${money(v.spend)} в месяц, стройка ${o.months} мес. Интересует контроль платежей.`,
-      );
-    }
-    dForm.addEventListener('input', renderDup);
-    renderDup();
 
     renderVilla();
   }
@@ -583,6 +479,10 @@ const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace(
   .vc :global(.vc-net) { fill: var(--accent-2); }
   .vc :global(.vc-sale) { fill: var(--th-3); }
   .vc :global(.vc-cum) { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+  .vc :global(.vc-lab) { font: 600 12px var(--font); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; font-variant-numeric: tabular-nums; }
+  .vc :global(.vc-lab--buy), .vc :global(.vc-lab--neg) { fill: var(--risk); }
+  .vc :global(.vc-lab--mute) { font-weight: 400; fill: var(--ink-2); }
+  .vc :global(.vc-lab--sale) { fill: var(--accent); }
   .vc :global(.vc-dot) { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
   .vc :global(.vc-hit) { fill: transparent; cursor: crosshair; }
   .vc :global(.vc-hit.is-on) { fill: color-mix(in srgb, var(--ink) 6%, transparent); }
@@ -612,13 +512,6 @@ const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace(
   .calc-warn { font-size: 14px; color: var(--ink-2); padding: 8px 12px; border-left: 2px solid var(--gold-ink, var(--accent)); background: var(--bg); }
   .calc-warn[hidden] { display: none; }
 
-  .calc-table summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 15px; }
-  .table-wrap { margin-top: var(--s2); overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .table-wrap table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .table-wrap :global(th), .table-wrap :global(td) { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--line); }
-  .table-wrap :global(thead th) { color: var(--ink-3); font-weight: 500; }
-  .table-wrap :global(th[scope='row']) { text-align: left; font-weight: 600; }
-  .table-wrap :global(td:nth-last-child(2)) { font-weight: 600; }
 
   .calc-cta { display: grid; gap: 10px; justify-items: start; }
   .calc-cta .caption { max-width: 40em; }
@@ -643,13 +536,6 @@ const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace(
   .ds-keys .k-inst::before { background: var(--track); border: 1px solid var(--line); }
 
   /* Переключатель валюты */
-  .cur { display: inline-flex; margin-bottom: var(--s2); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-  .cur button { padding: 6px 14px; border: 0; background: transparent; color: var(--ink-2); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .cur button + button { border-left: 1px solid var(--line); }
-  .cur button[aria-pressed='true'] { background: var(--ink); color: var(--surface); }
 
   /* Дубли */
-  .dup-main { display: grid; gap: 6px; }
-  .dup-value { font-family: var(--font-display); font-size: clamp(44px, 6vw, 72px); font-weight: 500; line-height: 1; letter-spacing: -0.04em; color: var(--ink); font-variant-numeric: tabular-nums; }
-  .dup-text { font-size: 17px; color: var(--ink-2); max-width: 30em; }
 </style>
