@@ -1,6 +1,6 @@
 /*
-  Дизайн-система Axiom, версия 8: «деловой журнал с живыми деньгами».
-  Бумажный фон, антиква в заголовках, моноширинные подписи и суммы с кодом валюты.
+  Дизайн-система Axiom, версия 9: «журнал и цифры», минималистичная.
+  Бумажный фон, один гротеск (Inter Tight в заголовках, Inter в тексте и цифрах), тонкие светлые линии, минимум декора.
   Одна яркая полоса с главной цифрой, один тёмный блок с системой учёта.
   Фирменный мотив: ленты денежного потока (первый экран, схема учёта, финальный блок).
 */
@@ -33,9 +33,9 @@
   --on-deep-2: #a9c0b9;
   --gold-on-deep: #d9b26a;
 
-  --font: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Source Serif 4', 'PT Serif', Georgia, 'Times New Roman', serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Inter Tight', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --s1: 8px;
   --s2: 16px;
@@ -97,7 +97,7 @@ h1, h2, h3, p, ul, ol, blockquote, figure, dl, dd { margin: 0; }
 
 h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
 
-h1, h2 { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.015em; font-optical-sizing: auto; }
+h1, h2 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.03em; }
 h1 { font-size: clamp(36px, 5.6vw, 68px); line-height: 1.04; }
 h2 { font-size: clamp(30px, 3.6vw, 48px); line-height: 1.08; }
 h3 { font-size: 1.1em; line-height: 1.3; letter-spacing: -0.01em; }
@@ -146,7 +146,7 @@ p { max-width: var(--measure); text-wrap: pretty; }
 /* Сигнальная полоса с главной цифрой */
 .section--signal { background-color: var(--signal); color: var(--ink); }
 .section--dark .muted, .section--dark .section-head p:not(.eyebrow) { color: var(--on-deep-2); }
-.section--dark .eyebrow { color: var(--gold-on-deep); }
+.section--dark .eyebrow { color: var(--accent); }
 @media (max-width: 719px) { .section { padding: var(--s6) 0; } }
 
 .section-head { margin-bottom: var(--s5); max-width: 48rem; }
@@ -162,14 +162,11 @@ p { max-width: var(--measure); text-wrap: pretty; }
 
 .eyebrow {
   margin-bottom: var(--s2);
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--gold-ink);
+  letter-spacing: 0;
+  color: var(--accent);
 }
-@media (min-width: 1024px) { .eyebrow { font-size: 14px; } }
 
 /* Суммы, коды валют, подписи данных */
 .num, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }
@@ -178,21 +175,18 @@ p { max-width: var(--measure); text-wrap: pretty; }
 .small { font-size: 0.85em; }
 .caption { font-size: 14px; line-height: 1.4; color: var(--ink-3); }
 
-/* Списки с золотой точкой */
+/* Списки: короткий тонкий штрих вместо точки */
 .dots { list-style: none; padding: 0; display: grid; gap: 10px; }
 .dots li { position: relative; padding-left: 26px; }
 .dots li::before {
   content: '';
   position: absolute;
-  left: 4px;
-  top: 0.55em;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 0 4px var(--gold-soft);
+  left: 2px;
+  top: 0.78em;
+  width: 10px;
+  height: 1px;
+  background: var(--ink-3);
 }
-.section--dark .dots li::before { box-shadow: 0 0 0 4px rgba(217, 178, 106, 0.18); }
 
 /* Кнопки */
 .btn {

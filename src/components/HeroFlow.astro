@@ -8,7 +8,7 @@ const W = 600;
 const H = 440;
 const PAD_T = 30;
 const PAD_B = 52;
-const NODE_W = 6;
+const NODE_W = 4;
 const GAP = 14;
 const colX = [118, 300, 482];
 const values = SERIES[0];
@@ -96,7 +96,7 @@ cols.forEach((c) => {
       const ly = labelY[id];
       return (
         <g class="hf-node">
-          <rect x={n.x} y={n.y} width={NODE_W} height={n.h} rx="1.5" fill="var(--ink)"></rect>
+          <rect x={n.x} y={n.y} width={NODE_W} height={n.h} rx="1" fill="var(--ink-2)"></rect>
           {c === 0 && (
             <text class="hf-side" x={n.x - 10} y={ly} text-anchor="end"><tspan class="hf-name">{label(id)}</tspan><tspan class="hf-val" dx="6">{fmt(val[id])}</tspan></text>
           )}

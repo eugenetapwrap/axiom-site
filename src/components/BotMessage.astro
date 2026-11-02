@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="bubble">
-    <p><span aria-hidden="true">⛔</span> <b>Дубль №&nbsp;75</b></p>
+    <p class="bubble-alert"><b>Дубль №&nbsp;75</b></p>
     <p>Совпадает с&nbsp;заявкой №&nbsp;63 от&nbsp;09.10</p>
     <p>1&#8239;080&#8239;000&nbsp;IDR · Поставщик №&nbsp;12 · цемент, 40&nbsp;мешков</p>
     <p class="bubble-result">В&nbsp;итоги не&nbsp;вошёл, оплата остановлена.</p>
@@ -51,6 +51,8 @@
   }
   .bubble p + p { margin-top: 2px; }
   .bubble-result { color: var(--ink-2); }
+  .bubble-alert { display: flex; align-items: center; gap: 8px; color: var(--risk); }
+  .bubble-alert::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--risk); flex: none; }
   .time { position: absolute; right: 12px; bottom: 6px; font-size: 12px; color: var(--ink-3); }
   figcaption { margin-top: var(--s2); }
 </style>

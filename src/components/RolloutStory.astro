@@ -109,11 +109,11 @@ import { t } from '../lib/typo';
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: var(--accent);
-    color: #fff;
-    font-weight: 700;
-    font-size: 15px;
-    box-shadow: 0 0 0 6px var(--accent-soft);
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--ink-2);
+    font-weight: 500;
+    font-size: 14px;
   }
   .story-visual { margin-top: var(--s2); padding: var(--s2); border-radius: 8px; background: var(--bg); font-size: 14px; }
 
@@ -178,10 +178,10 @@ import { t } from '../lib/typo';
     }
     .story-index li::before { content: counter(si); width: 1.2em; color: inherit; }
     .story-index li.is-on { color: var(--ink); }
-    .story-index li.is-on::before { color: var(--gold-ink); }
+    .story-index li.is-on::before { color: var(--accent); }
     .story-steps { position: relative; gap: var(--s6); padding: var(--s4) 0; }
     /* Линия шагов между колонками */
-    .story-steps::before { content: ''; position: absolute; left: -57px; top: var(--s4); bottom: var(--s4); width: 2px; background: var(--accent-soft); }
+    .story-steps::before { content: ''; position: absolute; left: -57px; top: var(--s4); bottom: var(--s4); width: 1px; background: var(--line); }
     .story-num { position: absolute; left: -74px; top: var(--s3); }
     .story-step { padding: var(--s4); }
   }

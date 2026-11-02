@@ -317,8 +317,8 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
     left: 13px;
     top: 30px;
     bottom: -22px;
-    width: 2px;
-    background: var(--gold-soft);
+    width: 1px;
+    background: var(--line);
   }
   .pw-num {
     display: grid;
@@ -326,18 +326,18 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: var(--gold);
-    color: #fff;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-2);
     font-size: 13px;
-    font-weight: 700;
-    box-shadow: 0 0 0 4px var(--gold-soft);
+    font-weight: 500;
   }
   .pw-title { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 3px 0 10px; font-weight: 700; font-size: 15px; }
   .pw-badge { padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 600; }
   .pw-panel { padding: 14px 16px; }
   .pw-sub { font-size: 12.5px; color: var(--ink-3); }
   .pw-flash { animation: pw-flash .9s ease; }
-  @keyframes pw-flash { 0% { color: var(--gold-ink); } 100% { color: inherit; } }
+  @keyframes pw-flash { 0% { color: var(--accent-2); } 100% { color: inherit; } }
 
   .pw-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .pw-chip {
@@ -346,27 +346,12 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
     border-radius: 8px;
     background: var(--surface);
     border: 1px solid var(--line);
-    box-shadow: var(--shadow);
     text-align: center;
-    font-weight: 600;
+    font-weight: 500;
     transition: border-color .4s ease, color .4s ease;
   }
-  .pw-chip.is-on { border: 2px solid var(--gold); padding: 11px 7px; color: var(--gold-ink); }
-  .pw-chip.is-on::after {
-    content: '✓';
-    position: absolute;
-    top: -9px;
-    right: -9px;
-    display: grid;
-    place-items: center;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--gold);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 800;
-  }
+  .pw-chip.is-on { border-color: var(--ink); color: var(--ink); }
+  /* Выбранный вариант отмечен только рамкой, без значков */
 
   .pw-sliders { display: grid; gap: 12px; }
   .pw-sliders div { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; }
