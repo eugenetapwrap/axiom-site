@@ -39,27 +39,11 @@ const instFields: Field[] = [
   { k: 'buy', label: 'Ставка покупателя', unit: '% годовых', hint: 'сколько деньги приносят ему сейчас, например на депозите' },
 ];
 
-// Вкладки в порядке Евгения: вилла, рост стоимости, оценка, рассрочка. «Дубли и ошибки» он убрал 02.11.2026
+// Вкладки: вилла и рассрочка. «Дубли и ошибки», «Рост стоимости» и «Оценку виллы» Евгений убрал 02.11.2026:
+// факторы роста не на чем основать, NOI у вилл никто не знает
 const TABS = [
   { id: 'villa', label: 'Доходность виллы' },
-  { id: 'growth', label: 'Рост стоимости' },
-  { id: 'value', label: 'Оценка виллы' },
   { id: 'inst', label: 'Рассрочка или скидка' },
-];
-// Заготовки (идеи Евгения 02.11.2026). Поля и выводы взяты из его описания, расчёт пока не делаем
-const STUBS = [
-  {
-    id: 'growth',
-    q: 'Сколько будет стоить объект через 1–5 лет',
-    inputs: ['Цена сегодня', 'Горизонт прогноза, 1–5 лет', 'Факторы роста', 'Факторы падения'],
-    outputs: ['Прогноз цены по годам', 'Рост за весь срок', 'Рост в среднем за год'],
-  },
-  {
-    id: 'value',
-    q: 'Сколько стоит вилла: затратный и доходный методы',
-    inputs: ['Земля', 'Строительство', 'Износ', 'Чистый операционный доход, NOI', 'Ставка капитализации', 'Ставка дисконтирования'],
-    outputs: ['Стоимость по затратному методу', 'Стоимость по NOI', 'Стоимость по DCF'],
-  },
 ];
 
 const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace('.', ','));
@@ -83,22 +67,6 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
       ))}
     </div>
   </div>
-
-  <!-- Заготовки новых калькуляторов: блок вводных и блок результата. Поля и расчёт Евгений уточнит -->
-  {STUBS.map((st) => (
-    <div class="calc-panel calc-panel--stub ui-card" id={`cp-${st.id}`} role="tabpanel" aria-labelledby={`ct-${st.id}`} data-cp={st.id} hidden>
-      <div class="stub">
-        <p class="calc-q">{t(st.q)}</p>
-        <p class="stub-h">Вводные</p>
-        <ul class="stub-in">{st.inputs.map((f) => <li><span>{t(f)}</span><i></i></li>)}</ul>
-      </div>
-      <div class="stub stub--out">
-        <p class="stub-h">Результат</p>
-        <ul class="stub-out">{st.outputs.map((o) => <li><span>{t(o)}</span><b>—</b></li>)}</ul>
-        <p class="caption">Калькулятор готовим: поля и порядок расчёта уточняем.</p>
-      </div>
-    </div>
-  ))}
 
   <!-- 1. Рассрочка или скидка -->
   <div class="calc-panel ui-card" id="cp-inst" role="tabpanel" aria-labelledby="ct-inst" data-cp="inst" hidden>
@@ -403,15 +371,6 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
   @media (min-width: 720px) { .calc-tabs { margin: 0; padding: 0; flex-wrap: wrap; } }
   .calc-foot { margin-top: var(--s2); }
   /* Заготовки: два прямоугольных блока, вводные и результат */
-  .stub { display: grid; align-content: start; gap: 12px; }
-  .stub-h { font-size: 13px; font-weight: 600; color: var(--ink-3); }
-  .stub-in, .stub-out { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-  @media (min-width: 480px) { .stub-in { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; } }
-  .stub-in li { display: grid; gap: 6px; align-content: end; font-size: 14px; color: var(--ink-2); }
-  .stub-in i { display: block; height: 44px; border: 1px dashed var(--line); border-radius: 6px; background: var(--bg); }
-  .stub--out { padding: var(--s3); border-radius: 8px; background: var(--bg); }
-  .stub-out li { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
-  .stub-out b { color: var(--ink-3); font-weight: 600; }
   .calc-tabs button {
     padding: 10px 16px;
     border: 1px solid var(--line);

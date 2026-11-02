@@ -11,13 +11,23 @@ import {
   hero, practices, results, cases, team, faq, finalCta,
 } from '../data/home';
 import { t } from '../lib/typo';
+import { villa, VILLA_DEFAULT, installment, INST_DEFAULT, usd, pct, group } from '../lib/calc';
 
-// Калькуляторы для инвестанализа: что вводят и что получают (по описанию Евгения 02.11.2026)
+// Калькуляторы для инвестанализа: что вводят, что получают и пример расчёта на значениях калькулятора по умолчанию.
+// «Рост стоимости» и «Оценку виллы» Евгений убрал 02.11.2026
+const vEx = villa(VILLA_DEFAULT);
+const iEx = installment(INST_DEFAULT);
 const calcLinks = [
-  { id: 'villa', title: 'Доходность виллы', inp: 'цена, ADR, загрузка, комиссии, налоги, расходы', out: 'чистый доход, ROI, срок окупаемости, IRR, MOIC' },
-  { id: 'growth', title: 'Рост стоимости', inp: 'цена сегодня, срок 1–5 лет, факторы роста и падения', out: 'прогноз цены по годам' },
-  { id: 'value', title: 'Оценка виллы', inp: 'земля, строительство, доход, ставки', out: 'стоимость затратным методом, по NOI и DCF' },
-  { id: 'inst', title: 'Рассрочка или скидка', inp: 'цена, первый взнос, срок, ставки', out: 'реальная ставка рассрочки и что выгоднее' },
+  {
+    id: 'villa', title: 'Доходность виллы', inp: 'цена, ADR, загрузка, комиссии, налоги, расходы', out: 'чистый доход, ROI, срок окупаемости, IRR, MOIC',
+    cap: `Вилла за ${usd(VILLA_DEFAULT.price)}, ночь ${usd(VILLA_DEFAULT.adr)}, загрузка ${VILLA_DEFAULT.occ}%, продажа через ${VILLA_DEFAULT.years} лет`,
+    kv: [['IRR', pct(vEx.irr)], ['MOIC', `${group(vEx.moic, 2)}×`], ['Доходность в первый год', pct(vEx.net1)]],
+  },
+  {
+    id: 'inst', title: 'Рассрочка или скидка', inp: 'цена, первый взнос, срок, ставки', out: 'реальная ставка рассрочки и что выгоднее',
+    cap: `Вилла за ${usd(INST_DEFAULT.price)}, взнос ${INST_DEFAULT.down}%, рассрочка на ${INST_DEFAULT.months} месяцев. Ставка девелопера ${INST_DEFAULT.dev}%, покупателя ${INST_DEFAULT.buy}%`,
+    kv: [['Платёж в месяц', usd(Math.round(iEx.pay))], ['Выгодная обоим скидка', `${group(iEx.evenBuy * 100, 1)}–${pct(iEx.evenDev)}`]],
+  },
 ];
 
 const faqLd = {
@@ -81,8 +91,10 @@ const faqLd = {
       {practices.map((p) => (
         <article class="practice" id={p.id} data-reveal aria-labelledby={`pr-h-${p.id}`}>
           <div class="pr-main">
-            <span class="practice-num">{p.num}</span>
-            <h2 id={`pr-h-${p.id}`}>{t(p.title)}</h2>
+            <div class="pr-title">
+              <span class="practice-num" aria-hidden="true">{p.num}</span>
+              <h2 id={`pr-h-${p.id}`}>{t(p.title)}</h2>
+            </div>
             <p class="practice-lead">{t(p.card)}</p>
             <p class="practice-result"><span>Результат</span>{t(p.result)}</p>
           </div>
@@ -105,9 +117,15 @@ const faqLd = {
                 <div class="calc-links-list">
                   {calcLinks.map((l) => (
                     <a href="#calc" data-open-calc={l.id}>
-                      <b>{l.title}</b>
-                      <span class="cl-row"><em>Вводите</em>{t(l.inp)}</span>
-                      <span class="cl-row"><em>Получаете</em>{t(l.out)}</span>
+                      <span class="cl-text">
+                        <b>{l.title}</b>
+                        <span class="cl-row"><em>Вводите</em>{t(l.inp)}</span>
+                        <span class="cl-row"><em>Получаете</em>{t(l.out)}</span>
+                      </span>
+                      <span class="cl-ex">
+                        <span class="cl-cap"><em>Пример</em>{t(l.cap)}</span>
+                        <span class="cl-kv">{l.kv.map(([k, v]) => <span><i>{t(k)}</i><strong>{v}</strong></span>)}</span>
+                      </span>
                     </a>
                   ))}
                 </div>
@@ -409,13 +427,17 @@ const faqLd = {
   .pr-list { grid-area: list; }
   .pr-cta { grid-area: cta; align-self: end; }
   .pr-ex { grid-area: ex; container-type: inline-size; display: grid; min-width: 0; }
-  .practice-num { display: block; margin-bottom: var(--s1); font-size: 14px; color: var(--ink-3); }
+  /* Номер мелко слева в строке названия (Евгений 02.11.2026): карточка ниже, название выше */
+  .pr-title { display: flex; align-items: baseline; gap: 14px; }
+  .practice-num { flex: none; font-size: 14px; font-weight: 500; color: var(--ink-3); font-variant-numeric: tabular-nums; }
   .practice h2 { font-size: clamp(24px, 2.2vw, 32px); line-height: 1.15; letter-spacing: -0.02em; }
   .practice-lead { margin-top: var(--s2); font-size: 18px; line-height: 1.45; color: var(--ink); max-width: 30em; }
   .practice-result { margin-top: var(--s2); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: 16px; line-height: 1.45; color: var(--ink-2); max-width: 32em; }
   .practice-result span { display: block; margin-bottom: 4px; font-size: 13px; font-weight: 600; color: var(--ink-3); }
   .practice-label { font-size: 13px; font-weight: 600; color: var(--ink-3); margin-bottom: 12px; }
-  .practice-items { gap: 8px; }
+  /* «Что входит» мельче лида: это справка, а не главный текст (Евгений 02.11.2026) */
+  .practice-items { gap: 8px; font-size: 15px; line-height: 1.45; color: var(--ink-2); }
+  .practice-items li { padding-left: 22px; }
 
   @media (min-width: 1024px) {
     /* Все карточки одной высоты (Евгений 02.11.2026: эталон — финансовое планирование). Лишнюю высоту забирает пример */
@@ -431,16 +453,26 @@ const faqLd = {
   .calc-links { display: flex; flex-direction: column; border-radius: 8px; background: var(--bg); overflow: hidden; }
   .calc-links-head { padding: 16px 18px 10px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
   .calc-links-list { display: grid; flex: 1; grid-auto-rows: 1fr; }
-  .calc-links a { display: grid; align-content: center; gap: 0; padding: 12px 18px; border-top: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+  .calc-links a { display: grid; gap: 14px; padding: 14px 18px 18px; border-top: 1px solid var(--line); color: var(--ink); text-decoration: none; }
   .calc-links a:hover { background: color-mix(in srgb, var(--accent) 6%, var(--bg)); }
   .calc-links a b { color: var(--accent); font-weight: 600; font-size: 16px; }
   .calc-links a b::after { content: ' →'; }
-  .cl-row { display: block; font-size: 14px; line-height: 1.4; color: var(--ink-2); }
-  .cl-row em { display: block; margin-top: 8px; font-style: normal; font-size: 12px; color: var(--ink-3); }
+  .cl-text { display: grid; align-content: start; }
+  .cl-row, .cl-cap { display: block; font-size: 14px; line-height: 1.4; color: var(--ink-2); }
+  .cl-row em, .cl-cap em { display: block; margin-top: 8px; font-style: normal; font-size: 12px; color: var(--ink-3); }
+  .cl-cap em { margin-top: 0; }
+  /* Пример расчёта на значениях калькулятора: чтобы было видно, какой ответ получит человек */
+  .cl-ex { display: grid; align-content: start; gap: 12px; padding: 14px 16px; border-radius: 8px; background: var(--surface); }
+  .cl-kv { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+  .cl-kv > span { display: grid; gap: 2px; }
+  .cl-kv i { font-style: normal; font-size: 12px; color: var(--ink-3); }
+  .cl-kv strong { font-size: 18px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
   @container (min-width: 1000px) {
-    .calc-links-list { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: auto; }
-    .calc-links a { align-content: center; padding: 16px 18px 20px; }
+    .calc-links-list { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; }
+    .calc-links a { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 20px; align-items: stretch; padding: 18px 20px 20px; }
     .calc-links a + a { border-left: 1px solid var(--line); }
+    .cl-ex { align-content: space-between; padding: 16px 18px; }
+    .cl-kv strong { font-size: 20px; }
   }
 
   /* Результаты за 2 года: три равные цифры */

@@ -7,10 +7,10 @@ export type SLink = { from: string; to: string };
 
 // Цвета — спектр фирменных нитей первого экрана (HeroThreads): у каждого проекта и каждой статьи свой.
 export const NODES: SNode[] = [
-  { id: 'p1', label: 'Вилла A', col: 0, color: 'var(--th-1)' },
-  { id: 'p2', label: 'Вилла B', col: 0, color: 'var(--th-2)' },
-  { id: 'p3', label: 'Апарт-отель', col: 0, color: 'var(--th-3)' },
-  { id: 'p4', label: 'Таунхаусы', col: 0, color: 'var(--th-4)' },
+  { id: 'p1', label: 'Arvo Residence', col: 0, color: 'var(--th-1)' },
+  { id: 'p2', label: 'Arvo Villas', col: 0, color: 'var(--th-2)' },
+  { id: 'p3', label: 'Arvo Apartments', col: 0, color: 'var(--th-3)' },
+  { id: 'p4', label: 'Arvo Townhouses', col: 0, color: 'var(--th-4)' },
   { id: 'p5', label: 'Прочие проекты', col: 0, color: 'var(--th-5)' },
   { id: 'cash', label: 'Поступления', col: 1, color: 'var(--ink)' },
   { id: 'g1', label: 'Строительство', col: 2, color: 'var(--th-1)' },
