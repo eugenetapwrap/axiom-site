@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import ServiceIcon from '../components/ServiceIcon.astro';
 import Calculators from '../components/Calculators.astro';
+import MiniJCurve from '../components/MiniJCurve.astro';
+import MiniThreads from '../components/MiniThreads.astro';
 import BotReceipt from '../components/BotReceipt.astro';
 import FinalThreads from '../components/FinalThreads.astro';
 import { site, tgLink } from '../data/site';
@@ -57,7 +59,7 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Услуги списком, как у BDO: строка на услугу — название и кнопка, что входит, результат. Без графиков -->
+  <!-- Услуги списком, как у BDO: строка на услугу — название и кнопка, что входит, результат с маленьким примером -->
   <section class="section section--alt practices" id="practices" aria-label="Услуги">
     <div class="container">
       {practices.map((p) => (
@@ -77,6 +79,9 @@ const faqLd = {
           <div class="practice-col">
             <p class="practice-label">Результат</p>
             <p class="practice-result">{t(p.result)}</p>
+            {/* Небольшой пример результата на демо-данных, с подписью (решение Евгения 02.11.2026) */}
+            {p.id === 'models' && <MiniJCurve />}
+            {p.id === 'accounting' && <MiniThreads />}
           </div>
         </article>
       ))}

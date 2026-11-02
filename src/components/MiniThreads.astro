@@ -1,0 +1,48 @@
+---
+// Маленькие нити для колонки «Результат» у управленческого учёта: отчёт собственнику за декабрь.
+// Слева поступления пяти проектов сходятся в один счёт, справа расходятся по статьям.
+// Подписей в схеме нет (в колонке они были бы мельче 5 px): вывод и суммы пишем под ней, суммы статей во всплывающей подсказке.
+// Данные демонстрационные (src/lib/sankey.ts), геометрия та же, что у больших нитей (src/lib/threads.ts).
+import { SERIES, MONTHS } from '../lib/sankey';
+import { TG, frame, PROJ_NAMES, COST_NAMES, PROJ_COLORS, COST_COLORS, fmt2 } from '../lib/threads';
+
+const M = SERIES.length - 1;
+const fr = frame(SERIES[M]);
+const f = (n: number) => n.toFixed(1);
+const all = [...fr.left, ...fr.right];
+const x0 = Math.min(...fr.left.map((t) => t.x)) - 2;
+const x1 = Math.max(...fr.right.map((t) => t.x)) + 2;
+const y0 = Math.min(fr.top, ...all.map((t) => t.y - t.h / 2)) - 4;
+const y1 = Math.max(fr.top + fr.total * TG.K, ...all.map((t) => t.y + t.h / 2)) + 4;
+const share = (v: number) => `${Math.round((v / fr.total) * 100)}%`;
+const r = fr.right;
+const build = r[0].v + r[1].v + r[2].v;
+const rest = r[r.length - 1].v;
+---
+
+<figure class="mini" aria-label={`Пример отчёта для собственника: ${MONTHS[M].toLowerCase()}, поступления ${fmt2(fr.total)} млрд IDR от пяти проектов. На стройку ушло ${fmt2(build)}, на счетах осталось ${fmt2(rest)}`}>
+  <svg viewBox={`${f(x0)} ${f(y0)} ${f(x1 - x0)} ${f(y1 - y0)}`} aria-hidden="true">
+    {fr.left.map((t, i) => <path class="mt" d={t.d} stroke={PROJ_COLORS[i]} stroke-width={f(t.h)}><title>{PROJ_NAMES[i]}: {fmt2(t.v)} млрд IDR</title></path>)}
+    {fr.right.map((t, i) => <path class="mt" d={t.d} stroke={COST_COLORS[i]} stroke-width={f(t.h)}><title>{COST_NAMES[i]}: {fmt2(t.v)} млрд IDR, {share(t.v)}</title></path>)}
+    <rect class="mt-bar" x={TG.PX} y={f(fr.top - 6)} width={TG.NW + 1} height={f(fr.total * TG.K + 12)} rx="1.5"></rect>
+  </svg>
+  <dl class="mini-kpis">
+    <div><dt>Поступления</dt><dd>{fmt2(fr.total)}</dd></div>
+    <div><dt>На стройку</dt><dd>{fmt2(build)}</dd></div>
+    <div><dt>Осталось на счетах</dt><dd>{fmt2(rest)}</dd></div>
+  </dl>
+  <figcaption>Пример отчёта для собственника: {MONTHS[M].toLowerCase()}, пять проектов, млрд IDR. Слева поступления по проектам, справа куда ушли деньги</figcaption>
+</figure>
+
+<style>
+  .mini { margin: var(--s3) 0 0; padding: 14px 16px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .mini svg { display: block; width: 100%; height: auto; }
+  .mt { fill: none; stroke-opacity: .9; transition: stroke-opacity .2s ease; }
+  .mini svg:hover .mt { stroke-opacity: .35; }
+  .mini svg:hover .mt:hover { stroke-opacity: 1; }
+  .mt-bar { fill: var(--ink); }
+  .mini-kpis { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 8px; margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
+  .mini-kpis dt { font-size: 12px; color: var(--ink-3); }
+  .mini-kpis dd { margin: 0; font-size: 16px; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .mini figcaption { margin-top: 8px; font-size: 12.5px; line-height: 1.4; color: var(--ink-3); }
+</style>

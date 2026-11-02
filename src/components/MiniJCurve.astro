@@ -1,0 +1,77 @@
+---
+// Маленькая J-кривая для колонки «Результат» у финансового планирования.
+// Демо-проект «Смешанный» из src/lib/finmodel.ts: стройка, аренда, продажа в конце.
+// IRR, MOIC и NPV считаются из тех же потоков, что нарисованы.
+import { SCENARIOS, YEARS, kpis } from '../lib/finmodel';
+
+const sc = SCENARIOS.find((s) => s.name === 'Смешанный')!;
+const cf = sc.cf;
+const k = kpis(cf);
+const r2 = (v: number) => Math.round(v * 100) / 100;
+let c = 0;
+const cum = cf.map((v) => (c = r2(c + v)));
+const fmt = (v: number) => v.toFixed(1).replace('.', ',').replace('-', '−');
+
+// Геометрия в пикселях колонки: подписи остаются 11 px
+const W = 340;
+const H = 150;
+const L = 10;
+const R = 10;
+const T = 10;
+const B = 22;
+const hi = Math.max(0, ...cf, ...cum);
+const lo = Math.min(0, ...cf, ...cum);
+const y = (v: number) => T + ((hi - v) / (hi - lo)) * (H - T - B);
+const slot = (W - L - R) / cf.length;
+const bw = Math.min(16, slot * 0.5);
+const x = (i: number) => L + slot * (i + 0.5);
+const f = (n: number) => n.toFixed(1);
+const y0 = y(0);
+const last = cf.length - 1;
+const trough = cum.indexOf(Math.min(...cum));
+const pts = cum.map((v, i) => `${f(x(i))},${f(y(v))}`).join(' ');
+const bars = cf.map((v, i) => ({
+  x: x(i) - bw / 2,
+  y: v < 0 ? y0 : y(v),
+  h: Math.abs(y(v) - y0),
+  cls: v < 0 ? 'neg' : i === last ? 'exit' : 'pos',
+  title: `${YEARS[i]}: ${v > 0 ? '+' : ''}${fmt(v)} млн USD, накопленный итог ${fmt(cum[i])}`,
+}));
+const npvText = `${k.npv} USD`.replace(/ /g, ' ');
+---
+
+<figure class="mini" aria-label={`Пример: накопленный Cash Flow демо-проекта. Пик вложений ${fmt(cum[trough])} млн USD, продажа в ${YEARS[last]}. IRR ${k.irr}, MOIC ${k.moic}, NPV при 12% ${k.npv} USD`}>
+  <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
+    <line class="mj-zero" x1={L} x2={W - R} y1={f(y0)} y2={f(y0)}></line>
+    {bars.map((b) => <rect class={`mj-${b.cls}`} x={f(b.x)} y={f(b.y)} width={f(bw)} height={f(Math.max(b.h, 0.5))} rx="1.5"><title>{b.title}</title></rect>)}
+    <polyline class="mj-line" points={pts}></polyline>
+    {cum.map((v, i) => <circle class={`mj-dot${i === last ? ' mj-dot--end' : ''}`} cx={f(x(i))} cy={f(y(v))} r={i === last ? 3.5 : 2.5}></circle>)}
+    <text class="mj-lab" x={f(x(trough))} y={f(y(cum[trough]) + 14)} text-anchor="middle">{fmt(cum[trough])}</text>
+    <text class="mj-yr" x={f(x(0))} y={H - 6} text-anchor="middle">{YEARS[0]}</text>
+    <text class="mj-yr" x={f(x(last))} y={H - 6} text-anchor="middle">{YEARS[last]}</text>
+  </svg>
+  <dl class="mini-kpis">
+    <div><dt>IRR</dt><dd>{k.irr}</dd></div>
+    <div><dt>MOIC</dt><dd>{k.moic}</dd></div>
+    <div><dt>NPV при 12%</dt><dd>{npvText}</dd></div>
+  </dl>
+  <figcaption>Пример: накопленный Cash Flow демо-проекта по годам, млн USD. Стройка, аренда, продажа в {YEARS[last]}</figcaption>
+</figure>
+
+<style>
+  .mini { margin: var(--s3) 0 0; padding: 14px 16px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .mini svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .mj-zero { stroke: var(--ink-3); stroke-width: 1; }
+  .mj-neg { fill: var(--c-neg); fill-opacity: .7; }
+  .mj-pos { fill: var(--c-pos); fill-opacity: .85; }
+  .mj-exit { fill: var(--c-pos-strong); }
+  .mj-line { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; }
+  .mj-dot { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
+  .mj-dot--end { fill: var(--ink); }
+  .mj-lab { font: 500 11px var(--font); fill: var(--c-neg); }
+  .mj-yr { font: 400 11px var(--font); fill: var(--ink-3); }
+  .mini-kpis { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 8px; margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
+  .mini-kpis dt { font-size: 12px; color: var(--ink-3); }
+  .mini-kpis dd { margin: 0; font-size: 16px; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .mini figcaption { margin-top: 8px; font-size: 12.5px; line-height: 1.4; color: var(--ink-3); }
+</style>
