@@ -4,7 +4,7 @@
 import { NODES, LINKS, MONTHS, MONTHS_SHORT, SERIES, GEOM, layout, fmt, linkColor } from '../lib/sankey';
 
 const { W, H, NODE_W, colX } = GEOM;
-const colTitles = ['Проекты', 'Поступления', 'Группы затрат', 'Статьи'];
+const colTitles = ['Проекты', 'Поступления', 'Группы затрат', 'Статьи расходов'];
 const first = layout(SERIES[0]);
 
 const labelPos = (id: string) => {
@@ -15,7 +15,7 @@ const labelPos = (id: string) => {
 };
 ---
 
-<figure class="sankey" data-sankey>
+<figure class="sankey theme-paper" data-sankey>
   <div class="sankey-scroll">
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="sankey-title sankey-desc">
       <title id="sankey-title">Движение денег по проектам за месяц</title>
@@ -37,7 +37,7 @@ const labelPos = (id: string) => {
       </g>
       {NODES.map((n) => {
         const p = first.nodes[n.id];
-        return <rect class="node" x={p.x} y={p.y} width={NODE_W} height={Math.max(p.h, 2)} rx="2" fill={n.color} data-node={n.id}></rect>;
+        return <rect class="node" x={p.x} y={p.y} width={NODE_W} height={Math.max(p.h, 2)} rx="1.5" fill="var(--ink)" data-node={n.id}></rect>;
       })}
       {NODES.map((n) => {
         const lp = labelPos(n.id);
@@ -87,12 +87,12 @@ const labelPos = (id: string) => {
   }
   .sankey-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .sankey-scroll svg { width: 100%; min-width: 720px; height: auto; font-family: var(--font); }
-  .col-title { font-size: 12px; fill: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; }
-  .flow { fill-opacity: 0.28; transition: fill-opacity 0.2s ease; cursor: pointer; }
-  .flow:hover, .flow.is-active { fill-opacity: 0.6; }
-  .sankey.has-active .flow:not(.is-active) { fill-opacity: 0.12; }
+  .col-title { font-size: 12px; font-weight: 500; fill: var(--ink-3); }
+  .flow { fill-opacity: 0.72; transition: fill-opacity 0.2s ease; cursor: pointer; }
+  .flow:hover, .flow.is-active { fill-opacity: 0.92; }
+  .sankey.has-active .flow:not(.is-active) { fill-opacity: 0.18; }
   .node { cursor: pointer; }
-  .node-label { font-size: 13px; fill: var(--ink); dominant-baseline: middle; cursor: default; }
+  .node-label { font-size: 13px; fill: var(--ink); dominant-baseline: middle; cursor: default; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-opacity: .8; stroke-linejoin: round; }
   .node-value { font-size: 12px; font-weight: 700; fill: var(--ink-2); }
   .sankey-clip { transform-origin: left; }
   .sankey.is-armed .sankey-clip { transform: scaleX(0); }
@@ -117,11 +117,11 @@ const labelPos = (id: string) => {
     height: 44px;
     border-radius: 50%;
     border: 0;
-    background: var(--accent);
-    color: #fff;
+    background: var(--btn-bg);
+    color: var(--btn-ink);
     cursor: pointer;
   }
-  .sk-play:hover { background: #083f35; }
+  .sk-play:hover { background: color-mix(in srgb, var(--btn-bg) 86%, var(--ink)); }
   .sk-play svg { width: 18px; height: 18px; }
   .sk-i-pause, .sankey.is-playing .sk-i-play { display: none; }
   .sankey.is-playing .sk-i-pause { display: block; }
@@ -138,9 +138,9 @@ const labelPos = (id: string) => {
   .sk-range input::-webkit-slider-runnable-track {
     height: 6px;
     border-radius: 3px;
-    background: linear-gradient(90deg, var(--gold) var(--fill, 0%), #ebe8df var(--fill, 0%));
+    background: linear-gradient(90deg, var(--gold) var(--fill, 0%), var(--track) var(--fill, 0%));
   }
-  .sk-range input::-moz-range-track { height: 6px; border-radius: 3px; background: #ebe8df; }
+  .sk-range input::-moz-range-track { height: 6px; border-radius: 3px; background: var(--track); }
   .sk-range input::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--gold); }
   .sk-range input::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -148,7 +148,7 @@ const labelPos = (id: string) => {
     height: 20px;
     margin-top: -7px;
     border-radius: 50%;
-    background: #fff;
+    background: var(--surface);
     border: 3px solid var(--gold);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
   }
@@ -156,7 +156,7 @@ const labelPos = (id: string) => {
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: #fff;
+    background: var(--surface);
     border: 3px solid var(--gold);
   }
   .sk-ticks { display: flex; justify-content: space-between; margin: 2px 7px 0; font-size: 11.5px; color: var(--ink-3); }

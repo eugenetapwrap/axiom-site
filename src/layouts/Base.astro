@@ -43,6 +43,15 @@ const org = {
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="ru_RU" />
     <meta name="theme-color" content="#f5f3ec" />
+    <script is:inline>
+      // Палитра для сравнения ставится до отрисовки, чтобы не мигали цвета (?palette=clay тоже работает)
+      try {
+        var q = new URLSearchParams(location.search).get('palette');
+        var p = q || localStorage.getItem('axiom-palette');
+        if (q) localStorage.setItem('axiom-palette', q);
+        if (p && p !== 'forest') document.documentElement.dataset.palette = p;
+      } catch (e) {}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

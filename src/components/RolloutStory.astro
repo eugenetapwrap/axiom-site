@@ -1,5 +1,5 @@
 ---
-// Внедрение учёта за 40 дней: заголовок слева «прилипает», шаги справа идут при прокрутке.
+// Внедрение учёта за 30 дней: заголовок слева «прилипает», шаги справа идут при прокрутке.
 // Номера шагов стоят на линии между колонками.
 import { rollout } from '../data/home';
 import { site } from '../data/site';
@@ -62,10 +62,33 @@ import { t } from '../lib/typo';
           )}
           {i === 4 && (
             <div class="sv-dash">
-              <svg viewBox="0 0 240 70" preserveAspectRatio="none">
-                <path d="M0 58 L30 52 L60 54 L90 40 L120 42 L150 30 L180 26 L210 18 L240 12" fill="none" stroke="var(--accent-2)" stroke-width="2.5" pathLength="1" class="sv-line" />
-                <path d="M0 58 L30 52 L60 54 L90 40 L120 42 L150 30 L180 26 L210 18 L240 12 L240 70 L0 70Z" fill="var(--accent-soft)" opacity=".7" />
-              </svg>
+              <div class="sv-tile">
+                <span class="sv-tile-t">Денежный поток</span>
+                <svg viewBox="0 0 160 70" aria-hidden="true">
+                  {[22, 30, 26, 38, 44, 40, 52, 58].map((h, k) => (
+                    <rect class="sv-bar" x={6 + k * 19} y={66 - h} width="10" height={h} rx="1.5" style={`--d:${k * 70}ms`}></rect>
+                  ))}
+                  <path class="sv-line" d="M11 50 C20 47 26 44 30 43 S44 46 49 42 S62 32 68 30 S80 31 87 29 S100 20 106 18 S120 14 125 12 S140 6 144 5" pathLength="1"></path>
+                </svg>
+              </div>
+              <div class="sv-tile">
+                <span class="sv-tile-t">Расходы по статьям</span>
+                <svg viewBox="0 0 70 70" aria-hidden="true" class="sv-donut">
+                  {[[36, 'var(--th-1)'], [20, 'var(--th-2)'], [12, 'var(--th-3)'], [10, 'var(--th-4)'], [9, 'var(--th-5)'], [8, 'var(--th-7)'], [5, 'var(--th-8)']].reduce((acc, [v, c]) => {
+                    const off = acc.sum;
+                    acc.items.push(<circle cx="35" cy="35" r="24" pathLength="100" stroke={String(c)} style={`--a:${Number(v) - 1.2};--o:${-off}`}></circle>);
+                    acc.sum += Number(v);
+                    return acc;
+                  }, { sum: 0, items: [] as any[] }).items}
+                </svg>
+              </div>
+              <div class="sv-tile sv-tile--wide">
+                <span class="sv-tile-t">Задачи недели</span>
+                <ul class="sv-tasks">
+                  <li><span>Финансовая модель девелоперского проекта: 50 000 м², пятизвёздочный отель</span><b class="done">Готово</b></li>
+                  <li><span>Аудит финансовой модели</span><b>В работе</b></li>
+                </ul>
+              </div>
               <span class="sv-meet">Встреча раз в неделю</span>
             </div>
           )}
@@ -120,37 +143,53 @@ import { t } from '../lib/typo';
   .sv-docs { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
   .sv-docs li { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); }
   .sv-docs li::before { content: ''; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--line); flex: none; }
-  .sv-docs li.ok::before { content: '✓'; border: 0; background: var(--growth); color: #fff; font-size: 9px; font-weight: 800; text-align: center; line-height: 14px; }
+  .sv-docs li.ok::before { content: '✓'; border: 0; background: var(--growth); color: var(--surface); font-size: 9px; font-weight: 800; text-align: center; line-height: 14px; }
 
   .sv-tree { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
   .sv-tree div { display: grid; gap: 4px; align-content: start; }
-  .sv-tree b { padding: 6px 8px; border-radius: 6px; background: var(--accent); color: #fff; font-size: 13px; }
+  .sv-tree b { padding: 6px 8px; border-radius: 6px; background: var(--btn-bg); color: var(--btn-ink); font-size: 13px; }
   .sv-tree span { position: relative; margin-left: 12px; padding: 4px 8px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-size: 13px; }
   .sv-tree span::before { content: ''; position: absolute; left: -9px; top: 50%; width: 8px; height: 1px; background: var(--line); }
 
   .sv-route { list-style: none; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
   .sv-route li { padding: 6px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-weight: 600; font-size: 13px; }
   .sv-route li + li::before { content: '→'; margin: 0 8px 0 -2px; color: var(--ink-3); font-weight: 400; }
-  .sv-route li:last-child { background: var(--growth-soft); border-color: #cfe2da; color: var(--growth); }
+  .sv-route li:last-child { background: var(--growth-soft); border-color: color-mix(in srgb, var(--growth) 22%, var(--growth-soft)); color: var(--growth); }
 
   .sv-pf { display: grid; gap: 8px; }
   .sv-pf > div { display: grid; grid-template-columns: 76px 1fr; gap: 10px; align-items: center; }
   .sv-pf-bars { display: grid; gap: 3px; }
   .sv-pf-bars i { display: block; height: 7px; border-radius: 4px; width: 0; transition: width 1s cubic-bezier(.2, .8, .2, 1); }
-  .sv-pf-bars .plan { background: #dcd8cc; }
+  .sv-pf-bars .plan { background: var(--line); }
   .sv-pf-bars .fact { background: var(--accent-2); }
   .sv-pf-bars .fact.over { background: var(--risk); }
   .is-seen .sv-pf-bars i { width: var(--w); }
 
-  .sv-dash { position: relative; }
-  .sv-dash svg { width: 100%; height: 80px; }
-  .sv-line { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s ease; }
+  /* Мини-дашборд: поток, структура расходов и задачи недели */
+  .sv-dash { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 8px; }
+  .sv-tile { display: grid; gap: 6px; align-content: start; padding: 10px 12px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
+  .sv-tile--wide { grid-column: 1 / -1; }
+  .sv-tile-t { font-size: 12px; font-weight: 600; color: var(--ink-3); }
+  .sv-tile svg { display: block; width: 100%; height: 70px; }
+  .sv-bar { fill: var(--accent-2); opacity: .22; transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); transition: transform .7s cubic-bezier(.2, .8, .2, 1) var(--d); }
+  .is-seen .sv-bar { transform: none; }
+  .sv-line { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s ease .3s; }
   .is-seen .sv-line { stroke-dashoffset: 0; }
-  .sv-meet { position: absolute; top: 0; left: 0; padding: 2px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 12px; font-weight: 600; }
+  .sv-donut { justify-self: center; transform: rotate(-90deg); }
+  .sv-donut circle { fill: none; stroke-width: 9; stroke-dasharray: 0 100; stroke-dashoffset: var(--o); transition: stroke-dasharray 1.2s cubic-bezier(.2, .8, .2, 1); }
+  .is-seen .sv-donut circle { stroke-dasharray: var(--a) calc(100 - var(--a)); }
+  .sv-tasks { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+  .sv-tasks li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 13px; line-height: 1.35; }
+  .sv-tasks li + li { padding-top: 6px; border-top: 1px solid var(--line); }
+  .sv-tasks b { flex: none; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--bg); color: var(--ink-2); }
+  .sv-tasks b.done { background: var(--growth-soft); color: var(--growth); }
+  .sv-meet { justify-self: start; grid-column: 1 / -1; padding: 2px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 12px; font-weight: 600; }
 
   @media (prefers-reduced-motion: reduce) {
     .sv-pf-bars i { width: var(--w); }
     .sv-line { stroke-dashoffset: 0; }
+    .sv-bar { transform: none; }
+    .sv-donut circle { stroke-dasharray: var(--a) calc(100 - var(--a)); }
   }
 
   @media (min-width: 1024px) {

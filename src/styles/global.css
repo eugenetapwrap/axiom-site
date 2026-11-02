@@ -6,6 +6,7 @@
 */
 
 :root {
+  /* Палитра «Лес» (основная). Другие палитры ниже, на html[data-palette]. */
   --bg: #f5f3ec;
   --bg-alt: #ecebe2;
   --surface: #fffdf8;
@@ -33,6 +34,27 @@
   --on-deep-2: #a9c0b9;
   --gold-on-deep: #d9b26a;
 
+  /* Тёмный блок */
+  --dk-surface: #0f2e28;
+  --dk-ink: #eef4f1;
+  --dk-ink-2: #b4c8c1;
+  --dk-ink-3: #87a199;
+  --dk-line: rgba(238, 244, 241, 0.13);
+  --dk-accent: #86d3b8;
+  --dk-accent-ink: #0b241f;
+  --dk-accent-soft: rgba(134, 211, 184, 0.12);
+  --dk-gold-ink: #d9b26a;
+
+  /* Нити, схемы и графики */
+  --th-1: #0b5345; --th-2: #2e8b7a; --th-3: #4a86c5; --th-4: #7a6fc0;
+  --th-5: #c0739a; --th-6: #d9826b; --th-7: #d8a24a; --th-8: #9aaa5c;
+  --c-pos: #2e8b7a;
+  --c-pos-strong: #0b5345;
+  --c-neg: #c0739a;
+  --c-neg-soft: #d9b8c6;
+  --c-out: #d7c9a8;
+  --track: #ebe8df;
+
   --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Inter Tight', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -51,6 +73,116 @@
   --page: 1200px;
   --gutter: 16px;
   --shadow: 0 1px 2px rgba(20, 33, 29, 0.04);
+}
+
+/* Кнопка и «бумага» (светлые карточки в тёмном блоке) берут значения текущей палитры */
+:root {
+  --btn-bg: var(--accent);
+  --btn-ink: var(--accent-ink);
+  --paper-surface: var(--surface);
+  --paper-ink: var(--ink);
+  --paper-ink-2: var(--ink-2);
+  --paper-ink-3: var(--ink-3);
+  --paper-line: var(--line);
+  --paper-accent: var(--accent);
+  --paper-accent-ink: var(--accent-ink);
+  --paper-accent-soft: var(--accent-soft);
+  --paper-gold-ink: var(--gold-ink);
+  --paper-track: var(--track);
+  --paper-btn-bg: var(--btn-bg);
+  --paper-btn-ink: var(--btn-ink);
+}
+
+/*
+  Палитры для сравнения (переключатель над шапкой, только в превью редизайна).
+  Шрифты, сетка и графика общие, меняются только цвета.
+*/
+
+/* «Глина»: слоновая кость и терракота. Референс: палитра Anthropic (#f0eee6, #cc785c, #1f1e1d) */
+html[data-palette='clay'] {
+  --bg: #f0eee6; --bg-alt: #e7e4d9; --surface: #faf9f5;
+  --ink: #1f1e1d; --ink-2: #4d4b47; --ink-3: #807d75; --line: #dbd7cb;
+  --accent: #9a4e36; --accent-2: #c06a4f; --accent-ink: #ffffff; --accent-soft: #f1e1d7;
+  --gold: #c08a3e; --gold-ink: #8a5a22; --gold-soft: #f1e6d2; --signal: #ecd2bd;
+  --growth: #4f7a52; --growth-soft: #e3ece0;
+  --deep: #1f1e1d; --deep-2: #2b2a27; --on-deep: #f0eee6; --on-deep-2: #b9b5aa; --gold-on-deep: #e0a184;
+  --dk-surface: #2a2926; --dk-ink: #f0eee6; --dk-ink-2: #c4c0b5; --dk-ink-3: #96928a;
+  --dk-line: rgba(240, 238, 230, 0.13); --dk-accent: #e0a184; --dk-accent-ink: #1f1e1d;
+  --dk-accent-soft: rgba(224, 161, 132, 0.14); --dk-gold-ink: #e0a184;
+  --th-1: #a9583e; --th-2: #cc785c; --th-3: #d9a066; --th-4: #6b8f71;
+  --th-5: #5f7fa6; --th-6: #8a7bb0; --th-7: #c9a3b0; --th-8: #a3a88f;
+  --c-pos: #6b8f71; --c-pos-strong: #3f5f45; --c-neg: #cc785c; --c-neg-soft: #e8c6b6;
+  --c-out: #d9ccb6; --track: #e6e2d6;
+}
+
+/* «Синий консалтинг»: холодный белый и тёмно-синий. Референсы: McKinsey, Stripe */
+html[data-palette='navy'] {
+  --bg: #f6f8fb; --bg-alt: #ecf0f6; --surface: #ffffff;
+  --ink: #0a2540; --ink-2: #425466; --ink-3: #74839a; --line: #dde3ec;
+  --accent: #1d4ed8; --accent-2: #2f62e8; --accent-ink: #ffffff; --accent-soft: #e4ebfd;
+  --gold: #d39b2a; --gold-ink: #8a5d0c; --gold-soft: #f6ecd6; --signal: #d4e2ff;
+  --growth: #0f7b6c; --growth-soft: #e0f2ef;
+  --deep: #051c2c; --deep-2: #0b2a40; --on-deep: #eef3f9; --on-deep-2: #a9b9cc; --gold-on-deep: #7fb2ff;
+  --dk-surface: #0b2a40; --dk-ink: #eef3f9; --dk-ink-2: #b5c3d4; --dk-ink-3: #8597ad;
+  --dk-line: rgba(238, 243, 249, 0.13); --dk-accent: #7fb2ff; --dk-accent-ink: #051c2c;
+  --dk-accent-soft: rgba(127, 178, 255, 0.14); --dk-gold-ink: #7fb2ff;
+  --th-1: #0a2540; --th-2: #1d4ed8; --th-3: #00a3c4; --th-4: #6a5cff;
+  --th-5: #9b7bd8; --th-6: #37b38a; --th-7: #f2a93b; --th-8: #9fb0c6;
+  --c-pos: #2f62e8; --c-pos-strong: #0a2540; --c-neg: #e0637b; --c-neg-soft: #f2c3cc;
+  --c-out: #c9d3e0; --track: #e3e8f0;
+}
+
+/* «Лайм»: тёмно-зелёный и лайм. Референс: Wise */
+html[data-palette='lime'] {
+  --bg: #f4f6ef; --bg-alt: #e9eee0; --surface: #ffffff;
+  --ink: #163300; --ink-2: #45573a; --ink-3: #76846b; --line: #d9e0cc;
+  --accent: #2f5d0a; --accent-2: #3c7a12; --accent-ink: #ffffff; --accent-soft: #e4f3d4;
+  --btn-bg: #9fe870; --btn-ink: #163300;
+  --gold: #7cc24a; --gold-ink: #3d6b14; --gold-soft: #e7f5d9; --signal: #9fe870;
+  --growth: #2f7d32; --growth-soft: #e4f2e0;
+  --deep: #163300; --deep-2: #1f4205; --on-deep: #f1f7ea; --on-deep-2: #b7c9a6; --gold-on-deep: #9fe870;
+  --dk-surface: #1f4205; --dk-ink: #f1f7ea; --dk-ink-2: #c3d4b3; --dk-ink-3: #93a883;
+  --dk-line: rgba(241, 247, 234, 0.14); --dk-accent: #9fe870; --dk-accent-ink: #163300;
+  --dk-accent-soft: rgba(159, 232, 112, 0.14); --dk-gold-ink: #9fe870;
+  --th-1: #163300; --th-2: #3c7a12; --th-3: #7cc24a; --th-4: #2f8f7f;
+  --th-5: #4a86c5; --th-6: #b8e68f; --th-7: #d8a24a; --th-8: #a7b59a;
+  --c-pos: #3c7a12; --c-pos-strong: #163300; --c-neg: #e2856e; --c-neg-soft: #f0c8bb;
+  --c-out: #d6dcc4; --track: #e4e9da;
+}
+
+/* «Графит»: графит и янтарь. Референсы: Ramp, терминал Bloomberg */
+html[data-palette='graphite'] {
+  --bg: #f4f3ef; --bg-alt: #e9e8e2; --surface: #fbfbf9;
+  --ink: #141414; --ink-2: #4a4a47; --ink-3: #7c7b76; --line: #dad9d2;
+  --accent: #8a5a00; --accent-2: #b7791f; --accent-ink: #ffffff; --accent-soft: #f3e7c9;
+  --btn-bg: #141414; --btn-ink: #ffffff;
+  --gold: #e8a317; --gold-ink: #8a5a00; --gold-soft: #f6ead0; --signal: #f2c94c;
+  --growth: #3f7d4f; --growth-soft: #e3efe5;
+  --deep: #141414; --deep-2: #1f1f1e; --on-deep: #f4f3ef; --on-deep-2: #b3b1aa; --gold-on-deep: #f2c94c;
+  --dk-surface: #1f1f1e; --dk-ink: #f4f3ef; --dk-ink-2: #c7c5be; --dk-ink-3: #96948d;
+  --dk-line: rgba(244, 243, 239, 0.13); --dk-accent: #f2c94c; --dk-accent-ink: #141414;
+  --dk-accent-soft: rgba(242, 201, 76, 0.14); --dk-gold-ink: #f2c94c;
+  --th-1: #141414; --th-2: #e8a317; --th-3: #6b6a66; --th-4: #f2c94c;
+  --th-5: #c2410c; --th-6: #9a9890; --th-7: #b7791f; --th-8: #cfccc2;
+  --c-pos: #e8a317; --c-pos-strong: #141414; --c-neg: #c2410c; --c-neg-soft: #ebc3ad;
+  --c-out: #d9d6cc; --track: #e6e4dc;
+}
+
+/* «Бирюза»: бирюза и песок, тропический модерн без открыточных клише */
+html[data-palette='teal'] {
+  --bg: #f3eee5; --bg-alt: #e9e2d5; --surface: #fbf8f2;
+  --ink: #10292a; --ink-2: #44575a; --ink-3: #76817f; --line: #ddd5c6;
+  --accent: #0e6e6b; --accent-2: #12807c; --accent-ink: #ffffff; --accent-soft: #dcedea;
+  --gold: #d08a3c; --gold-ink: #8f5a1c; --gold-soft: #f5e6d0; --signal: #f2c38b;
+  --growth: #2b7a5c; --growth-soft: #e1efe8;
+  --deep: #0f2e30; --deep-2: #163c3e; --on-deep: #eef5f3; --on-deep-2: #a8c2bf; --gold-on-deep: #f2c38b;
+  --dk-surface: #163c3e; --dk-ink: #eef5f3; --dk-ink-2: #b6cbc8; --dk-ink-3: #86a19e;
+  --dk-line: rgba(238, 245, 243, 0.13); --dk-accent: #7fd1c7; --dk-accent-ink: #0f2e30;
+  --dk-accent-soft: rgba(127, 209, 199, 0.13); --dk-gold-ink: #f2c38b;
+  --th-1: #0e6e6b; --th-2: #5fb3a8; --th-3: #d08a3c; --th-4: #4a7fa5;
+  --th-5: #c26a4a; --th-6: #f2c38b; --th-7: #12807c; --th-8: #a9ab8f;
+  --c-pos: #12807c; --c-pos-strong: #0e6e6b; --c-neg: #c26a4a; --c-neg-soft: #e8c4b4;
+  --c-out: #dccfb8; --track: #e7e0d2;
 }
 
 @media (min-width: 720px) {
@@ -118,29 +250,35 @@ p { max-width: var(--measure); text-wrap: pretty; }
 /* Тёмный блок: токены переопределены, компоненты внутри перекрашиваются сами */
 .section--dark {
   --bg: var(--deep);
-  --surface: #0f2e28;
-  --ink: #eef4f1;
-  --ink-2: #b4c8c1;
-  --ink-3: #87a199;
-  --line: rgba(238, 244, 241, 0.13);
-  --accent: #86d3b8;
-  --accent-ink: #0b241f;
-  --accent-soft: rgba(134, 211, 184, 0.12);
-  --gold-ink: #d9b26a;
+  --surface: var(--dk-surface);
+  --ink: var(--dk-ink);
+  --ink-2: var(--dk-ink-2);
+  --ink-3: var(--dk-ink-3);
+  --line: var(--dk-line);
+  --accent: var(--dk-accent);
+  --accent-ink: var(--dk-accent-ink);
+  --accent-soft: var(--dk-accent-soft);
+  --gold-ink: var(--dk-gold-ink);
+  --track: rgba(255, 255, 255, 0.12);
+  --btn-bg: var(--dk-accent);
+  --btn-ink: var(--dk-accent-ink);
   background-color: var(--deep);
   color: var(--on-deep);
 }
-/* Светлая «бумага» внутри тёмного блока (карточки, чаты) */
+/* Светлая «бумага» внутри тёмного блока (карточки, чаты): берёт светлые токены текущей палитры */
 .theme-paper {
-  --surface: #fffdf8;
-  --ink: #14211d;
-  --ink-2: #4a5652;
-  --ink-3: #7b8682;
-  --line: #dcd9ce;
-  --accent: #0b5345;
-  --accent-ink: #ffffff;
-  --accent-soft: #e2ece6;
-  --gold-ink: #85652a;
+  --surface: var(--paper-surface);
+  --ink: var(--paper-ink);
+  --ink-2: var(--paper-ink-2);
+  --ink-3: var(--paper-ink-3);
+  --line: var(--paper-line);
+  --accent: var(--paper-accent);
+  --accent-ink: var(--paper-accent-ink);
+  --accent-soft: var(--paper-accent-soft);
+  --gold-ink: var(--paper-gold-ink);
+  --track: var(--paper-track);
+  --btn-bg: var(--paper-btn-bg);
+  --btn-ink: var(--paper-btn-ink);
   color: var(--ink);
 }
 /* Сигнальная полоса с главной цифрой */
@@ -206,10 +344,10 @@ p { max-width: var(--measure); text-wrap: pretty; }
   cursor: pointer;
   transition: background-color .15s ease, color .15s ease, border-color .15s ease;
 }
-.btn-primary { background: var(--accent); color: var(--accent-ink); }
-.btn-primary:hover { background: #083f35; }
+.btn-primary { background: var(--btn-bg); color: var(--btn-ink); }
+.btn-primary:hover { background: color-mix(in srgb, var(--btn-bg) 86%, var(--ink)); }
 .btn-soft { background: var(--accent-soft); color: var(--accent); }
-.btn-soft:hover { background: #d6e7e0; }
+.btn-soft:hover { background: color-mix(in srgb, var(--accent-soft) 88%, var(--accent)); }
 .btn-soft::after, .btn-chevron::after {
   content: '';
   width: 7px;

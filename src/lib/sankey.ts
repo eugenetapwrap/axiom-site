@@ -5,25 +5,26 @@
 export type SNode = { id: string; label: string; col: number; color: string };
 export type SLink = { from: string; to: string };
 
+// Цвета — спектр фирменных нитей первого экрана (HeroThreads): у каждого проекта и каждой статьи свой.
 export const NODES: SNode[] = [
-  { id: 'p1', label: 'Вилла A', col: 0, color: '#5fa596' },
-  { id: 'p2', label: 'Вилла B', col: 0, color: '#5fa596' },
-  { id: 'p3', label: 'Апарт-отель', col: 0, color: '#5fa596' },
-  { id: 'p4', label: 'Таунхаусы', col: 0, color: '#5fa596' },
-  { id: 'p5', label: 'Прочие проекты', col: 0, color: '#9bb3ad' },
-  { id: 'cash', label: 'Поступления', col: 1, color: '#5b93cf' },
-  { id: 'g1', label: 'Строительство', col: 2, color: '#d9727b' },
-  { id: 'g2', label: 'Операционные', col: 2, color: '#d9a548' },
-  { id: 'g3', label: 'Инвестиции', col: 2, color: '#5b93cf' },
-  { id: 'g4', label: 'Прирост остатка', col: 2, color: '#5fa596' },
-  { id: 'c1', label: 'Материалы', col: 3, color: '#d9727b' },
-  { id: 'c2', label: 'Работы подрядчиков', col: 3, color: '#d9727b' },
-  { id: 'c3', label: 'Инжиниринг', col: 3, color: '#d9727b' },
-  { id: 'c4', label: 'ФОТ и консалтинг', col: 3, color: '#d9a548' },
-  { id: 'c5', label: 'Налоги', col: 3, color: '#d9a548' },
-  { id: 'c6', label: 'Общие расходы', col: 3, color: '#d9a548' },
-  { id: 'c7', label: 'Основные средства', col: 3, color: '#5b93cf' },
-  { id: 'c8', label: 'Остаток на счетах', col: 3, color: '#5fa596' },
+  { id: 'p1', label: 'Вилла A', col: 0, color: 'var(--th-1)' },
+  { id: 'p2', label: 'Вилла B', col: 0, color: 'var(--th-2)' },
+  { id: 'p3', label: 'Апарт-отель', col: 0, color: 'var(--th-3)' },
+  { id: 'p4', label: 'Таунхаусы', col: 0, color: 'var(--th-4)' },
+  { id: 'p5', label: 'Прочие проекты', col: 0, color: 'var(--th-5)' },
+  { id: 'cash', label: 'Поступления', col: 1, color: 'var(--ink)' },
+  { id: 'g1', label: 'Строительство', col: 2, color: 'var(--th-1)' },
+  { id: 'g2', label: 'Операционные', col: 2, color: 'var(--th-4)' },
+  { id: 'g3', label: 'Инвестиции', col: 2, color: 'var(--th-6)' },
+  { id: 'g4', label: 'Прирост остатка', col: 2, color: 'var(--th-5)' },
+  { id: 'c1', label: 'Материалы', col: 3, color: 'var(--th-1)' },
+  { id: 'c2', label: 'Работы подрядчиков', col: 3, color: 'var(--th-2)' },
+  { id: 'c3', label: 'Инжиниринг', col: 3, color: 'var(--th-3)' },
+  { id: 'c4', label: 'ФОТ и консалтинг', col: 3, color: 'var(--th-4)' },
+  { id: 'c5', label: 'Налоги', col: 3, color: 'var(--th-7)' },
+  { id: 'c6', label: 'Общие расходы', col: 3, color: 'var(--th-8)' },
+  { id: 'c7', label: 'Основные средства', col: 3, color: 'var(--th-6)' },
+  { id: 'c8', label: 'Остаток на счетах', col: 3, color: 'var(--th-5)' },
 ];
 
 export const LINKS: SLink[] = [
@@ -85,7 +86,8 @@ export const SERIES: number[][] = MONTHS.map((_, m) => {
   return [...p, g1, g2, g3, g4, c1, c2, c3, c4, c5, c6, g3, g4];
 });
 
-export const GEOM = { W: 1100, H: 520, PAD_T: 36, NODE_W: 10, GAP: 14, colX: [170, 430, 690, 900] };
+// Тонкие нити: узлы-планки 3 px, между узлами воздух, потоки почти вдвое тоньше прежних лент
+export const GEOM = { W: 1100, H: 520, PAD_T: 36, NODE_W: 3, GAP: 24, colX: [190, 430, 660, 860] };
 
 const cols = [0, 1, 2, 3].map((c) => NODES.filter((n) => n.col === c));
 
@@ -107,7 +109,7 @@ const maxTotal = Math.max(...SERIES.map((vals) => {
   return Math.max(...cols.map((ns) => ns.reduce((s, n) => s + v[n.id], 0)));
 }));
 const { H, PAD_T, GAP, NODE_W, colX } = GEOM;
-export const SCALE = (H - PAD_T - 10 - GAP * 7) / maxTotal;
+export const SCALE = ((H - PAD_T - 10 - GAP * 7) / maxTotal) * 0.55;
 
 export type Layout = {
   nodes: Record<string, { x: number; y: number; h: number; value: number }>;

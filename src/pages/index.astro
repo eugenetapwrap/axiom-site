@@ -148,7 +148,7 @@ const widgetFor = {
     </div>
   </section>
 
-  <!-- Внедрение за 40 дней -->
+  <!-- Внедрение за 30 дней -->
   <section class="section" id="rollout">
     <div class="container">
       <RolloutStory />
@@ -450,8 +450,8 @@ const widgetFor = {
   .signal-value { max-width: none; font-family: var(--font-display); font-size: clamp(60px, 9vw, 120px); font-weight: 500; line-height: .95; letter-spacing: -0.05em; }
   .signal-unit { font-size: .3em; font-weight: 500; letter-spacing: -0.01em; vertical-align: .95em; }
   .signal-text { margin-top: var(--s2); font-size: 20px; max-width: 22em; }
-  .signal-rest { display: grid; gap: 0; border-top: 1px solid rgba(20, 33, 29, .18); }
-  .signal-rest > div { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: var(--s2); padding: 14px 0; border-bottom: 1px solid rgba(20, 33, 29, .18); align-items: baseline; }
+  .signal-rest { display: grid; gap: 0; border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+  .signal-rest > div { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: var(--s2); padding: 14px 0; border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); align-items: baseline; }
   .signal-rest dt { font-weight: 500; font-size: 17px; }
   .signal-rest dt .num { font-weight: 600; font-size: 22px; letter-spacing: -0.02em; }
   .signal-rest dd { font-size: 15px; }

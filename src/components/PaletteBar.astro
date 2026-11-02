@@ -1,0 +1,89 @@
+---
+// Переключатель палитр для сравнения вариантов. Только в превью редизайна, перед запуском убрать.
+// Значения цветов в src/styles/global.css (html[data-palette=…]). Выбор запоминается в браузере.
+const PALETTES = [
+  { id: 'forest', label: 'Лес', ref: 'текущая палитра', sw: ['#f5f3ec', '#0b5345', '#f0d98c'] },
+  { id: 'clay', label: 'Глина', ref: 'референс: Anthropic', sw: ['#f0eee6', '#cc785c', '#1f1e1d'] },
+  { id: 'navy', label: 'Синий консалтинг', ref: 'референсы: McKinsey, Stripe', sw: ['#f6f8fb', '#1d4ed8', '#0a2540'] },
+  { id: 'lime', label: 'Лайм', ref: 'референс: Wise', sw: ['#f4f6ef', '#9fe870', '#163300'] },
+  { id: 'graphite', label: 'Графит', ref: 'референсы: Ramp, Bloomberg', sw: ['#f4f3ef', '#f2c94c', '#141414'] },
+  { id: 'teal', label: 'Бирюза', ref: 'тропический модерн', sw: ['#f3eee5', '#0e6e6b', '#f2c38b'] },
+];
+---
+
+<div class="pbar" data-pbar>
+  <div class="container pbar-inner">
+    <span class="pbar-label">Палитра</span>
+    <div class="pbar-list" role="group" aria-label="Палитра сайта">
+      {PALETTES.map((p, i) => (
+        <button type="button" class="pbar-btn" data-palette-btn={p.id} data-ref={p.ref} aria-pressed={i === 0 ? 'true' : 'false'} title={p.ref}>
+          <span class="pbar-sw" aria-hidden="true">{p.sw.map((c) => <i style={`background:${c}`}></i>)}</span>
+          {p.label}
+        </button>
+      ))}
+    </div>
+    <span class="pbar-ref" data-pbar-ref>{PALETTES[0].ref}</span>
+  </div>
+</div>
+
+<script>
+  const KEY = 'axiom-palette';
+  const root = document.documentElement;
+  document.querySelectorAll<HTMLElement>('[data-pbar]').forEach((bar) => {
+    const btns = [...bar.querySelectorAll<HTMLButtonElement>('[data-palette-btn]')];
+    const ref = bar.querySelector<HTMLElement>('[data-pbar-ref]');
+    const mark = (id: string) => {
+      btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.paletteBtn === id)));
+      const on = btns.find((b) => b.dataset.paletteBtn === id);
+      if (ref && on) ref.textContent = on.dataset.ref ?? '';
+      // На телефоне список прокручивается: держим выбранную палитру на виду
+      const list = on?.parentElement;
+      if (on && list && list.scrollWidth > list.clientWidth) list.scrollLeft = Math.max(0, on.offsetLeft - list.offsetLeft - 16);
+    };
+    const apply = (id: string) => {
+      if (id === 'forest') delete root.dataset.palette;
+      else root.dataset.palette = id;
+      mark(id);
+      try { localStorage.setItem(KEY, id); } catch { /* без памяти тоже работает */ }
+    };
+    mark(root.dataset.palette ?? 'forest');
+    btns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.paletteBtn!)));
+  });
+</script>
+
+<style>
+  /* Панель нарочно нейтральная и не зависит от палитры: это инструмент сравнения, а не часть сайта */
+  .pbar { background: #1c1c1b; color: #f2f1ec; font-size: 13px; }
+  .pbar-inner { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+  .pbar-label { flex: none; color: #a6a49c; }
+  .pbar-list { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 6px 0; }
+  .pbar-list::-webkit-scrollbar { display: none; }
+  .pbar-btn {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px 5px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font: 500 13px var(--font);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color .15s ease, border-color .15s ease;
+  }
+  .pbar-btn:hover { background: rgba(255, 255, 255, 0.08); }
+  .pbar-btn[aria-pressed='true'] { background: #f2f1ec; color: #1c1c1b; border-color: #f2f1ec; }
+  .pbar-btn:focus-visible { outline: 2px solid #f2c94c; outline-offset: 2px; }
+  .pbar-sw { display: inline-flex; }
+  .pbar-sw i { width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 0 1.5px #1c1c1b, inset 0 0 0 1px rgba(255, 255, 255, 0.3); }
+  .pbar-btn[aria-pressed='true'] .pbar-sw i { box-shadow: 0 0 0 1.5px #f2f1ec, inset 0 0 0 1px rgba(0, 0, 0, 0.12); }
+  .pbar-sw i + i { margin-left: -4px; }
+  .pbar-ref { margin-left: auto; flex: none; color: #a6a49c; white-space: nowrap; }
+  @media (max-width: 1100px) { .pbar-ref { display: none; } }
+  @media (max-width: 719px) {
+    .pbar-label { display: none; }
+  }
+  :global(html) { scroll-padding-top: 124px; }
+</style>
