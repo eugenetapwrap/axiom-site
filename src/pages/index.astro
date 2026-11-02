@@ -1,15 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
-import DemoDashboard from '../components/DemoDashboard.astro';
 import SankeyFlow from '../components/SankeyFlow.astro';
 import PaymentBoard from '../components/PaymentBoard.astro';
 import { site } from '../data/site';
 import {
-  hero, flow, services, smallTasks, stats, payment, rollout, cases, about, faq, finalCta,
+  hero, practices, expertise, geography, flow, stats, payment, rollout, approach, cases, team, bot, faq, finalCta,
 } from '../data/home';
 import { t } from '../lib/typo';
-
-const href = (k: 'telegram' | 'bot') => (k === 'bot' ? site.botUrl : site.telegramUrl);
 
 const faqLd = {
   '@context': 'https://schema.org',
@@ -22,69 +19,81 @@ const faqLd = {
 };
 ---
 
-<Base title="Axiom — финансы девелоперских проектов на Бали" jsonLd={[faqLd]}>
+<Base title="Axiom — финансовый консалтинг для девелопмента и строительства" jsonLd={[faqLd]}>
   <!-- Первый экран -->
   <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-copy">
-        <h1>{t(hero.title)}</h1>
-        <p class="hero-lead">{t(hero.lead)}</p>
-        <ul class="chips" aria-label="С чем работаем">
-          {hero.keywords.map((k) => <li>{k}</li>)}
-        </ul>
-        <div class="btn-row">
-          <a class="btn btn-primary" href={site.telegramUrl}>Написать в Telegram</a>
-          <a class="btn btn-secondary" href={site.botUrl}>Попробовать бота бесплатно</a>
-        </div>
-        <p class="caption hero-note">{t(hero.note)}: <a href={site.telegramUrl}>@{site.telegram}</a></p>
+    <div class="container">
+      <p class="eyebrow">{hero.eyebrow}</p>
+      <h1>{t(hero.title)}</h1>
+      <p class="hero-lead">{t(hero.lead)}</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
+        <a class="btn btn-secondary" href="#practices">Направления</a>
       </div>
-      <div class="hero-visual">
-        <DemoDashboard />
-      </div>
+      <dl class="facts">
+        {hero.facts.map((f) => (
+          <div>
+            <dt>{f.value}</dt>
+            <dd>{t(f.text)}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
   </section>
 
-  <!-- Куда уходят деньги: Sankey -->
-  <section class="section" id="flow" data-reveal>
+  <!-- Направления -->
+  <section class="section" id="practices" data-reveal>
     <div class="container">
       <div class="section-head">
-        <h2>{t(flow.title)}</h2>
-        <p>{t(flow.lead)}</p>
-        <ul class="chips chips-plain flow-points">
-          {flow.points.map((p) => <li>{t(p)}</li>)}
-        </ul>
+        <p class="eyebrow">Направления</p>
+        <h2>Чем мы занимаемся</h2>
       </div>
-      <SankeyFlow />
-    </div>
-  </section>
-
-  <!-- Услуги -->
-  <section class="section" id="services" data-reveal>
-    <div class="container">
-      <h2 class="section-head">Чем мы помогаем</h2>
-      <div class="cards">
-        {services.map((s) => (
-          <article class="card" id={s.id}>
-            <div>
-              <h3>
-                {t(s.title)} {s.badge && <span class="badge">{s.badge}</span>}
-              </h3>
-              <p class="card-lead">{t(s.lead)}</p>
+      <div class="practices">
+        {practices.map((p) => (
+          <article class="practice" id={p.id}>
+            <span class="practice-num">{p.num}</span>
+            <div class="practice-head">
+              <h3>{t(p.title)}</h3>
+              <p class="muted">{t(p.lead)}</p>
+              <a class="link-arrow" href={site.telegramUrl}>{p.cta}</a>
             </div>
-            <ul class="ticks">
-              {s.items.map((i) => <li>{t(i)}</li>)}
+            <ul class="practice-list">
+              {p.items.map((i) => <li>{t(i)}</li>)}
             </ul>
-            {s.tagline && <p class="tagline">{t(s.tagline)}</p>}
-            <a class="link-arrow card-link" href={href(s.href)}>{s.cta}</a>
           </article>
         ))}
       </div>
-      <div class="tasks">
-        <h3>{smallTasks.title}</h3>
-        <ul class="chips chips-plain">
-          {smallTasks.items.map((i) => <li>{t(i)}</li>)}
-        </ul>
-        <a class="link-arrow" href={site.telegramUrl}>{smallTasks.cta}</a>
+    </div>
+  </section>
+
+  <!-- Экспертиза и география -->
+  <section class="section" id="expertise" data-reveal>
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">{expertise.title}</p>
+        <h2>Девелопмент, строительство, инвестиции и технологии</h2>
+      </div>
+      <div class="areas">
+        {expertise.areas.map((a) => (
+          <div class="area">
+            <h3>{a.title}</h3>
+            <ul>
+              {a.items.map((i) => <li>{t(i)}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div class="geo">
+        <h3 class="geo-title">{geography.title}</h3>
+        <dl class="geo-list">
+          {geography.regions.map((r) => (
+            <div>
+              <dt>{r.title}</dt>
+              <dd>{r.countries}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="caption geo-note">{t(geography.note)}</p>
       </div>
     </div>
   </section>
@@ -92,7 +101,7 @@ const faqLd = {
   <!-- Цифры -->
   <section class="section stats-section" aria-labelledby="stats-title">
     <div class="container">
-      <h2 id="stats-title" class="section-head">Axiom Operations в цифрах</h2>
+      <h2 id="stats-title" class="section-head">Результаты в цифрах</h2>
       <dl class="stats">
         {stats.map((s) => (
           <div class="stat">
@@ -104,24 +113,33 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Как работает платёж -->
+  <!-- Движение денег -->
+  <section class="section" id="flow" data-reveal>
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Управленческий учёт</p>
+        <h2>{t(flow.title)}</h2>
+        <p>{t(flow.lead)}</p>
+      </div>
+      <SankeyFlow />
+    </div>
+  </section>
+
+  <!-- Контроль платежей и внедрение -->
   <section class="section" id="system" data-reveal>
     <div class="container">
       <div class="section-head">
+        <p class="eyebrow">Управленческий учёт</p>
         <h2>{t(payment.title)}</h2>
         <p>{t(payment.lead)}</p>
       </div>
       <PaymentBoard columns={payment.columns.map((c) => ({ title: t(c.title), text: t(c.text) }))} />
-    </div>
-  </section>
-
-  <!-- Внедрение -->
-  <section class="section" data-reveal>
-    <div class="container">
-      <h2 class="section-head">{t(rollout.title)}</h2>
-      <ol class="timeline">
-        {rollout.steps.map((s) => <li>{t(s)}</li>)}
-      </ol>
+      <div class="rollout">
+        <h3>{t(rollout.title)}</h3>
+        <ol class="timeline">
+          {rollout.steps.map((s) => <li>{t(s)}</li>)}
+        </ol>
+      </div>
     </div>
   </section>
 
@@ -129,7 +147,8 @@ const faqLd = {
   <section class="section" id="cases" data-reveal>
     <div class="container">
       <div class="section-head">
-        <h2>Кейсы</h2>
+        <p class="eyebrow">Кейсы</p>
+        <h2>Задачи, которые мы решали</h2>
         <p class="caption">Клиентов и проекты не называем</p>
       </div>
       <div class="cases">
@@ -138,7 +157,7 @@ const faqLd = {
             <p class="caption">{c.tag}</p>
             <h3>{t(c.problem)}</h3>
             <dl class="case-dl">
-              <dt>Сделали</dt>
+              <dt>Решение</dt>
               <dd>{t(c.action)}</dd>
               <dt>Результат</dt>
               <dd class="case-result">{t(c.result)}</dd>
@@ -149,17 +168,61 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Кто мы -->
-  <section class="section" id="about" data-reveal>
+  <!-- Как работаем -->
+  <section class="section" data-reveal>
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Подход</p>
+        <h2>{approach.title}</h2>
+      </div>
+      <ol class="approach">
+        {approach.steps.map((s, i) => (
+          <li>
+            <span class="approach-num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.title}</h3>
+            <p class="muted">{t(s.text)}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Команда -->
+  <section class="section" id="team" data-reveal>
     <div class="container two-col">
-      <h2>{about.title}</h2>
-      <div class="stack">
-        <div>
-          <h3>{t(about.name)}</h3>
-          <ul class="ticks about-list">
-            {about.items.map((i) => <li>{t(i)}</li>)}
-          </ul>
-        </div>
+      <div>
+        <p class="eyebrow">{team.title}</p>
+        <h2>Кто работает над проектом</h2>
+        <p class="muted team-lead">{t(team.lead)}</p>
+      </div>
+      <div>
+        <dl class="roles">
+          {team.roles.map((r) => (
+            <div>
+              <dt>{r.title}</dt>
+              <dd>{t(r.text)}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="founder">{t(team.founder)}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Продукт: бот -->
+  <section class="section bot-section" id="bot" data-reveal>
+    <div class="container bot-grid">
+      <div>
+        <p class="eyebrow">Продукт</p>
+        <h2>{bot.title} <span class="badge">{bot.badge}</span></h2>
+      </div>
+      <div>
+        <p>{t(bot.lead)}</p>
+        <ul class="inline-list">
+          {bot.items.map((i) => <li>{t(i)}</li>)}
+        </ul>
+        <p class="tagline">{t(bot.tagline)}</p>
+        <a class="btn btn-secondary" href={site.botUrl}>{bot.cta}</a>
       </div>
     </div>
   </section>
@@ -167,7 +230,10 @@ const faqLd = {
   <!-- FAQ -->
   <section class="section" id="faq">
     <div class="container two-col">
-      <h2>Частые вопросы</h2>
+      <div>
+        <p class="eyebrow">Вопросы</p>
+        <h2>Частые вопросы</h2>
+      </div>
       <div class="faq">
         {faq.map((f) => (
           <details>
@@ -184,7 +250,8 @@ const faqLd = {
     <div class="container two-col">
       <h2>{finalCta.title}</h2>
       <div>
-        <ul class="ticks final-list">
+        <p class="muted">Что прислать:</p>
+        <ul class="practice-list final-list">
           {finalCta.items.map((i) => <li>{t(i)}</li>)}
         </ul>
         <p class="final-text">{t(finalCta.text)}</p>
@@ -195,102 +262,111 @@ const faqLd = {
 </Base>
 
 <style>
-  .hero { padding: var(--s6) 0; }
-  .hero-grid { display: grid; gap: var(--s5); align-items: center; }
-  @media (min-width: 1024px) {
-    .hero { padding: var(--s7) 0; }
-    .hero-grid { grid-template-columns: 7fr 5fr; gap: var(--s6); }
-  }
-  .hero-lead { margin: var(--s3) 0; color: var(--ink-2); font-size: 1.1em; }
-  .hero-note { margin-top: var(--s2); }
-
-  .chips {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 var(--s4);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s1);
-  }
-  .chips li {
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: 15px;
+  .eyebrow {
+    margin-bottom: var(--s2);
+    font-size: 13px;
     font-weight: 600;
-    line-height: 1.3;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
   }
-  .chips-plain { margin: var(--s2) 0 var(--s3); }
-  .chips-plain li { background: var(--surface); color: var(--ink); border: 1px solid var(--line); font-weight: 500; }
+
+  /* Первый экран: только типографика и факты */
+  .hero { padding: var(--s7) 0 var(--s6); }
+  .hero h1 { max-width: 15em; font-size: clamp(36px, 5.6vw, 68px); line-height: 1.06; letter-spacing: -0.025em; }
+  .hero-lead { margin: var(--s4) 0; max-width: 40em; color: var(--ink-2); font-size: 1.1em; }
+  .facts {
+    display: grid;
+    gap: var(--s3);
+    margin-top: var(--s6);
+    padding-top: var(--s3);
+    border-top: 1px solid var(--ink);
+  }
+  @media (min-width: 800px) { .facts { grid-template-columns: repeat(3, 1fr); gap: var(--s4); } }
+  .facts dt { font-size: clamp(32px, 3.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+  .facts dd { margin-top: var(--s1); max-width: 18em; color: var(--ink-2); font-size: 16px; }
 
   .two-col { display: grid; gap: var(--s4); }
-  @media (min-width: 1024px) {
-    .two-col { grid-template-columns: 4fr 8fr; gap: var(--s6); }
-  }
-  .stack { display: grid; gap: var(--s4); }
+  @media (min-width: 1024px) { .two-col { grid-template-columns: 4fr 8fr; gap: var(--s6); } }
 
-  .ticks { list-style: none; padding: 0; display: grid; gap: 6px; }
-  .ticks li { position: relative; padding-left: 26px; font-size: 17px; }
-  .ticks li::before {
-    content: '';
-    position: absolute;
-    left: 2px;
-    top: 0.42em;
-    width: 12px;
-    height: 7px;
-    border-left: 2px solid var(--accent);
-    border-bottom: 2px solid var(--accent);
-    transform: rotate(-45deg);
+  /* Направления: строгие строки с номерами */
+  .practices { border-top: 1px solid var(--ink); }
+  .practice {
+    display: grid;
+    gap: var(--s2) var(--s4);
+    padding: var(--s4) 0;
+    border-bottom: 1px solid var(--line);
   }
+  @media (min-width: 900px) {
+    .practice { grid-template-columns: 64px 5fr 6fr; padding: var(--s5) 0; }
+  }
+  .practice-num { font-size: 15px; font-weight: 600; color: var(--ink-3); padding-top: 6px; }
+  .practice-head h3 { font-size: clamp(22px, 2.2vw, 28px); line-height: 1.2; }
+  .practice-head p { margin: var(--s1) 0 var(--s2); font-size: 17px; }
+  .practice-head .link-arrow { font-size: 16px; }
+  .practice-list { list-style: none; padding: 0; display: grid; gap: 0; }
+  .practice-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 17px;
+  }
+  .practice-list li:first-child { padding-top: 0; }
+  .practice-list li:last-child { border-bottom: 0; }
 
-  .cards { display: grid; gap: var(--s3); }
-  @media (min-width: 800px) { .cards { grid-template-columns: repeat(2, 1fr); } }
-  .card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--s3);
+  /* Экспертиза */
+  .areas { display: grid; gap: var(--s4); border-top: 1px solid var(--ink); padding-top: var(--s3); }
+  @media (min-width: 720px) { .areas { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .areas { grid-template-columns: repeat(4, 1fr); } }
+  .area h3 { margin-bottom: var(--s2); }
+  .area ul { list-style: none; padding: 0; display: grid; gap: 6px; color: var(--ink-2); font-size: 16px; }
+
+  .geo {
+    display: grid;
+    gap: var(--s2) var(--s4);
+    margin-top: var(--s6);
     padding: var(--s4);
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: var(--radius);
+    border-radius: 4px;
   }
-  .card-lead { margin-top: 4px; color: var(--ink-2); font-size: 17px; }
-  .card .tagline { font-weight: 600; font-size: 17px; }
-  .card-link { margin-top: auto; font-size: 17px; }
-  @media (max-width: 719px) { .card { padding: var(--s3); } }
+  @media (min-width: 900px) { .geo { grid-template-columns: 3fr 9fr; align-items: start; } }
+  .geo-list { display: grid; gap: var(--s2); }
+  @media (min-width: 720px) { .geo-list { grid-template-columns: repeat(3, 1fr); } }
+  .geo-list dt { font-size: 14px; color: var(--ink-3); }
+  .geo-list dd { margin-top: 2px; font-weight: 600; }
+  .geo-note { grid-column: 1 / -1; }
+  @media (min-width: 900px) { .geo-note { grid-column: 2; } }
 
-  .tasks { margin-top: var(--s5); }
-
+  /* Цифры */
   .stats-section { background: var(--accent); color: #fff; border-top: 0 !important; }
   .stats-section + .section { border-top: 0; }
   .stats { display: grid; gap: var(--s4); margin: 0; }
   @media (min-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1100px) { .stats { grid-template-columns: repeat(4, 1fr); } }
-  .stat { border-top: 1px solid rgba(255, 255, 255, 0.25); padding-top: var(--s2); }
+  .stat { border-top: 1px solid rgba(255, 255, 255, 0.3); padding-top: var(--s2); }
   .stat-value { font-size: clamp(36px, 4vw, 48px); font-weight: 700; letter-spacing: -0.02em; }
   .stat-unit { font-size: 18px; font-weight: 600; color: #e3c48c; }
   .stat dd { margin-top: var(--s1); color: #d3e3de; font-size: 16px; max-width: 18em; }
 
-  .flow-points { margin-bottom: 0; }
-
+  /* Внедрение */
+  .rollout { margin-top: var(--s6); }
+  .rollout h3 { margin-bottom: var(--s3); }
   .timeline { list-style: none; padding: 0; display: grid; gap: var(--s3); }
-  .timeline li { position: relative; padding-left: var(--s4); font-weight: 600; }
+  .timeline li { position: relative; padding-left: var(--s4); font-weight: 600; font-size: 17px; }
   .timeline li::before {
     content: '';
     position: absolute;
     left: 0;
-    top: 0.45em;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+    top: 0.4em;
+    width: 10px;
+    height: 10px;
     background: var(--accent);
   }
   .timeline li::after {
     content: '';
     position: absolute;
-    left: 5px;
-    top: calc(0.45em + 16px);
+    left: 4px;
+    top: calc(0.4em + 14px);
     bottom: calc(-1 * var(--s3) + 4px);
     width: 2px;
     background: var(--line);
@@ -300,20 +376,50 @@ const faqLd = {
     .timeline { grid-template-columns: repeat(5, 1fr); }
     .timeline li { padding-left: 0; padding-top: var(--s4); padding-right: var(--s2); }
     .timeline li::before { top: 0; }
-    .timeline li::after { left: 16px; right: calc(-1 * var(--s3) + 4px); top: 5px; bottom: auto; width: auto; height: 2px; }
+    .timeline li::after { left: 14px; right: calc(-1 * var(--s3) + 4px); top: 4px; bottom: auto; width: auto; height: 2px; }
   }
 
+  /* Кейсы */
   .cases { display: grid; gap: var(--s4); }
   @media (min-width: 900px) { .cases { grid-template-columns: repeat(3, 1fr); } }
-  .case { display: grid; gap: var(--s1); align-content: start; padding-top: var(--s2); border-top: 2px solid var(--accent); }
+  .case { display: grid; gap: var(--s1); align-content: start; padding-top: var(--s2); border-top: 1px solid var(--ink); }
   .case-dl { display: grid; gap: 2px; margin-top: var(--s1); font-size: 17px; }
   .case-dl dt { color: var(--ink-3); font-size: 14px; margin-top: var(--s1); }
   .case-result { font-weight: 600; color: var(--accent); }
 
-  .about-list { margin-top: var(--s2); }
-  .quote { padding-left: var(--s3); border-left: 2px solid var(--gold); }
+  /* Подход */
+  .approach { list-style: none; padding: 0; display: grid; gap: var(--s4); border-top: 1px solid var(--ink); padding-top: var(--s3); }
+  @media (min-width: 720px) { .approach { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .approach { grid-template-columns: repeat(4, 1fr); } }
+  .approach-num { display: block; margin-bottom: var(--s2); font-size: 15px; font-weight: 600; color: var(--ink-3); }
+  .approach p { margin-top: 4px; font-size: 16px; }
 
+  /* Команда */
+  .team-lead { margin-top: var(--s2); font-size: 17px; }
+  .roles { display: grid; border-top: 1px solid var(--ink); }
+  .roles > div {
+    display: grid;
+    gap: 2px var(--s3);
+    padding: var(--s2) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (min-width: 720px) { .roles > div { grid-template-columns: 5fr 7fr; } }
+  .roles dt { font-weight: 600; }
+  .roles dd { color: var(--ink-2); font-size: 17px; }
+  .founder { margin-top: var(--s3); color: var(--ink-2); font-size: 17px; }
+
+  /* Бот */
+  .bot-section { background: var(--surface); }
+  .bot-grid { display: grid; gap: var(--s3); }
+  @media (min-width: 1024px) { .bot-grid { grid-template-columns: 4fr 8fr; gap: var(--s6); } }
+  .bot-grid h2 { font-size: clamp(24px, 2.8vw, 32px); }
+  .inline-list { list-style: none; padding: 0; margin: var(--s2) 0; display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); color: var(--ink-2); font-size: 16px; }
+  .inline-list li::before { content: '— '; color: var(--ink-3); }
+  .tagline { font-weight: 600; margin-bottom: var(--s3); }
+
+  /* FAQ */
   .faq details { border-top: 1px solid var(--line); padding: var(--s2) 0; }
+  .faq details:first-child { border-top: 1px solid var(--ink); }
   .faq details:last-child { border-bottom: 1px solid var(--line); }
   .faq summary {
     cursor: pointer;
@@ -328,6 +434,6 @@ const faqLd = {
   .faq details[open] summary::after { content: '−'; }
   .faq details p { margin-top: var(--s1); font-size: 17px; }
 
-  .final-list li { font-size: 1em; font-weight: 500; }
+  .final-list { margin-top: var(--s1); }
   .final-text { margin: var(--s3) 0; color: var(--ink-2); }
 </style>
