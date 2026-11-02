@@ -64,21 +64,13 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Услуги (Евгений 02.11.2026): у всех четырёх один шаблон из прямоугольных блоков.
-       Название, строка «что это» и результат; «Что входит»; кнопка; пример на демо-данных.
-       Три варианта раскладки для сравнения (html[data-svc]): 1 — текст и пример пополам,
-       2 — два блока рядом и пример снизу, 3 — вкладки и пример сверху. Переключатель в тёмной полосе сверху -->
-  <section class="section section--alt practices" id="practices" aria-label="Услуги" data-pl>
+  <!-- Услуги (Евгений 02.11.2026, выбрал раскладку «пример снизу»): у всех четырёх один шаблон из прямоугольных блоков.
+       Сверху два блока рядом: название, строка «что это», результат и кнопка; «Что входит» в две колонки.
+       Под ними пример на демо-данных во всю ширину карточки -->
+  <section class="section section--alt practices" id="practices" aria-label="Услуги">
     <div class="container">
-      <div class="pl-tabs" role="tablist" aria-label="Услуги">
-        {practices.map((p, i) => (
-          <button type="button" role="tab" id={`pl-tab-${p.id}`} aria-controls={p.id} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-pl-tab={p.id}>
-            <span>{p.num}</span>{t(p.short)}
-          </button>
-        ))}
-      </div>
       {practices.map((p) => (
-        <article class="practice" id={p.id} data-reveal data-pl-panel={p.id} aria-labelledby={`pr-h-${p.id}`}>
+        <article class="practice" id={p.id} data-reveal aria-labelledby={`pr-h-${p.id}`}>
           <div class="pr-main">
             <span class="practice-num">{p.num}</span>
             <h2 id={`pr-h-${p.id}`}>{t(p.title)}</h2>
@@ -261,37 +253,6 @@ const faqLd = {
 </Base>
 
 <script>
-  // Услуги вкладками (раскладка 3): видна одна услуга. Ссылки на #models и другие открывают нужную вкладку
-  document.querySelectorAll<HTMLElement>('[data-pl]').forEach((pl) => {
-    const tabs = [...pl.querySelectorAll<HTMLButtonElement>('[data-pl-tab]')];
-    const panels = [...pl.querySelectorAll<HTMLElement>('[data-pl-panel]')];
-    const pick = (id: string) => {
-      if (!panels.some((p) => p.dataset.plPanel === id)) return false;
-      tabs.forEach((t) => {
-        const on = t.dataset.plTab === id;
-        t.setAttribute('aria-selected', String(on));
-        t.tabIndex = on ? 0 : -1;
-      });
-      panels.forEach((p) => p.toggleAttribute('data-pl-off', p.dataset.plPanel !== id));
-      return true;
-    };
-    tabs.forEach((t, i) => {
-      t.addEventListener('click', () => pick(t.dataset.plTab!));
-      t.addEventListener('keydown', (e) => {
-        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-        const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
-        n.focus();
-        pick(n.dataset.plTab!);
-      });
-    });
-    // Клик по ссылке на услугу: сначала показываем вкладку, потом браузер прокручивает к ней
-    document.addEventListener('click', (e) => {
-      const a = (e.target as Element).closest<HTMLAnchorElement>('a[href*="#"]');
-      if (a && a.pathname === location.pathname) pick(a.hash.slice(1));
-    });
-    if (!pick(location.hash.slice(1))) pick(panels[0].dataset.plPanel!);
-  });
-
   // Вопросы: клик по вопросу показывает ответ справа. На узком экране ответ встаёт под вопросом.
   document.querySelectorAll<HTMLElement>('[data-faq]').forEach((root) => {
     const qs = [...root.querySelectorAll<HTMLButtonElement>('[data-faq-q]')];
@@ -424,9 +385,8 @@ const faqLd = {
   .service-more { margin-top: auto; padding-top: var(--s1); color: var(--accent); font-size: 15px; font-weight: 600; }
   .service-more::after { content: ' ↓'; }
 
-  /* Услуги: у каждой одна карточка с четырьмя областями — main (название, что это, результат), list (что входит),
-     cta (кнопка), ex (пример). Раскладку задаёт html[data-svc]: 1 пополам, 2 пример снизу, 3 вкладки. На телефоне всё столбиком.
-     Кнопка всегда в нижнем ряду своей колонки: её низ совпадает с низом соседнего блока */
+  /* Услуги: карточка из четырёх областей — main (название, что это, результат), list (что входит), cta (кнопка), ex (пример).
+     На широком экране main и list рядом, кнопка по низу списка, пример во всю ширину карточки. На телефоне всё столбиком */
   .practices { padding-top: var(--s5); }
   .practice {
     display: grid;
@@ -455,36 +415,12 @@ const faqLd = {
   .practice-items { gap: 8px; }
 
   @media (min-width: 1024px) {
-    /* 1. Пополам: слева название, состав и кнопка, справа пример той же высоты */
-    .practice { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto 1fr auto; grid-template-areas: 'main ex' 'list ex' 'cta ex'; column-gap: var(--s5); row-gap: var(--s4); }
-    /* 2. Два блока рядом, пример снизу во всю ширину карточки */
-    :global(html[data-svc='2']) .practice { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); grid-template-rows: auto 1fr auto; grid-template-areas: 'main list' 'cta list' 'ex ex'; }
-    :global(html[data-svc='2']) .pr-list { padding-left: var(--s5); border-left: 1px solid var(--line); }
-    :global(html[data-svc='2']) .practice-items { display: block; columns: 2; column-gap: var(--s5); }
-    :global(html[data-svc='2']) .practice-items li { break-inside: avoid; margin-bottom: 8px; }
-    :global(html[data-svc='2']) .pr-ex { margin-top: var(--s1); }
-    /* 3. Вкладки: пример сверху, под ним два блока, как у claude.com */
-    :global(html[data-svc='3']) .practice { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); grid-template-rows: auto auto 1fr; grid-template-areas: 'ex ex' 'main list' 'cta list'; }
-    :global(html[data-svc='3']) .pr-list { padding-left: var(--s5); border-left: 1px solid var(--line); }
-    :global(html[data-svc='3']) .practice-items { display: block; columns: 2; column-gap: var(--s5); }
-    :global(html[data-svc='3']) .practice-items li { break-inside: avoid; margin-bottom: 8px; }
-    :global(html[data-svc='3']) .pr-ex { margin-bottom: var(--s1); }
+    .practice { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); grid-template-rows: auto 1fr auto; grid-template-areas: 'main list' 'cta list' 'ex ex'; column-gap: var(--s5); row-gap: var(--s4); }
+    .pr-list { padding-left: var(--s5); border-left: 1px solid var(--line); }
+    .practice-items { display: block; columns: 2; column-gap: var(--s5); }
+    .practice-items li { break-inside: avoid; margin-bottom: 8px; }
+    .pr-ex { margin-top: var(--s1); }
   }
-  /* Вкладки услуг видны только в варианте 3 */
-  .pl-tabs { display: none; }
-  :global(html[data-svc='3']) .pl-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: var(--s3); }
-  @media (min-width: 900px) { :global(html[data-svc='3']) .pl-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-  .pl-tabs button {
-    display: flex; align-items: baseline; gap: 10px; padding: 14px 18px;
-    border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
-    color: var(--ink-2); font: 600 16px/1.25 var(--font-display); text-align: left; cursor: pointer;
-    transition: border-color .15s ease, color .15s ease;
-  }
-  .pl-tabs button span { font: 400 13px var(--font); color: var(--ink-3); }
-  .pl-tabs button:hover { color: var(--ink); border-color: var(--ink-3); }
-  .pl-tabs button[aria-selected='true'] { color: var(--ink); border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
-  .pl-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  :global(html[data-svc='3']) .practice[data-pl-off] { display: none; }
 
   /* Ссылки на калькуляторы у инвестанализа: в узкой колонке списком, в широкой в ряд */
   .calc-links { display: flex; flex-direction: column; border-radius: 8px; background: var(--bg); overflow: hidden; }
