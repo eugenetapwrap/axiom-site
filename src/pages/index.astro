@@ -5,7 +5,7 @@ import SankeyFlow from '../components/SankeyFlow.astro';
 import PaymentBoard from '../components/PaymentBoard.astro';
 import RolloutStory from '../components/RolloutStory.astro';
 import BotMessage from '../components/BotMessage.astro';
-import HeroFlow from '../components/HeroFlow.astro';
+import HeroThreads from '../components/HeroThreads.astro';
 import ServiceIcon from '../components/ServiceIcon.astro';
 import { site } from '../data/site';
 import {
@@ -32,21 +32,23 @@ const widgetFor = {
 ---
 
 <Base title="Axiom — финансовый консалтинг для девелопмента и строительства" jsonLd={[faqLd]}>
-  <!-- Первый экран: фраза-манифест слева, ленты денежного потока справа, ниже четыре услуги -->
+  <!-- Первый экран: заголовок слева, лид и кнопки справа, под ними во всю ширину фирменные нити, ниже четыре услуги -->
   <section class="hero">
     <div class="container">
       <div class="hero-top">
         <div class="hero-text">
           <p class="eyebrow">{hero.eyebrow}</p>
           <h1>{t(hero.title)}</h1>
+        </div>
+        <div class="hero-side">
           <p class="hero-lead">{t(hero.lead)}</p>
           <div class="btn-row hero-btns">
             <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
             <a class="btn btn-secondary" href="#practices">Все направления</a>
           </div>
         </div>
-        <div class="hero-art"><HeroFlow /></div>
       </div>
+      <div class="hero-art"><HeroThreads /></div>
 
       <ul class="services">
         {practices.map((p) => (
@@ -377,12 +379,12 @@ const widgetFor = {
 <style>
   /* Первый экран */
   .hero { padding: var(--s6) 0 var(--s6); background-color: var(--bg); }
-  .hero-top { display: grid; gap: var(--s4); align-items: center; }
-  @media (min-width: 1024px) { .hero-top { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); column-gap: var(--s6); } }
-  .hero h1 { font-size: clamp(32px, 3.6vw, 50px); line-height: 1.08; max-width: 14em; }
-  .hero-lead { margin-top: var(--s3); max-width: 26em; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.4; color: var(--ink-2); }
-  .hero-btns { margin-top: var(--s4); }
-  .hero-art { min-width: 0; }
+  .hero-top { display: grid; gap: var(--s3); align-items: end; }
+  @media (min-width: 1024px) { .hero-top { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); column-gap: var(--s6); } }
+  .hero h1 { font-size: clamp(32px, 4vw, 56px); line-height: 1.05; max-width: 15em; text-wrap: balance; }
+  .hero-lead { max-width: 26em; font-size: clamp(19px, 1.5vw, 21px); line-height: 1.4; color: var(--ink-2); }
+  .hero-btns { margin-top: var(--s3); }
+  .hero-art { min-width: 0; margin-top: var(--s5); }
 
   .services {
     list-style: none;

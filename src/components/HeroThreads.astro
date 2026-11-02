@@ -1,0 +1,179 @@
+---
+// Фирменный мотив «Нити»: поступления проектов сходятся в один счёт и расходятся по статьям.
+// Чем больше сумма, тем длиннее прямой участок нити. Данные — июнь из схемы учёта (src/lib/sankey.ts).
+// Анимация в три такта на CSS: бам (нити бьют в счёт), пум (вспышка и сумма), вау (веер статей).
+// Базовые стили — конечное состояние, поэтому при reduced motion схема просто стоит готовой.
+import { NODES, LINKS, SERIES } from '../lib/sankey';
+
+const MONTH = 5; // июнь
+const MONTH_LABEL = 'июнь';
+const values = SERIES[MONTH];
+const label = (id: string) => NODES.find((n) => n.id === id)!.label;
+const fmt = (v: number) => v.toFixed(2).replace('.', ',');
+
+const projects = LINKS.map((l, i) => ({ id: l.from, v: values[i], to: l.to }))
+  .filter((l) => l.to === 'cash')
+  .map((l) => ({ name: label(l.id), v: l.v }))
+  .sort((a, b) => b.v - a.v);
+// Статьи: конечные узлы схемы (материалы, работы, …, основные средства, остаток на счетах)
+const costs = LINKS.map((l, i) => ({ to: l.to, v: values[i] }))
+  .filter((l) => /^c\d+$/.test(l.to))
+  .map((l) => ({ name: label(l.to), v: l.v }))
+  .sort((a, b) => b.v - a.v);
+const total = projects.reduce((s, p) => s + p.v, 0);
+
+const PAL = ['var(--th-1)', 'var(--th-2)', 'var(--th-3)', 'var(--th-4)', 'var(--th-5)', 'var(--th-6)', 'var(--th-7)', 'var(--th-8)'];
+const W = 1200;
+const H = 320;
+const K = 11; // px на 1 млрд IDR
+const CY = 182;
+const PX = 560;
+const NW = 3;
+const X1 = 400;
+const X2 = 720;
+const maxP = projects[0].v;
+const maxC = costs[0].v;
+const top = CY - (total * K) / 2;
+const f = (n: number) => n.toFixed(1);
+
+let acc = top;
+const left = projects.map((p, i) => {
+  const h = p.v * K;
+  const y = CY + (i - (projects.length - 1) / 2) * 46;
+  const xs = X1 - (p.v / maxP) * 240;
+  const yb = acc + h / 2;
+  acc += h;
+  const len = X1 - xs + Math.hypot(PX - X1, yb - y);
+  return {
+    ...p, h, y, xs, color: PAL[i], len,
+    d: `M${f(xs)},${f(y)} L${X1},${f(y)} C${X1 + 82},${f(y)} ${X1 + 78},${f(yb)} ${PX},${f(yb)}`,
+  };
+});
+acc = top;
+const right = costs.map((c, i) => {
+  const h = c.v * K;
+  const y = CY + (i - (costs.length - 1) / 2) * 33;
+  const xe = X2 + (c.v / maxC) * 320;
+  const ya = acc + h / 2;
+  acc += h;
+  const len = Math.hypot(X2 - PX, y - ya) + (xe - X2);
+  const dur = Math.round(420 + len * 0.95);
+  const delay = 1080 + i * 55;
+  return {
+    ...c, h: Math.max(h, 1.4), y, xe, color: PAL[i], len, dur, delay,
+    d: `M${PX + NW},${f(ya)} C${PX + 80},${f(ya)} ${X2 - 78},${f(y)} ${X2},${f(y)} L${f(xe)},${f(y)}`,
+  };
+});
+const G = 70; // длина блика, px
+---
+
+<figure class="ht" aria-label={`Поступления проектов за ${MONTH_LABEL} сходятся в один счёт, ${fmt(total)} млрд IDR, и расходятся по статьям`}>
+  <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
+    <text class="ht-cap ht-t" x="0" y="22" style="--d:0ms">Проекты</text>
+    <text class="ht-cap ht-t" x={W} y="22" text-anchor="end" style="--d:1300ms">Статьи расходов</text>
+
+    <g>
+      {left.map((p, i) => (
+        <path class="ht-in" d={p.d} pathLength="1" stroke={p.color} stroke-width={f(p.h)} style={`--d:${i * 40}ms`}></path>
+      ))}
+      {right.map((c) => (
+        <path class="ht-out" d={c.d} pathLength="1" stroke={c.color} stroke-width={f(c.h)} style={`--d:${c.delay}ms;--t:${c.dur}ms`}></path>
+      ))}
+    </g>
+    <g class="ht-glints">
+      {left.map((p) => (
+        <path class="ht-glint ht-glint--l" d={p.d} pathLength="1" stroke-width={f(p.h)} style={`--g:${(G / p.len).toFixed(3)}`}></path>
+      ))}
+      {right.map((c) => (
+        <path class="ht-glint ht-glint--r" d={c.d} pathLength="1" stroke-width={f(c.h)} style={`--g:${(G / c.len).toFixed(3)}`}></path>
+      ))}
+    </g>
+
+    {left.map((p, i) => (
+      <text class="ht-t ht-side" x={f(p.xs - 12)} y={f(p.y)} text-anchor="end" style={`--d:${i * 40}ms`}><tspan class="ht-name">{p.name}</tspan><tspan class="ht-val" dx="8">{fmt(p.v)}</tspan></text>
+    ))}
+    {right.map((c) => (
+      <text class="ht-t ht-side" x={f(c.xe + 12)} y={f(c.y)} style={`--d:${Math.round(c.delay + c.dur * 0.55)}ms`}><tspan class="ht-name">{c.name}</tspan><tspan class="ht-val" dx="8">{fmt(c.v)}</tspan></text>
+    ))}
+
+    <line class="ht-lead ht-t" x1={PX + NW / 2} x2={PX + NW / 2} y1="70" y2={f(top - 16)} style="--d:900ms"></line>
+    <circle class="ht-ring" cx={PX + NW / 2} cy={CY} r="46" style="--d:740ms"></circle>
+    <circle class="ht-ring ht-ring--2" cx={PX + NW / 2} cy={CY} r="80" style="--d:860ms"></circle>
+    <rect class="ht-bar" x={PX} y={f(top - 10)} width={NW} height={f(total * K + 20)} rx="1.5"></rect>
+    <text class="ht-cap ht-t" x={PX + NW / 2} y="22" text-anchor="middle" style="--d:760ms">Поступления за {MONTH_LABEL}</text>
+    <text class="ht-t" x={PX + NW / 2} y="52" text-anchor="middle" style="--d:760ms"><tspan class="ht-big" data-ht-count={total.toFixed(2)}>{fmt(total)}</tspan><tspan class="ht-unit" dx="6">млрд IDR</tspan></text>
+  </svg>
+  <figcaption class="ht-figcap">
+    <span class="ht-mobile-sum">Поступления за {MONTH_LABEL}: {fmt(total)} млрд IDR от {projects.length} проектов, разложены по {costs.length} статьям.</span>
+    <span>Демо-данные, млрд IDR</span>
+  </figcaption>
+</figure>
+
+<script>
+  // Пум: сумма месяца набирается за 0,8 с, пока расходится кольцо
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<SVGTSpanElement>('[data-ht-count]').forEach((el) => {
+    if (reduce) return;
+    const to = Number(el.dataset.htCount);
+    const show = (v: number) => { el.textContent = v.toFixed(2).replace('.', ','); };
+    show(0);
+    setTimeout(() => {
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const k = Math.min(1, (now - t0) / 800);
+        show(to * (1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, 760);
+  });
+</script>
+
+<style>
+  .ht {
+    margin: 0;
+    --th-1: #0b5345; --th-2: #2e8b7a; --th-3: #4a86c5; --th-4: #7a6fc0;
+    --th-5: #c0739a; --th-6: #d9826b; --th-7: #d8a24a; --th-8: #9aaa5c;
+  }
+  .ht svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .ht text { dominant-baseline: middle; }
+  .ht-cap { font: 500 12px var(--font); fill: var(--ink-3); }
+  .ht-name { font: 500 13px var(--font); fill: var(--ink); }
+  .ht-val { font: 400 13px var(--font); fill: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .ht-big { font: 600 30px var(--font-display); fill: var(--ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .ht-unit { font: 500 15px var(--font); fill: var(--ink-2); }
+  .ht-in, .ht-out { fill: none; stroke-opacity: .9; stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+  .ht-bar { fill: var(--ink); transform-box: fill-box; transform-origin: center; }
+  .ht-lead { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; }
+  .ht-ring { fill: none; stroke: var(--ink); stroke-width: 1.5; opacity: 0; transform-box: fill-box; transform-origin: center; }
+  .ht-ring--2 { stroke: var(--ink-3); }
+  .ht-glint { fill: none; stroke: #fffdf8; stroke-opacity: .5; stroke-dasharray: var(--g) 2; stroke-dashoffset: var(--g); }
+  .ht-figcap { display: flex; justify-content: flex-end; margin-top: 8px; font-size: 13px; color: var(--ink-3); }
+  .ht-mobile-sum { display: none; }
+
+  /* Бам: нити разгоняются и бьют в счёт */
+  .ht-in { animation: ht-draw 720ms cubic-bezier(.7, 0, .84, 0) var(--d) both; }
+  /* Пум: планка вздрагивает, расходятся кольца */
+  .ht-bar { animation: ht-pum 520ms cubic-bezier(.3, .7, .3, 1) 700ms both; }
+  .ht-ring { animation: ht-ring 900ms cubic-bezier(.2, .7, .2, 1) var(--d) both; }
+  /* Вау: веер статей, у каждой нити своя длина и своё время */
+  .ht-out { animation: ht-draw var(--t) cubic-bezier(.16, 1, .3, 1) var(--d) both; }
+  .ht-t { animation: ht-fade 420ms cubic-bezier(.2, .7, .2, 1) var(--d) both; }
+  /* Блик пробегает слева направо через счёт раз в 6 секунд */
+  .ht-glint--l { animation: ht-glint-l 6.2s linear 2.7s infinite; }
+  .ht-glint--r { animation: ht-glint-r 6.2s linear 2.7s infinite; }
+
+  @keyframes ht-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @keyframes ht-pum { 0% { transform: scaleY(0); } 55% { transform: scaleY(1.25); } 100% { transform: scaleY(1); } }
+  @keyframes ht-ring { from { opacity: .7; transform: scale(.15); } to { opacity: 0; transform: scale(1); } }
+  @keyframes ht-fade { from { opacity: 0; } }
+  @keyframes ht-glint-l { 0% { stroke-dashoffset: var(--g); } 16%, 100% { stroke-dashoffset: -1; } }
+  @keyframes ht-glint-r { 0%, 16% { stroke-dashoffset: var(--g); } 36%, 100% { stroke-dashoffset: -1; } }
+
+  /* На телефоне подписи в схеме были бы мельче 5px: оставляем сами нити, сумму пишем под ними */
+  @media (max-width: 760px) {
+    .ht svg text, .ht-lead { display: none; }
+    .ht-figcap { flex-direction: column; gap: 2px; justify-content: flex-start; }
+    .ht-mobile-sum { display: block; font-size: 15px; color: var(--ink-2); }
+  }
+</style>
