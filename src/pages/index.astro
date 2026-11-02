@@ -3,8 +3,6 @@ import Base from '../layouts/Base.astro';
 import ServiceIcon from '../components/ServiceIcon.astro';
 import Calculators from '../components/Calculators.astro';
 import BotReceipt from '../components/BotReceipt.astro';
-import HeroThreads from '../components/HeroThreads.astro';
-import HeroJCurve from '../components/HeroJCurve.astro';
 import FinalThreads from '../components/FinalThreads.astro';
 import { site, tgLink } from '../data/site';
 import {
@@ -59,42 +57,27 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Услуги подробно: для каждой что входит и что клиент получает на руки -->
-  <section class="section section--alt" id="practices">
+  <!-- Услуги списком, как у BDO: строка на услугу — название и кнопка, что входит, результат. Без графиков -->
+  <section class="section section--alt practices" id="practices" aria-label="Услуги">
     <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Услуги</p>
-        <h2>Услуги и что вы получите</h2>
-      </div>
       {practices.map((p) => (
         <article class="practice" id={p.id} data-reveal>
-          <div class="practice-text">
+          <div class="practice-head">
             <span class="practice-num">{p.num}</span>
-            <h3>{t(p.title)}</h3>
+            <h2>{t(p.title)}</h2>
             <p class="practice-lead">{t(p.lead)}</p>
             <a class="btn btn-soft" href={tgLink(p.topic)}>{p.cta}</a>
           </div>
-          <div class="practice-body">
+          <div class="practice-col">
             <p class="practice-label">Что входит</p>
             <ul class="dots practice-items">
               {p.items.map((i) => <li>{t(i)}</li>)}
             </ul>
-            <p class="practice-label">На выходе</p>
+          </div>
+          <div class="practice-col">
+            <p class="practice-label">Результат</p>
             <p class="practice-result">{t(p.result)}</p>
           </div>
-          {/* Пример результата на демо-данных: показываем, что клиент получит на руки */}
-          {p.id === 'models' && (
-            <div class="practice-demo">
-              <p class="practice-label">Пример: накопленный денежный поток проекта и показатели для инвестора</p>
-              <HeroJCurve />
-            </div>
-          )}
-          {p.id === 'accounting' && (
-            <div class="practice-demo">
-              <p class="practice-label">Пример отчёта для собственника</p>
-              <HeroThreads />
-            </div>
-          )}
         </article>
       ))}
     </div>
@@ -363,7 +346,7 @@ const faqLd = {
   .hero-top { display: grid; gap: var(--s3); align-items: start; }
   @media (min-width: 1024px) { .hero-side { padding-top: 8px; } }
   @media (min-width: 1024px) { .hero-top { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: var(--s6); } }
-  .hero h1 { font-size: clamp(30px, 3.6vw, 50px); line-height: 1.06; max-width: 16em; text-wrap: balance; }
+  .hero h1 { font-size: clamp(30px, 3.6vw, 60px); line-height: 1.06; max-width: 16em; text-wrap: balance; }
   .hero-aud { color: var(--ink-3); }
   .hero-lead { max-width: 26em; font-size: clamp(17px, 1.35vw, 19px); line-height: 1.45; color: var(--ink-2); }
   .hero-btns { margin-top: var(--s3); }
@@ -405,25 +388,24 @@ const faqLd = {
   .service-more { margin-top: auto; padding-top: var(--s1); color: var(--accent); font-size: 15px; font-weight: 600; }
   .service-more::after { content: ' ↓'; }
 
-  /* Услуги подробно */
-  .practice {
-    display: grid;
-    gap: var(--s3);
-    padding: var(--s5) 0;
-    border-top: 1px solid var(--line);
+  /* Услуги подробно: строки с тонкой линией между ними */
+  .practices { padding-top: var(--s5); }
+  .practice { display: grid; gap: var(--s3); padding: var(--s5) 0; border-top: 1px solid var(--line); }
+  .practice:last-child { border-bottom: 1px solid var(--line); }
+  @media (min-width: 760px) {
+    .practice { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--s5); }
+    .practice-head { grid-row: span 2; }
   }
-  @media (min-width: 1024px) {
-    .practice { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); column-gap: 112px; align-items: start; }
+  @media (min-width: 1180px) {
+    .practice { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.15fr) minmax(0, 0.8fr); column-gap: var(--s6); }
+    .practice-head { grid-row: auto; }
   }
   .practice-num { display: block; margin-bottom: var(--s1); font-size: 14px; color: var(--ink-3); }
-  .practice h3 { font-size: clamp(24px, 2.4vw, 32px); line-height: 1.15; letter-spacing: -0.02em; }
-  .practice-lead { margin: var(--s2) 0 var(--s3); color: var(--ink-2); }
+  .practice h2 { font-size: clamp(24px, 2.2vw, 32px); line-height: 1.15; letter-spacing: -0.02em; }
+  .practice-lead { margin: var(--s2) 0 var(--s3); color: var(--ink-2); max-width: 30em; }
   .practice-label { font-size: 13px; font-weight: 600; color: var(--ink-3); margin-bottom: 12px; }
-  .practice-items { margin-bottom: var(--s3); }
-  @media (min-width: 720px) { .practice-items { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s3); } }
-  .practice-result { font-weight: 600; color: var(--ink); max-width: 30em; }
-  .practice-demo { grid-column: 1 / -1; margin-top: var(--s3); padding: var(--s4); border-radius: 10px; background: var(--surface); border: 1px solid var(--line); }
-  @media (max-width: 599px) { .practice-demo { padding: var(--s3) var(--s2); } }
+  .practice-items { gap: 8px; }
+  .practice-result { font-weight: 600; color: var(--ink); max-width: 22em; }
 
   /* Сигнальная полоса */
   .signal { display: grid; gap: var(--s5); align-items: end; }
