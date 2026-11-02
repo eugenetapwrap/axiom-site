@@ -6,6 +6,7 @@ import PaymentBoard from '../components/PaymentBoard.astro';
 import RolloutStory from '../components/RolloutStory.astro';
 import BotMessage from '../components/BotMessage.astro';
 import HeroSignature from '../components/HeroSignature.astro';
+import FinalThreads from '../components/FinalThreads.astro';
 import ServiceIcon from '../components/ServiceIcon.astro';
 import { site } from '../data/site';
 import {
@@ -317,13 +318,7 @@ const widgetFor = {
 
   <!-- Финальный блок -->
   <section class="section section--dark final" id="contact">
-    <svg class="final-flow" viewBox="0 0 1440 420" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M0,40 C480,40 600,300 720,300 L720,306 C600,306 480,92 0,92 Z" />
-      <path d="M0,150 C420,150 580,306 720,306 L720,312 C580,312 420,178 0,178 Z" />
-      <path d="M0,300 C420,300 560,312 720,312 L720,316 C560,316 420,318 0,318 Z" />
-      <path d="M1440,60 C960,60 840,300 720,300 L720,304 C840,304 960,104 1440,104 Z" />
-      <path d="M1440,210 C980,210 860,306 720,306 L720,312 C860,312 980,240 1440,240 Z" />
-    </svg>
+    <FinalThreads />
     <div class="container final-inner" data-reveal>
       <p class="eyebrow">Контакты</p>
       <h2>{finalCta.title}</h2>
@@ -567,11 +562,8 @@ const widgetFor = {
   .faq details[open] summary::after { content: '−'; }
   .faq details p { margin-top: var(--s1); font-size: 16px; }
 
-  /* Финальный блок: ленты сходятся к кнопке */
+  /* Финальный блок: фирменные нити сходятся в узел за кнопками (FinalThreads) */
   .final { position: relative; overflow: hidden; }
-  .final-flow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-  .final-flow path { fill: var(--gold-on-deep); opacity: .1; }
-  .final-flow path:nth-child(2n) { fill: #86d3b8; opacity: .08; }
   .final-inner { position: relative; text-align: center; display: grid; justify-items: center; }
   .final-text { margin-top: var(--s3); color: var(--on-deep-2); }
   .final-list { list-style: none; padding: 0; margin: var(--s4) 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }

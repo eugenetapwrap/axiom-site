@@ -36,7 +36,7 @@ const views = [
   // Счётчики набирают итоговое число за 0,8 с; итоговый текст берётся из разметки, чтобы совпасть до знака
   function count(el: HTMLElement | SVGElement) {
     const d = el.dataset;
-    const to = Number(d.count);
+    const to = Number(d.sigCount);
     const dec = Number(d.dec ?? 2);
     const suffix = d.suffix ?? '';
     const final = d.final ?? el.textContent ?? '';
@@ -71,7 +71,7 @@ const views = [
       if (!view) return;
       void view.offsetWidth; // из display:none обратно — CSS-анимации начинаются заново
       view.hidden = false;
-      if (!reduce) view.querySelectorAll<SVGElement>('[data-count]').forEach(count);
+      if (!reduce) view.querySelectorAll<SVGElement>('[data-sig-count]').forEach(count);
       if (save) { try { localStorage.setItem(KEY, id); } catch { /* без памяти тоже работает */ } }
     };
     let start = 'threads';

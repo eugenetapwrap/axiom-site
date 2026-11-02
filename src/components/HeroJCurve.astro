@@ -77,7 +77,7 @@ const kpiList = [
     {kpiList.map((q, i) => (
       <g class="hj-t" style={`--d:${2200 + i * 120}ms`}>
         <text class="hj-kl" x={80 + i * 190} y="30">{q.label}</text>
-        <text class="hj-kv" x={80 + i * 190} y="62" data-count={q.v} data-dec={q.dec} data-suffix={q.suffix} data-delay={2200 + i * 120}>{q.text}</text>
+        <text class="hj-kv" x={80 + i * 190} y="62" data-sig-count={q.v} data-dec={q.dec} data-suffix={q.suffix} data-delay={2200 + i * 120}>{q.text}</text>
       </g>
     ))}
     <text class="hj-cap hj-t" x="80" y="96" style="--d:2500ms">Смешанный сценарий: аренда, затем продажа</text>

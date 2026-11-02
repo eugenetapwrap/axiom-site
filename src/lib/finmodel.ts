@@ -84,8 +84,30 @@ export function kpis(cf: number[]) {
   };
 }
 
-// Масштаб графика: ноль на 80% высоты, самый большой плюс занимает 78%.
+// Масштаб графика: ноль на 58% высоты, самый большой плюс занимает 56%.
+// Ниже нуля остаётся место для накопленного итога: яма вложений до −6,6 млн уходит на 88%.
+export const ZERO = 58;
+const SPAN = 56;
 const maxPos = Math.max(...SCENARIOS.flatMap((s) => s.cf));
-export const barHeight = (v: number) => `${((Math.abs(v) / maxPos) * 78).toFixed(1)}%`;
+export const barHeight = (v: number) => `${((Math.abs(v) / maxPos) * SPAN).toFixed(1)}%`;
+
+// Накопленный итог (J-кривая) в том же масштабе, координаты 0–100 по ширине и высоте графика
+export const cumulative = (cf: number[]) => {
+  let c = 0;
+  return cf.map((v) => (c = Math.round((c + v) * 100) / 100));
+};
+const cumY = (v: number) => ZERO - (v / maxPos) * SPAN;
+export function cumPath(cf: number[]) {
+  const pts = cumulative(cf).map((v, i) => `${((i + 0.5) * 10).toFixed(1)},${cumY(v).toFixed(1)}`);
+  return `M0,${ZERO} L${pts.join(' L')}`;
+}
+// Окупаемость: год, в котором накопленный итог впервые выше нуля, и точка пересечения нуля
+export function payback(cf: number[]) {
+  const cum = cumulative(cf);
+  const i = cum.findIndex((v, k) => v > 0 && k > 0 && cum[k - 1] <= 0);
+  if (i < 0) return null;
+  const x = (i - 0.5 + (0 - cum[i - 1]) / (cum[i] - cum[i - 1])) * 10;
+  return { year: YEARS[i], x };
+}
 export const barTitle = (year: number, v: number) =>
   `${year}: ${v > 0 ? '+' : v < 0 ? '−' : ''}${num(Math.abs(v), 2)} млн USD`;

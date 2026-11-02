@@ -1,8 +1,8 @@
 ---
 // Живой виджет справа от описания направления: три шага с номерами, как в интерфейсе.
 // Все значения демонстрационные, кроме IRR 9,0% → 8,2% и NPV «в 3,6 раза» из кейса аудита.
-import { SCENARIOS, YEARS, kpis, barHeight, barTitle } from '../lib/finmodel';
-import { SERIES, MONTHS_SHORT } from '../lib/sankey';
+import { SCENARIOS, YEARS, kpis, barHeight, barTitle, cumPath, payback, ZERO } from '../lib/finmodel';
+import { MONTHS_SHORT } from '../lib/sankey';
 
 interface Props {
   variant: 'models' | 'audit' | 'accounting' | 'advisory';
@@ -13,29 +13,33 @@ const models = SCENARIOS;
 const years = YEARS;
 const m0 = models[0];
 const k0 = kpis(m0.cf);
+const pb0 = payback(m0.cf);
 const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
 
 // Шаг «Аналитика»: Cash Flow по месяцам с накопленным итогом, как в дашборде портала.
-// Те же демо-данные, что в схеме движения денег (src/lib/sankey.ts), млрд IDR:
-// поступления = все проекты, расходы = стройка + операционные + инвестиции, итог копится из разницы.
+// Демо-данные, млрд IDR, январь–октябрь: поступления скачут (месяцы с продажами и без),
+// расходы ровнее, поэтому накопленный итог ходит около нуля, а с осени уверенно растёт.
+const INFLOW = [1.8, 4.6, 1.2, 3.9, 5.2, 1.6, 4.8, 2.2, 5.6, 4.4];
+const OUTFLOW = [3.0, 2.4, 3.5, 2.6, 3.1, 3.8, 2.5, 3.6, 2.9, 2.6];
 const CW = 480;
-const CH = 196;
-const BASE = 168;
-const step = (CW - 16) / 12;
-const r2 = (v: number) => Math.round(v * 100) / 100;
+const CH = 212;
+const step = (CW - 16) / INFLOW.length;
+const r1 = (v: number) => Math.round(v * 10) / 10;
 let acc = 0;
-const cfm = SERIES.map((v, m) => {
-  const inflow = r2(v.slice(0, 5).reduce((s, x) => s + x, 0));
-  const outflow = r2(v[5] + v[6] + v[7]);
-  acc = r2(acc + inflow - outflow);
+const cfm = INFLOW.map((inflow, m) => {
+  const outflow = OUTFLOW[m];
+  acc = r1(acc + inflow - outflow);
   return { m, inflow, outflow, cum: acc, cx: 8 + step * (m + 0.5) };
 });
-const maxFlow = Math.max(...cfm.map((d) => Math.max(d.inflow, d.outflow)));
-const maxCum = Math.max(...cfm.map((d) => d.cum));
-const barY = (v: number) => (v / maxFlow) * 72;
-const lineY = (v: number) => 92 - (v / maxCum) * 64;
-const linePath = cfm.map((d, i) => `${i ? 'L' : 'M'}${d.cx.toFixed(1)},${lineY(d.cum).toFixed(1)}`).join(' ');
-const fmt2 = (v: number) => v.toFixed(2).replace('.', ',');
+const NOW = cfm.length - 1;
+// Один масштаб для столбиков и линии: ноль на высоте ZY, ниже нуля место для минусов итога
+const top = Math.max(...cfm.map((d) => Math.max(d.inflow, d.outflow, d.cum)));
+const bottom = Math.min(0, ...cfm.map((d) => d.cum));
+const ZY = 22 + (top / (top - bottom)) * 150;
+const sc = 150 / (top - bottom);
+const vy = (v: number) => ZY - v * sc;
+const linePath = cfm.map((d, i) => `${i ? 'L' : 'M'}${d.cx.toFixed(1)},${vy(d.cum).toFixed(1)}`).join(' ');
+const fmt1 = (v: number) => v.toFixed(1).replace('.', ',').replace('-', '−');
 ---
 
 <div class="pw" data-pw={variant}>
@@ -66,12 +70,17 @@ const fmt2 = (v: number) => v.toFixed(2).replace('.', ',');
         <div class="pw-body">
           <p class="pw-title">Cash Flow и показатели для инвестора</p>
           <div class="ui-card pw-panel pw-cf-panel">
+            <div class="pw-cash-legend" aria-hidden="true"><span class="in">Cash Flow по годам</span><span class="cum">Накопленный итог</span></div>
             <div class="pw-cf" aria-hidden="true">
               {m0.cf.map((v, i) => (
                 <span class={v < 0 ? 'neg' : 'pos'} style={`--h:${barHeight(v)}`} data-cf={i} title={barTitle(years[i], v)}></span>
               ))}
+              <svg class="pw-cum" viewBox="0 0 100 100" preserveAspectRatio="none" data-cum>
+                <path d={cumPath(m0.cf)} vector-effect="non-scaling-stroke"></path>
+              </svg>
+              <i class={`pw-pb${pb0 && pb0.x > 60 ? ' is-right' : ''}`} data-pb style={pb0 ? `left:${pb0.x.toFixed(1)}%;top:${ZERO}%` : 'display:none'}><b data-pb-text>Окупаемость в {pb0?.year}</b></i>
             </div>
-            <div class="pw-cf-axis" aria-hidden="true"><span>{years[0]}</span><span>Cash Flow, млн USD</span><span>{years[years.length - 1]}</span></div>
+            <div class="pw-cf-axis" aria-hidden="true"><span>{years[0]}</span><span>млн USD</span><span>{years[years.length - 1]}</span></div>
             <dl class="pw-kpis">
               <div><dt>IRR</dt><dd data-m="irr">{k0.irr}</dd></div>
               <div><dt>NPV при 12%</dt><dd data-m="npv" class={k0.npvNeg ? 'is-neg' : undefined}>{k0.npv}</dd></div>
@@ -171,25 +180,25 @@ const fmt2 = (v: number) => v.toFixed(2).replace('.', ',');
             <div class="pw-cash-legend" aria-hidden="true">
               <span class="in">Поступления</span><span class="out">Расходы</span><span class="cum">Накопленный итог</span>
             </div>
-            <svg class="pw-cash-chart" viewBox={`0 0 ${CW} ${CH}`} role="img" aria-label={`Cash Flow по месяцам, млрд IDR: накопленный итог вырос с ${fmt2(cfm[0].cum)} в январе до ${fmt2(cfm[11].cum)} в декабре`}>
-              <rect class="pw-cash-today" data-today x={(cfm[11].cx - step / 2 + 1).toFixed(1)} y="6" width={(step - 2).toFixed(1)} height={BASE - 6} rx="4"></rect>
-              <line class="pw-cash-base" x1="8" x2={CW - 8} y1={BASE} y2={BASE}></line>
+            <svg class="pw-cash-chart" viewBox={`0 0 ${CW} ${CH}`} role="img" aria-label={`Cash Flow за январь–октябрь, млрд IDR: накопленный итог колеблется около нуля и к октябрю доходит до ${fmt1(cfm[NOW].cum)}`}>
+              <rect class="pw-cash-today" data-today x={(cfm[NOW].cx - step / 2 + 1).toFixed(1)} y="4" width={(step - 2).toFixed(1)} height={CH - 26} rx="4"></rect>
+              <line class="pw-cash-base" x1="8" x2={CW - 8} y1={ZY.toFixed(1)} y2={ZY.toFixed(1)}></line>
               {cfm.map((d) => (
                 <g>
-                  <rect class="in" x={(d.cx - 11).toFixed(1)} y={(BASE - barY(d.inflow)).toFixed(1)} width="10" height={barY(d.inflow).toFixed(1)} rx="1.5"><title>{`${MONTHS_SHORT[d.m]}: поступления ${fmt2(d.inflow)}`}</title></rect>
-                  <rect class="out" x={(d.cx + 1).toFixed(1)} y={(BASE - barY(d.outflow)).toFixed(1)} width="10" height={barY(d.outflow).toFixed(1)} rx="1.5"><title>{`${MONTHS_SHORT[d.m]}: расходы ${fmt2(d.outflow)}`}</title></rect>
-                  <text class={`pw-cash-m${d.m === 11 ? ' is-now' : ''}`} x={d.cx.toFixed(1)} y={BASE + 18} text-anchor="middle">{MONTHS_SHORT[d.m]}</text>
+                  <rect class="in" x={(d.cx - 12).toFixed(1)} y={vy(d.inflow).toFixed(1)} width="11" height={(d.inflow * sc).toFixed(1)} rx="1.5"><title>{`${MONTHS_SHORT[d.m]}: поступления ${fmt1(d.inflow)}`}</title></rect>
+                  <rect class="out" x={(d.cx + 1).toFixed(1)} y={vy(d.outflow).toFixed(1)} width="11" height={(d.outflow * sc).toFixed(1)} rx="1.5"><title>{`${MONTHS_SHORT[d.m]}: расходы ${fmt1(d.outflow)}`}</title></rect>
+                  <text class={`pw-cash-m${d.m === NOW ? ' is-now' : ''}`} x={d.cx.toFixed(1)} y={CH - 6} text-anchor="middle">{MONTHS_SHORT[d.m]}</text>
                 </g>
               ))}
               <path class="pw-cash-line" d={linePath}></path>
               {cfm.map((d) => (
-                <circle class="pw-cash-dot" cx={d.cx.toFixed(1)} cy={lineY(d.cum).toFixed(1)} r={d.m === 11 ? 4 : 2.6}><title>{`${MONTHS_SHORT[d.m]}: накопленный итог ${fmt2(d.cum)}`}</title></circle>
+                <circle class={`pw-cash-dot${d.cum < 0 ? ' is-neg' : ''}`} cx={d.cx.toFixed(1)} cy={vy(d.cum).toFixed(1)} r={d.m === NOW ? 4 : 2.8}><title>{`${MONTHS_SHORT[d.m]}: накопленный итог ${fmt1(d.cum)}`}</title></circle>
               ))}
-              {cfm.filter((d) => d.m % 3 === 2).map((d) => (
-                <text class={`pw-cash-v${d.m === 11 ? ' is-now' : ''}`} x={d.cx.toFixed(1)} y={(lineY(d.cum) - 11).toFixed(1)} text-anchor="middle">{fmt2(d.cum)}</text>
+              {cfm.map((d) => (
+                <text class={`pw-cash-v${d.m === NOW ? ' is-now' : ''}${d.cum < 0 ? ' is-neg' : ''}`} x={d.cx.toFixed(1)} y={(vy(d.cum) + (d.cum < 0 ? 15 : -10)).toFixed(1)} text-anchor="middle">{fmt1(d.cum)}</text>
               ))}
             </svg>
-            <p class="pw-sub" data-c-note>Платёж 1 080 000 IDR попал в Cash Flow за декабрь</p>
+            <p class="pw-sub" data-c-note>Платёж 1 080 000 IDR попал в Cash Flow за октябрь</p>
           </div>
         </div>
       </div>
@@ -236,7 +245,7 @@ const fmt2 = (v: number) => v.toFixed(2).replace('.', ',');
 </div>
 
 <script>
-  import { SCENARIOS, YEARS, kpis, barHeight, barTitle } from '../lib/finmodel';
+  import { SCENARIOS, YEARS, kpis, barHeight, barTitle, cumPath, payback } from '../lib/finmodel';
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -275,6 +284,24 @@ const fmt2 = (v: number) => v.toFixed(2).replace('.', ',');
           if (el.dataset.m === 'npv') el.classList.toggle('is-neg', k.npvNeg);
           flash(el);
         });
+        const cum = w.querySelector<SVGSVGElement>('[data-cum]');
+        if (cum) {
+          cum.querySelector('path')!.setAttribute('d', cumPath(sc.cf));
+          cum.classList.remove('is-draw');
+          void cum.getBoundingClientRect();
+          cum.classList.add('is-draw');
+        }
+        const pb = payback(sc.cf);
+        const pbEl = w.querySelector<HTMLElement>('[data-pb]');
+        if (pbEl) {
+          pbEl.style.display = pb ? '' : 'none';
+          if (pb) {
+            pbEl.style.left = `${pb.x.toFixed(1)}%`;
+            pbEl.classList.toggle('is-right', pb.x > 60);
+            pbEl.querySelector('[data-pb-text]')!.textContent = `Окупаемость в ${pb.year}`;
+            flash(pbEl);
+          }
+        }
         w.querySelectorAll<HTMLElement>('[data-cf]').forEach((el) => {
           const n = Number(el.dataset.cf);
           const v = sc.cf[n];
@@ -338,7 +365,7 @@ const fmt2 = (v: number) => v.toFixed(2).replace('.', ',');
         if (step === 4) check.dataset.check = dup ? 'dup' : 'ok';
         if (!dup && step >= 5 && step <= 7) route[step - 5].classList.add('is-ok');
         if (step === 8) {
-          note.textContent = dup ? 'Дубль не оплачен и в отчёт не попал' : `Платёж ${FORMS[n][1]} IDR попал в Cash Flow за декабрь`;
+          note.textContent = dup ? 'Дубль не оплачен и в отчёт не попал' : `Платёж ${FORMS[n][1]} IDR попал в Cash Flow за октябрь`;
           if (!dup) today.classList.add('is-hit');
           flash(note);
         }
@@ -446,13 +473,22 @@ const fmt2 = (v: number) => v.toFixed(2).replace('.', ',');
   }
 
   .pw-cf-panel { display: grid; gap: 10px; }
-  .pw-cf { position: relative; display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; height: 130px; }
-  .pw-cf::after { content: ''; position: absolute; left: 0; right: 0; top: 80%; height: 1px; background: var(--line); }
+  .pw-cf { position: relative; display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; height: 168px; }
+  .pw-cf::after { content: ''; position: absolute; left: 0; right: 0; top: 58%; height: 1px; background: var(--line); }
   .pw-cf span { position: relative; height: 100%; }
-  /* Один масштаб для плюсов и минусов, ноль на 80% высоты (высоты считает src/lib/finmodel.ts) */
+  /* Один масштаб для плюсов, минусов и накопленного итога, ноль на 58% высоты (считает src/lib/finmodel.ts) */
   .pw-cf span::before { content: ''; position: absolute; left: 0; right: 0; height: var(--h); border-radius: 2px; transition: height .6s cubic-bezier(.2, .8, .2, 1); }
-  .pw-cf .pos::before { bottom: 20%; background: var(--accent-2); }
-  .pw-cf .neg::before { top: 80%; background: #d7c9a8; }
+  .pw-cf .pos::before { bottom: 42%; background: var(--accent-2); opacity: .85; }
+  .pw-cf .neg::before { top: 58%; background: #d9b8c6; }
+  /* J-кривая: накопленный итог поверх столбиков, при смене сценария прорисовывается слева направо */
+  .pw-cum { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .pw-cum path { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linejoin: round; }
+  .pw-cum.is-draw { animation: pw-wipe .9s cubic-bezier(.45, 0, .2, 1) both; }
+  @keyframes pw-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .pw-pb { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(18, 112, 93, .18); font-style: normal; z-index: 1; }
+  .pw-pb b { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 12px; font-weight: 600; color: var(--accent); background: var(--surface); padding: 1px 4px; border-radius: 4px; }
+  .pw-pb.is-right b { left: auto; right: -4px; transform: none; }
+
   .pw-cf-axis { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--ink-3); }
   .pw-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .pw-kpis div { padding: 4px 0 0; border-top: 2px solid var(--accent-soft); }
@@ -500,12 +536,14 @@ const fmt2 = (v: number) => v.toFixed(2).replace('.', ',');
   .pw-form dd.is-typing::after { content: ''; display: inline-block; width: 2px; height: 1em; background: var(--gold); vertical-align: -2px; animation: pw-caret .8s steps(1) infinite; }
   @keyframes pw-caret { 50% { opacity: 0; } }
 
-  .pw-route { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pw-route { list-style: none; padding: 0; display: flex; flex-wrap: nowrap; gap: 6px; }
   .pw-route li {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 12px;
+    white-space: nowrap;
+    font-size: 13px;
+    padding: 7px 10px;
     border-radius: 8px;
     background: var(--surface);
     border: 1px solid var(--line);
@@ -556,10 +594,16 @@ const fmt2 = (v: number) => v.toFixed(2).replace('.', ',');
   .pw-cash-today.is-hit { opacity: 1; }
   .pw-cash-line { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; }
   .pw-cash-dot { fill: var(--surface); stroke: var(--ink); stroke-width: 1.4; }
+  .pw-cash-dot.is-neg { stroke: var(--risk); }
   .pw-cash-m { font-size: 11px; fill: var(--ink-3); }
-  .pw-cash-v { font-size: 11px; font-weight: 600; fill: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .pw-cash-v { font-size: 11px; font-weight: 600; fill: var(--ink-2); font-variant-numeric: tabular-nums; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; }
+  .pw-cash-v.is-neg { fill: var(--risk); }
   .pw-cash-m.is-now, .pw-cash-v.is-now { fill: var(--ink); font-weight: 600; }
   @media (max-width: 640px) {
     .pw-cash-m, .pw-cash-v { font-size: 16px; }
+  }
+  /* На узком телефоне три согласующих в одну строку не помещаются */
+  @media (max-width: 520px) {
+    .pw-route { flex-wrap: wrap; }
   }
 </style>

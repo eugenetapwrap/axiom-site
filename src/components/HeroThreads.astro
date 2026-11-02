@@ -102,7 +102,7 @@ const G = 70; // длина блика, px
     <circle class="ht-ring ht-ring--2" cx={PX + NW / 2} cy={CY} r="80" style="--d:860ms"></circle>
     <rect class="ht-bar" x={PX} y={f(top - 10)} width={NW} height={f(total * K + 20)} rx="1.5"></rect>
     <text class="ht-cap ht-t" x={PX + NW / 2} y="22" text-anchor="middle" style="--d:760ms">Поступления за {MONTH_LABEL}</text>
-    <text class="ht-t" x={PX + NW / 2} y="52" text-anchor="middle" style="--d:760ms"><tspan class="ht-big" data-count={total.toFixed(2)} data-dec="2" data-delay="760">{fmt(total)}</tspan><tspan class="ht-unit" dx="6">млрд IDR</tspan></text>
+    <text class="ht-t" x={PX + NW / 2} y="52" text-anchor="middle" style="--d:760ms"><tspan class="ht-big" data-sig-count={total.toFixed(2)} data-dec="2" data-delay="760">{fmt(total)}</tspan><tspan class="ht-unit" dx="6">млрд IDR</tspan></text>
   </svg>
   <figcaption class="ht-figcap">
     <span class="ht-mobile-sum">Поступления за {MONTH_LABEL}: {fmt(total)} млрд IDR от {projects.length} проектов, разложены по {costs.length} статьям.</span>
