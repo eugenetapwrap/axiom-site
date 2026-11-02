@@ -1,12 +1,13 @@
 ---
 // Плавающая кнопка Telegram справа внизу. Появляется после первого экрана.
-// Карточка с быстрыми темами показывается один раз за визит, её можно закрыть.
+// Карточка с быстрыми темами открывается только по клику на кнопку, сама не всплывает.
 import { site } from '../data/site';
 
 const topics = [
   { label: 'Финмодель', text: 'Здравствуйте! Нужна финансовая модель проекта.' },
   { label: 'Аудит модели', text: 'Здравствуйте! Хочу отправить финмодель на аудит.' },
   { label: 'Учёт', text: 'Здравствуйте! Интересует управленческий учёт и контроль платежей.' },
+  { label: 'Инвестанализ', text: 'Здравствуйте! Есть задача по инвестиционному анализу.' },
 ];
 ---
 
@@ -19,38 +20,32 @@ const topics = [
         <a href={`${site.telegramUrl}?text=${encodeURIComponent(tp.text)}`}>{tp.label}</a>
       ))}
     </div>
+    <a class="fc-plain" href={site.telegramUrl}>Написать без темы</a>
   </div>
-  <a class="fc-btn" href={site.telegramUrl}>
+  <button class="fc-btn" type="button" aria-expanded="false" data-fc-btn>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.2 2.9 11.4c-1 .4-1 1.6 0 1.9l4.6 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6L22.9 5.6c.3-1-.5-1.8-1.4-1.4Z" fill="currentColor"/></svg>
     Написать в Telegram
-  </a>
+  </button>
 </div>
 
 <script>
   const fc = document.querySelector<HTMLElement>('[data-fc]');
   const card = document.querySelector<HTMLElement>('[data-fc-card]');
-  if (fc && card) {
-    let dismissed = false;
-    try { dismissed = sessionStorage.getItem('fc-dismissed') === '1'; } catch { /* хранилище недоступно */ }
-    let shown = false;
-    const wide = window.matchMedia('(min-width: 720px)').matches;
+  const btn = document.querySelector<HTMLButtonElement>('[data-fc-btn]');
+  if (fc && card && btn) {
     const onScroll = () => {
-      const y = window.scrollY;
-      fc.hidden = y < window.innerHeight * 0.9;
-      const half = (document.documentElement.scrollHeight - window.innerHeight) * 0.5;
-      if (wide && !dismissed && !shown && y > half) {
-        shown = true;
-        card.hidden = false;
-        window.setTimeout(() => { card.hidden = true; }, 12000);
-      }
+      fc.hidden = window.scrollY < window.innerHeight * 0.9;
+      if (fc.hidden) setOpen(false);
     };
+    const setOpen = (open: boolean) => {
+      card.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+    };
+    btn.addEventListener('click', () => setOpen(card.hidden));
+    document.querySelector('[data-fc-close]')?.addEventListener('click', () => setOpen(false));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-    document.querySelector('[data-fc-close]')?.addEventListener('click', () => {
-      card.hidden = true;
-      dismissed = true;
-      try { sessionStorage.setItem('fc-dismissed', '1'); } catch { /* ничего */ }
-    });
   }
 </script>
 
@@ -77,6 +72,9 @@ const topics = [
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
+    border: 0;
+    font-family: inherit;
+    cursor: pointer;
     box-shadow: 0 10px 30px rgba(10, 42, 36, 0.3);
   }
   .fc-btn svg { width: 18px; height: 18px; color: var(--gold-on-deep); }
@@ -102,6 +100,7 @@ const topics = [
     text-decoration: none;
   }
   .fc-topics a:hover { border-color: var(--accent); color: var(--accent); }
+  .fc-plain { display: inline-block; margin-top: 10px; font-size: 14px; color: var(--ink-2); }
   .fc-close {
     position: absolute;
     top: 6px;

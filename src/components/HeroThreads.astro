@@ -1,134 +1,110 @@
 ---
-// Фирменный мотив «Нити»: поступления проектов сходятся в один счёт и расходятся по статьям.
-// Чем больше сумма, тем длиннее прямой участок нити. Данные — июнь из схемы учёта (src/lib/sankey.ts).
-// Анимация в три такта на CSS: бам (нити бьют в счёт), пум (вспышка и сумма), вау (веер статей).
-// Счётчик суммы запускает HeroSignature.
-// Базовые стили — конечное состояние, поэтому при reduced motion схема просто стоит готовой.
-import { NODES, LINKS, SERIES } from '../lib/sankey';
+// Фирменный мотив «Нити» — главная фишка первого экрана.
+// Поступления проектов сходятся в один счёт и расходятся по статьям. Схема сама проигрывает год:
+// в январе деньги идут с одного проекта, в феврале и марте добавляется по проекту, в апреле ещё два.
+// Под схемой шкала месяцев: клик открывает любой месяц. Наведение на нить показывает сумму и долю.
+// Вступление в три такта на CSS: бам (нити бьют в счёт), пум (вспышка и сумма), вау (веер статей).
+// Данные демонстрационные (src/lib/sankey.ts), геометрия в src/lib/threads.ts.
+import { SERIES, MONTHS, MONTHS_SHORT, MONTH_TOTALS } from '../lib/sankey';
+import { TG, frame, PROJ_NAMES, COST_NAMES, PROJ_COLORS, COST_COLORS, fmt2 } from '../lib/threads';
 
-const MONTH = 5; // июнь
-const MONTH_LABEL = 'июнь';
-const values = SERIES[MONTH];
-const label = (id: string) => NODES.find((n) => n.id === id)!.label;
-const fmt = (v: number) => v.toFixed(2).replace('.', ',');
-
-const projects = LINKS.map((l, i) => ({ id: l.from, v: values[i], to: l.to }))
-  .filter((l) => l.to === 'cash')
-  .map((l) => ({ name: label(l.id), v: l.v }))
-  .sort((a, b) => b.v - a.v);
-// Статьи: конечные узлы схемы (материалы, работы, …, основные средства, остаток на счетах)
-const costs = LINKS.map((l, i) => ({ to: l.to, v: values[i] }))
-  .filter((l) => /^c\d+$/.test(l.to))
-  .map((l) => ({ name: label(l.to), v: l.v }))
-  .sort((a, b) => b.v - a.v);
-const total = projects.reduce((s, p) => s + p.v, 0);
-
-const PAL = ['var(--th-1)', 'var(--th-2)', 'var(--th-3)', 'var(--th-4)', 'var(--th-5)', 'var(--th-6)', 'var(--th-7)', 'var(--th-8)'];
-const W = 1200;
-const H = 320;
-const K = 11; // px на 1 млрд IDR
-const CY = 182;
-const PX = 560;
-const NW = 3;
-const X1 = 400;
-const X2 = 720;
-const maxP = projects[0].v;
-const maxC = costs[0].v;
-const top = CY - (total * K) / 2;
+const START = 0;
+const fr = frame(SERIES[START]);
+const { W, H, PX, NW, CY } = TG;
 const f = (n: number) => n.toFixed(1);
-
-let acc = top;
-const left = projects.map((p, i) => {
-  const h = p.v * K;
-  const y = CY + (i - (projects.length - 1) / 2) * 46;
-  const xs = X1 - (p.v / maxP) * 240;
-  const yb = acc + h / 2;
-  acc += h;
-  const len = X1 - xs + Math.hypot(PX - X1, yb - y);
-  return {
-    ...p, h, y, xs, color: PAL[i], len,
-    d: `M${f(xs)},${f(y)} L${X1},${f(y)} C${X1 + 82},${f(y)} ${X1 + 78},${f(yb)} ${PX},${f(yb)}`,
-  };
-});
-acc = top;
-const right = costs.map((c, i) => {
-  const h = c.v * K;
-  const y = CY + (i - (costs.length - 1) / 2) * 33;
-  const xe = X2 + (c.v / maxC) * 320;
-  const ya = acc + h / 2;
-  acc += h;
-  const len = Math.hypot(X2 - PX, y - ya) + (xe - X2);
-  const dur = Math.round(420 + len * 0.95);
-  const delay = 1080 + i * 55;
-  return {
-    ...c, h: Math.max(h, 1.4), y, xe, color: PAL[i], len, dur, delay,
-    d: `M${PX + NW},${f(ya)} C${PX + 80},${f(ya)} ${X2 - 78},${f(y)} ${X2},${f(y)} L${f(xe)},${f(y)}`,
-  };
-});
 const G = 70; // длина блика, px
+const totals = MONTH_TOTALS.map((p) => p.reduce((s, v) => s + v, 0));
+const maxTotal = Math.max(...totals);
+const right = fr.right.map((c, i) => {
+  const dur = Math.round(420 + c.len * 0.95);
+  const delay = 1080 + i * 55;
+  return { ...c, dur, delay };
+});
+const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
 ---
 
-<figure class="ht" aria-label={`Поступления проектов за ${MONTH_LABEL} сходятся в один счёт, ${fmt(total)} млрд IDR, и расходятся по статьям`}>
+<figure class="ht" data-ht aria-label="Пример отчёта на демо-данных: поступления проектов по месяцам сходятся в один счёт и расходятся по статьям">
   <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
     <text class="ht-cap ht-t" x="0" y="22" style="--d:0ms">Проекты</text>
-    <text class="ht-cap ht-t" x={W} y="22" text-anchor="end" style="--d:1300ms">Статьи расходов</text>
+    <text class="ht-cap ht-t" x={W} y="22" text-anchor="end" style="--d:1300ms">Куда ушли поступления</text>
 
     <g>
-      {left.map((p, i) => (
-        <path class="ht-in" d={p.d} pathLength="1" stroke={p.color} stroke-width={f(p.h)} style={`--d:${i * 40}ms`}></path>
+      {fr.left.map((p, i) => (
+        <path class="ht-in" data-l={i} d={p.d} pathLength="1" stroke={PROJ_COLORS[i]} stroke-width={f(p.h)} style={`--d:${i * 40}ms`}></path>
       ))}
-      {right.map((c) => (
-        <path class="ht-out" d={c.d} pathLength="1" stroke={c.color} stroke-width={f(c.h)} style={`--d:${c.delay}ms;--t:${c.dur}ms`}></path>
+      {right.map((c, i) => (
+        <path class="ht-out" data-r={i} d={c.d} pathLength="1" stroke={COST_COLORS[i]} stroke-width={f(c.h)} style={`--d:${c.delay}ms;--t:${c.dur}ms`}></path>
       ))}
     </g>
     <g class="ht-glints">
-      {left.map((p) => (
-        <path class="ht-glint ht-glint--l" d={p.d} pathLength="1" stroke-width={f(p.h)} style={`--g:${(G / p.len).toFixed(3)}`}></path>
+      {fr.left.map((p) => (
+        <path class="ht-glint ht-glint--l" data-gl d={p.d} pathLength="1" stroke-width={f(p.h)} style={`--g:${(G / p.len).toFixed(3)}`}></path>
       ))}
       {right.map((c) => (
-        <path class="ht-glint ht-glint--r" d={c.d} pathLength="1" stroke-width={f(c.h)} style={`--g:${(G / c.len).toFixed(3)}`}></path>
+        <path class="ht-glint ht-glint--r" data-gr d={c.d} pathLength="1" stroke-width={f(c.h)} style={`--g:${(G / c.len).toFixed(3)}`}></path>
       ))}
     </g>
 
-    {left.map((p, i) => (
-      <text class="ht-t ht-side" x={f(p.xs - 12)} y={f(p.y)} text-anchor="end" style={`--d:${i * 40}ms`}><tspan class="ht-name">{p.name}</tspan><tspan class="ht-val" dx="8">{fmt(p.v)}</tspan></text>
+    {fr.left.map((p, i) => (
+      <g class={`ht-lbl${p.v > 0.005 ? '' : ' is-off'}`} data-ll={i}>
+        <text class="ht-t ht-side" x={f(p.x - 12)} y={f(p.y)} text-anchor="end" style={`--d:${i * 40}ms`}><tspan class="ht-name">{PROJ_NAMES[i]}</tspan><tspan class="ht-val" dx="8" data-v>{fmt2(p.v)}</tspan></text>
+      </g>
     ))}
-    {right.map((c) => (
-      <text class="ht-t ht-side" x={f(c.xe + 12)} y={f(c.y)} style={`--d:${Math.round(c.delay + c.dur * 0.55)}ms`}><tspan class="ht-name">{c.name}</tspan><tspan class="ht-val" dx="8">{fmt(c.v)}</tspan></text>
+    {right.map((c, i) => (
+      <g class={`ht-lbl${c.v > 0.005 ? '' : ' is-off'}`} data-rl={i}>
+        <text class="ht-t ht-side" x={f(c.x + 12)} y={f(c.y)} style={`--d:${Math.round(c.delay + c.dur * 0.55)}ms`}><tspan class="ht-name">{COST_NAMES[i]}</tspan><tspan class="ht-val" dx="8" data-v>{fmt2(c.v)}</tspan></text>
+      </g>
     ))}
 
-    <line class="ht-lead ht-t" x1={PX + NW / 2} x2={PX + NW / 2} y1="70" y2={f(top - 16)} style="--d:900ms"></line>
+    <line class="ht-lead ht-t" data-lead x1={PX + NW / 2} x2={PX + NW / 2} y1="70" y2={f(fr.top - 16)} style="--d:900ms"></line>
     <circle class="ht-ring" cx={PX + NW / 2} cy={CY} r="46" style="--d:740ms"></circle>
     <circle class="ht-ring ht-ring--2" cx={PX + NW / 2} cy={CY} r="80" style="--d:860ms"></circle>
-    <rect class="ht-bar" x={PX} y={f(top - 10)} width={NW} height={f(total * K + 20)} rx="1.5"></rect>
-    <text class="ht-cap ht-t" x={PX + NW / 2} y="22" text-anchor="middle" style="--d:760ms">Поступления за {MONTH_LABEL}</text>
-    <text class="ht-t" x={PX + NW / 2} y="52" text-anchor="middle" style="--d:760ms"><tspan class="ht-big" data-sig-count={total.toFixed(2)} data-dec="2" data-delay="760">{fmt(total)}</tspan><tspan class="ht-unit" dx="6">млрд IDR</tspan></text>
+    <rect class="ht-bar" data-bar x={PX} y={f(fr.top - 10)} width={NW} height={f(fr.total * TG.K + 20)} rx="1.5"></rect>
+    <text class="ht-cap ht-t" x={PX + NW / 2} y="22" text-anchor="middle" style="--d:760ms">Поступления за <tspan data-mon>{MONTHS[START].toLowerCase()}</tspan></text>
+    <text class="ht-t" x={PX + NW / 2} y="52" text-anchor="middle" style="--d:760ms"><tspan class="ht-big" data-total>{fmt2(fr.total)}</tspan><tspan class="ht-unit" dx="6">млрд IDR</tspan></text>
   </svg>
+
+  <div class="ht-controls">
+    <button class="ht-play" type="button" data-ht-play aria-label="Проиграть год заново">
+      <svg class="ht-i-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7.5-4.5Z" fill="currentColor"/></svg>
+      <svg class="ht-i-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 3.5h2.5v9H4.5zM9 3.5h2.5v9H9z" fill="currentColor"/></svg>
+    </button>
+    <div class="ht-months" role="group" aria-label="Месяцы">
+      {MONTH_TOTALS.map((p, i) => (
+        <button type="button" class={`ht-month${i === START ? ' is-on' : ' is-ahead'}`} aria-pressed={i === START ? 'true' : 'false'} aria-label={`${MONTHS[i]}: ${fmt2(totals[i])} млрд IDR`} data-ht-m={i}>
+          <span class="ht-stack" style={`--h:${((totals[i] / maxTotal) * 100).toFixed(1)}%`}>
+            {p.map((v, k) => (v > 0 ? <i style={`flex-grow:${v};background:${PROJ_COLORS[k]}`}></i> : null))}
+          </span>
+          <span class="ht-m">{MONTHS_SHORT[i]}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
   <figcaption class="ht-figcap">
-    <span class="ht-mobile-sum">Поступления за {MONTH_LABEL}: {fmt(total)} млрд IDR от {projects.length} проектов, разложены по {costs.length} статьям.</span>
-    <span>Демо-данные, млрд IDR</span>
+    <span class="ht-info" data-ht-info>{MONTHS[START]}: поступления {fmt2(fr.total)} млрд IDR от {projCount} проекта</span>
+    <span class="ht-demo">Пример отчёта на демо-данных, млрд IDR</span>
   </figcaption>
 </figure>
 
 <style>
-  .ht {
-    margin: 0;
-  }
-  .ht svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .ht { margin: 0; }
+  .ht > svg { display: block; width: 100%; height: auto; overflow: visible; }
   .ht text { dominant-baseline: middle; }
   .ht-cap { font: 500 12px var(--font); fill: var(--ink-3); }
   .ht-name { font: 500 13px var(--font); fill: var(--ink); }
   .ht-val { font: 400 13px var(--font); fill: var(--ink-2); font-variant-numeric: tabular-nums; }
   .ht-big { font: 600 30px var(--font-display); fill: var(--ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
   .ht-unit { font: 500 15px var(--font); fill: var(--ink-2); }
-  .ht-in, .ht-out { fill: none; stroke-opacity: .9; stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+  .ht-in, .ht-out { fill: none; stroke-opacity: .9; stroke-dasharray: 1 1; stroke-dashoffset: 0; cursor: pointer; transition: stroke-opacity .2s ease; }
+  .ht.has-active .ht-in:not(.is-active), .ht.has-active .ht-out:not(.is-active) { stroke-opacity: .18; }
+  .ht-lbl { transition: opacity .4s ease; }
+  .ht-lbl.is-off { opacity: 0; }
   .ht-bar { fill: var(--ink); transform-box: fill-box; transform-origin: center; }
   .ht-lead { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; }
-  .ht-ring { fill: none; stroke: var(--ink); stroke-width: 1.5; opacity: 0; transform-box: fill-box; transform-origin: center; }
+  .ht-ring { fill: none; stroke: var(--ink); stroke-width: 1.5; opacity: 0; transform-box: fill-box; transform-origin: center; pointer-events: none; }
   .ht-ring--2 { stroke: var(--ink-3); }
-  .ht-glint { fill: none; stroke: var(--surface); stroke-opacity: .5; stroke-dasharray: var(--g) 2; stroke-dashoffset: var(--g); }
-  .ht-figcap { display: flex; justify-content: flex-end; margin-top: 8px; font-size: 13px; color: var(--ink-3); }
-  .ht-mobile-sum { display: none; }
+  .ht-glint { fill: none; stroke: var(--surface); stroke-opacity: .5; stroke-dasharray: var(--g) 2; stroke-dashoffset: var(--g); pointer-events: none; }
 
   /* Бам: нити разгоняются и бьют в счёт */
   .ht-in { animation: ht-draw 720ms cubic-bezier(.7, 0, .84, 0) var(--d) both; }
@@ -149,10 +125,215 @@ const G = 70; // длина блика, px
   @keyframes ht-glint-l { 0% { stroke-dashoffset: var(--g); } 16%, 100% { stroke-dashoffset: -1; } }
   @keyframes ht-glint-r { 0%, 16% { stroke-dashoffset: var(--g); } 36%, 100% { stroke-dashoffset: -1; } }
 
+  /* Шкала месяцев: тонкие столбики поступлений по проектам, цвета как у нитей */
+  .ht-controls { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: var(--s2); margin-top: 6px; }
+  .ht-play {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 2px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .ht-play:hover { border-color: var(--ink-3); }
+  .ht-play svg { width: 13px; height: 13px; }
+  .ht-i-pause, .ht.is-playing .ht-i-play { display: none; }
+  .ht.is-playing .ht-i-pause { display: block; }
+  .ht-months { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2px; }
+  .ht-month {
+    display: grid;
+    grid-template-rows: 22px auto;
+    gap: 3px;
+    padding: 4px 0 2px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+    transition: opacity .3s ease, background-color .2s ease;
+  }
+  .ht-month:hover { background: var(--track); }
+  .ht-month.is-ahead { opacity: .35; }
+  .ht-month.is-ahead:hover { opacity: .75; }
+  .ht-month:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .ht-stack { align-self: end; justify-self: center; display: flex; flex-direction: column-reverse; width: min(18px, 60%); height: var(--h); border-radius: 2px; overflow: hidden; }
+  .ht-stack i { display: block; min-height: 0; }
+  .ht-m { font-size: 12px; color: var(--ink-3); text-align: center; }
+  .ht-month.is-on .ht-m { color: var(--ink); font-weight: 700; }
+
+  .ht-figcap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px var(--s3); margin-top: 6px; font-size: 13px; color: var(--ink-3); }
+  .ht-info { color: var(--ink-2); font-size: 14px; font-variant-numeric: tabular-nums; }
+
   /* На телефоне подписи в схеме были бы мельче 5px: оставляем сами нити, сумму пишем под ними */
   @media (max-width: 760px) {
     .ht svg text, .ht-lead { display: none; }
-    .ht-figcap { flex-direction: column; gap: 2px; justify-content: flex-start; }
-    .ht-mobile-sum { display: block; font-size: 15px; color: var(--ink-2); }
+    .ht-figcap { flex-direction: column; }
+    .ht-info { font-size: 15px; }
+  }
+  @media (max-width: 599px) {
+    .ht-month:nth-child(even) .ht-m { visibility: hidden; }
   }
 </style>
+
+<script>
+  import { SERIES, MONTHS, MONTH_TOTALS } from '../lib/sankey';
+  import { TG, frame, fmt2, PROJ_NAMES, COST_NAMES } from '../lib/threads';
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const G = 70;
+  const LAST = MONTHS.length - 1;
+  const f = (n: number) => n.toFixed(1);
+  const projWord = (n: number) => (n === 1 ? 'проекта' : 'проектов');
+
+  document.querySelectorAll<HTMLElement>('[data-ht]').forEach((root) => {
+    const q = <T extends Element>(s: string) => [...root.querySelectorAll<T>(s)];
+    const lp = q<SVGPathElement>('[data-l]');
+    const rp = q<SVGPathElement>('[data-r]');
+    const gl = q<SVGPathElement>('[data-gl]');
+    const gr = q<SVGPathElement>('[data-gr]');
+    const ll = q<SVGGElement>('[data-ll]');
+    const rl = q<SVGGElement>('[data-rl]');
+    const bar = root.querySelector<SVGRectElement>('[data-bar]')!;
+    const lead = root.querySelector<SVGLineElement>('[data-lead]')!;
+    const totalEl = root.querySelector<SVGTSpanElement>('[data-total]')!;
+    const monEl = root.querySelector<SVGTSpanElement>('[data-mon]')!;
+    const info = root.querySelector<HTMLElement>('[data-ht-info]')!;
+    const months = q<HTMLButtonElement>('[data-ht-m]');
+    const playBtn = root.querySelector<HTMLButtonElement>('[data-ht-play]')!;
+
+    let month = 0;
+    let cur = SERIES[0].slice();
+    let fr = frame(cur);
+    let hovered: (() => string) | null = null;
+
+    const summary = () => {
+      const n = MONTH_TOTALS[month].filter((v) => v > 0).length;
+      const total = MONTH_TOTALS[month].reduce((s, v) => s + v, 0);
+      return `${MONTHS[month]}: поступления ${fmt2(total)} млрд IDR от ${n} ${projWord(n)}`;
+    };
+    const showInfo = () => { info.textContent = hovered ? hovered() : summary(); };
+
+    const place = (g: SVGGElement, x: number, y: number, v: number) => {
+      const t = g.querySelector('text')!;
+      t.setAttribute('x', f(x));
+      t.setAttribute('y', f(y));
+      g.querySelector('[data-v]')!.textContent = fmt2(v);
+      g.classList.toggle('is-off', v < 0.005);
+    };
+
+    const draw = (values: number[]) => {
+      cur = values;
+      fr = frame(values);
+      fr.left.forEach((t, k) => {
+        lp[k].setAttribute('d', t.d);
+        lp[k].setAttribute('stroke-width', f(t.h));
+        gl[k].setAttribute('d', t.d);
+        gl[k].setAttribute('stroke-width', f(t.h));
+        gl[k].style.setProperty('--g', (G / t.len).toFixed(3));
+        place(ll[k], t.x - 12, t.y, t.v);
+      });
+      fr.right.forEach((t, k) => {
+        rp[k].setAttribute('d', t.d);
+        rp[k].setAttribute('stroke-width', f(t.h));
+        gr[k].setAttribute('d', t.d);
+        gr[k].setAttribute('stroke-width', f(t.h));
+        gr[k].style.setProperty('--g', (G / t.len).toFixed(3));
+        place(rl[k], t.x + 12, t.y, t.v);
+      });
+      bar.setAttribute('y', f(fr.top - 10));
+      bar.setAttribute('height', f(fr.total * TG.K + 20));
+      lead.setAttribute('y2', f(fr.top - 16));
+      totalEl.textContent = fmt2(fr.total);
+      if (hovered) showInfo();
+    };
+
+    // Наведение на нить: сумма и доля от поступлений месяца
+    const share = (v: number) => `${Math.round((v / fr.total) * 100)}%`;
+    const hook = (el: SVGPathElement, text: () => string) => {
+      el.addEventListener('mouseenter', () => { root.classList.add('has-active'); el.classList.add('is-active'); hovered = text; showInfo(); });
+      el.addEventListener('mouseleave', () => { root.classList.remove('has-active'); el.classList.remove('is-active'); hovered = null; showInfo(); });
+      el.addEventListener('click', () => { hovered = text; showInfo(); });
+    };
+    lp.forEach((el, k) => hook(el, () => `${PROJ_NAMES[k]}: ${fmt2(fr.left[k].v)} млрд IDR, ${share(fr.left[k].v)} поступлений`));
+    rp.forEach((el, k) => hook(el, () => `${COST_NAMES[k]}: ${fmt2(fr.right[k].v)} млрд IDR, ${share(fr.right[k].v)} поступлений`));
+
+    // Плавный переход между месяцами
+    let raf = 0;
+    const goTo = (m: number, animate = true) => {
+      month = m;
+      months.forEach((b, i) => {
+        b.classList.toggle('is-on', i === m);
+        b.classList.toggle('is-ahead', i > m);
+        b.setAttribute('aria-pressed', String(i === m));
+      });
+      monEl.textContent = MONTHS[m].toLowerCase();
+      showInfo();
+      cancelAnimationFrame(raf);
+      const target = SERIES[m];
+      if (!animate || reduce) { draw(target.slice()); return; }
+      const from = cur.slice();
+      const t0 = performance.now();
+      const dur = 620;
+      const step = (now: number) => {
+        const k = Math.min(1, (now - t0) / dur);
+        const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        draw(from.map((v, i) => v + (target[i] - v) * e));
+        if (k < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    // Проигрывание года: один раз после вступления, дальше по кнопке
+    let timer = 0;
+    const stop = () => {
+      clearInterval(timer);
+      timer = 0;
+      root.classList.remove('is-playing');
+      playBtn.setAttribute('aria-label', 'Проиграть год заново');
+    };
+    const play = () => {
+      if (month >= LAST) goTo(0);
+      root.classList.add('is-playing');
+      playBtn.setAttribute('aria-label', 'Пауза');
+      timer = window.setInterval(() => {
+        if (month >= LAST) { stop(); return; }
+        goTo(month + 1);
+      }, 850);
+    };
+    playBtn.addEventListener('click', () => (timer ? stop() : play()));
+    months.forEach((b, i) => b.addEventListener('click', () => { stop(); goTo(i); }));
+
+    // Сумма в центре набирается в такт «пум»
+    const countIn = () => {
+      const to = fr.total;
+      const t0 = performance.now() + 760;
+      const step = (now: number) => {
+        const k = Math.max(0, Math.min(1, (now - t0) / 800));
+        totalEl.textContent = fmt2(to * (1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(step);
+        else totalEl.textContent = fmt2(to);
+      };
+      requestAnimationFrame(step);
+    };
+
+    if (reduce) { goTo(LAST, false); return; }
+
+    // Мотив может быть скрыт (выбрана J-кривая): год проигрывается при первом показе
+    const view = root.closest<HTMLElement>('[data-sig-view]');
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true;
+      countIn();
+      window.setTimeout(() => { if (!timer && month === 0) play(); }, 2600);
+    };
+    if (!view || !view.hidden) start();
+    if (view) {
+      new MutationObserver(() => { if (!view.hidden) start(); }).observe(view, { attributes: true, attributeFilter: ['hidden'] });
+    }
+  });
+</script>

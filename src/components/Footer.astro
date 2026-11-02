@@ -5,11 +5,11 @@ import { t } from '../lib/typo';
 
 const year = new Date().getFullYear();
 const company = [
-  { href: '/#expertise', label: 'Экспертиза' },
-  { href: '/#accounting-system', label: 'Система учёта' },
   { href: '/#cases', label: 'Кейсы' },
+  { href: '/#reviews', label: 'Отзывы' },
   { href: '/#team', label: 'Команда' },
   { href: '/#faq', label: 'Вопросы' },
+  { href: '/#steps', label: 'Как начать' },
 ];
 ---
 
@@ -46,6 +46,7 @@ const company = [
       <ul>
         <li><a href={site.telegramUrl}>Telegram @{site.telegram}</a></li>
         <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        {site.channelUrl && <li><a href={site.channelUrl}>Канал «{site.channelName}»</a></li>}
         <li><a href={site.portalUrl}>Личный кабинет клиента</a></li>
       </ul>
       <figure class="ketut" aria-label="Кетут">
