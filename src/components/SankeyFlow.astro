@@ -1,0 +1,236 @@
+---
+// Sankey «Куда уходят деньги проекта» по мотивам экрана Cash Flow Sankey в портале.
+// Данные вымышленные (млрд IDR). Раскладка считается при сборке, на клиенте только анимация и подсказки.
+
+type Node = { id: string; label: string; col: number; color: string };
+type Link = { from: string; to: string; value: number };
+
+const nodes: Node[] = [
+  { id: 'p1', label: 'Вилла A', col: 0, color: '#5fa596' },
+  { id: 'p2', label: 'Вилла B', col: 0, color: '#5fa596' },
+  { id: 'p3', label: 'Апарт-отель', col: 0, color: '#5fa596' },
+  { id: 'p4', label: 'Таунхаусы', col: 0, color: '#5fa596' },
+  { id: 'p5', label: 'Прочие проекты', col: 0, color: '#9bb3ad' },
+  { id: 'cash', label: 'Поступления', col: 1, color: '#5b93cf' },
+  { id: 'g1', label: 'Строительство', col: 2, color: '#d9727b' },
+  { id: 'g2', label: 'Операционные', col: 2, color: '#d9a548' },
+  { id: 'g3', label: 'Инвестиции', col: 2, color: '#5b93cf' },
+  { id: 'g4', label: 'Прирост остатка', col: 2, color: '#5fa596' },
+  { id: 'c1', label: 'Материалы', col: 3, color: '#d9727b' },
+  { id: 'c2', label: 'Работы подрядчиков', col: 3, color: '#d9727b' },
+  { id: 'c3', label: 'Инжиниринг', col: 3, color: '#d9727b' },
+  { id: 'c4', label: 'ФОТ и консалтинг', col: 3, color: '#d9a548' },
+  { id: 'c5', label: 'Налоги', col: 3, color: '#d9a548' },
+  { id: 'c6', label: 'Общие расходы', col: 3, color: '#d9a548' },
+  { id: 'c7', label: 'Основные средства', col: 3, color: '#5b93cf' },
+  { id: 'c8', label: 'Остаток на счетах', col: 3, color: '#5fa596' },
+];
+
+const links: Link[] = [
+  { from: 'p1', to: 'cash', value: 18.6 },
+  { from: 'p2', to: 'cash', value: 14.1 },
+  { from: 'p3', to: 'cash', value: 9.8 },
+  { from: 'p4', to: 'cash', value: 6.2 },
+  { from: 'p5', to: 'cash', value: 4.3 },
+  { from: 'cash', to: 'g1', value: 33.0 },
+  { from: 'cash', to: 'g2', value: 8.5 },
+  { from: 'cash', to: 'g3', value: 4.1 },
+  { from: 'cash', to: 'g4', value: 7.4 },
+  { from: 'g1', to: 'c1', value: 19.2 },
+  { from: 'g1', to: 'c2', value: 9.6 },
+  { from: 'g1', to: 'c3', value: 4.2 },
+  { from: 'g2', to: 'c4', value: 5.1 },
+  { from: 'g2', to: 'c5', value: 2.1 },
+  { from: 'g2', to: 'c6', value: 1.3 },
+  { from: 'g3', to: 'c7', value: 4.1 },
+  { from: 'g4', to: 'c8', value: 7.4 },
+];
+
+const W = 1100;
+const H = 520;
+const PAD_T = 36;
+const NODE_W = 10;
+const GAP = 14;
+const colX = [170, 430, 690, 900];
+const colTitles = ['Проекты', 'Поступления', 'Группы затрат', 'Статьи'];
+
+const total = links.filter((l) => l.to === 'cash').reduce((s, l) => s + l.value, 0);
+const valueOf = (id: string) => {
+  const out = links.filter((l) => l.from === id).reduce((s, l) => s + l.value, 0);
+  const inn = links.filter((l) => l.to === id).reduce((s, l) => s + l.value, 0);
+  return Math.max(out, inn);
+};
+
+// Масштаб по самой «длинной» колонке с учётом зазоров.
+const cols = [0, 1, 2, 3].map((c) => nodes.filter((n) => n.col === c));
+const scale = Math.min(...cols.map((ns) => (H - PAD_T - 10 - GAP * (ns.length - 1)) / ns.reduce((s, n) => s + valueOf(n.id), 0)));
+
+type Pos = { x: number; y: number; h: number; outY: number; inY: number };
+const pos: Record<string, Pos> = {};
+for (const ns of cols) {
+  const colH = ns.reduce((s, n) => s + valueOf(n.id) * scale, 0) + GAP * (ns.length - 1);
+  let y = PAD_T + (H - PAD_T - 10 - colH) / 2;
+  for (const n of ns) {
+    const h = valueOf(n.id) * scale;
+    pos[n.id] = { x: colX[n.col], y, h, outY: y, inY: y };
+    y += h + GAP;
+  }
+}
+
+const fmt = (v: number) => v.toFixed(1).replace('.', ',');
+const share = (v: number) => `${Math.round((v / total) * 100)}%`;
+const nodeById = Object.fromEntries(nodes.map((n) => [n.id, n]));
+
+const paths = links.map((l) => {
+  const a = pos[l.from];
+  const b = pos[l.to];
+  const h = l.value * scale;
+  const x0 = a.x + NODE_W;
+  const x1 = b.x;
+  const y0 = a.outY;
+  const y1 = b.inY;
+  a.outY += h;
+  b.inY += h;
+  const mx = (x0 + x1) / 2;
+  const d = `M${x0},${y0} C${mx},${y0} ${mx},${y1} ${x1},${y1} L${x1},${y1 + h} C${mx},${y1 + h} ${mx},${y0 + h} ${x0},${y0 + h} Z`;
+  const src = nodeById[l.from];
+  const dst = nodeById[l.to];
+  const color = l.from === 'cash' ? dst.color : src.col === 0 ? src.color : dst.color;
+  return {
+    d,
+    color,
+    info: `${src.label} → ${dst.label}: ${fmt(l.value)} млрд IDR · ${share(l.value)}`,
+  };
+});
+
+const labels = nodes.map((n) => {
+  const p = pos[n.id];
+  const right = n.col === 3;
+  return {
+    x: right ? p.x + NODE_W + 10 : p.x - 10,
+    y: p.y + p.h / 2,
+    anchor: right ? 'start' : 'end',
+    label: n.label,
+    value: `${fmt(valueOf(n.id))} млрд`,
+    compact: p.h < 30,
+    info: `${n.label}: ${fmt(valueOf(n.id))} млрд IDR · ${share(valueOf(n.id))}`,
+  };
+});
+---
+
+<figure class="sankey" data-sankey>
+  <div class="sankey-scroll">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="sankey-title sankey-desc">
+      <title id="sankey-title">Движение денег по проекту</title>
+      <desc id="sankey-desc">
+        Пример на вымышленных данных: поступления по проектам распределяются на строительство, операционные расходы, инвестиции и прирост остатка.
+      </desc>
+      <defs>
+        <clipPath id="sankey-reveal">
+          <rect class="sankey-clip" x="0" y="0" width={W} height={H}></rect>
+        </clipPath>
+      </defs>
+      {colTitles.map((t, i) => (
+        <text class="col-title" x={i === 3 ? colX[i] : colX[i] + NODE_W / 2} y="14" text-anchor={i === 3 ? 'start' : 'middle'}>{t}</text>
+      ))}
+      <g clip-path="url(#sankey-reveal)">
+        {paths.map((p) => (
+          <path class="flow" d={p.d} fill={p.color} data-info={p.info}></path>
+        ))}
+      </g>
+      {nodes.map((n) => {
+        const p = pos[n.id];
+        return <rect class="node" x={p.x} y={p.y} width={NODE_W} height={Math.max(p.h, 2)} rx="2" fill={n.color} data-info={labels.find((l) => l.label === n.label)?.info}></rect>;
+      })}
+      {labels.map((l) => (
+        l.compact ? (
+          <text class="node-label" x={l.x} y={l.y} text-anchor={l.anchor} data-info={l.info}>
+            {l.label} <tspan class="node-value">{l.value}</tspan>
+          </text>
+        ) : (
+          <text class="node-label" x={l.x} y={l.y} text-anchor={l.anchor} data-info={l.info}>
+            <tspan x={l.x} dy="-0.2em">{l.label}</tspan>
+            <tspan class="node-value" x={l.x} dy="1.25em">{l.value}</tspan>
+          </text>
+        )
+      ))}
+    </svg>
+  </div>
+  <figcaption class="sankey-caption">
+    <span class="sankey-info" aria-live="polite" data-default="Наведите на поток, чтобы увидеть сумму и долю">Наведите на поток, чтобы увидеть сумму и долю</span>
+    <span class="caption">Демо-данные, млрд IDR</span>
+  </figcaption>
+</figure>
+
+<style>
+  .sankey {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: var(--s3) var(--s3) var(--s2);
+  }
+  .sankey-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .sankey svg { width: 100%; min-width: 720px; height: auto; font-family: var(--font); }
+  .col-title { font-size: 12px; fill: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; }
+  .flow { fill-opacity: 0.28; transition: fill-opacity 0.2s ease; cursor: pointer; }
+  .flow:hover, .flow.is-active { fill-opacity: 0.6; }
+  .sankey.has-active .flow:not(.is-active) { fill-opacity: 0.12; }
+  .node { cursor: pointer; }
+  .node-label { font-size: 13px; fill: var(--ink); dominant-baseline: middle; cursor: default; }
+  .node-value { font-size: 12px; font-weight: 700; fill: var(--ink-2); }
+  .sankey-clip { transform-origin: left; }
+  .sankey.is-armed .sankey-clip { transform: scaleX(0); }
+  .sankey.is-armed .node, .sankey.is-armed .node-label { opacity: 0; }
+  .sankey.is-visible .sankey-clip { transform: scaleX(1); transition: transform 1.8s cubic-bezier(0.65, 0, 0.35, 1); }
+  .sankey.is-visible .node, .sankey.is-visible .node-label { opacity: 1; transition: opacity 0.6s ease 0.2s; }
+  .sankey-caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--s1) var(--s3);
+    margin-top: var(--s2);
+    padding-top: var(--s2);
+    border-top: 1px solid var(--line);
+    font-size: 15px;
+  }
+  .sankey-info { font-weight: 600; min-height: 1.4em; }
+  @media (max-width: 719px) { .sankey { padding: var(--s2); } }
+</style>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<HTMLElement>('[data-sankey]').forEach((root) => {
+    const info = root.querySelector<HTMLElement>('.sankey-info');
+    const def = info?.dataset.default ?? '';
+    root.querySelectorAll<SVGElement>('.flow').forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        root.classList.add('has-active');
+        el.classList.add('is-active');
+        if (info) info.textContent = el.dataset.info ?? def;
+      });
+      el.addEventListener('mouseleave', () => {
+        root.classList.remove('has-active');
+        el.classList.remove('is-active');
+        if (info) info.textContent = def;
+      });
+      el.addEventListener('click', () => { if (info) info.textContent = el.dataset.info ?? def; });
+    });
+    root.querySelectorAll<SVGElement>('.node, .node-label').forEach((el) => {
+      el.addEventListener('mouseenter', () => { if (info) info.textContent = el.dataset.info ?? def; });
+      el.addEventListener('mouseleave', () => { if (info) info.textContent = def; });
+    });
+
+    if (reduce || !('IntersectionObserver' in window)) return;
+    root.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          root.classList.add('is-visible');
+          root.classList.remove('is-armed');
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    io.observe(root);
+  });
+</script>

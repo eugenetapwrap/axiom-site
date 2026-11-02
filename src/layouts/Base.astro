@@ -58,5 +58,26 @@ const org = {
       <slot />
     </main>
     <Footer />
+    <script>
+      // Плавное появление секций при прокрутке. При reduced-motion ничего не делаем.
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (!reduce && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-in');
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        els.forEach((el) => {
+          if (el.getBoundingClientRect().top > window.innerHeight) {
+            el.classList.add('reveal');
+            io.observe(el);
+          }
+        });
+      }
+    </script>
   </body>
 </html>

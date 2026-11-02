@@ -1,57 +1,94 @@
 ---
-// Демо-дашборд на вымышленных данных. Реальные проекты, контрагенты и суммы клиентов не показываем.
-const months = [
-  { m: 'июн', inflow: 62, outflow: 48 },
-  { m: 'июл', inflow: 40, outflow: 55 },
-  { m: 'авг', inflow: 75, outflow: 58 },
-  { m: 'сен', inflow: 52, outflow: 61 },
-  { m: 'окт', inflow: 88, outflow: 64 },
-  { m: 'ноя', inflow: 70, outflow: 59 },
+// Живой демо-дашборд по мотивам экранов Overview и Cash Flow в портале.
+// Данные вымышленные (млрд IDR). Реальные проекты, контрагенты и суммы клиентов не показываем.
+
+const kpi = [
+  { label: 'Чистая прибыль', value: 18.4, suffix: 'млрд', note: '19%', tone: '' },
+  { label: 'Остаток на счетах', value: 14.1, suffix: 'млрд', note: '', tone: '' },
+  { label: 'Дебиторка', value: 5.8, suffix: 'млрд', note: '', tone: 'growth' },
+  { label: 'Ждёт оплаты', value: 2.2, suffix: 'млрд', note: '', tone: 'risk' },
 ];
+
+// Поступления, выплаты и остаток на конец месяца.
+const months = [
+  { m: 'апр', inflow: 6.6, outflow: 6.7, balance: 9.4 },
+  { m: 'май', inflow: 8.0, outflow: 11.2, balance: 6.2 },
+  { m: 'июн', inflow: 5.1, outflow: 3.8, balance: 7.5 },
+  { m: 'июл', inflow: 5.0, outflow: 3.7, balance: 8.8 },
+  { m: 'авг', inflow: 5.3, outflow: 5.2, balance: 8.9 },
+  { m: 'сен', inflow: 6.3, outflow: 7.3, balance: 7.9 },
+  { m: 'окт', inflow: 8.8, outflow: 4.6, balance: 12.1 },
+  { m: 'ноя', inflow: 4.2, outflow: 2.2, balance: 14.1 },
+];
+
+const W = 460;
+const H = 190;
+const top = 26;
+const base = 150;
+const maxBar = 12;
+const step = W / months.length;
+const barW = 13;
+const bh = (v: number) => (v / maxBar) * (base - top - 20);
+const maxBal = 16;
+const by = (v: number) => base - (v / maxBal) * (base - top);
+const pts = months.map((d, i) => [i * step + step / 2, by(d.balance)] as const);
+const linePath = pts
+  .map(([x, y], i) => {
+    if (i === 0) return `M${x},${y}`;
+    const [px, py] = pts[i - 1];
+    const cx = (px + x) / 2;
+    return `C${cx},${py} ${cx},${y} ${x},${y}`;
+  })
+  .join(' ');
+const fmt = (v: number) => v.toFixed(1).replace('.', ',');
 ---
 
-<figure class="dash" aria-label="Пример дашборда на вымышленных данных">
+<figure class="dash" data-dash aria-label="Пример дашборда на вымышленных данных">
   <div class="dash-head">
-    <span class="dash-title">Проект «Вилла 7»</span>
-    <span class="caption">демо-данные</span>
+    <span class="dash-title">Обзор финансов</span>
+    <span class="dash-tag">демо-данные · IDR</span>
   </div>
 
   <dl class="dash-kpi">
-    <div>
-      <dt class="caption">На счетах</dt>
-      <dd>1,24 млрд <span>IDR</span></dd>
-    </div>
-    <div>
-      <dt class="caption">Ждут согласования</dt>
-      <dd>18 заявок</dd>
-    </div>
-    <div>
-      <dt class="caption">Дублей остановлено</dt>
-      <dd class="risk">3</dd>
-    </div>
+    {kpi.map((k) => (
+      <div class={`kpi ${k.tone}`}>
+        <dt>{k.label}</dt>
+        <dd>
+          <span class="kpi-num" data-count={k.value}>{fmt(k.value)}</span>&nbsp;<span class="kpi-unit">{k.suffix}</span>
+          {k.note && <span class="kpi-note"><i></i>{k.note}</span>}
+        </dd>
+      </div>
+    ))}
   </dl>
 
-  <div class="dash-chart" role="img" aria-label="Cash Flow по месяцам: поступления и выплаты">
-    <div class="caption dash-legend">
-      <span><i class="dot dot-in"></i>Поступления</span>
-      <span><i class="dot dot-out"></i>Выплаты</span>
+  <div class="dash-chart">
+    <div class="dash-legend">
+      <span><i class="sw sw-in"></i>Поступления</span>
+      <span><i class="sw sw-out"></i>Выплаты</span>
+      <span><i class="sw sw-line"></i>Остаток</span>
     </div>
-    <div class="bars">
-      {months.map((d) => (
-        <div class="bar-group">
-          <div class="bar-pair">
-            <span class="bar bar-in" style={`height:${d.inflow}%`}></span>
-            <span class="bar bar-out" style={`height:${d.outflow}%`}></span>
-          </div>
-          <span class="caption">{d.m}</span>
-        </div>
-      ))}
-    </div>
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Cash Flow по месяцам: поступления, выплаты и остаток на конец месяца">
+      <rect class="today" x={(months.length - 1) * step + 4} y="8" width={step - 8} height={base - 8 + 22} rx="6"></rect>
+      <text class="today-label" x={(months.length - 1) * step + step / 2} y="20" text-anchor="middle">сегодня</text>
+      <line x1="0" x2={W} y1={base} y2={base} class="axis"></line>
+      {months.map((d, i) => {
+        const cx = i * step + step / 2;
+        return (
+          <g class="bar-g" style={`--i:${i}`}>
+            <rect class="bar bar-in" x={cx - barW - 1.5} y={base - bh(d.inflow)} width={barW} height={bh(d.inflow)} rx="2"></rect>
+            <rect class="bar bar-out" x={cx + 1.5} y={base - bh(d.outflow)} width={barW} height={bh(d.outflow)} rx="2"></rect>
+            <text class="month" x={cx} y={base + 18} text-anchor="middle">{d.m}</text>
+          </g>
+        );
+      })}
+      <path class="balance" d={linePath} pathLength="1"></path>
+      {pts.map(([x, y], i) => <circle class="dot" cx={x} cy={y} r="3.2" style={`--i:${i}`}></circle>)}
+    </svg>
   </div>
 
   <div class="dash-alert">
     <span class="alert-mark" aria-hidden="true"></span>
-    <span>Заявка №&nbsp;75 совпадает с&nbsp;№&nbsp;63 от&nbsp;09.10. В&nbsp;оплату не&nbsp;ушла.</span>
+    <span>Заявка №&nbsp;75 совпадает с&nbsp;№&nbsp;63. В&nbsp;оплату не&nbsp;ушла.</span>
   </div>
 </figure>
 
@@ -59,60 +96,99 @@ const months = [
   .dash {
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: var(--radius);
+    border-radius: 16px;
     padding: var(--s3);
-    font-size: 16px;
-    line-height: 1.4;
-    box-shadow: 0 1px 0 rgba(22, 32, 31, 0.04);
+    font-size: 15px;
+    line-height: 1.35;
+    box-shadow: 0 24px 48px -32px rgba(11, 83, 69, 0.35);
   }
   .dash-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s2); }
-  .dash-title { font-weight: 600; }
+  .dash-title { font-weight: 700; font-size: 17px; }
+  .dash-tag { font-size: 12px; color: var(--ink-3); }
+
   .dash-kpi {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--s2);
-    margin: var(--s3) 0;
-    padding: var(--s2) 0;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: var(--s2) 0;
   }
-  .dash-kpi > div { display: flex; flex-direction: column; justify-content: space-between; }
-  .dash-kpi dd { font-size: 20px; font-weight: 700; margin-top: 4px; }
-  .dash-kpi dd span { font-size: 14px; font-weight: 500; color: var(--ink-3); }
-  .dash-kpi .risk { color: var(--risk); }
-  .dash-legend { display: flex; gap: var(--s2); margin-bottom: var(--s1); }
-  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
-  .dot-in, .bar-in { background: var(--accent); }
-  .dot-out, .bar-out { background: #b9cfc8; }
-  .bars {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: var(--s1);
-    align-items: end;
-  }
-  .bar-group { display: grid; gap: 6px; justify-items: center; }
-  .bar-pair { display: flex; gap: 3px; align-items: flex-end; height: 120px; width: 100%; justify-content: center; }
-  .bar { display: block; width: 38%; max-width: 16px; border-radius: 3px 3px 0 0; }
+  .kpi { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .kpi dt { font-size: 12px; color: var(--ink-3); }
+  .kpi dd { margin-top: 2px; font-size: 20px; font-weight: 700; white-space: nowrap; }
+  .kpi-unit { font-size: 13px; font-weight: 500; color: var(--ink-3); }
+  .kpi.risk dd .kpi-num { color: var(--risk); }
+  .kpi.growth dd .kpi-num { color: var(--growth); }
+  .kpi-note { margin-left: 8px; font-size: 14px; font-weight: 700; }
+  .kpi-note i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); margin-right: 4px; vertical-align: middle; }
+
+  .dash-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--ink-2); margin-bottom: 4px; }
+  .sw { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .sw-in { background: #5fa596; }
+  .sw-out { background: #d8bf90; }
+  .sw-line { height: 2px; width: 14px; background: var(--accent); vertical-align: 3px; }
+  .dash-chart svg { width: 100%; height: auto; font-family: var(--font); overflow: visible; }
+  .axis { stroke: var(--line); }
+  .bar-in { fill: #5fa596; }
+  .bar-out { fill: #d8bf90; }
+  .month { font-size: 11px; fill: var(--ink-3); }
+  .today { fill: var(--accent-soft); }
+  .today-label { font-size: 10px; fill: var(--accent); font-weight: 600; }
+  .balance { fill: none; stroke: var(--accent); stroke-width: 2.2; stroke-linecap: round; }
+  .dot { fill: #fff; stroke: var(--accent); stroke-width: 1.6; }
+
   .dash-alert {
     display: flex;
     gap: 10px;
     align-items: flex-start;
-    margin-top: var(--s3);
-    padding: 12px 14px;
+    margin-top: var(--s2);
+    padding: 10px 12px;
     background: var(--risk-soft);
     border-radius: 8px;
-    font-size: 15px;
+    font-size: 14px;
   }
-  .alert-mark {
-    flex: none;
-    width: 8px;
-    height: 8px;
-    margin-top: 7px;
-    border-radius: 50%;
-    background: var(--risk);
-  }
+  .alert-mark { flex: none; width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: var(--risk); }
+
+  /* Анимация: включается скриптом, при reduced-motion всё сразу в конечном состоянии. */
+  .dash.is-armed .bar { transform: scaleY(0); }
+  .dash.is-armed .balance { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .dash.is-armed .dot, .dash.is-armed .dash-alert { opacity: 0; }
+  .bar { transform-box: fill-box; transform-origin: bottom; }
+  .dash.is-play .bar { transform: scaleY(1); transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--i) * 70ms); }
+  .dash.is-play .balance { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1.4s ease 0.5s; }
+  .dash.is-play .dot { opacity: 1; transition: opacity 0.3s ease calc(0.5s + var(--i) * 160ms); }
+  .dash.is-play .dash-alert { animation: alert-in 0.5s ease 2.3s both; }
+  @keyframes alert-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
   @media (max-width: 420px) {
     .dash { padding: var(--s2); }
-    .dash-kpi dd { font-size: 17px; }
+    .kpi dd { font-size: 18px; }
   }
 </style>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<HTMLElement>('[data-dash]').forEach((root) => {
+    if (reduce) return;
+    root.classList.add('is-armed');
+    const nums = [...root.querySelectorAll<HTMLElement>('[data-count]')];
+    nums.forEach((n) => (n.textContent = '0,0'));
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        root.classList.add('is-play');
+        root.classList.remove('is-armed');
+        const start = performance.now();
+        const dur = 1200;
+        const tick = (now: number) => {
+          const p = Math.min(1, (now - start) / dur);
+          const e = 1 - Math.pow(1 - p, 3);
+          nums.forEach((n) => {
+            const v = Number(n.dataset.count) * e;
+            n.textContent = v.toFixed(1).replace('.', ',');
+          });
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }),
+    );
+  });
+</script>

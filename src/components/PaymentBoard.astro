@@ -1,0 +1,272 @@
+---
+// Живая канбан-доска платежей по мотивам блока Cash Flow Status в портале.
+// Заявки идут по колонкам, антифрод останавливает дубль. Данные вымышленные.
+import BotMessage from './BotMessage.astro';
+
+interface Props {
+  columns: { title: string; text: string }[];
+}
+const { columns } = Astro.props;
+
+// Начальное состояние (оно же статичная картинка без анимации).
+const initial = [
+  { id: 'a', name: 'Песок, 5 м³', amount: 2750000, project: 'Вилла A', stage: 0 },
+  { id: 'b', name: 'Арматура 12 мм', amount: 14300000, project: 'Вилла B', stage: 1 },
+  { id: 'c', name: 'Аренда экскаватора', amount: 9500000, project: 'Апарт-отель', stage: 1 },
+  { id: 'd', name: 'Плитка, 120 м²', amount: 36000000, project: 'Вилла A', stage: 2 },
+  { id: 'e', name: 'Цемент, 40 мешков', amount: 1080000, project: 'Вилла B', stage: 3 },
+];
+const fmt = (n: number) => n.toLocaleString('ru-RU').replace(/\s/g, ' ');
+const totals = columns.map((_, i) => initial.filter((c) => c.stage === i).reduce((s, c) => s + c.amount, 0));
+---
+
+<div class="board-wrap" data-board>
+  <div class="board" role="img" aria-label="Пример канбан-доски платежей: заявка, согласование, к оплате, оплачено">
+    {columns.map((col, i) => (
+      <section class="pb-col" data-col={i}>
+        <header class="pb-col-head">
+          <span class="pb-col-title">{col.title}</span>
+          <span class="pb-col-count" data-count>{initial.filter((c) => c.stage === i).length}</span>
+        </header>
+        <p class="pb-col-text">{col.text}</p>
+        <p class="pb-col-total"><span data-total>{fmt(totals[i])}</span> IDR</p>
+        <div class="pb-col-cards" data-cards>
+          {initial.filter((c) => c.stage === i).map((c) => (
+            <article class="pcard" data-id={c.id}>
+              <span class="pcard-name">{c.name}</span>
+              <span class="pcard-meta"><span>{c.project}</span><b>{fmt(c.amount)}</b></span>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+  <div class="board-bot" data-bot>
+    <BotMessage />
+  </div>
+</div>
+
+<style is:global>
+  /* Глобально: карточки создаются скриптом и не получают атрибуты scoped-стилей Astro. */
+  .board-wrap { display: grid; gap: var(--s4); align-items: start; }
+  @media (min-width: 1100px) { .board-wrap { grid-template-columns: 1fr 340px; } }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 10px;
+    background: #eef2ef;
+    border-radius: 16px;
+  }
+  @media (min-width: 760px) { .board { grid-template-columns: repeat(4, 1fr); } }
+
+  .pb-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 330px;
+    padding: 12px;
+    background: var(--surface);
+    border-radius: 12px;
+  }
+  .pb-col-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .pb-col-title { font-weight: 700; font-size: 16px; }
+  .pb-col-count {
+    min-width: 26px;
+    padding: 1px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .pb-col-text { font-size: 13px; line-height: 1.35; color: var(--ink-3); min-height: 2.7em; }
+  .pb-col-total { font-size: 13px; font-weight: 700; color: var(--ink-2); padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+  .pb-col-cards { display: grid; gap: 8px; align-content: start; }
+
+  .pcard {
+    display: grid;
+    gap: 4px;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-left: 3px solid #5fa596;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .pb-col[data-col='1'] .pcard { border-left-color: #d9a548; }
+  .pb-col[data-col='2'] .pcard { border-left-color: #5b93cf; }
+  .pb-col[data-col='3'] .pcard { border-left-color: var(--accent); background: #f6faf8; }
+  .pcard-name { font-weight: 600; }
+  .pcard-meta { display: flex; justify-content: space-between; gap: 6px; color: var(--ink-3); }
+  .pcard-meta b { color: var(--ink); font-weight: 600; white-space: nowrap; }
+
+  .pcard.is-dup { border-color: var(--risk); border-left-color: var(--risk); background: var(--risk-soft); }
+  .pcard.is-dup .pcard-name::after { content: ' · дубль'; color: var(--risk); }
+  .pcard.is-enter { animation: card-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  .pcard.is-leave { animation: card-out 0.45s ease both; }
+  @keyframes card-in { from { opacity: 0; transform: translateX(-14px) scale(0.98); } to { opacity: 1; transform: none; } }
+  @keyframes card-out { to { opacity: 0; transform: scale(0.94); } }
+  .pcard.is-dup.is-enter { animation-name: card-in, shake; animation-duration: 0.5s, 0.4s; animation-delay: 0s, 0.6s; }
+  @keyframes shake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+
+  .pcard-meta { flex-wrap: wrap; }
+  .pcard-meta span { white-space: nowrap; }
+
+  .board-wrap { position: relative; }
+  .board-bot { transition: opacity 0.4s ease, transform 0.4s ease; }
+  .board-wrap.is-live .board-bot { opacity: 0.35; transform: translateY(6px); }
+  .board-wrap.is-live .board-bot.is-show { opacity: 1; transform: none; }
+  /* На узких экранах сообщение бота всплывает поверх доски, иначе его не видно. */
+  @media (max-width: 1099px) {
+    .board-wrap.is-live .board-bot {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: 0 16px 40px -12px rgba(22, 32, 31, 0.35);
+      border-radius: var(--radius);
+    }
+    .board-wrap.is-live .board-bot .chat { max-width: none; }
+  }
+</style>
+
+<script>
+  type Card = { id: string; name: string; amount: number; project: string; stage: number; dup?: boolean; t?: number };
+
+  const POOL: Omit<Card, 'id' | 'stage' | 't'>[] = [
+    { name: 'Опалубка', amount: 6400000, project: 'Апарт-отель' },
+    { name: 'Электрика, этап 2', amount: 18200000, project: 'Вилла A' },
+    { name: 'Доставка бетона', amount: 22600000, project: 'Вилла B' },
+    { name: 'Бригада, неделя 41', amount: 12800000, project: 'Апарт-отель' },
+    { name: 'Сантехника', amount: 7900000, project: 'Вилла A' },
+    { name: 'Песок, 5 м³', amount: 2750000, project: 'Вилла B' },
+  ];
+
+  const fmt = (n: number) => n.toLocaleString('ru-RU').replace(/\s/g, ' ');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('[data-board]').forEach((root) => {
+    const cols = [...root.querySelectorAll<HTMLElement>('[data-col]')];
+    const bot = root.querySelector<HTMLElement>('[data-bot]');
+    if (reduce || cols.length !== 4) {
+      bot?.classList.add('is-show');
+      return;
+    }
+
+    const cards: Card[] = [];
+    root.querySelectorAll<HTMLElement>('.pcard').forEach((el) => {
+      const stage = Number(el.closest<HTMLElement>('[data-col]')?.dataset.col ?? 0);
+      cards.push({
+        id: el.dataset.id!,
+        name: el.querySelector('.pcard-name')?.textContent ?? '',
+        amount: Number((el.querySelector('b')?.textContent ?? '0').replace(/\D/g, '')),
+        project: el.querySelector('.pcard-meta span')?.textContent ?? '',
+        stage,
+      });
+    });
+
+    let seq = 0;
+    let poolIdx = 0;
+    let tick = 0;
+    let timer: number | undefined;
+
+    const el = (id: string) => root.querySelector<HTMLElement>(`.pcard[data-id="${id}"]`);
+
+    const make = (c: Card) => {
+      const a = document.createElement('article');
+      a.className = 'pcard is-enter' + (c.dup ? ' is-dup' : '');
+      a.dataset.id = c.id;
+      a.innerHTML = `<span class="pcard-name"></span><span class="pcard-meta"><span></span><b></b></span>`;
+      a.querySelector('.pcard-name')!.textContent = c.name;
+      a.querySelector('.pcard-meta span')!.textContent = c.project;
+      a.querySelector('b')!.textContent = fmt(c.amount);
+      return a;
+    };
+
+    const updateHeads = () => {
+      cols.forEach((col, i) => {
+        const inCol = cards.filter((c) => c.stage === i && !c.dup);
+        col.querySelector('[data-count]')!.textContent = String(inCol.length);
+        col.querySelector('[data-total]')!.textContent = fmt(inCol.reduce((s, c) => s + c.amount, 0));
+      });
+    };
+
+    const place = (c: Card, enterTop = false) => {
+      const box = cols[c.stage].querySelector<HTMLElement>('[data-cards]')!;
+      const old = el(c.id);
+      old?.remove();
+      const node = make(c);
+      if (enterTop) box.prepend(node);
+      else box.append(node);
+    };
+
+    const remove = (c: Card) => {
+      const node = el(c.id);
+      cards.splice(cards.indexOf(c), 1);
+      if (!node) return;
+      node.classList.remove('is-enter');
+      node.classList.add('is-leave');
+      setTimeout(() => node.remove(), 450);
+    };
+
+    const step = () => {
+      tick++;
+      // Каждый шестой шаг: повторная заявка на уже оплаченный счёт.
+      if (tick % 6 === 3) {
+        const paid = cards.find((c) => c.stage === 3);
+        if (paid) {
+          const dup: Card = { ...paid, id: `d${++seq}`, stage: 0, dup: true };
+          cards.push(dup);
+          place(dup, true);
+          setTimeout(() => bot?.classList.add('is-show'), 700);
+          setTimeout(() => remove(dup), 2600);
+          setTimeout(() => bot?.classList.remove('is-show'), 5200);
+          updateHeads();
+          return;
+        }
+      }
+      const inbox = cards.filter((c) => c.stage === 0 && !c.dup);
+      if (tick % 2 === 0 && inbox.length < 2) {
+        const p = POOL[poolIdx++ % POOL.length];
+        const c: Card = { ...p, id: `n${++seq}`, stage: 0 };
+        cards.push(c);
+        place(c);
+      } else {
+        // Двигаем заявку из самой загруженной колонки; при равенстве — ближе к оплате.
+        const count = (s: number) => cards.filter((x) => x.stage === s && !x.dup).length;
+        const s = [2, 1, 0].reduce((best, cur) => (count(cur) > count(best) ? cur : best), 2);
+        const queue = cards.filter((x) => x.stage === s && !x.dup).sort((a, b) => (a.t ?? -1) - (b.t ?? -1));
+        const c = queue[0];
+        if (c) {
+          c.stage = s + 1;
+          c.t = tick;
+          place(c, true);
+        }
+        const paid = cards.filter((c) => c.stage === 3).sort((a, b) => (a.t ?? -1) - (b.t ?? -1));
+        if (paid.length > 3) remove(paid[0]);
+      }
+      updateHeads();
+    };
+
+    const startLoop = () => {
+      if (timer) return;
+      root.classList.add('is-live');
+      timer = window.setInterval(step, 1700);
+    };
+    const stopLoop = () => {
+      if (timer) window.clearInterval(timer);
+      timer = undefined;
+    };
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => (e.isIntersecting ? startLoop() : stopLoop()));
+    }, { threshold: 0.25 });
+    io.observe(root);
+  });
+</script>
