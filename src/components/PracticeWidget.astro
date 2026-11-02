@@ -1,20 +1,17 @@
 ---
 // Живой виджет справа от описания направления: три шага с номерами, как в интерфейсе.
 // Все значения демонстрационные, кроме IRR 9,0% → 8,2% и NPV «в 3,6 раза» из кейса аудита.
+import { SCENARIOS, YEARS, kpis, barHeight, barTitle } from '../lib/finmodel';
+
 interface Props {
   variant: 'models' | 'audit' | 'accounting' | 'advisory';
 }
 const { variant } = Astro.props;
 
-const models = [
-  { name: 'Продажа', price: '3 200', pace: '4', mat: '6%', p1: 64, p2: 50, p3: 40, irr: '24,6%', npv: '1,8 млн', moic: '1,6×', cf: [-15, -27, -20, 100, 0, 0, 0, 0] },
-  { name: 'Аренда', price: '2 900', pace: '2', mat: '6%', p1: 52, p2: 28, p3: 40, irr: '14,2%', npv: '2,4 млн', moic: '2,1×', cf: [-18, -30, -22, 24, 27, 30, 32, 34] },
-  { name: 'Смешанный', price: '3 050', pace: '3', mat: '8%', p1: 58, p2: 38, p3: 55, irr: '19,8%', npv: '2,1 млн', moic: '1,8×', cf: [-16, -28, -22, 60, 12, 14, 15, 18] },
-];
-// Cash Flow по годам (демо): три года стройки, затем продажа одним платежом,
-// аренда равными поступлениями или часть продаж плюс аренда. Сумма плюсов к минусам ≈ MOIC.
-const years = ['2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033'];
+const models = SCENARIOS;
+const years = YEARS;
 const m0 = models[0];
+const k0 = kpis(m0.cf);
 const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
 ---
 
@@ -35,9 +32,9 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
         <div class="pw-body">
           <p class="pw-title">Предпосылки</p>
           <div class="ui-card pw-panel pw-sliders">
-            <div><span>Цена продажи, USD/м²</span><b data-m="price">{m0.price}</b><i style={`--p:${m0.p1}%`} data-mp="p1"></i></div>
-            <div><span>Темп продаж, юнитов в месяц</span><b data-m="pace">{m0.pace}</b><i style={`--p:${m0.p2}%`} data-mp="p2"></i></div>
-            <div><span>Рост цен на материалы, в год</span><b data-m="mat">{m0.mat}</b><i style={`--p:${m0.p3}%`} data-mp="p3"></i></div>
+            {m0.params.map((q, j) => (
+              <div><span data-ml={j}>{q.label}</span><b data-mv={j}>{q.value}</b><i style={`--p:${q.p}%`} data-mp={j}></i></div>
+            ))}
           </div>
         </div>
       </div>
@@ -48,14 +45,14 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
           <div class="ui-card pw-panel pw-cf-panel">
             <div class="pw-cf" aria-hidden="true">
               {m0.cf.map((v, i) => (
-                <span class={v < 0 ? 'neg' : 'pos'} style={`--h:${Math.abs(v)}%`} data-cf={i} title={years[i]}></span>
+                <span class={v < 0 ? 'neg' : 'pos'} style={`--h:${barHeight(v)}`} data-cf={i} title={barTitle(years[i], v)}></span>
               ))}
             </div>
-            <div class="pw-cf-axis" aria-hidden="true"><span>{years[0]}</span><span>Cash Flow по годам</span><span>{years[years.length - 1]}</span></div>
+            <div class="pw-cf-axis" aria-hidden="true"><span>{years[0]}</span><span>Cash Flow, млн USD</span><span>{years[years.length - 1]}</span></div>
             <dl class="pw-kpis">
-              <div><dt>IRR</dt><dd data-m="irr">{m0.irr}</dd></div>
-              <div><dt>NPV, USD</dt><dd data-m="npv">{m0.npv}</dd></div>
-              <div><dt>MOIC</dt><dd data-m="moic">{m0.moic}</dd></div>
+              <div><dt>IRR</dt><dd data-m="irr">{k0.irr}</dd></div>
+              <div><dt>NPV при 12%</dt><dd data-m="npv" class={k0.npvNeg ? 'is-neg' : undefined}>{k0.npv}</dd></div>
+              <div><dt>MOIC</dt><dd data-m="moic">{k0.moic}</dd></div>
             </dl>
           </div>
         </div>
@@ -186,13 +183,10 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
 </div>
 
 <script>
+  import { SCENARIOS, YEARS, kpis, barHeight, barTitle } from '../lib/finmodel';
+
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const MODELS = [
-    { price: '3 200', pace: '4', mat: '6%', p1: 64, p2: 50, p3: 40, irr: '24,6%', npv: '1,8 млн', moic: '1,6×', cf: [-15, -27, -20, 100, 0, 0, 0, 0] },
-    { price: '2 900', pace: '2', mat: '6%', p1: 52, p2: 28, p3: 40, irr: '14,2%', npv: '2,4 млн', moic: '2,1×', cf: [-18, -30, -22, 24, 27, 30, 32, 34] },
-    { price: '3 050', pace: '3', mat: '8%', p1: 58, p2: 38, p3: 55, irr: '19,8%', npv: '2,1 млн', moic: '1,8×', cf: [-16, -28, -22, 60, 12, 14, 15, 18] },
-  ];
   const OBJECTS = [
     { a: '1,35 млн', b: '1,41 млн', wa: 78, wb: 84, win: 'a', yld: '8,1%', pb: '11,2 года', tax: '10%' },
     { a: '2,62 млн', b: '2,49 млн', wa: 88, wb: 82, win: 'b', yld: '9,6%', pb: '9,8 года', tax: '10%' },
@@ -215,16 +209,24 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
       let i = 0;
       const chips = [...w.querySelectorAll('[data-m-chips] .pw-chip')];
       return () => {
-        i = (i + 1) % MODELS.length;
-        const m = MODELS[i] as Record<string, string | number>;
-        chips.forEach((c, k) => c.classList.toggle('is-on', k === i));
-        w.querySelectorAll<HTMLElement>('[data-m]').forEach((el) => { el.textContent = String(m[el.dataset.m!]); flash(el); });
-        w.querySelectorAll<HTMLElement>('[data-mp]').forEach((el) => el.style.setProperty('--p', `${m[el.dataset.mp!]}%`));
-        const cf = MODELS[i].cf;
+        i = (i + 1) % SCENARIOS.length;
+        const sc = SCENARIOS[i];
+        const k = kpis(sc.cf);
+        chips.forEach((c, n) => c.classList.toggle('is-on', n === i));
+        w.querySelectorAll<HTMLElement>('[data-ml]').forEach((el) => { el.textContent = sc.params[Number(el.dataset.ml)].label; });
+        w.querySelectorAll<HTMLElement>('[data-mv]').forEach((el) => { el.textContent = sc.params[Number(el.dataset.mv)].value; flash(el); });
+        w.querySelectorAll<HTMLElement>('[data-mp]').forEach((el) => el.style.setProperty('--p', `${sc.params[Number(el.dataset.mp)].p}%`));
+        w.querySelectorAll<HTMLElement>('[data-m]').forEach((el) => {
+          el.textContent = String(k[el.dataset.m as 'irr' | 'npv' | 'moic']);
+          if (el.dataset.m === 'npv') el.classList.toggle('is-neg', k.npvNeg);
+          flash(el);
+        });
         w.querySelectorAll<HTMLElement>('[data-cf]').forEach((el) => {
-          const v = cf[Number(el.dataset.cf)];
-          el.style.setProperty('--h', `${Math.abs(v)}%`);
+          const n = Number(el.dataset.cf);
+          const v = sc.cf[n];
+          el.style.setProperty('--h', barHeight(v));
           el.className = v < 0 ? 'neg' : 'pos';
+          el.title = barTitle(YEARS[n], v);
         });
       };
     },
@@ -383,18 +385,19 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
   }
 
   .pw-cf-panel { display: grid; gap: 10px; }
-  .pw-cf { position: relative; display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; height: 110px; }
-  .pw-cf::after { content: ''; position: absolute; left: 0; right: 0; top: 70%; height: 1px; background: var(--line); }
+  .pw-cf { position: relative; display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; height: 130px; }
+  .pw-cf::after { content: ''; position: absolute; left: 0; right: 0; top: 80%; height: 1px; background: var(--line); }
   .pw-cf span { position: relative; height: 100%; }
-  /* Один масштаб для плюсов и минусов: ноль на 70% высоты, 100 единиц = 68% высоты */
-  .pw-cf span::before { content: ''; position: absolute; left: 0; right: 0; height: calc(var(--h) * 0.68); border-radius: 2px; transition: height .6s cubic-bezier(.2, .8, .2, 1); }
-  .pw-cf .pos::before { bottom: 30%; background: var(--accent-2); }
-  .pw-cf .neg::before { top: 70%; background: #d7c9a8; }
+  /* Один масштаб для плюсов и минусов, ноль на 80% высоты (высоты считает src/lib/finmodel.ts) */
+  .pw-cf span::before { content: ''; position: absolute; left: 0; right: 0; height: var(--h); border-radius: 2px; transition: height .6s cubic-bezier(.2, .8, .2, 1); }
+  .pw-cf .pos::before { bottom: 20%; background: var(--accent-2); }
+  .pw-cf .neg::before { top: 80%; background: #d7c9a8; }
   .pw-cf-axis { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--ink-3); }
   .pw-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .pw-kpis div { padding: 4px 0 0; border-top: 2px solid var(--accent-soft); }
   .pw-kpis dt { font-size: 12.5px; color: var(--ink-3); }
   .pw-kpis dd { font-size: clamp(20px, 2vw, 26px); font-weight: 700; letter-spacing: -0.01em; color: var(--accent); white-space: nowrap; }
+  .pw-kpis dd.is-neg { color: var(--risk); }
 
   .pw-file { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: center; }
   .pw-xls { display: grid; place-items: center; width: 44px; height: 52px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 800; }
