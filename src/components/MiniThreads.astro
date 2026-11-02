@@ -1,46 +1,113 @@
 ---
-// Маленькие нити для колонки «Результат» у управленческого учёта: отчёт собственнику за декабрь.
-// Слева поступления пяти проектов сходятся в один счёт, справа расходятся по статьям.
-// Подписей в схеме нет (в колонке они были бы мельче 5 px): вывод и суммы пишем под ней, суммы статей во всплывающей подсказке.
-// Данные демонстрационные (src/lib/sankey.ts), геометрия та же, что у больших нитей (src/lib/threads.ts).
+// Нити для управленческого учёта, вертикально: отчёт собственнику за декабрь.
+// Сверху поступления пяти проектов сходятся в один счёт, снизу расходятся по статьям.
+// Длина прямого участка нити пропорциональна сумме, как у столбика; толщина тоже. Подписи сумм на концах нитей,
+// названия статей в легенде под схемой (восемь подписей рядом не поместятся).
+// Данные демонстрационные (src/lib/sankey.ts), те же, что у больших нитей. Геометрия своя, в пикселях колонки.
 import { SERIES, MONTHS } from '../lib/sankey';
-import { TG, frame, PROJ_NAMES, COST_NAMES, PROJ_COLORS, COST_COLORS, fmt2 } from '../lib/threads';
+import { frame, PROJ_NAMES, COST_NAMES, PROJ_COLORS, COST_COLORS, fmt2 } from '../lib/threads';
 
 const M = SERIES.length - 1;
 const fr = frame(SERIES[M]);
+const p = fr.left.map((t) => t.v);
+const c = fr.right.map((t) => t.v);
+const total = fr.total;
+
+const W = 440;
+const CX = W / 2;
+const K = 16; // px на 1 млрд IDR
+const NW = 3; // толщина планки счёта
+const LSTEP = 88; // шаг проектов
+const RSTEP = 53; // шаг статей
+const LMAX = 64; // самый длинный прямой участок сверху
+const RMAX = 128; // самый длинный прямой участок снизу
+const BEND = 82; // высота изгиба
+const Y1 = 34 + LMAX; // конец прямых участков сверху (над ними две строки подписи)
+const PY = Y1 + BEND; // планка счёта
+const Y2 = PY + NW + BEND; // начало прямых участков снизу
+const H = Y2 + RMAX + 20;
 const f = (n: number) => n.toFixed(1);
-const all = [...fr.left, ...fr.right];
-const x0 = Math.min(...fr.left.map((t) => t.x)) - 2;
-const x1 = Math.max(...fr.right.map((t) => t.x)) + 2;
-const y0 = Math.min(fr.top, ...all.map((t) => t.y - t.h / 2)) - 4;
-const y1 = Math.max(fr.top + fr.total * TG.K, ...all.map((t) => t.y + t.h / 2)) + 4;
-const share = (v: number) => `${Math.round((v / fr.total) * 100)}%`;
-const r = fr.right;
-const build = r[0].v + r[1].v + r[2].v;
-const rest = r[r.length - 1].v;
+const maxP = Math.max(...p);
+const maxC = Math.max(...c);
+const SHORT: Record<string, string> = { 'Прочие проекты': 'Прочие' };
+
+// Лента ширины w: прямой участок ya→yb на x0, изгиб yb→yc с x0 на x1, прямой участок yc→yd на x1.
+// Края ленты — кривые с одинаковыми вертикальными опорами, поэтому соседние ленты не перекрываются.
+const ribbon = (x0: number, x1: number, w: number, ya: number, yb: number, yc: number, yd: number) => {
+  const h = w / 2;
+  const b = (yc - yb) * 0.55;
+  return `M${f(x0 - h)},${f(ya)} L${f(x0 - h)},${f(yb)} C${f(x0 - h)},${f(yb + b)} ${f(x1 - h)},${f(yc - b)} ${f(x1 - h)},${f(yc)} L${f(x1 - h)},${f(yd)} `
+    + `L${f(x1 + h)},${f(yd)} L${f(x1 + h)},${f(yc)} C${f(x1 + h)},${f(yc - b)} ${f(x0 + h)},${f(yb + b)} ${f(x0 + h)},${f(yb)} L${f(x0 + h)},${f(ya)} Z`;
+};
+
+let acc = CX - (total * K) / 2;
+const top = p.map((v, k) => {
+  const w = v * K;
+  const x = CX + (k - (p.length - 1) / 2) * LSTEP;
+  const y = Y1 - (v / maxP) * LMAX;
+  const xb = acc + w / 2;
+  acc += w;
+  return { v, w, x, y, d: ribbon(x, xb, w, y, Y1, PY, PY) };
+});
+
+acc = CX - (total * K) / 2;
+const bottom = c.map((v, k) => {
+  const w = v * K;
+  const x = CX + (k - (c.length - 1) / 2) * RSTEP;
+  const y = Y2 + (v / maxC) * RMAX;
+  const xa = acc + w / 2;
+  acc += w;
+  const y0 = PY + NW;
+  return { v, w, x, y, d: ribbon(xa, x, Math.max(w, 1.4), y0, y0, Y2, y) };
+});
+
+const share = (v: number) => `${Math.round((v / total) * 100)}%`;
+const build = c[0] + c[1] + c[2];
+const rest = c[c.length - 1];
 ---
 
-<figure class="mini" aria-label={`Пример отчёта для собственника: ${MONTHS[M].toLowerCase()}, поступления ${fmt2(fr.total)} млрд IDR от пяти проектов. На стройку ушло ${fmt2(build)}, на счетах осталось ${fmt2(rest)}`}>
-  <svg viewBox={`${f(x0)} ${f(y0)} ${f(x1 - x0)} ${f(y1 - y0)}`} aria-hidden="true">
-    {fr.left.map((t, i) => <path class="mt" d={t.d} stroke={PROJ_COLORS[i]} stroke-width={f(t.h)}><title>{PROJ_NAMES[i]}: {fmt2(t.v)} млрд IDR</title></path>)}
-    {fr.right.map((t, i) => <path class="mt" d={t.d} stroke={COST_COLORS[i]} stroke-width={f(t.h)}><title>{COST_NAMES[i]}: {fmt2(t.v)} млрд IDR, {share(t.v)}</title></path>)}
-    <rect class="mt-bar" x={TG.PX} y={f(fr.top - 6)} width={TG.NW + 1} height={f(fr.total * TG.K + 12)} rx="1.5"></rect>
-  </svg>
+<figure class="mini" aria-label={`Пример отчёта для собственника: ${MONTHS[M].toLowerCase()}, поступления ${fmt2(total)} млрд IDR от пяти проектов. На стройку ушло ${fmt2(build)}, на счетах осталось ${fmt2(rest)}`}>
+  <p class="mini-head">Отчёт собственнику: {MONTHS[M].toLowerCase()}, пять проектов</p>
   <dl class="mini-kpis">
-    <div><dt>Поступления</dt><dd>{fmt2(fr.total)}</dd></div>
+    <div><dt>Поступления</dt><dd>{fmt2(total)}</dd></div>
     <div><dt>На стройку</dt><dd>{fmt2(build)}</dd></div>
     <div><dt>Осталось на счетах</dt><dd>{fmt2(rest)}</dd></div>
   </dl>
-  <figcaption>Пример отчёта для собственника: {MONTHS[M].toLowerCase()}, пять проектов, млрд IDR. Слева поступления по проектам, справа куда ушли деньги</figcaption>
+  <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
+    {top.map((t, i) => <path class="mt" d={t.d} fill={PROJ_COLORS[i]}><title>{PROJ_NAMES[i]}: {fmt2(t.v)} млрд IDR</title></path>)}
+    {bottom.map((t, i) => <path class="mt" d={t.d} fill={COST_COLORS[i]}><title>{COST_NAMES[i]}: {fmt2(t.v)} млрд IDR, {share(t.v)}</title></path>)}
+    <rect class="mt-bar" x={f(CX - (total * K) / 2 - 6)} y={PY} width={f(total * K + 12)} height={NW} rx="1.5"></rect>
+    {top.map((t, i) => (
+      <Fragment>
+        <text class="mt-lab" x={f(t.x)} y={f(t.y - 20)} text-anchor="middle">{SHORT[PROJ_NAMES[i]] ?? PROJ_NAMES[i]}</text>
+        <text class="mt-val" x={f(t.x)} y={f(t.y - 6)} text-anchor="middle">{fmt2(t.v)}</text>
+      </Fragment>
+    ))}
+    {bottom.map((t) => <text class="mt-val" x={f(t.x)} y={f(t.y + 14)} text-anchor="middle">{fmt2(t.v)}</text>)}
+  </svg>
+  <ul class="mb-list">
+    {fr.right.map((t, i) => <li><i style={`background:${COST_COLORS[i]}`}></i><span>{COST_NAMES[i]}</span><b>{share(t.v)}</b></li>)}
+  </ul>
+  <figcaption>Пример, демо-данные, млрд IDR. Сверху поступления по проектам, снизу куда ушли деньги</figcaption>
 </figure>
 
 <style>
-  .mini { margin: var(--s3) 0 0; padding: 14px 16px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
-  .mini svg { display: block; width: 100%; height: auto; }
-  .mt { fill: none; stroke-opacity: .9; transition: stroke-opacity .2s ease; }
-  .mini svg:hover .mt { stroke-opacity: .35; }
-  .mini svg:hover .mt:hover { stroke-opacity: 1; }
+  .mini { margin: 0; padding: 16px 18px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .mini svg { display: block; width: 100%; height: auto; margin-top: 14px; overflow: visible; }
+  .mini-head { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .mb-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 12.5px; color: var(--ink-2); }
+  .mb-list li { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+  .mb-list i { width: 8px; height: 8px; border-radius: 2px; }
+  .mb-list b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+  @media (max-width: 380px) { .mb-list { grid-template-columns: 1fr; } }
+  .mt { fill-opacity: .9; transition: fill-opacity .2s ease; }
+  .mini svg:hover .mt { fill-opacity: .35; }
+  .mini svg:hover .mt:hover { fill-opacity: 1; }
   .mt-bar { fill: var(--ink); }
+  .mt-lab { font: 400 11px var(--font); fill: var(--ink-3); }
+  .mt-val { font: 600 11px var(--font); fill: var(--ink); }
+  /* На телефоне схема ужимается, подписи в единицах схемы делаем крупнее, чтобы на экране они остались читаемыми */
+  @media (max-width: 479px) { .mt-lab, .mt-val { font-size: 13.5px; } }
   .mini-kpis { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 8px; margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
   .mini-kpis dt { font-size: 12px; color: var(--ink-3); }
   .mini-kpis dd { margin: 0; font-size: 16px; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }

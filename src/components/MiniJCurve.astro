@@ -1,7 +1,9 @@
 ---
-// Маленькая J-кривая для колонки «Результат» у финансового планирования.
-// Демо-проект «Смешанный» из src/lib/finmodel.ts: стройка, аренда, продажа в конце.
-// IRR, MOIC и NPV считаются из тех же потоков, что нарисованы.
+// Пример дашборда для финансового планирования: показатели, накопленный Cash Flow и структура бюджета.
+// Демо-проект «Смешанный» из src/lib/finmodel.ts: 48 апартаментов, 3 120 м², стройка 2026–2028,
+// аренда, продажа в 2035. IRR, MOIC и NPV считаются из тех же потоков, что нарисованы.
+// Бюджет 6,6 млн USD = сумма затрат сценария (1,6 + 2,8 + 2,2), разбивка по статьям демонстрационная:
+// стройка 3,6 млн ≈ 1 150 USD/м², земля 1,2 млн, мебель и оснащение 0,4 млн (как в finmodel.ts).
 import { SCENARIOS, YEARS, kpis } from '../lib/finmodel';
 
 const sc = SCENARIOS.find((s) => s.name === 'Смешанный')!;
@@ -38,9 +40,30 @@ const bars = cf.map((v, i) => ({
   title: `${YEARS[i]}: ${v > 0 ? '+' : ''}${fmt(v)} млн USD, накопленный итог ${fmt(cum[i])}`,
 }));
 const npvText = `${k.npv} USD`.replace(/ /g, ' ');
+
+const budget = [
+  { name: 'Земля', v: 1.2 },
+  { name: 'Строительство', v: 3.6 },
+  { name: 'Проектирование и инжиниринг', v: 0.4 },
+  { name: 'Мебель и оснащение', v: 0.4 },
+  { name: 'Налоги и сборы', v: 0.4 },
+  { name: 'Маркетинг и запуск', v: 0.2 },
+  { name: 'Резерв', v: 0.4 },
+];
+const total = r2(budget.reduce((s, b) => s + b.v, 0));
+const spent = r2(-cf.filter((v) => v < 0).reduce((s, v) => s + v, 0));
+if (Math.abs(total - spent) > 0.01) throw new Error(`Бюджет ${total} не равен затратам сценария ${spent}`);
+const pctOf = (v: number) => `${Math.round((v / total) * 100)}%`;
 ---
 
 <figure class="mini" aria-label={`Пример: накопленный Cash Flow демо-проекта. Пик вложений ${fmt(cum[trough])} млн USD, продажа в ${YEARS[last]}. IRR ${k.irr}, MOIC ${k.moic}, NPV при 12% ${k.npv} USD`}>
+  <p class="mini-head">Демо-проект: 48 апартаментов, 3 120 м²</p>
+  <dl class="mini-kpis mini-kpis--top">
+    <div><dt>IRR</dt><dd>{k.irr}</dd></div>
+    <div><dt>MOIC</dt><dd>{k.moic}</dd></div>
+    <div><dt>NPV при 12%</dt><dd>{npvText}</dd></div>
+  </dl>
+  <p class="mini-sub">Накопленный Cash Flow, млн USD</p>
   <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
     <line class="mj-zero" x1={L} x2={W - R} y1={f(y0)} y2={f(y0)}></line>
     {bars.map((b) => <rect class={`mj-${b.cls}`} x={f(b.x)} y={f(b.y)} width={f(bw)} height={f(Math.max(b.h, 0.5))} rx="1.5"><title>{b.title}</title></rect>)}
@@ -50,16 +73,18 @@ const npvText = `${k.npv} USD`.replace(/ /g, ' ');
     <text class="mj-yr" x={f(x(0))} y={H - 6} text-anchor="middle">{YEARS[0]}</text>
     <text class="mj-yr" x={f(x(last))} y={H - 6} text-anchor="middle">{YEARS[last]}</text>
   </svg>
-  <dl class="mini-kpis">
-    <div><dt>IRR</dt><dd>{k.irr}</dd></div>
-    <div><dt>MOIC</dt><dd>{k.moic}</dd></div>
-    <div><dt>NPV при 12%</dt><dd>{npvText}</dd></div>
-  </dl>
-  <figcaption>Пример: накопленный Cash Flow демо-проекта по годам, млн USD. Стройка, аренда, продажа в {YEARS[last]}</figcaption>
+  <p class="mini-sub">Структура бюджета, {String(total).replace('.', ',')} млн USD</p>
+  <div class="mb-bar" aria-hidden="true">
+    {budget.map((b, i) => <i style={`flex-grow:${b.v};background:var(--th-${i + 1})`} title={`${b.name}: ${String(b.v).replace('.', ',')} млн USD`}></i>)}
+  </div>
+  <ul class="mb-list">
+    {budget.map((b, i) => <li><i style={`background:var(--th-${i + 1})`}></i><span>{b.name}</span><b>{pctOf(b.v)}</b></li>)}
+  </ul>
+  <figcaption>Пример дашборда по модели, демо-данные. Стройка {YEARS[0]}–{YEARS[2]}, аренда, продажа в {YEARS[last]}</figcaption>
 </figure>
 
 <style>
-  .mini { margin: var(--s3) 0 0; padding: 14px 16px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .mini { margin: 0; padding: 16px 18px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
   .mini svg { display: block; width: 100%; height: auto; overflow: visible; }
   .mj-zero { stroke: var(--ink-3); stroke-width: 1; }
   .mj-neg { fill: var(--c-neg); fill-opacity: .7; }
@@ -70,7 +95,16 @@ const npvText = `${k.npv} USD`.replace(/ /g, ' ');
   .mj-dot--end { fill: var(--ink); }
   .mj-lab { font: 500 11px var(--font); fill: var(--c-neg); }
   .mj-yr { font: 400 11px var(--font); fill: var(--ink-3); }
+  .mini-head { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .mini-sub { margin: 14px 0 6px; font-size: 12px; color: var(--ink-3); }
   .mini-kpis { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 8px; margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
+  .mb-bar { display: flex; height: 12px; gap: 2px; border-radius: 3px; overflow: hidden; }
+  .mb-bar i { display: block; min-width: 3px; }
+  .mb-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; margin: 10px 0 0; padding: 0; list-style: none; font-size: 12.5px; color: var(--ink-2); }
+  .mb-list li { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+  .mb-list i { width: 8px; height: 8px; border-radius: 2px; }
+  .mb-list b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+  @media (max-width: 380px) { .mb-list { grid-template-columns: 1fr; } }
   .mini-kpis dt { font-size: 12px; color: var(--ink-3); }
   .mini-kpis dd { margin: 0; font-size: 16px; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
   .mini figcaption { margin-top: 8px; font-size: 12.5px; line-height: 1.4; color: var(--ink-3); }

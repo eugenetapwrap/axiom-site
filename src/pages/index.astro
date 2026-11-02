@@ -4,11 +4,11 @@ import ServiceIcon from '../components/ServiceIcon.astro';
 import Calculators from '../components/Calculators.astro';
 import MiniJCurve from '../components/MiniJCurve.astro';
 import MiniThreads from '../components/MiniThreads.astro';
-import BotReceipt from '../components/BotReceipt.astro';
+import MiniRegister from '../components/MiniRegister.astro';
 import FinalThreads from '../components/FinalThreads.astro';
 import { site, tgLink } from '../data/site';
 import {
-  hero, practices, results, steps, cases, team, reviews, bot, faq, finalCta,
+  hero, practices, results, cases, team, faq, finalCta,
 } from '../data/home';
 import { t } from '../lib/typo';
 
@@ -24,7 +24,8 @@ const faqLd = {
 ---
 
 <Base title="Axiom — финансовый консалтинг для девелопмента и строительства" jsonLd={[faqLd]}>
-  <!-- Первый экран (каталог): заголовок, цифры и кнопка, под ними четыре услуги карточками -->
+  <!-- Первый экран (каталог): заголовок слева; справа крупные цифры, как в презентации, и кнопки по низу заголовка.
+       Под ними четыре услуги карточками -->
   <section class="hero">
     <div class="container">
       <div class="hero-top">
@@ -32,12 +33,16 @@ const faqLd = {
           <h1>{t(hero.title)} <span class="hero-aud">{t(hero.audience)}</span></h1>
         </div>
         <div class="hero-side">
-          <p class="hero-lead">{t(hero.lead)}</p>
+          <dl class="hero-stats">
+            {hero.stats.map((s) => (
+              <div><dt>{s.value}</dt><dd>{t(s.text)}</dd></div>
+            ))}
+          </dl>
+          <p class="hero-note">{t(hero.note)}</p>
           <div class="btn-row hero-btns">
             <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
             <a class="btn btn-secondary" href="#calc">Калькуляторы</a>
           </div>
-          <p class="hero-note">{t(hero.note)}</p>
         </div>
       </div>
 
@@ -59,7 +64,7 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Услуги списком, как у BDO: строка на услугу — название и кнопка, что входит, результат с маленьким примером -->
+  <!-- Услуги строками (Евгений 02.11.2026): под заголовком результат, в центре что входит, справа пример на демо-данных -->
   <section class="section section--alt practices" id="practices" aria-label="Услуги">
     <div class="container">
       {practices.map((p) => (
@@ -67,7 +72,7 @@ const faqLd = {
           <div class="practice-head">
             <span class="practice-num">{p.num}</span>
             <h2>{t(p.title)}</h2>
-            <p class="practice-lead">{t(p.lead)}</p>
+            <p class="practice-result">{t(p.result)}</p>
             <a class="btn btn-soft" href={tgLink(p.topic)}>{p.cta}</a>
           </div>
           <div class="practice-col">
@@ -76,12 +81,18 @@ const faqLd = {
               {p.items.map((i) => <li>{t(i)}</li>)}
             </ul>
           </div>
-          <div class="practice-col">
-            <p class="practice-label">Результат</p>
-            <p class="practice-result">{t(p.result)}</p>
-            {/* Небольшой пример результата на демо-данных, с подписью (решение Евгения 02.11.2026) */}
+          <div class="practice-ex">
             {p.id === 'models' && <MiniJCurve />}
             {p.id === 'accounting' && <MiniThreads />}
+            {p.id === 'audit' && <MiniRegister />}
+            {p.id === 'advisory' && (
+              <div class="calc-links">
+                <p class="calc-links-head">Посчитайте сами на сайте</p>
+                <a href="#calc" data-open-calc="inst"><b>Рассрочка или скидка</b><span>Какая скидка за полную оплату выгодна обеим сторонам</span></a>
+                <a href="#calc" data-open-calc="villa"><b>Доходность виллы</b><span>Cash Flow инвестора по годам, IRR и NPV</span></a>
+                <a href="#calc" data-open-calc="dup"><b>Дубли и ошибки</b><span>Ориентир по проектам наших клиентов</span></a>
+              </div>
+            )}
           </div>
         </article>
       ))}
@@ -102,19 +113,15 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Результаты: главная цифра крупно, две рядом -->
-  <section class="section section--signal" aria-labelledby="stats-title">
-    <div class="container signal">
-      <div class="signal-main" data-reveal>
-        <h2 id="stats-title" class="eyebrow">Результаты</h2>
-        <p class="signal-value"><span data-count={results.main.value}>{results.main.value}</span> <span class="signal-unit">{results.main.unit}</span></p>
-        <p class="signal-text">{t(results.main.text)}</p>
-      </div>
-      <dl class="signal-rest" data-reveal style="--d: 120ms">
-        {results.rest.map((s) => (
+  <!-- Результаты за 2 года: три равные крупные цифры -->
+  <section class="section section--signal results" aria-labelledby="stats-title">
+    <div class="container">
+      <h2 id="stats-title" class="results-title" data-reveal>{results.title}</h2>
+      <dl class="results-grid" data-reveal>
+        {results.items.map((r) => (
           <div>
-            <dt><span class="num">{s.value}</span></dt>
-            <dd>{t(s.text)}</dd>
+            <dt>{r.value}</dt>
+            <dd>{t(r.text)}</dd>
           </div>
         ))}
       </dl>
@@ -169,38 +176,11 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Отзывы: заготовка, тексты появятся после согласования с клиентами -->
-  <section class="section" id="reviews">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Отзывы</p>
-        <h2>{reviews.title}</h2>
-      </div>
-      <div class="reviews">
-        {reviews.items.map((r, i) => (
-          <figure class={`review ui-card${r.text ? '' : ' review--soon'}`} data-reveal style={`--d: ${i * 100}ms`}>
-            {r.text ? (
-              <blockquote>{t(r.text)}</blockquote>
-            ) : (
-              <div class="review-skeleton" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-            )}
-            <figcaption>
-              <b>{r.role}</b>
-              <span>{r.company}</span>
-              {!r.text && <em>Отзыв появится после согласования с клиентом</em>}
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- Команда: основатель с фото, роли без имён (пока) -->
   <section class="section section--white" id="team">
     <div class="container team">
       <div data-reveal>
-        <p class="eyebrow">{team.title}</p>
-        <h2>Кто работает над проектом</h2>
+        <h2>{team.title}</h2>
         <p class="muted team-lead">{t(team.lead)}</p>
       </div>
       <div class="team-cards" data-reveal style="--d: 120ms">
@@ -228,64 +208,27 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Продукт: бот -->
-  <section class="section section--alt" id="bot">
-    <div class="container bot">
-      <div class="bot-visual" data-reveal>
-        <BotReceipt />
-      </div>
-      <div data-reveal style="--d: 120ms">
-        <p class="eyebrow">Продукт · {bot.badge}</p>
-        <h2>{bot.title}</h2>
-        <p class="bot-lead">{t(bot.lead)}</p>
-        <p class="bot-aud">{t(bot.audience)}</p>
-        <ul class="dots bot-list">
-          {bot.items.map((i) => <li>{t(i)}</li>)}
-        </ul>
-        <p class="tagline">{t(bot.tagline)}</p>
-        <div class="btn-row">
-          <a class="btn btn-primary" href={tgLink(bot.topic)}>{bot.cta}</a>
-          {site.channelUrl && <a class="btn btn-secondary" href={site.channelUrl}>Канал «{site.channelName}»</a>}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
+  <!-- Вопросы: список слева, ответ справа. Ничего не раскрывается и не сдвигается (Евгений 02.11.2026).
+       На телефоне ответ показывается под вопросом -->
   <section class="section" id="faq">
-    <div class="container faq-wrap">
-      <div data-reveal>
-        <p class="eyebrow">Вопросы</p>
+    <div class="container faq-wrap" data-faq>
+      <div class="faq-side">
         <h2>Частые вопросы</h2>
+        <div class="faq-list" role="tablist" aria-orientation="vertical" aria-label="Частые вопросы">
+          {faq.map((f, i) => (
+            <button type="button" role="tab" id={`faq-q-${i}`} aria-controls={`faq-a-${i}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-faq-q={i}>{t(f.q)}</button>
+          ))}
+        </div>
         <p class="muted faq-more">Не нашли ответ? <a href={site.telegramUrl}>Напишите в Telegram</a></p>
       </div>
-      <div class="faq" data-reveal style="--d: 120ms">
-        {faq.map((f) => (
-          <details class="ui-card">
-            <summary>{t(f.q)}</summary>
-            <p class="muted">{t(f.a)}</p>
-          </details>
+      <div class="faq-answers">
+        {faq.map((f, i) => (
+          <div class="faq-answer" role="tabpanel" id={`faq-a-${i}`} aria-labelledby={`faq-q-${i}`} data-faq-a={i} hidden={i !== 0}>
+            <p class="faq-answer-q">{t(f.q)}</p>
+            <p>{t(f.a)}</p>
+          </div>
         ))}
       </div>
-    </div>
-  </section>
-
-  <!-- Что будет после заявки -->
-  <section class="section section--white" id="steps">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Как начать</p>
-        <h2>{steps.title}</h2>
-      </div>
-      <ol class="cols4 approach" data-reveal>
-        {steps.items.map((s, i) => (
-          <li class="col">
-            <span class="approach-num">{i + 1}</span>
-            <h3>{t(s.title)}</h3>
-            <p class="muted">{t(s.text)}</p>
-          </li>
-        ))}
-      </ol>
     </div>
   </section>
 
@@ -309,6 +252,40 @@ const faqLd = {
 </Base>
 
 <script>
+  // Вопросы: клик по вопросу показывает ответ справа. На узком экране ответ встаёт под вопросом.
+  document.querySelectorAll<HTMLElement>('[data-faq]').forEach((root) => {
+    const qs = [...root.querySelectorAll<HTMLButtonElement>('[data-faq-q]')];
+    const as = [...root.querySelectorAll<HTMLElement>('[data-faq-a]')];
+    const box = root.querySelector<HTMLElement>('.faq-answers')!;
+    const narrow = window.matchMedia('(max-width: 899px)');
+    let cur = 0;
+    const place = () => {
+      if (narrow.matches) qs[cur].after(as[cur]);
+      else as.forEach((a) => box.append(a));
+    };
+    const show = (i: number) => {
+      cur = i;
+      qs.forEach((q, k) => {
+        q.setAttribute('aria-selected', String(k === i));
+        q.tabIndex = k === i ? 0 : -1;
+      });
+      as.forEach((a, k) => { a.hidden = k !== i; });
+      place();
+    };
+    qs.forEach((q, i) => {
+      q.addEventListener('click', () => show(i));
+      q.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+        e.preventDefault();
+        const n = (i + (e.key === 'ArrowDown' ? 1 : qs.length - 1)) % qs.length;
+        qs[n].focus();
+        show(n);
+      });
+    });
+    narrow.addEventListener('change', place);
+    place();
+  });
+
   // Счётчики в полосе цифр: от нуля до значения, один раз
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const nums = document.querySelectorAll<HTMLElement>('[data-count]');
@@ -348,14 +325,23 @@ const faqLd = {
 <style>
   /* Первый экран */
   .hero { padding: var(--s5) 0 var(--s6); background-color: var(--bg); }
-  .hero-top { display: grid; gap: var(--s3); align-items: start; }
-  @media (min-width: 1024px) { .hero-side { padding-top: 8px; } }
-  @media (min-width: 1024px) { .hero-top { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); column-gap: var(--s6); } }
+  .hero-top { display: grid; gap: var(--s4); align-items: end; }
+  @media (min-width: 1024px) { .hero-top { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); column-gap: var(--s6); } }
   .hero h1 { font-size: clamp(30px, 3.6vw, 60px); line-height: 1.06; max-width: 16em; text-wrap: balance; }
   .hero-aud { color: var(--ink-3); }
-  .hero-lead { max-width: 26em; font-size: clamp(17px, 1.35vw, 19px); line-height: 1.45; color: var(--ink-2); }
-  .hero-btns { margin-top: var(--s3); }
-  .hero-note { margin-top: 10px; font-size: 14px; color: var(--ink-3); }
+  /* Крупные цифры, как в презентации: значение и подпись */
+  .hero-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); margin: 0; }
+  .hero-stats div { padding-top: 12px; border-top: 2px solid var(--ink); }
+  .hero-stats dt { font-family: var(--font-display); font-size: clamp(26px, 2.5vw, 40px); font-weight: 600; line-height: 1.05; letter-spacing: -0.03em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .hero-stats dd { margin: 8px 0 0; font-size: 14px; line-height: 1.35; color: var(--ink-2); }
+  .hero-note { margin-top: var(--s3); font-size: 14px; color: var(--ink-3); }
+  .hero-btns { margin-top: 12px; }
+  @media (max-width: 520px) {
+    .hero-stats { grid-template-columns: 1fr; gap: 0; }
+    .hero-stats div { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: var(--s2); align-items: baseline; padding: 10px 0; border-top: 1px solid var(--line); }
+    .hero-stats div:first-child { border-top: 2px solid var(--ink); }
+    .hero-stats dd { margin: 0; }
+  }
 
   .services {
     list-style: none;
@@ -393,47 +379,43 @@ const faqLd = {
   .service-more { margin-top: auto; padding-top: var(--s1); color: var(--accent); font-size: 15px; font-weight: 600; }
   .service-more::after { content: ' ↓'; }
 
-  /* Услуги подробно: строки с тонкой линией между ними */
+  /* Услуги: строки с тонкой линией между ними. Слева название и результат, в центре что входит, справа пример */
   .practices { padding-top: var(--s5); }
-  .practice { display: grid; gap: var(--s3); padding: var(--s5) 0; border-top: 1px solid var(--line); }
+  .practice { display: grid; gap: var(--s4); padding: var(--s5) 0; border-top: 1px solid var(--line); }
   .practice:last-child { border-bottom: 1px solid var(--line); }
   @media (min-width: 760px) {
-    .practice { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--s5); }
-    .practice-head { grid-row: span 2; }
+    /* Две колонки: слева название и пример под ним, справа что входит */
+    .practice { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--s5); align-items: start; }
+    .practice-head { grid-column: 1; grid-row: 1; }
+    .practice-col { grid-column: 2; grid-row: 1 / span 2; }
+    .practice-ex { grid-column: 1; grid-row: 2; }
   }
   @media (min-width: 1180px) {
-    .practice { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.15fr) minmax(0, 0.8fr); column-gap: var(--s6); }
-    .practice-head { grid-row: auto; }
+    .practice { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr) minmax(0, 1.15fr); column-gap: var(--s5); align-items: start; }
+    .practice-head, .practice-col, .practice-ex { grid-column: auto; grid-row: auto; }
   }
   .practice-num { display: block; margin-bottom: var(--s1); font-size: 14px; color: var(--ink-3); }
   .practice h2 { font-size: clamp(24px, 2.2vw, 32px); line-height: 1.15; letter-spacing: -0.02em; }
-  .practice-lead { margin: var(--s2) 0 var(--s3); color: var(--ink-2); max-width: 30em; }
+  .practice-result { margin: var(--s2) 0 var(--s3); font-size: 18px; line-height: 1.45; color: var(--ink-2); max-width: 26em; }
   .practice-label { font-size: 13px; font-weight: 600; color: var(--ink-3); margin-bottom: 12px; }
   .practice-items { gap: 8px; }
-  .practice-result { font-weight: 600; color: var(--ink); max-width: 22em; }
+  /* Ссылки на калькуляторы у инвестанализа */
+  .calc-links { display: grid; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; }
+  .calc-links-head { padding: 16px 18px 10px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .calc-links a { display: grid; gap: 2px; padding: 12px 18px; border-top: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+  .calc-links a:hover { background: color-mix(in srgb, var(--accent) 5%, var(--surface)); }
+  .calc-links a b { color: var(--accent); font-weight: 600; font-size: 16px; }
+  .calc-links a b::after { content: ' →'; }
+  .calc-links a span { font-size: 14px; color: var(--ink-2); }
 
-  /* Сигнальная полоса */
-  .signal { display: grid; gap: var(--s5); align-items: end; }
-  @media (min-width: 1024px) { .signal { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); column-gap: var(--s7); } }
-  .signal .eyebrow { color: var(--ink); }
-  .signal-value { max-width: none; font-family: var(--font-display); font-size: clamp(60px, 9vw, 120px); font-weight: 500; line-height: .95; letter-spacing: -0.05em; }
-  .signal-unit { font-size: .3em; font-weight: 500; letter-spacing: -0.01em; vertical-align: .95em; }
-  .signal-text { margin-top: var(--s2); font-size: 20px; max-width: 22em; }
-  .signal-rest { display: grid; gap: 0; border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
-  .signal-rest > div { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: var(--s2); padding: 14px 0; border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); align-items: baseline; }
-  .signal-rest dt { font-weight: 500; font-size: 17px; }
-  .signal-rest dt .num { font-weight: 600; font-size: 22px; letter-spacing: -0.02em; }
-  .signal-rest dd { font-size: 15px; }
-  @media (max-width: 520px) { .signal-rest > div { grid-template-columns: 1fr; gap: 2px; } }
-
-  /* Четыре колонки */
-  .cols4 { display: grid; gap: var(--s4) 0; list-style: none; padding: 0; }
-  @media (min-width: 720px) { .cols4 { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .cols4 { grid-template-columns: repeat(4, 1fr); } }
-  .col { padding-right: var(--s3); }
-  @media (min-width: 1024px) { .col:not(:first-child) { padding-left: var(--s3); } }
-  @media (min-width: 720px) and (max-width: 1023px) { .col:nth-child(even) { padding-left: var(--s3); } }
-
+  /* Результаты за 2 года: три равные цифры */
+  .results { padding: var(--s6) 0; }
+  .results-title { font-size: clamp(24px, 2.2vw, 32px); letter-spacing: -0.02em; margin-bottom: var(--s4); }
+  .results-grid { display: grid; gap: var(--s3); margin: 0; }
+  @media (min-width: 760px) { .results-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5); } }
+  .results-grid div { padding-top: 14px; border-top: 2px solid color-mix(in srgb, var(--ink) 70%, transparent); }
+  .results-grid dt { font-family: var(--font-display); font-size: clamp(40px, 4.4vw, 64px); font-weight: 600; line-height: 1; letter-spacing: -0.04em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .results-grid dd { margin: 12px 0 0; font-size: 16px; line-height: 1.45; max-width: 22em; }
 
   /* Кейсы */
   .cases { display: grid; gap: var(--s3); }
@@ -468,37 +450,6 @@ const faqLd = {
   .case-dl dt { color: var(--ink-3); font-size: 13px; margin-top: var(--s1); }
   .case-result { font-weight: 700; color: var(--accent); }
 
-  /* Подход */
-  .approach .col { position: relative; }
-  .approach-num {
-    display: grid;
-    place-items: center;
-    width: 36px;
-    height: 36px;
-    margin-bottom: var(--s3);
-    border-radius: 50%;
-    border: 1px solid var(--line);
-    color: var(--ink-2);
-    font-weight: 500;
-    font-size: 14px;
-  }
-  .approach h3 { font-size: 21px; }
-  .approach p { margin-top: 6px; font-size: 16px; }
-
-  /* Отзывы */
-  .reviews { display: grid; gap: var(--s3); }
-  @media (min-width: 900px) { .reviews { grid-template-columns: repeat(3, 1fr); } }
-  .review { margin: 0; display: flex; flex-direction: column; gap: var(--s3); padding: var(--s3); }
-  .review blockquote { margin: 0; font-size: 17px; line-height: 1.5; }
-  .review figcaption { display: grid; gap: 2px; margin-top: auto; font-size: 15px; }
-  .review figcaption span { color: var(--ink-3); }
-  .review figcaption em { margin-top: var(--s1); font-style: normal; font-size: 13px; color: var(--ink-3); }
-  .review-skeleton { display: grid; gap: 10px; }
-  .review-skeleton i { display: block; height: 10px; border-radius: 5px; background: var(--track); }
-  .review-skeleton i:nth-child(2) { width: 92%; }
-  .review-skeleton i:nth-child(3) { width: 84%; }
-  .review-skeleton i:nth-child(4) { width: 55%; }
-
   /* Команда */
   .team { display: grid; gap: var(--s5); }
   @media (min-width: 1024px) { .team { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); column-gap: 112px; } }
@@ -519,34 +470,42 @@ const faqLd = {
     .roles dd { margin-top: 0; }
   }
 
-  /* Бот */
-  .bot { display: grid; gap: var(--s5); align-items: center; }
-  @media (min-width: 1024px) { .bot { grid-template-columns: 1fr 1fr; column-gap: 112px; } }
-  .bot-visual { display: grid; justify-items: center; }
-  .bot-visual :global(.chat) { width: 100%; }
-  .bot-lead { margin-top: var(--s3); color: var(--ink-2); }
-  .bot-aud { margin-top: var(--s1); color: var(--ink-2); }
-  .bot-list { margin: var(--s3) 0; }
-  .tagline { margin-bottom: var(--s4); font-family: var(--font-display); font-weight: 600; font-size: 22px; letter-spacing: -0.02em; color: var(--accent); }
-
-  /* FAQ */
-  .faq-wrap { display: grid; gap: var(--s5); }
-  @media (min-width: 1024px) { .faq-wrap { grid-template-columns: 1fr 1fr; column-gap: 112px; } }
-  .faq-more { margin-top: var(--s3); }
-  .faq { display: grid; gap: 10px; }
-  .faq details { padding: 18px 22px; box-shadow: none; }
-  .faq summary {
-    cursor: pointer;
-    font-weight: 600;
-    list-style: none;
+  /* Вопросы: список слева, ответ справа */
+  .faq-wrap { display: grid; gap: var(--s4); }
+  @media (min-width: 900px) { .faq-wrap { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); column-gap: var(--s6); align-items: start; } }
+  .faq-list { display: grid; margin-top: var(--s3); border-top: 1px solid var(--line); }
+  .faq-list button {
     display: flex;
     justify-content: space-between;
     gap: var(--s2);
+    padding: 14px 0;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: none;
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 17px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
   }
-  .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after { content: '+'; color: var(--gold-ink); font-weight: 600; font-size: 22px; line-height: 1; }
-  .faq details[open] summary::after { content: '−'; }
-  .faq details p { margin-top: var(--s1); font-size: 16px; }
+  .faq-list button::after { content: '→'; color: var(--ink-3); transition: transform .2s ease; }
+  .faq-list button:hover { color: var(--ink); }
+  .faq-list button[aria-selected='true'] { color: var(--ink); font-weight: 600; }
+  .faq-list button[aria-selected='true']::after { color: var(--accent); }
+  .faq-list button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .faq-more { margin-top: var(--s3); }
+  .faq-answer { padding: var(--s4); border-radius: 10px; background: var(--surface); border: 1px solid var(--line); }
+  .faq-answer[hidden] { display: none; }
+  .faq-answer-q { font-family: var(--font-display); font-size: 22px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; margin-bottom: var(--s2); }
+  .faq-answer p:last-child { font-size: 17px; line-height: 1.6; color: var(--ink-2); }
+  @media (min-width: 900px) { .faq-answers { position: sticky; top: 96px; } }
+  /* На телефоне ответ встаёт под выбранный вопрос (скрипт переносит его в список) */
+  @media (max-width: 899px) {
+    .faq-list .faq-answer { margin: 4px 0 12px; padding: var(--s3); }
+    .faq-list .faq-answer-q { display: none; }
+    .faq-answers:empty { display: none; }
+  }
 
   /* Финальный блок: фирменные нити сходятся в узел за кнопками (FinalThreads) */
   .final { position: relative; overflow: hidden; }

@@ -6,10 +6,8 @@ import { t } from '../lib/typo';
 const year = new Date().getFullYear();
 const company = [
   { href: '/#cases', label: 'Кейсы' },
-  { href: '/#reviews', label: 'Отзывы' },
   { href: '/#team', label: 'Команда' },
   { href: '/#faq', label: 'Вопросы' },
-  { href: '/#steps', label: 'Как начать' },
 ];
 ---
 
@@ -30,7 +28,6 @@ const company = [
       <p class="footer-h">Направления</p>
       <ul>
         {practices.map((p) => <li><a href={`/#${p.id}`}>{t(p.title)}</a></li>)}
-        <li><a href="/#bot">Бот для чеков <span class="badge">бета</span></a></li>
       </ul>
     </nav>
 

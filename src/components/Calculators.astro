@@ -245,6 +245,10 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
       panels.forEach((p) => { p.hidden = p.dataset.cp !== id; });
       if (id === 'villa') renderVilla();
     };
+    // Ссылки из услуг («Инвестиционный анализ») открывают нужную вкладку, прокрутку делает href="#calc"
+    document.querySelectorAll<HTMLElement>('[data-open-calc]').forEach((a) => {
+      a.addEventListener('click', () => select(a.dataset.openCalc!));
+    });
     tabs.forEach((t, i) => {
       t.addEventListener('click', () => select(t.dataset.ct!));
       t.addEventListener('keydown', (e) => {
