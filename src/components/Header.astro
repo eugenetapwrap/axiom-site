@@ -21,6 +21,10 @@ const nav = [
     <nav class="nav" aria-label="Основное меню">
       {nav.map((item) => <a href={item.href}>{item.label}</a>)}
     </nav>
+    <a class="header-login" href={site.portalUrl} aria-label="Личный кабинет клиента">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.8 16.5c.9-2.9 3.3-4.5 6.2-4.5s5.3 1.6 6.2 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span>Личный кабинет</span>
+    </a>
     <a class="btn btn-primary header-cta" href={site.telegramUrl}>Написать в Telegram</a>
   </div>
 </header>
@@ -59,9 +63,32 @@ const nav = [
   .nav a { color: var(--ink-2); text-decoration: none; }
   .nav a:hover { color: var(--ink); }
   .header-cta { min-height: 40px; padding: 8px 16px; font-size: 15px; }
+  .header-login {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .header-login:hover { border-color: var(--accent); color: var(--accent); }
+  .header-login svg { width: 18px; height: 18px; color: var(--accent); }
+  .nav { margin-right: var(--s1); }
 
   @media (max-width: 899px) {
     .nav { display: none; }
-    .header-cta { margin-left: auto; }
+    .header-login { margin-left: auto; }
+  }
+  @media (max-width: 519px) {
+    .header-inner { gap: var(--s1); }
+    .header-login { padding: 8px 10px; }
+    .header-login span { display: none; }
   }
 </style>

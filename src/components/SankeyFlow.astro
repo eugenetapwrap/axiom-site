@@ -1,129 +1,26 @@
 ---
-// Sankey «Куда уходят деньги проекта» по мотивам экрана Cash Flow Sankey в портале.
-// Данные вымышленные (млрд IDR). Раскладка считается при сборке, на клиенте только анимация и подсказки.
+// Схема движения денег по мотивам экрана Cash Flow Sankey в портале.
+// Ползунок по месяцам: потоки плавно перестраиваются. Данные демонстрационные (млрд IDR).
+import { NODES, LINKS, MONTHS, MONTHS_SHORT, SERIES, GEOM, layout, fmt, linkColor } from '../lib/sankey';
 
-type Node = { id: string; label: string; col: number; color: string };
-type Link = { from: string; to: string; value: number };
-
-const nodes: Node[] = [
-  { id: 'p1', label: 'Вилла A', col: 0, color: '#5fa596' },
-  { id: 'p2', label: 'Вилла B', col: 0, color: '#5fa596' },
-  { id: 'p3', label: 'Апарт-отель', col: 0, color: '#5fa596' },
-  { id: 'p4', label: 'Таунхаусы', col: 0, color: '#5fa596' },
-  { id: 'p5', label: 'Прочие проекты', col: 0, color: '#9bb3ad' },
-  { id: 'cash', label: 'Поступления', col: 1, color: '#5b93cf' },
-  { id: 'g1', label: 'Строительство', col: 2, color: '#d9727b' },
-  { id: 'g2', label: 'Операционные', col: 2, color: '#d9a548' },
-  { id: 'g3', label: 'Инвестиции', col: 2, color: '#5b93cf' },
-  { id: 'g4', label: 'Прирост остатка', col: 2, color: '#5fa596' },
-  { id: 'c1', label: 'Материалы', col: 3, color: '#d9727b' },
-  { id: 'c2', label: 'Работы подрядчиков', col: 3, color: '#d9727b' },
-  { id: 'c3', label: 'Инжиниринг', col: 3, color: '#d9727b' },
-  { id: 'c4', label: 'ФОТ и консалтинг', col: 3, color: '#d9a548' },
-  { id: 'c5', label: 'Налоги', col: 3, color: '#d9a548' },
-  { id: 'c6', label: 'Общие расходы', col: 3, color: '#d9a548' },
-  { id: 'c7', label: 'Основные средства', col: 3, color: '#5b93cf' },
-  { id: 'c8', label: 'Остаток на счетах', col: 3, color: '#5fa596' },
-];
-
-const links: Link[] = [
-  { from: 'p1', to: 'cash', value: 18.6 },
-  { from: 'p2', to: 'cash', value: 14.1 },
-  { from: 'p3', to: 'cash', value: 9.8 },
-  { from: 'p4', to: 'cash', value: 6.2 },
-  { from: 'p5', to: 'cash', value: 4.3 },
-  { from: 'cash', to: 'g1', value: 33.0 },
-  { from: 'cash', to: 'g2', value: 8.5 },
-  { from: 'cash', to: 'g3', value: 4.1 },
-  { from: 'cash', to: 'g4', value: 7.4 },
-  { from: 'g1', to: 'c1', value: 19.2 },
-  { from: 'g1', to: 'c2', value: 9.6 },
-  { from: 'g1', to: 'c3', value: 4.2 },
-  { from: 'g2', to: 'c4', value: 5.1 },
-  { from: 'g2', to: 'c5', value: 2.1 },
-  { from: 'g2', to: 'c6', value: 1.3 },
-  { from: 'g3', to: 'c7', value: 4.1 },
-  { from: 'g4', to: 'c8', value: 7.4 },
-];
-
-const W = 1100;
-const H = 520;
-const PAD_T = 36;
-const NODE_W = 10;
-const GAP = 14;
-const colX = [170, 430, 690, 900];
+const { W, H, NODE_W, colX } = GEOM;
 const colTitles = ['Проекты', 'Поступления', 'Группы затрат', 'Статьи'];
+const first = layout(SERIES[0]);
 
-const total = links.filter((l) => l.to === 'cash').reduce((s, l) => s + l.value, 0);
-const valueOf = (id: string) => {
-  const out = links.filter((l) => l.from === id).reduce((s, l) => s + l.value, 0);
-  const inn = links.filter((l) => l.to === id).reduce((s, l) => s + l.value, 0);
-  return Math.max(out, inn);
-};
-
-// Масштаб по самой «длинной» колонке с учётом зазоров.
-const cols = [0, 1, 2, 3].map((c) => nodes.filter((n) => n.col === c));
-const scale = Math.min(...cols.map((ns) => (H - PAD_T - 10 - GAP * (ns.length - 1)) / ns.reduce((s, n) => s + valueOf(n.id), 0)));
-
-type Pos = { x: number; y: number; h: number; outY: number; inY: number };
-const pos: Record<string, Pos> = {};
-for (const ns of cols) {
-  const colH = ns.reduce((s, n) => s + valueOf(n.id) * scale, 0) + GAP * (ns.length - 1);
-  let y = PAD_T + (H - PAD_T - 10 - colH) / 2;
-  for (const n of ns) {
-    const h = valueOf(n.id) * scale;
-    pos[n.id] = { x: colX[n.col], y, h, outY: y, inY: y };
-    y += h + GAP;
-  }
-}
-
-const fmt = (v: number) => v.toFixed(1).replace('.', ',');
-const share = (v: number) => `${Math.round((v / total) * 100)}%`;
-const nodeById = Object.fromEntries(nodes.map((n) => [n.id, n]));
-
-const paths = links.map((l) => {
-  const a = pos[l.from];
-  const b = pos[l.to];
-  const h = l.value * scale;
-  const x0 = a.x + NODE_W;
-  const x1 = b.x;
-  const y0 = a.outY;
-  const y1 = b.inY;
-  a.outY += h;
-  b.inY += h;
-  const mx = (x0 + x1) / 2;
-  const d = `M${x0},${y0} C${mx},${y0} ${mx},${y1} ${x1},${y1} L${x1},${y1 + h} C${mx},${y1 + h} ${mx},${y0 + h} ${x0},${y0 + h} Z`;
-  const src = nodeById[l.from];
-  const dst = nodeById[l.to];
-  const color = l.from === 'cash' ? dst.color : src.col === 0 ? src.color : dst.color;
-  return {
-    d,
-    color,
-    info: `${src.label} → ${dst.label}: ${fmt(l.value)} млрд IDR · ${share(l.value)}`,
-  };
-});
-
-const labels = nodes.map((n) => {
-  const p = pos[n.id];
+const labelPos = (id: string) => {
+  const n = NODES.find((x) => x.id === id)!;
+  const p = first.nodes[id];
   const right = n.col === 3;
-  return {
-    x: right ? p.x + NODE_W + 10 : p.x - 10,
-    y: p.y + p.h / 2,
-    anchor: right ? 'start' : 'end',
-    label: n.label,
-    value: `${fmt(valueOf(n.id))} млрд`,
-    compact: p.h < 30,
-    info: `${n.label}: ${fmt(valueOf(n.id))} млрд IDR · ${share(valueOf(n.id))}`,
-  };
-});
+  return { x: right ? p.x + NODE_W + 10 : p.x - 10, y: p.y + p.h / 2, anchor: right ? 'start' : 'end', compact: p.h < 30 };
+};
 ---
 
 <figure class="sankey" data-sankey>
   <div class="sankey-scroll">
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="sankey-title sankey-desc">
-      <title id="sankey-title">Движение денег по проекту</title>
+      <title id="sankey-title">Движение денег по проектам за месяц</title>
       <desc id="sankey-desc">
-        Пример на вымышленных данных: поступления по проектам распределяются на строительство, операционные расходы, инвестиции и прирост остатка.
+        Пример на демонстрационных данных: поступления по проектам распределяются на строительство, операционные расходы, инвестиции и прирост остатка. Ползунок под схемой переключает месяцы.
       </desc>
       <defs>
         <clipPath id="sankey-reveal">
@@ -134,31 +31,50 @@ const labels = nodes.map((n) => {
         <text class="col-title" x={i === 3 ? colX[i] : colX[i] + NODE_W / 2} y="14" text-anchor={i === 3 ? 'start' : 'middle'}>{t}</text>
       ))}
       <g clip-path="url(#sankey-reveal)">
-        {paths.map((p) => (
-          <path class="flow" d={p.d} fill={p.color} data-info={p.info}></path>
+        {LINKS.map((l, i) => (
+          <path class="flow" d={first.links[i].d} fill={linkColor(l)} data-link={i}></path>
         ))}
       </g>
-      {nodes.map((n) => {
-        const p = pos[n.id];
-        return <rect class="node" x={p.x} y={p.y} width={NODE_W} height={Math.max(p.h, 2)} rx="2" fill={n.color} data-info={labels.find((l) => l.label === n.label)?.info}></rect>;
+      {NODES.map((n) => {
+        const p = first.nodes[n.id];
+        return <rect class="node" x={p.x} y={p.y} width={NODE_W} height={Math.max(p.h, 2)} rx="2" fill={n.color} data-node={n.id}></rect>;
       })}
-      {labels.map((l) => (
-        l.compact ? (
-          <text class="node-label" x={l.x} y={l.y} text-anchor={l.anchor} data-info={l.info}>
-            {l.label} <tspan class="node-value">{l.value}</tspan>
+      {NODES.map((n) => {
+        const lp = labelPos(n.id);
+        const val = `${fmt(first.nodes[n.id].value)} млрд`;
+        return lp.compact ? (
+          <text class="node-label" x={lp.x} y={lp.y} text-anchor={lp.anchor} data-label={n.id}>
+            <tspan data-t="name" x={lp.x} dy="0">{n.label}</tspan><tspan class="node-value" data-t="val" dx="5" dy="0">{val}</tspan>
           </text>
         ) : (
-          <text class="node-label" x={l.x} y={l.y} text-anchor={l.anchor} data-info={l.info}>
-            <tspan x={l.x} dy="-0.2em">{l.label}</tspan>
-            <tspan class="node-value" x={l.x} dy="1.25em">{l.value}</tspan>
+          <text class="node-label" x={lp.x} y={lp.y} text-anchor={lp.anchor} data-label={n.id}>
+            <tspan data-t="name" x={lp.x} dy="-0.2em">{n.label}</tspan><tspan class="node-value" data-t="val" x={lp.x} dy="1.25em">{val}</tspan>
           </text>
-        )
-      ))}
+        );
+      })}
     </svg>
   </div>
+
+  <div class="sk-controls">
+    <button class="sk-play" type="button" data-play aria-label="Воспроизвести по месяцам">
+      <svg class="sk-i-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7.5-4.5Z" fill="currentColor"/></svg>
+      <svg class="sk-i-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 3.5h2.5v9H4.5zM9 3.5h2.5v9H9z" fill="currentColor"/></svg>
+    </button>
+    <div class="sk-range">
+      <input type="range" min="0" max={MONTHS.length - 1} step="1" value="0" data-range aria-label="Месяц" aria-valuetext={MONTHS[0]} />
+      <div class="sk-ticks" aria-hidden="true">
+        {MONTHS_SHORT.map((m, i) => <span data-tick={i} class={i === 0 ? 'is-on' : ''}>{m}</span>)}
+      </div>
+    </div>
+    <div class="sk-period">
+      <b data-month>{MONTHS[0]}</b>
+      <span>Поступления <b data-total>{fmt(first.total)}</b> млрд IDR</span>
+    </div>
+  </div>
+
   <figcaption class="sankey-caption">
     <span class="sankey-info" aria-live="polite" data-default="Наведите на поток, чтобы увидеть сумму и долю">Наведите на поток, чтобы увидеть сумму и долю</span>
-    <span class="caption">Демо-данные, млрд IDR</span>
+    <span class="caption">Демо-данные, млрд IDR за месяц</span>
   </figcaption>
 </figure>
 
@@ -170,7 +86,7 @@ const labels = nodes.map((n) => {
     padding: var(--s3) var(--s3) var(--s2);
   }
   .sankey-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .sankey svg { width: 100%; min-width: 720px; height: auto; font-family: var(--font); }
+  .sankey-scroll svg { width: 100%; min-width: 720px; height: auto; font-family: var(--font); }
   .col-title { font-size: 12px; fill: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; }
   .flow { fill-opacity: 0.28; transition: fill-opacity 0.2s ease; cursor: pointer; }
   .flow:hover, .flow.is-active { fill-opacity: 0.6; }
@@ -183,6 +99,76 @@ const labels = nodes.map((n) => {
   .sankey.is-armed .node, .sankey.is-armed .node-label { opacity: 0; }
   .sankey.is-visible .sankey-clip { transform: scaleX(1); transition: transform 1.8s cubic-bezier(0.65, 0, 0.35, 1); }
   .sankey.is-visible .node, .sankey.is-visible .node-label { opacity: 1; transition: opacity 0.6s ease 0.2s; }
+
+  .sk-controls {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--s2) var(--s3);
+    margin-top: var(--s2);
+    padding-top: var(--s2);
+    border-top: 1px solid var(--line);
+  }
+  @media (min-width: 900px) { .sk-controls { grid-template-columns: auto 1fr 230px; } }
+  .sk-play {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 0;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+  }
+  .sk-play:hover { background: #083f35; }
+  .sk-play svg { width: 18px; height: 18px; }
+  .sk-i-pause, .sankey.is-playing .sk-i-play { display: none; }
+  .sankey.is-playing .sk-i-pause { display: block; }
+
+  .sk-range input {
+    width: 100%;
+    height: 24px;
+    margin: 0;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+  .sk-range input::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--gold) var(--fill, 0%), #ebe8df var(--fill, 0%));
+  }
+  .sk-range input::-moz-range-track { height: 6px; border-radius: 3px; background: #ebe8df; }
+  .sk-range input::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--gold); }
+  .sk-range input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    margin-top: -7px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid var(--gold);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
+  .sk-range input::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid var(--gold);
+  }
+  .sk-ticks { display: flex; justify-content: space-between; margin: 2px 7px 0; font-size: 11.5px; color: var(--ink-3); }
+  .sk-ticks span { width: 0; display: flex; justify-content: center; white-space: nowrap; }
+  .sk-ticks span.is-on { color: var(--gold-ink); font-weight: 700; }
+  @media (max-width: 599px) { .sk-ticks span:nth-child(even) { visibility: hidden; } }
+
+  .sk-period { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: 15px; color: var(--ink-2); }
+  .sk-period > b { font-size: 18px; color: var(--ink); }
+  .sk-period span b { color: var(--accent); }
+  @media (min-width: 900px) { .sk-period { grid-column: auto; display: grid; gap: 2px; justify-items: end; text-align: right; } }
+
   .sankey-caption {
     display: flex;
     flex-wrap: wrap;
@@ -198,27 +184,115 @@ const labels = nodes.map((n) => {
 </style>
 
 <script>
+  import { NODES, LINKS, MONTHS, SERIES, GEOM, layout, fmt } from '../lib/sankey';
+
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const label = Object.fromEntries(NODES.map((n) => [n.id, n.label]));
+
   document.querySelectorAll<HTMLElement>('[data-sankey]').forEach((root) => {
-    const info = root.querySelector<HTMLElement>('.sankey-info');
-    const def = info?.dataset.default ?? '';
-    root.querySelectorAll<SVGElement>('.flow').forEach((el) => {
-      el.addEventListener('mouseenter', () => {
-        root.classList.add('has-active');
-        el.classList.add('is-active');
-        if (info) info.textContent = el.dataset.info ?? def;
-      });
-      el.addEventListener('mouseleave', () => {
-        root.classList.remove('has-active');
-        el.classList.remove('is-active');
-        if (info) info.textContent = def;
-      });
-      el.addEventListener('click', () => { if (info) info.textContent = el.dataset.info ?? def; });
+    const info = root.querySelector<HTMLElement>('.sankey-info')!;
+    const def = info.dataset.default ?? '';
+    const flows = [...root.querySelectorAll<SVGPathElement>('[data-link]')];
+    const rects = Object.fromEntries([...root.querySelectorAll<SVGRectElement>('[data-node]')].map((r) => [r.dataset.node!, r]));
+    const texts = Object.fromEntries([...root.querySelectorAll<SVGTextElement>('[data-label]')].map((t) => [t.dataset.label!, t]));
+    const range = root.querySelector<HTMLInputElement>('[data-range]')!;
+    const ticks = [...root.querySelectorAll<HTMLElement>('[data-tick]')];
+    const monthEl = root.querySelector<HTMLElement>('[data-month]')!;
+    const totalEl = root.querySelector<HTMLElement>('[data-total]')!;
+    const playBtn = root.querySelector<HTMLButtonElement>('[data-play]')!;
+
+    let month = 0;
+    let current = SERIES[0].slice();
+    let lay = layout(current);
+
+    // Подсказки по наведению считают долю от поступлений текущего месяца
+    const share = (v: number) => `${Math.round((v / lay.total) * 100)}%`;
+    const linkInfo = (i: number) => `${label[LINKS[i].from]} → ${label[LINKS[i].to]}: ${fmt(current[i])} млрд IDR · ${share(current[i])}`;
+    const nodeInfo = (id: string) => `${label[id]}: ${fmt(lay.nodes[id].value)} млрд IDR · ${share(lay.nodes[id].value)}`;
+    let hovered: (() => string) | null = null;
+    const showInfo = () => { info.textContent = hovered ? hovered() : def; };
+
+    flows.forEach((el, i) => {
+      el.addEventListener('mouseenter', () => { root.classList.add('has-active'); el.classList.add('is-active'); hovered = () => linkInfo(i); showInfo(); });
+      el.addEventListener('mouseleave', () => { root.classList.remove('has-active'); el.classList.remove('is-active'); hovered = null; showInfo(); });
+      el.addEventListener('click', () => { hovered = () => linkInfo(i); showInfo(); });
     });
-    root.querySelectorAll<SVGElement>('.node, .node-label').forEach((el) => {
-      el.addEventListener('mouseenter', () => { if (info) info.textContent = el.dataset.info ?? def; });
-      el.addEventListener('mouseleave', () => { if (info) info.textContent = def; });
+    [...Object.values(rects), ...Object.values(texts)].forEach((el) => {
+      const id = (el as SVGElement).dataset.node ?? (el as SVGElement).dataset.label!;
+      el.addEventListener('mouseenter', () => { hovered = () => nodeInfo(id); showInfo(); });
+      el.addEventListener('mouseleave', () => { hovered = null; showInfo(); });
     });
+
+    // Перерисовка по значениям
+    const draw = (values: number[]) => {
+      current = values;
+      lay = layout(values);
+      lay.links.forEach((l, i) => flows[i].setAttribute('d', l.d));
+      NODES.forEach((n) => {
+        const p = lay.nodes[n.id];
+        const r = rects[n.id];
+        r.setAttribute('y', p.y.toFixed(1));
+        r.setAttribute('height', Math.max(p.h, 2).toFixed(1));
+        const t = texts[n.id];
+        const right = n.col === 3;
+        const x = right ? p.x + GEOM.NODE_W + 10 : p.x - 10;
+        t.setAttribute('y', (p.y + p.h / 2).toFixed(1));
+        const [name, val] = [t.querySelector('[data-t="name"]')!, t.querySelector('[data-t="val"]')!];
+        val.textContent = `${fmt(p.value)} млрд`;
+        if (p.h < 30) {
+          name.setAttribute('dy', '0');
+          val.removeAttribute('x');
+          val.setAttribute('dx', '5');
+          val.setAttribute('dy', '0');
+        } else {
+          name.setAttribute('dy', '-0.2em');
+          val.setAttribute('x', String(x));
+          val.setAttribute('dx', '0');
+          val.setAttribute('dy', '1.25em');
+        }
+      });
+      if (hovered) showInfo();
+    };
+
+    // Плавный переход между месяцами
+    let raf = 0;
+    const goTo = (m: number, animate = true) => {
+      month = m;
+      range.value = String(m);
+      range.style.setProperty('--fill', `${(m / (MONTHS.length - 1)) * 100}%`);
+      range.setAttribute('aria-valuetext', MONTHS[m]);
+      ticks.forEach((t, i) => t.classList.toggle('is-on', i === m));
+      monthEl.textContent = MONTHS[m];
+      const target = SERIES[m];
+      totalEl.textContent = fmt(target.slice(0, 5).reduce((s, v) => s + v, 0));
+      cancelAnimationFrame(raf);
+      if (!animate || reduce) { draw(target.slice()); return; }
+      const from = current.slice();
+      const t0 = performance.now();
+      const dur = 750;
+      const step = (now: number) => {
+        const k = Math.min(1, (now - t0) / dur);
+        const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        draw(from.map((v, i) => v + (target[i] - v) * e));
+        if (k < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    // Воспроизведение
+    let timer = 0;
+    const stop = () => { clearInterval(timer); timer = 0; root.classList.remove('is-playing'); playBtn.setAttribute('aria-label', 'Воспроизвести по месяцам'); };
+    const play = () => {
+      if (month >= MONTHS.length - 1) goTo(0);
+      root.classList.add('is-playing');
+      playBtn.setAttribute('aria-label', 'Пауза');
+      timer = window.setInterval(() => {
+        if (month >= MONTHS.length - 1) { stop(); return; }
+        goTo(month + 1);
+      }, 1400);
+    };
+    playBtn.addEventListener('click', () => (timer ? stop() : play()));
+    range.addEventListener('input', () => { stop(); goTo(Number(range.value)); });
 
     if (reduce || !('IntersectionObserver' in window)) return;
     root.classList.add('is-armed');
@@ -228,6 +302,8 @@ const labels = nodes.map((n) => {
           root.classList.add('is-visible');
           root.classList.remove('is-armed');
           io.disconnect();
+          // После появления схемы один раз проигрываем год
+          window.setTimeout(() => { if (!timer && month === 0) play(); }, 2000);
         }
       });
     }, { threshold: 0.3 });
