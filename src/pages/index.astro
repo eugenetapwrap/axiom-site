@@ -15,6 +15,8 @@ import { villa, VILLA_DEFAULT, installment, INST_DEFAULT, usd, pct, group } from
 
 // Калькуляторы для инвестанализа: что вводят, что получают и пример расчёта на значениях калькулятора по умолчанию.
 // «Рост стоимости» и «Оценку виллы» Евгений убрал 02.11.2026
+// На телефоне в «Что входит» видны первые 4 пункта, остальные под кнопкой «Ещё N пунктов»
+const plural = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? 'пункт' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'пункта' : 'пунктов');
 const vEx = villa(VILLA_DEFAULT);
 const iEx = installment(INST_DEFAULT);
 const calcLinks = [
@@ -103,6 +105,7 @@ const faqLd = {
             <ul class="dots practice-items">
               {p.items.map((i) => <li>{t(i)}</li>)}
             </ul>
+            {p.items.length > 5 && <button type="button" class="pr-more" data-more>Ещё {p.items.length - 4} {plural(p.items.length - 4)}</button>}
           </div>
           <div class="pr-cta">
             <a class="btn btn-soft" href={tgLink(p.topic)}>{p.cta}</a>
@@ -177,18 +180,33 @@ const faqLd = {
             <div class="case-visual" aria-hidden="true">
               <span class="case-tag">{c.tag}</span>
               {i === 0 && (
+                <div class="cv-card cv-gap">
+                  <!-- Схема без цифр: накопленный итог до и после настройки против лимита финансирования -->
+                  <svg viewBox="0 0 260 96">
+                    <line class="cv-lim" x1="4" x2="256" y1="62" y2="62"></line>
+                    <text class="cv-t" x="256" y="74" text-anchor="end">лимит</text>
+                    <path class="cv-before" d="M6,14 C40,18 64,82 104,82 C150,82 178,40 254,12"></path>
+                    <path class="cv-after" d="M6,14 C40,18 64,46 104,46 C150,46 178,24 254,12"></path>
+                    <text class="cv-t cv-t--ok" x="104" y="33" text-anchor="middle">после</text>
+                    <line class="cv-gapl" x1="104" x2="104" y1="50" y2="58"></line>
+                    <text class="cv-t" x="110" y="56">запас</text>
+                    <text class="cv-t cv-t--risk" x="104" y="96" text-anchor="middle">до: разрыв</text>
+                  </svg>
+                </div>
+              )}
+              {i === 1 && (
                 <div class="cv-card">
                   <p><span>Заявка № 63</span><b>1 080 000 IDR</b></p>
                   <p class="cv-dup"><span>Заявка № 75</span><b>1 080 000 IDR</b><em>дубль</em></p>
                 </div>
               )}
-              {i === 1 && (
+              {i === 2 && (
                 <div class="cv-card cv-bars">
                   <p><span>Норма</span><i style="--w:62%"></i></p>
                   <p class="cv-over"><span>Факт</span><i style="--w:88%"></i></p>
                 </div>
               )}
-              {i === 2 && (
+              {i === 3 && (
                 <div class="cv-card cv-irr">
                   <span>IRR</span><b>9,0%</b><span>→</span><b class="cv-risk">8,2%</b>
                 </div>
@@ -273,6 +291,18 @@ const faqLd = {
 </Base>
 
 <script>
+  // «Что входит» на телефоне: 4 пункта и кнопка «Ещё N пунктов». На десктопе CSS кнопку не показывает
+  document.querySelectorAll<HTMLElement>('.practice').forEach((card) => {
+    const more = card.querySelector<HTMLButtonElement>('[data-more]');
+    if (!more) return;
+    card.classList.add('is-clamped');
+    more.addEventListener('click', () => {
+      card.classList.remove('is-clamped');
+      card.querySelector<HTMLElement>('.practice-items li:nth-child(5)')?.setAttribute('tabindex', '-1');
+      card.querySelector<HTMLElement>('.practice-items li:nth-child(5)')?.focus({ preventScroll: true });
+    });
+  });
+
   // Вопросы: клик по вопросу показывает ответ справа. На узком экране ответ встаёт под вопросом.
   document.querySelectorAll<HTMLElement>('[data-faq]').forEach((root) => {
     const qs = [...root.querySelectorAll<HTMLButtonElement>('[data-faq-q]')];
@@ -438,6 +468,15 @@ const faqLd = {
   /* «Что входит» мельче лида: это справка, а не главный текст (Евгений 02.11.2026) */
   .practice-items { gap: 8px; font-size: 15px; line-height: 1.45; color: var(--ink-2); }
   .practice-items li { padding-left: 22px; }
+  /* Телефон и планшет: карточка в одну колонку, длинный список уводит пример на второй экран.
+     Показываем 4 пункта, остальные по кнопке. Без JS класса is-clamped нет и список виден целиком */
+  .pr-more { display: none; margin-top: 10px; padding: 4px 0 4px 22px; border: 0; background: none; font: 600 15px var(--font); color: var(--accent); cursor: pointer; }
+  .pr-more::after { content: ' ↓'; }
+  @media (max-width: 1023px) {
+    .practice.is-clamped .practice-items li:nth-child(n+5) { display: none; }
+    .practice.is-clamped .pr-more { display: inline-block; }
+  }
+  /* Шрифты в примерах сведены к шкале: 12 подписи, 13 текст, 18 цифры (в широкой карточке 20) */
 
   @media (min-width: 1024px) {
     /* Все карточки одной высоты (Евгений 02.11.2026: эталон — финансовое планирование). Лишнюю высоту забирает пример */
@@ -458,7 +497,7 @@ const faqLd = {
   .calc-links a b { color: var(--accent); font-weight: 600; font-size: 16px; }
   .calc-links a b::after { content: ' →'; }
   .cl-text { display: grid; align-content: start; }
-  .cl-row, .cl-cap { display: block; font-size: 14px; line-height: 1.4; color: var(--ink-2); }
+  .cl-row, .cl-cap { display: block; font-size: 13px; line-height: 1.4; color: var(--ink-2); }
   .cl-row em, .cl-cap em { display: block; margin-top: 8px; font-style: normal; font-size: 12px; color: var(--ink-3); }
   .cl-cap em { margin-top: 0; }
   /* Пример расчёта на значениях калькулятора: чтобы было видно, какой ответ получит человек */
@@ -486,7 +525,8 @@ const faqLd = {
 
   /* Кейсы */
   .cases { display: grid; gap: var(--s3); }
-  @media (min-width: 900px) { .cases { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 760px) { .cases { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1400px) { .cases { grid-template-columns: repeat(4, 1fr); } }
   .case { display: flex; flex-direction: column; padding: 8px; }
   .case-visual {
     position: relative;
@@ -503,11 +543,23 @@ const faqLd = {
   .cv-card { width: 100%; max-width: 280px; padding: 12px 14px; border-radius: 8px; background: var(--surface); font-size: 13px; display: grid; gap: 8px; }
   .cv-card p { display: flex; align-items: center; justify-content: space-between; gap: 8px; max-width: none; }
   .cv-card span { color: var(--ink-3); }
+  .cv-card p span, .cv-card p b { white-space: nowrap; }
+  @media (min-width: 1400px) { .cv-card { font-size: 12.5px; padding: 12px; } }
   .cv-dup { padding: 4px 6px; margin: 0 -6px; border-radius: 6px; background: var(--risk-soft); }
   .cv-dup em { font-style: normal; font-weight: 700; color: var(--risk); }
   .cv-bars p { display: grid; grid-template-columns: 52px 1fr; }
   .cv-bars i { display: block; height: 10px; width: var(--w); border-radius: 5px; background: var(--accent-2); }
   .cv-over i { background: var(--risk); }
+  .cv-gap { max-width: 320px; }
+  .cv-gap svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .cv-lim { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 3 3; }
+  .cv-before, .cv-after { fill: none; stroke-width: 2.2; stroke-linecap: round; }
+  .cv-before { stroke: var(--risk); }
+  .cv-after { stroke: var(--c-pos-strong); }
+  .cv-gapl { stroke: var(--ink-2); stroke-width: 1; }
+  .cv-t { font: 400 14px var(--font); fill: var(--ink-3); }
+  .cv-t--risk { font-weight: 600; fill: var(--risk); }
+  .cv-t--ok { font-weight: 600; fill: var(--c-pos-strong); }
   .cv-irr { display: flex; align-items: baseline; justify-content: center; gap: 10px; font-size: 15px; }
   .cv-irr b { font-size: 30px; letter-spacing: -0.02em; }
   .cv-risk { color: var(--risk); }

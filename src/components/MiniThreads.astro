@@ -8,6 +8,7 @@
 // Данные демонстрационные (src/lib/sankey.ts). Геометрия своя, в пикселях колонки.
 import { SERIES, MONTHS } from '../lib/sankey';
 import { frame, PROJ_NAMES, COST_NAMES, PROJ_COLORS, COST_COLORS, fmt2 } from '../lib/threads';
+import MiniThreadsX from './MiniThreadsX.astro';
 
 const M = SERIES.length - 1;
 const fr = frame(SERIES[M]);
@@ -24,17 +25,17 @@ const rest = c[c.length - 1];
 
 // ---------- Горизонтальная схема (широкая карточка) ----------
 const W = 1200;
-const H = 228;
-const K = 13; // px на 1 млрд IDR
+const H = 254;
+const K = 11; // px на 1 млрд IDR
 const NW = 3; // толщина планки счёта
-const CY = 128; // середина нитей
+const CY = 146; // середина нитей
 const PX = 600; // планка счёта
 const X1 = 430; // конец прямых участков слева
 const X2 = 770; // начало прямых участков справа
 const LMAX = 250;
 const RMAX = 240;
-const LSTEP = 42;
-const RSTEP = 24;
+const LSTEP = 46;
+const RSTEP = 27;
 const G = 60; // длина блика, px
 const top0 = CY - (total * K) / 2;
 
@@ -115,10 +116,16 @@ const vbottom = c.map((v, k) => {
     </dl>
   </div>
 
+  <!-- Широкая карточка: основная схема и расширенная (группы, раскладка по проектам при наведении) -->
+  <div class="mt-w" data-mtw>
+  <div class="mt-sw" role="group" aria-label="Вид схемы">
+    <button type="button" aria-pressed="true" data-sw="0">Основная</button>
+    <button type="button" aria-pressed="false" data-sw="1">Расширенная</button>
+  </div>
   <div class="mt-h" data-mt>
     <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
       <text class="mt-cap mt-t" x="0" y="12" style="--d:0ms">Поступления по проектам</text>
-      <text class="mt-cap mt-t" x={W} y="12" text-anchor="end" style="--d:1000ms">Куда ушли деньги</text>
+      <text class="mt-cap mt-t" x={X2 + 60} y="12" style="--d:1000ms">Куда ушли деньги</text>
       <text class="mt-t" x={PX + NW / 2} y="12" text-anchor="middle" style="--d:620ms"><tspan class="mt-cap">Поступления за {month}</tspan><tspan class="mt-big" dx="10">{fmt2(total)}</tspan><tspan class="mt-unit" dx="5">млрд IDR</tspan></text>
       <line class="mt-lead mt-t" x1={PX + NW / 2} x2={PX + NW / 2} y1="28" y2={f(top0 - 12)} style="--d:700ms"></line>
       {left.map((t, i) => <path class="mt-in" d={t.d} pathLength="1" stroke={PROJ_COLORS[i]} stroke-width={f(t.h)} style={`--d:${i * 40}ms`}><title>{PROJ_NAMES[i]}: {fmt2(t.v)} млрд IDR, {share(t.v)} поступлений</title></path>)}
@@ -131,6 +138,8 @@ const vbottom = c.map((v, k) => {
       {left.map((t, i) => <text class="mt-t" x={f(t.x - 12)} y={f(t.y)} text-anchor="end" style={`--d:${i * 40}ms`}><tspan class="mt-name">{PROJ_NAMES[i]}</tspan><tspan class="mt-val" dx="8">{fmt2(t.v)}</tspan></text>)}
       {right.map((t, i) => <text class="mt-t" x={f(t.x + 12)} y={f(t.y)} style={`--d:${Math.round(outDelay(i) + outDur(t.len) * 0.55)}ms`}><tspan class="mt-name">{COST_NAMES[i]}</tspan><tspan class="mt-val" dx="8">{fmt2(t.v)}</tspan><tspan class="mt-share" dx="6">{share(t.v)}</tspan></text>)}
     </svg>
+  </div>
+  <div class="mt-x"><MiniThreadsX /></div>
   </div>
 
   <div class="mt-b">
@@ -155,6 +164,16 @@ const vbottom = c.map((v, k) => {
 </figure>
 
 <script>
+  // Переключатель «Основная / Расширенная»
+  document.querySelectorAll<HTMLElement>('[data-mtw]').forEach((w) => {
+    const btns = [...w.querySelectorAll<HTMLButtonElement>('[data-sw]')];
+    btns.forEach((b) => b.addEventListener('click', () => {
+      const x = b.dataset.sw === '1';
+      w.classList.toggle('is-x', x);
+      btns.forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+    }));
+  });
+
   // Нити втекают в счёт, когда карточка появляется на экране. Без JS и при «уменьшить движение» схема видна сразу
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll<HTMLElement>('[data-mt]').forEach((el) => {
@@ -173,14 +192,20 @@ const vbottom = c.map((v, k) => {
   .mini { display: flex; flex-direction: column; justify-content: space-between; gap: 14px; height: 100%; margin: 0; padding: 18px 20px; border-radius: 8px; background: var(--bg); }
   .mini svg { display: block; width: 100%; height: auto; overflow: visible; }
   .mt-b svg { max-width: 460px; margin-inline: auto; }
-  .mt-h { display: none; }
+  .mt-w { display: none; position: relative; width: 100%; max-width: 1200px; margin-inline: auto; }
+  .mt-x { display: none; }
+  .mt-w.is-x .mt-h { display: none; }
+  .mt-w.is-x .mt-x { display: block; }
+  .mt-sw { position: absolute; z-index: 1; top: -6px; right: 0; display: flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+  .mt-sw button { padding: 4px 12px; border: 0; border-radius: 999px; background: none; font: 500 12px var(--font); color: var(--ink-2); cursor: pointer; }
+  .mt-sw button:hover { color: var(--ink); }
+  .mt-sw button[aria-pressed='true'] { background: var(--ink); color: var(--surface); }
 
   /* Широкая карточка: схема на всю ширину примера, показатели переходят в заголовки колонок */
   @container (min-width: 1000px) {
-    .mini { justify-content: center; padding: 22px 24px 20px; }
+    .mini { justify-content: center; padding: 18px 24px 14px; }
     .mt-a, .mt-b, .mt-c { display: none; }
-    .mt-h { display: block; }
-    .mt-h svg { max-width: 1200px; margin-inline: auto; }
+    .mt-w { display: block; }
   }
 
   .mt-h text { dominant-baseline: middle; }
@@ -215,7 +240,7 @@ const vbottom = c.map((v, k) => {
 
   /* Вертикальная схема */
   .mini-head { font-size: 13px; font-weight: 600; color: var(--ink-2); }
-  .mb-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; margin: 0; padding: 0; list-style: none; font-size: 12.5px; color: var(--ink-2); }
+  .mb-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; margin: 0; padding: 0; list-style: none; font-size: 12px; color: var(--ink-2); }
   .mb-list li { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
   .mb-list i { width: 8px; height: 8px; border-radius: 2px; }
   .mb-list b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
@@ -224,13 +249,13 @@ const vbottom = c.map((v, k) => {
   .mt-b svg:hover .mt { fill-opacity: .35; }
   .mt-b svg:hover .mt:hover { fill-opacity: 1; }
   .mt-vbar { fill: var(--ink); }
-  .mt-lab { font: 400 11px var(--font); fill: var(--ink-3); }
-  .mt-v { font: 600 11px var(--font); fill: var(--ink); }
+  .mt-lab { font: 400 12px var(--font); fill: var(--ink-3); }
+  .mt-v { font: 600 12px var(--font); fill: var(--ink); }
   /* На телефоне схема ужимается, подписи в единицах схемы делаем крупнее, чтобы на экране они остались читаемыми */
   @media (max-width: 479px) { .mt-lab, .mt-v { font-size: 13.5px; } }
   .mini-kpis { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 8px; margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
   .mini-kpis dt { font-size: 12px; color: var(--ink-3); }
-  .mini-kpis dd { margin: 0; font-size: 16px; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .mini-kpis dd { margin: 0; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   @media (prefers-reduced-motion: reduce) {
     .mt-h .mt-glint { display: none; }

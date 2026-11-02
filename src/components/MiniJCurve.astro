@@ -131,15 +131,15 @@ const tone = (v: number) => TONES[Math.min(levels.indexOf(v), TONES.length - 1)]
   .mj-line { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; }
   .mj-dot { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
   .mj-dot--end { fill: var(--ink); }
-  .mj-lab { font: 600 11px var(--font); fill: var(--ink); }
+  .mj-lab { font: 600 12px var(--font); fill: var(--ink); }
   .mj-lab--neg { fill: var(--c-neg); }
   .mj-lab--mute { font-weight: 400; fill: var(--ink-3); }
-  .mj-yr { font: 400 11px var(--font); fill: var(--ink-3); }
+  .mj-yr { font: 400 12px var(--font); fill: var(--ink-3); }
   .mini-head { font-size: 13px; font-weight: 600; color: var(--ink-2); }
   .mini-sub { margin: 0 0 8px; font-size: 12px; color: var(--ink-3); }
   .mini-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 16px; margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
   .mini-kpis dt { font-size: 12px; color: var(--ink-3); }
-  .mini-kpis dd { margin: 2px 0 0; font-size: 16px; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .mini-kpis dd { margin: 2px 0 0; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
   /* Бюджет: статья, доля, столбик (Евгений 02.11.2026). Столбики начинаются в одной точке, чтобы длины сравнивались.
      Цвет от тёмного к светлому по величине доли (tone во frontmatter): глаз сразу находит крупные статьи */
   .mh { display: grid; grid-template-columns: max-content auto minmax(48px, 1fr); gap: 7px 14px; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--ink-2); }
