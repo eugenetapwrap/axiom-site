@@ -1,0 +1,323 @@
+---
+import Base from '../layouts/Base.astro';
+import DemoDashboard from '../components/DemoDashboard.astro';
+import BotMessage from '../components/BotMessage.astro';
+import { site } from '../data/site';
+import {
+  hero, situation, services, smallTasks, stats, paymentSteps, rollout, cases, about, faq, finalCta,
+} from '../data/home';
+import { t } from '../lib/typo';
+
+const href = (k: 'telegram' | 'bot') => (k === 'bot' ? site.botUrl : site.telegramUrl);
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Base title="Axiom — финансы девелоперских проектов на Бали" jsonLd={[faqLd]}>
+  <!-- Первый экран -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <h1>{t(hero.title)}</h1>
+        <p class="hero-lead">{t(hero.lead)}</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href={site.telegramUrl}>Написать в Telegram</a>
+          <a class="btn btn-secondary" href={site.botUrl}>Попробовать бота бесплатно</a>
+        </div>
+        <p class="caption hero-note">{t(hero.note)}: <a href={site.telegramUrl}>@{site.telegram}</a></p>
+      </div>
+      <div class="hero-visual">
+        <DemoDashboard />
+      </div>
+    </div>
+  </section>
+
+  <!-- Типичная ситуация -->
+  <section class="section">
+    <div class="container two-col">
+      <h2>{t(situation.title)}</h2>
+      <div class="stack">
+        <p>{t(situation.text)} <span class="caption">{t(situation.footnote)}</span></p>
+        <p class="muted">{t(situation.notBookkeeping)}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Услуги -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-head">
+        <h2>Чем мы помогаем</h2>
+      </div>
+      <div class="cards">
+        {services.map((s) => (
+          <article class="card" id={s.id}>
+            <h3>
+              {t(s.title)} {s.badge && <span class="badge">{s.badge}</span>}
+            </h3>
+            <p>{t(s.text)}</p>
+            {s.tagline && <p class="tagline">{t(s.tagline)}</p>}
+            <a class="link-arrow card-link" href={href(s.href)}>{s.cta}</a>
+          </article>
+        ))}
+      </div>
+      <div class="tasks">
+        <h3>{smallTasks.title}</h3>
+        <ul>
+          {smallTasks.items.map((i) => <li>{t(i)}</li>)}
+        </ul>
+        <a class="link-arrow" href={site.telegramUrl}>{smallTasks.cta}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Цифры -->
+  <section class="section stats-section" aria-labelledby="stats-title">
+    <div class="container">
+      <h2 id="stats-title" class="section-head">Axiom Operations в цифрах</h2>
+      <dl class="stats">
+        {stats.map((s) => (
+          <div class="stat">
+            <dt><span class="stat-value">{s.value}</span> <span class="stat-unit">{s.unit}</span></dt>
+            <dd>{t(s.text)}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- Как работает платёж -->
+  <section class="section" id="system">
+    <div class="container">
+      <div class="section-head">
+        <h2>Как проходит платёж в системе</h2>
+        <p>{t('Четыре шага от счёта прораба до отчёта собственнику. Параллельно антифрод-бот проверяет каждый документ.')}</p>
+      </div>
+      <div class="system-grid">
+        <ol class="steps">
+          {paymentSteps.map((s, i) => (
+            <li>
+              <span class="step-num">{i + 1}</span>
+              <div>
+                <h3>{t(s.title)}</h3>
+                <p class="muted">{t(s.text)}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <BotMessage />
+      </div>
+    </div>
+  </section>
+
+  <!-- Внедрение -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>{t(rollout.title)}</h2>
+        <p>{t(rollout.lead)}</p>
+      </div>
+      <ol class="timeline">
+        {rollout.steps.map((s) => (
+          <li>
+            <h3>{t(s.title)}</h3>
+            <p class="muted">{t(s.text)}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Кейсы -->
+  <section class="section" id="cases">
+    <div class="container">
+      <div class="section-head">
+        <h2>Кейсы</h2>
+        <p>{t('Клиентов и проекты не называем. Цифры и выводы — из реальной работы.')}</p>
+      </div>
+      <div class="cases">
+        {cases.map((c) => (
+          <article class="case">
+            <p class="caption">{c.tag}</p>
+            <h3>{t(c.title)}</h3>
+            <p class="muted">{t(c.text)}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Кто мы -->
+  <section class="section" id="about">
+    <div class="container two-col">
+      <h2>{about.title}</h2>
+      <div class="stack">
+        <p>{t(about.text)}</p>
+        <blockquote class="quote">
+          <p>«{t(about.quote)}»</p>
+          <footer class="caption">— {about.quoteAuthor}</footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container two-col">
+      <h2>Частые вопросы</h2>
+      <div class="faq">
+        {faq.map((f) => (
+          <details>
+            <summary>{t(f.q)}</summary>
+            <p class="muted">{t(f.a)}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Финальный блок -->
+  <section class="section final">
+    <div class="container">
+      <h2>{finalCta.title}</h2>
+      <p class="final-text">{t(finalCta.text)}</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href={site.telegramUrl}>Написать в Telegram @{site.telegram}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: var(--s6) 0; }
+  .hero-grid { display: grid; gap: var(--s5); align-items: center; }
+  @media (min-width: 1024px) {
+    .hero { padding: var(--s7) 0; }
+    .hero-grid { grid-template-columns: 7fr 5fr; gap: var(--s6); }
+  }
+  .hero-lead { margin: var(--s3) 0 var(--s4); color: var(--ink-2); font-size: 1.1em; }
+  .hero-note { margin-top: var(--s2); }
+
+  .two-col { display: grid; gap: var(--s3); }
+  @media (min-width: 1024px) {
+    .two-col { grid-template-columns: 4fr 8fr; gap: var(--s6); }
+  }
+  .stack { display: grid; gap: var(--s3); }
+
+  .cards { display: grid; gap: var(--s3); }
+  @media (min-width: 800px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2);
+    padding: var(--s4);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .card p { font-size: 17px; color: var(--ink-2); }
+  .card .tagline { color: var(--ink); font-weight: 600; }
+  .card-link { margin-top: auto; padding-top: var(--s1); font-size: 17px; }
+  @media (max-width: 719px) { .card { padding: var(--s3); } }
+
+  .tasks { margin-top: var(--s5); max-width: 44rem; }
+  .tasks ul { margin: var(--s2) 0; padding-left: 1.1em; color: var(--ink-2); }
+  .tasks li + li { margin-top: 4px; }
+
+  .stats-section { background: var(--accent); color: #fff; border-top: 0 !important; }
+  .stats-section + .section { border-top: 0; }
+  .stats { display: grid; gap: var(--s4); margin: 0; }
+  @media (min-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+  .stat { border-top: 1px solid rgba(255, 255, 255, 0.25); padding-top: var(--s2); }
+  .stat-value { font-size: clamp(36px, 4vw, 48px); font-weight: 700; letter-spacing: -0.02em; }
+  .stat-unit { font-size: 18px; font-weight: 600; color: #e3c48c; }
+  .stat dd { margin-top: var(--s1); color: #d3e3de; font-size: 16px; max-width: 18em; }
+
+  .system-grid { display: grid; gap: var(--s5); align-items: start; }
+  @media (min-width: 1024px) { .system-grid { grid-template-columns: 7fr 5fr; gap: var(--s6); } }
+  .steps { list-style: none; padding: 0; display: grid; gap: var(--s4); }
+  .steps li { display: grid; grid-template-columns: 40px 1fr; gap: var(--s2); }
+  .steps p { margin-top: 4px; font-size: 17px; }
+  .step-num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 17px;
+  }
+
+  .timeline {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--s4);
+    counter-reset: step;
+  }
+  .timeline li { position: relative; padding-left: var(--s4); counter-increment: step; }
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.45em;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .timeline li::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: calc(0.45em + 16px);
+    bottom: calc(-1 * var(--s4) + 4px);
+    width: 2px;
+    background: var(--line);
+  }
+  .timeline li:last-child::after { display: none; }
+  .timeline p { margin-top: 4px; font-size: 17px; }
+  @media (min-width: 1024px) {
+    .timeline { grid-template-columns: repeat(5, 1fr); gap: var(--s3); }
+    .timeline li { padding-left: 0; padding-top: var(--s4); }
+    .timeline li::before { top: 0; }
+    .timeline li::after { left: 16px; right: calc(-1 * var(--s3) + 4px); top: 5px; bottom: auto; width: auto; height: 2px; }
+  }
+
+  .cases { display: grid; gap: var(--s3); }
+  @media (min-width: 900px) { .cases { grid-template-columns: repeat(3, 1fr); } }
+  .case { display: grid; gap: var(--s1); align-content: start; padding-top: var(--s2); border-top: 2px solid var(--accent); }
+  .case p.muted { font-size: 17px; }
+
+  .quote { padding-left: var(--s3); border-left: 2px solid var(--gold); }
+  .quote p { font-size: 1.05em; }
+  .quote footer { margin-top: var(--s1); }
+
+  .faq details { border-top: 1px solid var(--line); padding: var(--s2) 0; }
+  .faq details:last-child { border-bottom: 1px solid var(--line); }
+  .faq summary {
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s2);
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; color: var(--accent); font-weight: 500; }
+  .faq details[open] summary::after { content: '−'; }
+  .faq details p { margin-top: var(--s1); font-size: 17px; }
+
+  .final-text { margin: var(--s2) 0 var(--s4); color: var(--ink-2); }
+</style>

@@ -1,0 +1,46 @@
+---
+import { site } from '../data/site';
+import { ketut } from '../data/home';
+import { t } from '../lib/typo';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <figure class="ketut" aria-label="Кетут">
+      <p>— {t(ketut.q)}</p>
+      <p>— {t(ketut.a)}</p>
+    </figure>
+    <div class="footer-contacts">
+      <a href={site.telegramUrl}>Telegram @{site.telegram}</a>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
+    <p class="caption footer-legal">{site.legalName}, Бали · {year}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--accent);
+    color: #e9f1ee;
+    padding: var(--s6) 0 var(--s5);
+  }
+  .footer-grid {
+    display: grid;
+    gap: var(--s4);
+  }
+  @media (min-width: 900px) {
+    .footer-grid { grid-template-columns: 2fr 1fr; align-items: end; }
+    .footer-legal { grid-column: 1 / -1; }
+  }
+  .ketut {
+    font-size: clamp(20px, 2.4vw, 26px);
+    line-height: 1.4;
+    font-weight: 500;
+  }
+  .ketut p:last-child { color: #e3c48c; }
+  .footer-contacts { display: grid; gap: var(--s1); font-size: 17px; }
+  .footer a { color: #ffffff; }
+  .footer-legal { color: #a9c3bc; }
+</style>

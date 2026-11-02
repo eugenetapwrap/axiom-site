@@ -1,0 +1,118 @@
+---
+// Демо-дашборд на вымышленных данных. Реальные проекты, контрагенты и суммы клиентов не показываем.
+const months = [
+  { m: 'июн', inflow: 62, outflow: 48 },
+  { m: 'июл', inflow: 40, outflow: 55 },
+  { m: 'авг', inflow: 75, outflow: 58 },
+  { m: 'сен', inflow: 52, outflow: 61 },
+  { m: 'окт', inflow: 88, outflow: 64 },
+  { m: 'ноя', inflow: 70, outflow: 59 },
+];
+---
+
+<figure class="dash" aria-label="Пример дашборда на вымышленных данных">
+  <div class="dash-head">
+    <span class="dash-title">Проект «Вилла 7»</span>
+    <span class="caption">демо-данные</span>
+  </div>
+
+  <dl class="dash-kpi">
+    <div>
+      <dt class="caption">На счетах</dt>
+      <dd>1,24 млрд <span>IDR</span></dd>
+    </div>
+    <div>
+      <dt class="caption">Ждут согласования</dt>
+      <dd>18 заявок</dd>
+    </div>
+    <div>
+      <dt class="caption">Дублей остановлено</dt>
+      <dd class="risk">3</dd>
+    </div>
+  </dl>
+
+  <div class="dash-chart" role="img" aria-label="Cash Flow по месяцам: поступления и выплаты">
+    <div class="caption dash-legend">
+      <span><i class="dot dot-in"></i>Поступления</span>
+      <span><i class="dot dot-out"></i>Выплаты</span>
+    </div>
+    <div class="bars">
+      {months.map((d) => (
+        <div class="bar-group">
+          <div class="bar-pair">
+            <span class="bar bar-in" style={`height:${d.inflow}%`}></span>
+            <span class="bar bar-out" style={`height:${d.outflow}%`}></span>
+          </div>
+          <span class="caption">{d.m}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="dash-alert">
+    <span class="alert-mark" aria-hidden="true"></span>
+    <span>Заявка №&nbsp;75 совпадает с&nbsp;№&nbsp;63 от&nbsp;09.10. В&nbsp;оплату не&nbsp;ушла.</span>
+  </div>
+</figure>
+
+<style>
+  .dash {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: var(--s3);
+    font-size: 16px;
+    line-height: 1.4;
+    box-shadow: 0 1px 0 rgba(22, 32, 31, 0.04);
+  }
+  .dash-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s2); }
+  .dash-title { font-weight: 600; }
+  .dash-kpi {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s2);
+    margin: var(--s3) 0;
+    padding: var(--s2) 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .dash-kpi > div { display: flex; flex-direction: column; justify-content: space-between; }
+  .dash-kpi dd { font-size: 20px; font-weight: 700; margin-top: 4px; }
+  .dash-kpi dd span { font-size: 14px; font-weight: 500; color: var(--ink-3); }
+  .dash-kpi .risk { color: var(--risk); }
+  .dash-legend { display: flex; gap: var(--s2); margin-bottom: var(--s1); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
+  .dot-in, .bar-in { background: var(--accent); }
+  .dot-out, .bar-out { background: #b9cfc8; }
+  .bars {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--s1);
+    align-items: end;
+  }
+  .bar-group { display: grid; gap: 6px; justify-items: center; }
+  .bar-pair { display: flex; gap: 3px; align-items: flex-end; height: 120px; width: 100%; justify-content: center; }
+  .bar { display: block; width: 38%; max-width: 16px; border-radius: 3px 3px 0 0; }
+  .dash-alert {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: var(--s3);
+    padding: 12px 14px;
+    background: var(--risk-soft);
+    border-radius: 8px;
+    font-size: 15px;
+  }
+  .alert-mark {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    margin-top: 7px;
+    border-radius: 50%;
+    background: var(--risk);
+  }
+  @media (max-width: 420px) {
+    .dash { padding: var(--s2); }
+    .dash-kpi dd { font-size: 17px; }
+  }
+</style>

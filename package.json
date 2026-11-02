@@ -1,0 +1,23 @@
+{
+  "name": "axiom-site",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eugenetapwrap/axiom-site.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/eugenetapwrap/axiom-site/issues"
+  },
+  "homepage": "https://github.com/eugenetapwrap/axiom-site#readme",
+  "dependencies": {
+    "astro": "^5.18.2"
+  },
+  "private": true,
+  "type": "module"
+}

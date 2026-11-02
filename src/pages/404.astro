@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base title="Страница не найдена — Axiom">
+  <section class="section nf">
+    <div class="container">
+      <p class="caption">Ошибка 404</p>
+      <h1>Такой страницы нет</h1>
+      <!-- TBD: реплика Кетута для 404 — только из утверждённых Евгением фраз. -->
+      <p class="nf-text">Возможно, ссылка устарела. Начните с&nbsp;главной или напишите нам.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="/">На главную</a>
+        <a class="btn btn-secondary" href={site.telegramUrl}>Написать в Telegram</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { min-height: 60vh; }
+  .nf-text { margin: var(--s3) 0 var(--s4); color: var(--ink-2); }
+</style>
