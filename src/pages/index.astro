@@ -1,13 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-import PracticeWidget from '../components/PracticeWidget.astro';
 import SankeyFlow from '../components/SankeyFlow.astro';
-import PaymentBoard from '../components/PaymentBoard.astro';
-import RolloutStory from '../components/RolloutStory.astro';
-import BotMessage from '../components/BotMessage.astro';
 import { site } from '../data/site';
 import {
-  hero, practices, expertise, geography, flow, stats, payment, approach, cases, team, bot, faq, finalCta,
+  hero, practices, geography, flow, stats, cases, team, bot, faq, finalCta,
 } from '../data/home';
 import { t } from '../lib/typo';
 
@@ -31,12 +27,6 @@ const serviceIcons: Record<string, string> = {
   accounting: 'M2 4.5h12v8H2zM2 7.5h12M5 10.5h3',
   advisory: 'M3 13V8M6.3 13V5M9.7 13V9.5M13 13V3',
 };
-const widgetFor = {
-  models: 'models',
-  audit: 'audit',
-  accounting: 'accounting',
-  advisory: 'advisory',
-} as const;
 ---
 
 <Base title="Axiom — финансовый консалтинг для девелопмента и строительства" jsonLd={[faqLd]}>
@@ -67,43 +57,29 @@ const widgetFor = {
         ))}
       </ul>
 
-      <dl class="facts">
-          {hero.facts.map((f) => (
-            <div>
-              <dt>{f.value}</dt>
-              <dd>{t(f.text)}</dd>
-            </div>
-        ))}
-      </dl>
     </div>
   </section>
 
-  <!-- Направления: текст слева, живой интерфейс справа -->
+  <!-- Направления: четыре карточки со списками -->
   <section class="section section--alt" id="practices">
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Направления</p>
         <h2>Что входит в каждое направление</h2>
       </div>
-      {practices.map((p) => (
-        <article class="practice" id={p.id}>
-          <div class="practice-text" data-reveal>
-            <div class="practice-head">
-              <p class="eyebrow">Направление {p.num}</p>
-              <h2>{t(p.title)}</h2>
-            </div>
-            <p class="practice-lead">{t(p.lead)}</p>
+      <div class="pgrid">
+        {practices.map((p, i) => (
+          <article class="pcard ui-card" id={p.id} data-reveal style={`--d: ${(i % 2) * 100}ms`}>
+            <p class="pcard-num">{p.num}</p>
+            <h3>{t(p.title)}</h3>
+            <p class="pcard-lead">{t(p.lead)}</p>
             <ul class="dots">
-              {p.items.map((i) => <li>{t(i)}</li>)}
+              {p.items.map((it) => <li>{t(it)}</li>)}
             </ul>
             <a class="btn btn-soft" href={site.telegramUrl}>{p.cta}</a>
-          </div>
-          <div class="practice-widget" data-reveal style="--d: 120ms">
-            <PracticeWidget variant={widgetFor[p.id as keyof typeof widgetFor]} />
-          </div>
-        </article>
-      ))}
-      <p class="caption practices-note">Интерфейсы показаны на демонстрационных данных</p>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -112,7 +88,7 @@ const widgetFor = {
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Результаты</p>
-        <h2 id="stats-title">Цифры из наших систем учёта</h2>
+        <h2 id="stats-title">Axiom в цифрах</h2>
       </div>
       <dl class="stats" data-reveal>
         {stats.map((s) => (
@@ -134,60 +110,6 @@ const widgetFor = {
         <p>{t(flow.lead)}</p>
       </div>
       <div data-reveal><SankeyFlow /></div>
-    </div>
-  </section>
-
-  <!-- Контроль платежей -->
-  <section class="section section--alt" id="payments">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Система учёта</p>
-        <h2>{t(payment.title)}</h2>
-        <p>{t(payment.lead)}</p>
-      </div>
-      <div data-reveal>
-        <PaymentBoard columns={payment.columns.map((c) => ({ title: t(c.title), text: t(c.text) }))} />
-      </div>
-    </div>
-  </section>
-
-  <!-- Внедрение за 40 дней -->
-  <section class="section" id="rollout">
-    <div class="container">
-      <RolloutStory />
-    </div>
-  </section>
-
-  <!-- Экспертиза и география -->
-  <section class="section section--white" id="expertise">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">{expertise.title}</p>
-        <h2>Девелопмент, строительство, инвестиции и технологии</h2>
-      </div>
-      <div class="cols4 areas" data-reveal>
-        {expertise.areas.map((a, i) => (
-          <div class="col">
-            <span class="col-num">0{i + 1}</span>
-            <h3>{a.title}</h3>
-            <ul>
-              {a.items.map((item) => <li>{t(item)}</li>)}
-            </ul>
-          </div>
-        ))}
-      </div>
-      <div class="cols4 geo" data-reveal>
-        <div class="col">
-          <h3>{geography.title}</h3>
-          <p class="caption">{t(geography.note)}</p>
-        </div>
-        {geography.regions.map((r) => (
-          <div class="col">
-            <p class="geo-region">{r.title}</p>
-            <p class="geo-countries">{r.countries}</p>
-          </div>
-        ))}
-      </div>
     </div>
   </section>
 
@@ -239,25 +161,6 @@ const widgetFor = {
     </div>
   </section>
 
-  <!-- Как работаем -->
-  <section class="section" id="approach">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Подход</p>
-        <h2>{approach.title}</h2>
-      </div>
-      <ol class="cols4 approach" data-reveal>
-        {approach.steps.map((s, i) => (
-          <li class="col">
-            <span class="approach-num">{i + 1}</span>
-            <h3>{s.title}</h3>
-            <p class="muted">{t(s.text)}</p>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
-
   <!-- Команда -->
   <section class="section section--white" id="team">
     <div class="container team">
@@ -266,6 +169,11 @@ const widgetFor = {
         <h2>Кто работает над проектом</h2>
         <p class="muted team-lead">{t(team.lead)}</p>
         <p class="founder">{t(team.founder)}</p>
+        <dl class="geo">
+          {geography.regions.map((r) => (
+            <div><dt>{r.title}</dt><dd>{r.countries}</dd></div>
+          ))}
+        </dl>
       </div>
       <dl class="roles" data-reveal style="--d: 120ms">
         {team.roles.map((r) => (
@@ -278,24 +186,17 @@ const widgetFor = {
     </div>
   </section>
 
-  <!-- Продукт: бот -->
-  <section class="section section--dark" id="bot">
-    <div class="container bot">
-      <div class="bot-visual" data-reveal>
-        <BotMessage />
-      </div>
-      <div data-reveal style="--d: 120ms">
+  <!-- Продукт: бот, одной полосой -->
+  <section class="bot-strip" id="bot">
+    <div class="container bot-row" data-reveal>
+      <div>
         <p class="eyebrow">Продукт · {bot.badge}</p>
-        <h2>{bot.title}</h2>
-        <p class="bot-lead">{t(bot.lead)}</p>
-        <ul class="dots bot-list">
-          {bot.items.map((i) => <li>{t(i)}</li>)}
-        </ul>
+        <h2 class="bot-title">{bot.title}</h2>
+        <p class="muted">{t(bot.lead)}</p>
+      </div>
+      <div class="bot-side">
         <p class="tagline">{t(bot.tagline)}</p>
-        <div class="btn-row">
-          <a class="btn btn-light" href={site.botUrl}>{bot.cta}</a>
-          <a class="btn btn-ghost-light" href={site.telegramUrl}>Задать вопрос</a>
-        </div>
+        <a class="btn btn-primary" href={site.botUrl}>{bot.cta}</a>
       </div>
     </div>
   </section>
@@ -411,34 +312,15 @@ const widgetFor = {
 
   .hero-btns { margin-top: var(--s4); }
 
-  .facts {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--s3);
-    margin-top: var(--s5);
-    padding-top: var(--s4);
-    border-top: 1px solid var(--line);
-  }
-  @media (min-width: 720px) { .facts { grid-template-columns: repeat(4, 1fr); } }
-  .facts dt { font-size: clamp(26px, 2.6vw, 34px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--accent); }
-  .facts dd { margin-top: 4px; max-width: 17em; color: var(--ink-2); font-size: 15px; line-height: 1.4; }
-
   /* Направления */
-  .practice {
-    display: grid;
-    gap: var(--s5);
-    padding: var(--s6) 0;
-    border-top: 1px solid var(--line);
-  }
-  .practice:first-of-type { border-top: 0; padding-top: 0; }
-  @media (min-width: 1024px) {
-    .practice { grid-template-columns: 1fr 1fr; column-gap: 112px; align-items: start; padding: var(--s7) 0; }
-  }
-  .practice-head { border-left: 2px solid var(--gold); padding-left: var(--s3); margin-left: -1px; }
-  .practice-head .eyebrow { margin-bottom: var(--s1); }
-  .practice-lead { margin: var(--s3) 0; color: var(--ink-2); }
-  .practice .dots { margin-bottom: var(--s4); }
-  .practices-note { margin-top: var(--s2); }
+  .pgrid { display: grid; gap: var(--s3); }
+  @media (min-width: 900px) { .pgrid { grid-template-columns: 1fr 1fr; } }
+  .pcard { display: flex; flex-direction: column; padding: var(--s4); scroll-margin-top: 96px; }
+  .pcard-num { font-size: 15px; font-weight: 700; color: var(--gold-ink); }
+  .pcard h3 { margin-top: var(--s1); font-size: clamp(22px, 2vw, 26px); }
+  .pcard-lead { margin: var(--s2) 0 var(--s3); color: var(--ink-2); font-size: 16px; }
+  .pcard .dots { margin-bottom: var(--s4); font-size: 16px; }
+  .pcard .btn { margin-top: auto; align-self: flex-start; }
 
   /* Цифры */
   .stats { display: grid; gap: var(--s4) 0; }
@@ -450,22 +332,6 @@ const widgetFor = {
   .stat-value { font-size: clamp(40px, 4.4vw, 60px); font-weight: 700; letter-spacing: -0.03em; color: var(--gold-on-deep); line-height: 1; }
   .stat-unit { display: block; margin-top: var(--s1); font-size: 18px; font-weight: 600; color: var(--on-deep); }
   .stat dd { margin-top: 6px; color: var(--on-deep-2); font-size: 15px; max-width: 18em; }
-
-  /* Четыре колонки */
-  .cols4 { display: grid; gap: var(--s4) 0; list-style: none; padding: 0; }
-  @media (min-width: 720px) { .cols4 { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .cols4 { grid-template-columns: repeat(4, 1fr); } }
-  .col { padding-right: var(--s3); }
-  @media (min-width: 1024px) { .col:not(:first-child) { padding-left: var(--s3); } }
-  @media (min-width: 720px) and (max-width: 1023px) { .col:nth-child(even) { padding-left: var(--s3); } }
-
-  .col-num { display: block; margin-bottom: var(--s2); font-size: 14px; font-weight: 700; color: var(--gold-ink); }
-  .areas h3 { margin-bottom: var(--s2); font-size: 22px; }
-  .areas ul { list-style: none; padding: 0; display: grid; gap: 8px; color: var(--ink-2); font-size: 16px; }
-  .geo { margin-top: var(--s6); padding-top: var(--s4); border-top: 1px solid var(--line); }
-  .geo h3 { font-size: 22px; margin-bottom: var(--s1); }
-  .geo-region { font-size: 14px; color: var(--ink-3); }
-  .geo-countries { margin-top: 2px; font-size: 20px; font-weight: 700; }
 
   /* Кейсы */
   .cases { display: grid; gap: var(--s3); }
@@ -500,24 +366,6 @@ const widgetFor = {
   .case-dl dt { color: var(--ink-3); font-size: 13px; margin-top: var(--s1); }
   .case-result { font-weight: 700; color: var(--accent); }
 
-  /* Подход */
-  .approach .col { position: relative; }
-  .approach-num {
-    display: grid;
-    place-items: center;
-    width: 36px;
-    height: 36px;
-    margin-bottom: var(--s3);
-    border-radius: 50%;
-    background: var(--accent);
-    color: #fff;
-    font-weight: 700;
-    font-size: 15px;
-    box-shadow: 0 0 0 6px var(--accent-soft);
-  }
-  .approach h3 { font-size: 21px; }
-  .approach p { margin-top: 6px; font-size: 16px; }
-
   /* Команда */
   .team { display: grid; gap: var(--s5); }
   @media (min-width: 1024px) { .team { grid-template-columns: 1fr 1fr; column-gap: 112px; } }
@@ -529,15 +377,18 @@ const widgetFor = {
   .roles dt { font-weight: 700; font-size: 18px; }
   .roles dd { margin-top: 6px; color: var(--ink-2); font-size: 15px; }
 
+  .geo { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); margin-top: var(--s4); padding-top: var(--s3); border-top: 1px solid var(--line); }
+  .geo dt { font-size: 14px; color: var(--ink-3); }
+  .geo dd { margin-top: 2px; font-weight: 700; }
+
   /* Бот */
-  .bot { display: grid; gap: var(--s5); align-items: center; }
-  @media (min-width: 1024px) { .bot { grid-template-columns: 1fr 1fr; column-gap: 112px; } }
-  .bot-visual { display: grid; justify-items: center; }
-  .bot-visual :global(.chat) { width: 100%; }
-  .bot-visual :global(figcaption) { color: var(--on-deep-2); }
-  .bot-lead { margin-top: var(--s3); color: var(--on-deep-2); }
-  .bot-list { margin: var(--s3) 0; }
-  .tagline { margin-bottom: var(--s4); font-weight: 700; font-size: 20px; color: var(--gold-on-deep); }
+  .bot-strip { padding: var(--s5) 0; background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .bot-row { display: grid; gap: var(--s3); align-items: center; }
+  @media (min-width: 1024px) { .bot-row { grid-template-columns: 1.4fr 1fr; column-gap: 112px; } }
+  .bot-title { font-size: clamp(26px, 2.6vw, 34px); }
+  .bot-row .muted { margin-top: var(--s1); max-width: 34em; }
+  .bot-side { display: grid; gap: var(--s2); justify-items: start; }
+  .tagline { font-weight: 700; font-size: 20px; color: var(--gold-ink); }
 
   /* FAQ */
   .faq-wrap { display: grid; gap: var(--s5); }
