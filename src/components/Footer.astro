@@ -5,8 +5,6 @@ import { t } from '../lib/typo';
 
 const year = new Date().getFullYear();
 const company = [
-  { href: '/#expertise', label: 'Экспертиза' },
-  { href: '/#accounting-system', label: 'Система учёта' },
   { href: '/#cases', label: 'Кейсы' },
   { href: '/#team', label: 'Команда' },
   { href: '/#faq', label: 'Вопросы' },
@@ -18,8 +16,8 @@ const company = [
     <div class="footer-brand">
       <a class="footer-logo" href="/" aria-label="Axiom, на главную">
         <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
-          <rect width="32" height="32" rx="6" fill="var(--accent)"></rect>
-          <path d="M9 24 16 8l7 16M11.8 18h8.4" fill="none" stroke="#faf8f3" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+          <rect width="32" height="32" rx="6" fill="var(--btn-bg)"></rect>
+          <path d="M9 24 16 8l7 16M11.8 18h8.4" fill="none" stroke="var(--btn-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
         <span>Axiom</span>
       </a>
@@ -30,7 +28,6 @@ const company = [
       <p class="footer-h">Направления</p>
       <ul>
         {practices.map((p) => <li><a href={`/#${p.id}`}>{t(p.title)}</a></li>)}
-        <li><a href="/#bot">Бот для чеков <span class="badge">бета</span></a></li>
       </ul>
     </nav>
 
@@ -46,6 +43,7 @@ const company = [
       <ul>
         <li><a href={site.telegramUrl}>Telegram @{site.telegram}</a></li>
         <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        {site.channelUrl && <li><a href={site.channelUrl}>Канал «{site.channelName}»</a></li>}
         <li><a href={site.portalUrl}>Личный кабинет клиента</a></li>
       </ul>
       <figure class="ketut" aria-label="Кетут">

@@ -1,15 +1,36 @@
 ---
 import Base from '../layouts/Base.astro';
-import PracticeWidget from '../components/PracticeWidget.astro';
-import SankeyFlow from '../components/SankeyFlow.astro';
-import PaymentBoard from '../components/PaymentBoard.astro';
-import RolloutStory from '../components/RolloutStory.astro';
-import BotMessage from '../components/BotMessage.astro';
-import { site } from '../data/site';
+import ServiceIcon from '../components/ServiceIcon.astro';
+import Calculators from '../components/Calculators.astro';
+import MiniJCurve from '../components/MiniJCurve.astro';
+import MiniThreads from '../components/MiniThreads.astro';
+import MiniRegister from '../components/MiniRegister.astro';
+import FinalThreads from '../components/FinalThreads.astro';
+import { site, tgLink } from '../data/site';
 import {
-  hero, practices, expertise, geography, flow, stats, payment, approach, cases, team, bot, faq, finalCta,
+  hero, practices, results, cases, team, faq, finalCta,
 } from '../data/home';
 import { t } from '../lib/typo';
+import { villa, VILLA_DEFAULT, installment, INST_DEFAULT, usd, pct, group } from '../lib/calc';
+
+// Калькуляторы для инвестанализа: что вводят, что получают и пример расчёта на значениях калькулятора по умолчанию.
+// «Рост стоимости» и «Оценку виллы» Евгений убрал 02.11.2026
+// На телефоне в «Что входит» видны первые 4 пункта, остальные под кнопкой «Ещё N пунктов»
+const plural = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? 'пункт' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'пункта' : 'пунктов');
+const vEx = villa(VILLA_DEFAULT);
+const iEx = installment(INST_DEFAULT);
+const calcLinks = [
+  {
+    id: 'villa', title: 'Доходность виллы', inp: 'цена, ADR, загрузка, комиссии, налоги, расходы', out: 'чистый доход, ROI, срок окупаемости, IRR, MOIC',
+    cap: `Вилла за ${usd(VILLA_DEFAULT.price)}, ночь ${usd(VILLA_DEFAULT.adr)}, загрузка ${VILLA_DEFAULT.occ}%, продажа через ${VILLA_DEFAULT.years} лет`,
+    kv: [['IRR', pct(vEx.irr)], ['MOIC', `${group(vEx.moic, 2)}×`], ['Доходность в первый год', pct(vEx.net1)]],
+  },
+  {
+    id: 'inst', title: 'Рассрочка или скидка', inp: 'цена, первый взнос, срок, ставки', out: 'реальная ставка рассрочки и что выгоднее',
+    cap: `Вилла за ${usd(INST_DEFAULT.price)}, взнос ${INST_DEFAULT.down}%, рассрочка на ${INST_DEFAULT.months} месяцев. Ставка девелопера ${INST_DEFAULT.dev}%, покупателя ${INST_DEFAULT.buy}%`,
+    kv: [['Платёж в месяц', usd(Math.round(iEx.pay))], ['Выгодная обоим скидка', `${group(iEx.evenBuy * 100, 1)}–${pct(iEx.evenDev)}`]],
+  },
+];
 
 const faqLd = {
   '@context': 'https://schema.org',
@@ -20,174 +41,126 @@ const faqLd = {
     acceptedAnswer: { '@type': 'Answer', text: f.a },
   })),
 };
-
-const titleWords = hero.title.split(' ');
-const titleAccent = titleWords.slice(0, hero.accent).join(' ');
-const titleRest = titleWords.slice(hero.accent).join(' ');
-
-const serviceIcons: Record<string, string> = {
-  models: 'M2 13.5h12M3.5 11l3-3.5 2.5 2 4-5',
-  audit: 'M11.2 11.2 14 14M7 11.5a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z',
-  accounting: 'M2 4.5h12v8H2zM2 7.5h12M5 10.5h3',
-  advisory: 'M3 13V8M6.3 13V5M9.7 13V9.5M13 13V3',
-};
-const widgetFor = {
-  models: 'models',
-  audit: 'audit',
-  accounting: 'accounting',
-  advisory: 'advisory',
-} as const;
 ---
 
 <Base title="Axiom — финансовый консалтинг для девелопмента и строительства" jsonLd={[faqLd]}>
-  <!-- Первый экран: кто мы, для кого и четыре услуги -->
+  <!-- Первый экран (каталог): заголовок слева; справа крупные цифры, как в презентации, и кнопки по низу заголовка.
+       Под ними четыре услуги карточками -->
   <section class="hero">
     <div class="container">
-      <p class="eyebrow">{hero.eyebrow}</p>
-      <h1><span class="h1-accent">{titleAccent}</span> {t(titleRest)}</h1>
-      <p class="hero-lead">{t(hero.lead)}</p>
-      <div class="btn-row hero-btns">
-        <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
-        <a class="btn btn-secondary" href="#practices">Все направления</a>
+      <div class="hero-top">
+        <div class="hero-text">
+          <!-- На широком экране строки заданы явно: четыре строки, кнопки по низу последней -->
+          <h1>{hero.lines.map((l) => <span class="h1-l">{t(l)} </span>)}<span class="hero-aud">{hero.audLines.map((l) => <span class="h1-l">{t(l)} </span>)}</span></h1>
+        </div>
+        <div class="hero-side">
+          <dl class="hero-stats">
+            {hero.stats.map((s) => (
+              <div><dt>{s.value}</dt><dd>{t(s.text)}</dd></div>
+            ))}
+          </dl>
+          <div class="btn-row hero-btns">
+            <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
+            <a class="btn btn-secondary" href="#calc">Калькуляторы</a>
+          </div>
+        </div>
       </div>
 
       <ul class="services">
         {practices.map((p) => (
           <li>
-            <a class="service ui-card" href={`#${p.id}`}>
+            <a class="service" href={`#${p.id}`}>
               <span class="service-top">
+                <ServiceIcon name={p.id} />
                 <span class="service-num">{p.num}</span>
-                <svg viewBox="0 0 16 16" aria-hidden="true"><path d={serviceIcons[p.id]} fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
               </span>
               <span class="service-title">{t(p.title)}</span>
-              <span class="service-lead">{t(p.lead)}</span>
-              <span class="service-more">Подробнее</span>
+              <span class="service-lead">{t(p.card)}</span>
+              <span class="service-more">Что входит</span>
             </a>
           </li>
         ))}
       </ul>
-
-      <dl class="facts">
-          {hero.facts.map((f) => (
-            <div>
-              <dt>{f.value}</dt>
-              <dd>{t(f.text)}</dd>
-            </div>
-        ))}
-      </dl>
     </div>
   </section>
 
-  <!-- Направления: текст слева, живой интерфейс справа -->
-  <section class="section section--alt" id="practices">
+  <!-- Услуги (Евгений 02.11.2026, выбрал раскладку «пример снизу»): у всех четырёх один шаблон из прямоугольных блоков.
+       Сверху два блока рядом: название, строка «что это», результат и кнопка; «Что входит» в две колонки.
+       Под ними пример на демо-данных во всю ширину карточки -->
+  <section class="section section--alt practices" id="practices" aria-label="Услуги">
     <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Направления</p>
-        <h2>Что входит в каждое направление</h2>
-      </div>
+      <div class="practices-list">
       {practices.map((p) => (
-        <article class="practice" id={p.id}>
-          <div class="practice-text" data-reveal>
-            <div class="practice-head">
-              <p class="eyebrow">Направление {p.num}</p>
-              <h2>{t(p.title)}</h2>
+        <article class="practice" id={p.id} data-reveal aria-labelledby={`pr-h-${p.id}`}>
+          <div class="pr-main">
+            <div class="pr-title">
+              <span class="practice-num" aria-hidden="true">{p.num}</span>
+              <h2 id={`pr-h-${p.id}`}>{t(p.title)}</h2>
             </div>
-            <p class="practice-lead">{t(p.lead)}</p>
-            <ul class="dots">
+            <p class="practice-lead">{t(p.card)}</p>
+            <p class="practice-result"><span>Результат</span>{t(p.result)}</p>
+          </div>
+          <div class="pr-list">
+            <p class="practice-label">Что входит</p>
+            <ul class="dots practice-items">
               {p.items.map((i) => <li>{t(i)}</li>)}
             </ul>
-            <a class="btn btn-soft" href={site.telegramUrl}>{p.cta}</a>
+            {p.items.length > 5 && <button type="button" class="pr-more" data-more>Ещё {p.items.length - 4} {plural(p.items.length - 4)}</button>}
           </div>
-          <div class="practice-widget" data-reveal style="--d: 120ms">
-            <PracticeWidget variant={widgetFor[p.id as keyof typeof widgetFor]} />
+          <div class="pr-cta">
+            <a class="btn btn-soft" href={tgLink(p.topic)}>{p.cta}</a>
+          </div>
+          <div class="pr-ex">
+            {p.id === 'models' && <MiniJCurve />}
+            {p.id === 'accounting' && <MiniThreads />}
+            {p.id === 'audit' && <MiniRegister />}
+            {p.id === 'advisory' && (
+              <div class="calc-links">
+                <p class="calc-links-head">Посчитайте сами на сайте</p>
+                <div class="calc-links-list">
+                  {calcLinks.map((l) => (
+                    <a href="#calc" data-open-calc={l.id}>
+                      <span class="cl-text">
+                        <b>{l.title}</b>
+                        <span class="cl-row"><em>Вводите</em>{t(l.inp)}</span>
+                        <span class="cl-row"><em>Получаете</em>{t(l.out)}</span>
+                      </span>
+                      <span class="cl-ex">
+                        <span class="cl-cap"><em>Пример</em>{t(l.cap)}</span>
+                        <span class="cl-kv">{l.kv.map(([k, v]) => <span><i>{t(k)}</i><strong>{v}</strong></span>)}</span>
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </article>
       ))}
-      <p class="caption practices-note">Интерфейсы показаны на демонстрационных данных</p>
+      </div>
+      <p class="practices-note">Цифры в примерах — демо-данные.</p>
     </div>
   </section>
 
-  <!-- Ключевые цифры -->
-  <section class="section section--dark" aria-labelledby="stats-title">
+  <!-- Калькуляторы вместо демо-виджетов: считают цифры самого посетителя -->
+  <section class="section" id="calc">
     <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Результаты</p>
-        <h2 id="stats-title">Цифры из наших систем учёта</h2>
-      </div>
-      <dl class="stats" data-reveal>
-        {stats.map((s) => (
-          <div class="stat">
-            <dt><span class="stat-value" data-count={s.value}>{s.value}</span> <span class="stat-unit">{s.unit}</span></dt>
-            <dd>{t(s.text)}</dd>
+      <Calculators />
+    </div>
+  </section>
+
+  <!-- Результаты за 2 года: три равные крупные цифры -->
+  <section class="section section--signal results" aria-labelledby="stats-title">
+    <div class="container">
+      <h2 id="stats-title" class="results-title" data-reveal>{results.title}</h2>
+      <dl class="results-grid" data-reveal>
+        {results.items.map((r) => (
+          <div>
+            <dt>{r.value}</dt>
+            <dd>{t(r.text)}</dd>
           </div>
         ))}
       </dl>
-    </div>
-  </section>
-
-  <!-- Движение денег -->
-  <section class="section section--white" id="accounting-system">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Система учёта</p>
-        <h2>{t(flow.title)}</h2>
-        <p>{t(flow.lead)}</p>
-      </div>
-      <div data-reveal><SankeyFlow /></div>
-    </div>
-  </section>
-
-  <!-- Контроль платежей -->
-  <section class="section section--alt" id="payments">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Система учёта</p>
-        <h2>{t(payment.title)}</h2>
-        <p>{t(payment.lead)}</p>
-      </div>
-      <div data-reveal>
-        <PaymentBoard columns={payment.columns.map((c) => ({ title: t(c.title), text: t(c.text) }))} />
-      </div>
-    </div>
-  </section>
-
-  <!-- Внедрение за 40 дней -->
-  <section class="section" id="rollout">
-    <div class="container">
-      <RolloutStory />
-    </div>
-  </section>
-
-  <!-- Экспертиза и география -->
-  <section class="section section--white" id="expertise">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">{expertise.title}</p>
-        <h2>Девелопмент, строительство, инвестиции и технологии</h2>
-      </div>
-      <div class="cols4 areas" data-reveal>
-        {expertise.areas.map((a, i) => (
-          <div class="col">
-            <span class="col-num">0{i + 1}</span>
-            <h3>{a.title}</h3>
-            <ul>
-              {a.items.map((item) => <li>{t(item)}</li>)}
-            </ul>
-          </div>
-        ))}
-      </div>
-      <div class="cols4 geo" data-reveal>
-        <div class="col">
-          <h3>{geography.title}</h3>
-          <p class="caption">{t(geography.note)}</p>
-        </div>
-        {geography.regions.map((r) => (
-          <div class="col">
-            <p class="geo-region">{r.title}</p>
-            <p class="geo-countries">{r.countries}</p>
-          </div>
-        ))}
-      </div>
     </div>
   </section>
 
@@ -207,18 +180,33 @@ const widgetFor = {
             <div class="case-visual" aria-hidden="true">
               <span class="case-tag">{c.tag}</span>
               {i === 0 && (
+                <div class="cv-card cv-gap">
+                  <!-- Схема без цифр: накопленный итог до и после настройки против лимита финансирования -->
+                  <svg viewBox="0 0 260 96">
+                    <line class="cv-lim" x1="4" x2="256" y1="62" y2="62"></line>
+                    <text class="cv-t" x="256" y="74" text-anchor="end">лимит</text>
+                    <path class="cv-before" d="M6,14 C40,18 64,82 104,82 C150,82 178,40 254,12"></path>
+                    <path class="cv-after" d="M6,14 C40,18 64,46 104,46 C150,46 178,24 254,12"></path>
+                    <text class="cv-t cv-t--ok" x="104" y="33" text-anchor="middle">после</text>
+                    <line class="cv-gapl" x1="104" x2="104" y1="50" y2="58"></line>
+                    <text class="cv-t" x="110" y="56">запас</text>
+                    <text class="cv-t cv-t--risk" x="104" y="96" text-anchor="middle">до: разрыв</text>
+                  </svg>
+                </div>
+              )}
+              {i === 1 && (
                 <div class="cv-card">
                   <p><span>Заявка № 63</span><b>1 080 000 IDR</b></p>
                   <p class="cv-dup"><span>Заявка № 75</span><b>1 080 000 IDR</b><em>дубль</em></p>
                 </div>
               )}
-              {i === 1 && (
+              {i === 2 && (
                 <div class="cv-card cv-bars">
                   <p><span>Норма</span><i style="--w:62%"></i></p>
                   <p class="cv-over"><span>Факт</span><i style="--w:88%"></i></p>
                 </div>
               )}
-              {i === 2 && (
+              {i === 3 && (
                 <div class="cv-card cv-irr">
                   <span>IRR</span><b>9,0%</b><span>→</span><b class="cv-risk">8,2%</b>
                 </div>
@@ -239,81 +227,45 @@ const widgetFor = {
     </div>
   </section>
 
-  <!-- Как работаем -->
-  <section class="section" id="approach">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Подход</p>
-        <h2>{approach.title}</h2>
-      </div>
-      <ol class="cols4 approach" data-reveal>
-        {approach.steps.map((s, i) => (
-          <li class="col">
-            <span class="approach-num">{i + 1}</span>
-            <h3>{s.title}</h3>
-            <p class="muted">{t(s.text)}</p>
+  <!-- Команда: компактная строка, фото и подпись (Евгений 02.11.2026) -->
+  <section class="section section--white team-sec" id="team">
+    <div class="container team">
+      <h2 data-reveal>{team.title}</h2>
+      <ul class="people" data-reveal style="--d: 120ms">
+        {team.people.map((m) => (
+          <li class="person">
+            {m.photo ? (
+              <img class="person-photo" src={m.photo} alt={m.name} width="120" height="120" />
+            ) : (
+              <span class="person-photo person-photo--empty" aria-hidden="true">{m.name.split(' ').map((w) => w[0]).join('')}</span>
+            )}
+            <p class="person-name">{m.name}</p>
+            <p class="person-role">{t(m.role)}</p>
           </li>
         ))}
-      </ol>
+      </ul>
     </div>
   </section>
 
-  <!-- Команда -->
-  <section class="section section--white" id="team">
-    <div class="container team">
-      <div data-reveal>
-        <p class="eyebrow">{team.title}</p>
-        <h2>Кто работает над проектом</h2>
-        <p class="muted team-lead">{t(team.lead)}</p>
-        <p class="founder">{t(team.founder)}</p>
-      </div>
-      <dl class="roles" data-reveal style="--d: 120ms">
-        {team.roles.map((r) => (
-          <div class="ui-card">
-            <dt>{r.title}</dt>
-            <dd>{t(r.text)}</dd>
-          </div>
-        ))}
-      </dl>
-    </div>
-  </section>
-
-  <!-- Продукт: бот -->
-  <section class="section section--dark" id="bot">
-    <div class="container bot">
-      <div class="bot-visual" data-reveal>
-        <BotMessage />
-      </div>
-      <div data-reveal style="--d: 120ms">
-        <p class="eyebrow">Продукт · {bot.badge}</p>
-        <h2>{bot.title}</h2>
-        <p class="bot-lead">{t(bot.lead)}</p>
-        <ul class="dots bot-list">
-          {bot.items.map((i) => <li>{t(i)}</li>)}
-        </ul>
-        <p class="tagline">{t(bot.tagline)}</p>
-        <div class="btn-row">
-          <a class="btn btn-light" href={site.botUrl}>{bot.cta}</a>
-          <a class="btn btn-ghost-light" href={site.telegramUrl}>Задать вопрос</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
+  <!-- Вопросы: список слева, ответ справа. Ничего не раскрывается и не сдвигается (Евгений 02.11.2026).
+       На телефоне ответ показывается под вопросом -->
   <section class="section" id="faq">
-    <div class="container faq-wrap">
-      <div data-reveal>
-        <p class="eyebrow">Вопросы</p>
+    <div class="container faq-wrap" data-faq>
+      <div class="faq-side">
         <h2>Частые вопросы</h2>
+        <div class="faq-list" role="tablist" aria-orientation="vertical" aria-label="Частые вопросы">
+          {faq.map((f, i) => (
+            <button type="button" role="tab" id={`faq-q-${i}`} aria-controls={`faq-a-${i}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-faq-q={i}>{t(f.q)}</button>
+          ))}
+        </div>
         <p class="muted faq-more">Не нашли ответ? <a href={site.telegramUrl}>Напишите в Telegram</a></p>
       </div>
-      <div class="faq" data-reveal style="--d: 120ms">
-        {faq.map((f) => (
-          <details class="ui-card">
-            <summary>{t(f.q)}</summary>
-            <p class="muted">{t(f.a)}</p>
-          </details>
+      <div class="faq-answers">
+        {faq.map((f, i) => (
+          <div class="faq-answer" role="tabpanel" id={`faq-a-${i}`} aria-labelledby={`faq-q-${i}`} data-faq-a={i} hidden={i !== 0}>
+            <p class="faq-answer-q">{t(f.q)}</p>
+            <p>{t(f.a)}</p>
+          </div>
         ))}
       </div>
     </div>
@@ -321,10 +273,12 @@ const widgetFor = {
 
   <!-- Финальный блок -->
   <section class="section section--dark final" id="contact">
+    <FinalThreads />
     <div class="container final-inner" data-reveal>
       <p class="eyebrow">Контакты</p>
       <h2>{finalCta.title}</h2>
       <p class="final-text">{t(finalCta.text)}</p>
+      <p class="final-sub">{t(finalCta.itemsTitle)}</p>
       <ul class="final-list">
         {finalCta.items.map((i, k) => <li><b>{k + 1}</b>{t(i)}</li>)}
       </ul>
@@ -337,6 +291,52 @@ const widgetFor = {
 </Base>
 
 <script>
+  // «Что входит» на телефоне: 4 пункта и кнопка «Ещё N пунктов». На десктопе CSS кнопку не показывает
+  document.querySelectorAll<HTMLElement>('.practice').forEach((card) => {
+    const more = card.querySelector<HTMLButtonElement>('[data-more]');
+    if (!more) return;
+    card.classList.add('is-clamped');
+    more.addEventListener('click', () => {
+      card.classList.remove('is-clamped');
+      card.querySelector<HTMLElement>('.practice-items li:nth-child(5)')?.setAttribute('tabindex', '-1');
+      card.querySelector<HTMLElement>('.practice-items li:nth-child(5)')?.focus({ preventScroll: true });
+    });
+  });
+
+  // Вопросы: клик по вопросу показывает ответ справа. На узком экране ответ встаёт под вопросом.
+  document.querySelectorAll<HTMLElement>('[data-faq]').forEach((root) => {
+    const qs = [...root.querySelectorAll<HTMLButtonElement>('[data-faq-q]')];
+    const as = [...root.querySelectorAll<HTMLElement>('[data-faq-a]')];
+    const box = root.querySelector<HTMLElement>('.faq-answers')!;
+    const narrow = window.matchMedia('(max-width: 899px)');
+    let cur = 0;
+    const place = () => {
+      if (narrow.matches) qs[cur].after(as[cur]);
+      else as.forEach((a) => box.append(a));
+    };
+    const show = (i: number) => {
+      cur = i;
+      qs.forEach((q, k) => {
+        q.setAttribute('aria-selected', String(k === i));
+        q.tabIndex = k === i ? 0 : -1;
+      });
+      as.forEach((a, k) => { a.hidden = k !== i; });
+      place();
+    };
+    qs.forEach((q, i) => {
+      q.addEventListener('click', () => show(i));
+      q.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+        e.preventDefault();
+        const n = (i + (e.key === 'ArrowDown' ? 1 : qs.length - 1)) % qs.length;
+        qs[n].focus();
+        show(n);
+      });
+    });
+    narrow.addEventListener('change', place);
+    place();
+  });
+
   // Счётчики в полосе цифр: от нуля до значения, один раз
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const nums = document.querySelectorAll<HTMLElement>('[data-count]');
@@ -374,102 +374,159 @@ const widgetFor = {
 </script>
 
 <style>
-  /* Первый экран */
-  .hero { padding: var(--s6) 0; background-color: var(--bg); }
-  .hero h1 { max-width: 17em; font-size: clamp(32px, 4.6vw, 58px); }
-  .h1-accent { color: var(--accent); }
-  .hero-lead { margin-top: var(--s3); max-width: 34em; color: var(--ink-2); font-size: 1.1em; }
+  /* Первый экран. Цифры справа: их линии стоят на высоте заглавных первой строки, кнопки по базовой линии последней.
+     Смещения считаны с метрик Inter Tight при межстрочном 1,06: от края строки до верха заглавных и до базовой линии около 0,17 кегля */
+  .hero { padding: var(--s5) 0 var(--s6); background-color: var(--bg); }
+  .hero-top { --hfs: clamp(30px, 3.6vw, 60px); display: grid; gap: var(--s4); }
+  .hero h1 { font-size: var(--hfs); line-height: 1.06; max-width: 16em; text-wrap: balance; }
+  .hero-aud { color: var(--ink-3); }
+  .hero-side { display: grid; gap: var(--s4); }
+  @media (min-width: 1200px) {
+    .hero-top { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); column-gap: var(--s6); align-items: stretch; }
+    .h1-l { display: block; }
+    .hero-side { display: flex; flex-direction: column; justify-content: space-between; padding: calc(var(--hfs) * 0.166) 0 calc(var(--hfs) * 0.167); }
+  }
+  /* Крупные цифры, как в презентации. Линии в цветах нитей */
+  .hero-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); margin: 0; }
+  .hero-stats div { padding-top: 14px; border-top: 3px solid var(--th-1); }
+  .hero-stats div:nth-child(2) { border-top-color: var(--th-2); }
+  .hero-stats div:nth-child(3) { border-top-color: var(--th-3); }
+  .hero-stats dt { font-family: var(--font-display); font-size: clamp(26px, 2.5vw, 40px); font-weight: 600; line-height: 1.05; letter-spacing: -0.03em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .hero-stats dd { margin: 8px 0 0; font-size: 14px; line-height: 1.35; color: var(--ink-2); }
+  @media (max-width: 520px) {
+    .hero-stats { grid-template-columns: 1fr; gap: 0; }
+    .hero-stats div { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: var(--s2); align-items: baseline; padding: 10px 0; border-top-width: 2px; }
+    .hero-stats dd { margin: 0; }
+  }
 
   .services {
     list-style: none;
     padding: 0;
     margin-top: var(--s5);
     display: grid;
-    gap: var(--s2);
+    border-top: 1px solid var(--line);
   }
   @media (min-width: 640px) { .services { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1100px) { .services { grid-template-columns: repeat(4, 1fr); } }
-  .services li { display: flex; }
+  .services li { display: flex; border-bottom: 1px solid var(--line); }
+  @media (min-width: 640px) { .services li:nth-child(odd) { border-right: 1px solid var(--line); } }
+  @media (min-width: 1100px) {
+    .services li { border-bottom: 0; }
+    .services li:not(:last-child) { border-right: 1px solid var(--line); }
+  }
   .service {
     display: flex;
     flex-direction: column;
     gap: 10px;
     width: 100%;
-    padding: var(--s3);
+    padding: var(--s3) var(--s3) var(--s3) 0;
     color: var(--ink);
     text-decoration: none;
-    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
   }
-  .service:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .service-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-  .service-num { font-size: 15px; font-weight: 700; color: var(--gold-ink); }
-  .service-top svg { width: 22px; height: 22px; color: var(--accent); }
-  .service-title { font-size: 20px; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; }
+  @media (min-width: 640px) { .services li:nth-child(even) .service { padding-left: var(--s3); } }
+  @media (min-width: 1100px) { .services li:not(:first-child) .service { padding-left: var(--s3); } }
+  .service:hover .service-title { color: var(--accent); }
+  .service:hover .service-more { text-decoration: underline; }
+  .service-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; color: var(--accent); }
+  .service-top :global(.s-icon) { width: 36px; height: 36px; }
+  .service-num { font-size: 14px; color: var(--ink-3); }
+  .service-title { font-family: var(--font-display); font-size: 21px; font-weight: 600; line-height: 1.2; letter-spacing: -0.02em; transition: color .2s ease; }
   .service-lead { color: var(--ink-2); font-size: 15px; line-height: 1.45; }
   .service-more { margin-top: auto; padding-top: var(--s1); color: var(--accent); font-size: 15px; font-weight: 600; }
-  .service-more::after { content: ' →'; }
+  .service-more::after { content: ' ↓'; }
 
-  .hero-btns { margin-top: var(--s4); }
-
-  .facts {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--s3);
-    margin-top: var(--s5);
-    padding-top: var(--s4);
-    border-top: 1px solid var(--line);
-  }
-  @media (min-width: 720px) { .facts { grid-template-columns: repeat(4, 1fr); } }
-  .facts dt { font-size: clamp(26px, 2.6vw, 34px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--accent); }
-  .facts dd { margin-top: 4px; max-width: 17em; color: var(--ink-2); font-size: 15px; line-height: 1.4; }
-
-  /* Направления */
+  /* Услуги: карточка из четырёх областей — main (название, что это, результат), list (что входит), cta (кнопка), ex (пример).
+     На широком экране main и list рядом, кнопка по низу списка, пример во всю ширину карточки. На телефоне всё столбиком */
+  .practices { padding-top: var(--s5); }
   .practice {
     display: grid;
-    gap: var(--s5);
-    padding: var(--s6) 0;
-    border-top: 1px solid var(--line);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'main' 'list' 'cta' 'ex';
+    gap: var(--s3);
+    margin-bottom: var(--s3);
+    padding: var(--s4);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+    scroll-margin-top: 96px;
   }
-  .practice:first-of-type { border-top: 0; padding-top: 0; }
+  .practice:last-child { margin-bottom: 0; }
+  .practices-note { margin-top: var(--s2); font-size: 13px; color: var(--ink-3); }
+  @media (max-width: 600px) { .practice { padding: var(--s3) 18px; } }
+  .pr-main { grid-area: main; }
+  .pr-list { grid-area: list; }
+  .pr-cta { grid-area: cta; align-self: end; }
+  .pr-ex { grid-area: ex; container-type: inline-size; display: grid; min-width: 0; }
+  /* Номер мелко слева в строке названия (Евгений 02.11.2026): карточка ниже, название выше */
+  .pr-title { display: flex; align-items: baseline; gap: 14px; }
+  .practice-num { flex: none; font-size: 14px; font-weight: 500; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .practice h2 { font-size: clamp(24px, 2.2vw, 32px); line-height: 1.15; letter-spacing: -0.02em; }
+  .practice-lead { margin-top: var(--s2); font-size: 18px; line-height: 1.45; color: var(--ink); max-width: 30em; }
+  .practice-result { margin-top: var(--s2); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: 16px; line-height: 1.45; color: var(--ink-2); max-width: 32em; }
+  .practice-result span { display: block; margin-bottom: 4px; font-size: 13px; font-weight: 600; color: var(--ink-3); }
+  .practice-label { font-size: 13px; font-weight: 600; color: var(--ink-3); margin-bottom: 12px; }
+  /* «Что входит» мельче лида: это справка, а не главный текст (Евгений 02.11.2026) */
+  .practice-items { gap: 8px; font-size: 15px; line-height: 1.45; color: var(--ink-2); }
+  .practice-items li { padding-left: 22px; }
+  /* Телефон и планшет: карточка в одну колонку, длинный список уводит пример на второй экран.
+     Показываем 4 пункта, остальные по кнопке. Без JS класса is-clamped нет и список виден целиком */
+  .pr-more { display: none; margin-top: 10px; padding: 4px 0 4px 22px; border: 0; background: none; font: 600 15px var(--font); color: var(--accent); cursor: pointer; }
+  .pr-more::after { content: ' ↓'; }
+  @media (max-width: 1023px) {
+    .practice.is-clamped .practice-items li:nth-child(n+5) { display: none; }
+    .practice.is-clamped .pr-more { display: inline-block; }
+  }
+  /* Шрифты в примерах сведены к шкале: 12 подписи, 13 текст, 18 цифры (в широкой карточке 20) */
+
   @media (min-width: 1024px) {
-    .practice { grid-template-columns: 1fr 1fr; column-gap: 112px; align-items: start; padding: var(--s7) 0; }
+    /* Все карточки одной высоты (Евгений 02.11.2026: эталон — финансовое планирование). Лишнюю высоту забирает пример */
+    .practices-list { display: grid; grid-auto-rows: 1fr; gap: var(--s3); }
+    .practice { margin-bottom: 0; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); grid-template-rows: auto auto 1fr; grid-template-areas: 'main list' 'cta list' 'ex ex'; column-gap: var(--s5); row-gap: var(--s4); }
+    .pr-list { padding-left: var(--s5); border-left: 1px solid var(--line); }
+    .practice-items { display: block; columns: 2; column-gap: var(--s5); }
+    .practice-items li { break-inside: avoid; margin-bottom: 8px; }
+    .pr-ex { margin-top: var(--s1); }
   }
-  .practice-head { border-left: 2px solid var(--gold); padding-left: var(--s3); margin-left: -1px; }
-  .practice-head .eyebrow { margin-bottom: var(--s1); }
-  .practice-lead { margin: var(--s3) 0; color: var(--ink-2); }
-  .practice .dots { margin-bottom: var(--s4); }
-  .practices-note { margin-top: var(--s2); }
 
-  /* Цифры */
-  .stats { display: grid; gap: var(--s4) 0; }
-  @media (min-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .stats { grid-template-columns: repeat(4, 1fr); } }
-  .stat { padding: 0 var(--s3) 0 0; }
-  @media (min-width: 720px) { .stat:not(:first-child) { padding-left: var(--s3); } }
-  @media (min-width: 720px) and (max-width: 1023px) { .stat:nth-child(3) { padding-left: 0; } }
-  .stat-value { font-size: clamp(40px, 4.4vw, 60px); font-weight: 700; letter-spacing: -0.03em; color: var(--gold-on-deep); line-height: 1; }
-  .stat-unit { display: block; margin-top: var(--s1); font-size: 18px; font-weight: 600; color: var(--on-deep); }
-  .stat dd { margin-top: 6px; color: var(--on-deep-2); font-size: 15px; max-width: 18em; }
+  /* Ссылки на калькуляторы у инвестанализа: в узкой колонке списком, в широкой в ряд */
+  .calc-links { display: flex; flex-direction: column; border-radius: 8px; background: var(--bg); overflow: hidden; }
+  .calc-links-head { padding: 16px 18px 10px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .calc-links-list { display: grid; flex: 1; grid-auto-rows: 1fr; }
+  .calc-links a { display: grid; gap: 14px; padding: 14px 18px 18px; border-top: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+  .calc-links a:hover { background: color-mix(in srgb, var(--accent) 6%, var(--bg)); }
+  .calc-links a b { color: var(--accent); font-weight: 600; font-size: 16px; }
+  .calc-links a b::after { content: ' →'; }
+  .cl-text { display: grid; align-content: start; }
+  .cl-row, .cl-cap { display: block; font-size: 13px; line-height: 1.4; color: var(--ink-2); }
+  .cl-row em, .cl-cap em { display: block; margin-top: 8px; font-style: normal; font-size: 12px; color: var(--ink-3); }
+  .cl-cap em { margin-top: 0; }
+  /* Пример расчёта на значениях калькулятора: чтобы было видно, какой ответ получит человек */
+  .cl-ex { display: grid; align-content: start; gap: 12px; padding: 14px 16px; border-radius: 8px; background: var(--surface); }
+  .cl-kv { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+  .cl-kv > span { display: grid; gap: 2px; }
+  .cl-kv i { font-style: normal; font-size: 12px; color: var(--ink-3); }
+  .cl-kv strong { font-size: 18px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  @container (min-width: 1000px) {
+    .calc-links-list { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; }
+    .calc-links a { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 20px; align-items: stretch; padding: 18px 20px 20px; }
+    .calc-links a + a { border-left: 1px solid var(--line); }
+    .cl-ex { align-content: space-between; padding: 16px 18px; }
+    .cl-kv strong { font-size: 20px; }
+  }
 
-  /* Четыре колонки */
-  .cols4 { display: grid; gap: var(--s4) 0; list-style: none; padding: 0; }
-  @media (min-width: 720px) { .cols4 { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .cols4 { grid-template-columns: repeat(4, 1fr); } }
-  .col { padding-right: var(--s3); }
-  @media (min-width: 1024px) { .col:not(:first-child) { padding-left: var(--s3); } }
-  @media (min-width: 720px) and (max-width: 1023px) { .col:nth-child(even) { padding-left: var(--s3); } }
-
-  .col-num { display: block; margin-bottom: var(--s2); font-size: 14px; font-weight: 700; color: var(--gold-ink); }
-  .areas h3 { margin-bottom: var(--s2); font-size: 22px; }
-  .areas ul { list-style: none; padding: 0; display: grid; gap: 8px; color: var(--ink-2); font-size: 16px; }
-  .geo { margin-top: var(--s6); padding-top: var(--s4); border-top: 1px solid var(--line); }
-  .geo h3 { font-size: 22px; margin-bottom: var(--s1); }
-  .geo-region { font-size: 14px; color: var(--ink-3); }
-  .geo-countries { margin-top: 2px; font-size: 20px; font-weight: 700; }
+  /* Результаты за 2 года: три равные цифры */
+  .results { padding: var(--s6) 0; }
+  .results-title { font-size: clamp(24px, 2.2vw, 32px); letter-spacing: -0.02em; margin-bottom: var(--s4); }
+  .results-grid { display: grid; gap: var(--s3); margin: 0; }
+  @media (min-width: 760px) { .results-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5); } }
+  .results-grid div { padding-top: 14px; border-top: 2px solid color-mix(in srgb, var(--ink) 70%, transparent); }
+  .results-grid dt { font-family: var(--font-display); font-size: clamp(40px, 4.4vw, 64px); font-weight: 600; line-height: 1; letter-spacing: -0.04em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .results-grid dd { margin: 12px 0 0; font-size: 16px; line-height: 1.45; max-width: 22em; }
 
   /* Кейсы */
   .cases { display: grid; gap: var(--s3); }
-  @media (min-width: 900px) { .cases { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 760px) { .cases { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1400px) { .cases { grid-template-columns: repeat(4, 1fr); } }
   .case { display: flex; flex-direction: column; padding: 8px; }
   .case-visual {
     position: relative;
@@ -486,11 +543,23 @@ const widgetFor = {
   .cv-card { width: 100%; max-width: 280px; padding: 12px 14px; border-radius: 8px; background: var(--surface); font-size: 13px; display: grid; gap: 8px; }
   .cv-card p { display: flex; align-items: center; justify-content: space-between; gap: 8px; max-width: none; }
   .cv-card span { color: var(--ink-3); }
+  .cv-card p span, .cv-card p b { white-space: nowrap; }
+  @media (min-width: 1400px) { .cv-card { font-size: 12.5px; padding: 12px; } }
   .cv-dup { padding: 4px 6px; margin: 0 -6px; border-radius: 6px; background: var(--risk-soft); }
   .cv-dup em { font-style: normal; font-weight: 700; color: var(--risk); }
   .cv-bars p { display: grid; grid-template-columns: 52px 1fr; }
   .cv-bars i { display: block; height: 10px; width: var(--w); border-radius: 5px; background: var(--accent-2); }
   .cv-over i { background: var(--risk); }
+  .cv-gap { max-width: 320px; }
+  .cv-gap svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .cv-lim { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 3 3; }
+  .cv-before, .cv-after { fill: none; stroke-width: 2.2; stroke-linecap: round; }
+  .cv-before { stroke: var(--risk); }
+  .cv-after { stroke: var(--c-pos-strong); }
+  .cv-gapl { stroke: var(--ink-2); stroke-width: 1; }
+  .cv-t { font: 400 14px var(--font); fill: var(--ink-3); }
+  .cv-t--risk { font-weight: 600; fill: var(--risk); }
+  .cv-t--ok { font-weight: 600; fill: var(--c-pos-strong); }
   .cv-irr { display: flex; align-items: baseline; justify-content: center; gap: 10px; font-size: 15px; }
   .cv-irr b { font-size: 30px; letter-spacing: -0.02em; }
   .cv-risk { color: var(--risk); }
@@ -500,68 +569,64 @@ const widgetFor = {
   .case-dl dt { color: var(--ink-3); font-size: 13px; margin-top: var(--s1); }
   .case-result { font-weight: 700; color: var(--accent); }
 
-  /* Подход */
-  .approach .col { position: relative; }
-  .approach-num {
-    display: grid;
-    place-items: center;
-    width: 36px;
-    height: 36px;
-    margin-bottom: var(--s3);
-    border-radius: 50%;
-    background: var(--accent);
-    color: #fff;
-    font-weight: 700;
-    font-size: 15px;
-    box-shadow: 0 0 0 6px var(--accent-soft);
+  /* Команда: заголовок слева, люди в строку справа */
+  .team-sec { padding-block: var(--s6); }
+  .team { display: grid; gap: var(--s4); align-items: start; }
+  @media (min-width: 1024px) { .team { grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr); column-gap: var(--s5); } }
+  .people { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); margin: 0; padding: 0; list-style: none; }
+  .person-photo { display: block; width: 100%; max-width: 168px; aspect-ratio: 1; border-radius: 12px; object-fit: cover; }
+  .person-photo--empty { display: grid; place-items: center; background: var(--track); color: var(--ink-3); font-family: var(--font-display); font-size: clamp(24px, 3vw, 40px); font-weight: 600; letter-spacing: -0.02em; }
+  .person-name { margin-top: 14px; font-weight: 600; font-size: 17px; line-height: 1.3; }
+  .person-role { margin-top: 4px; color: var(--ink-2); font-size: 15px; line-height: 1.4; }
+  @media (max-width: 520px) {
+    .people { gap: var(--s2); }
+    .person-name { font-size: 15px; }
+    .person-role { font-size: 13px; }
   }
-  .approach h3 { font-size: 21px; }
-  .approach p { margin-top: 6px; font-size: 16px; }
 
-  /* Команда */
-  .team { display: grid; gap: var(--s5); }
-  @media (min-width: 1024px) { .team { grid-template-columns: 1fr 1fr; column-gap: 112px; } }
-  .team-lead { margin-top: var(--s3); }
-  .founder { margin-top: var(--s3); padding-left: var(--s3); border-left: 2px solid var(--gold); font-size: 17px; }
-  .roles { display: grid; gap: var(--s2); }
-  @media (min-width: 640px) { .roles { grid-template-columns: 1fr 1fr; } }
-  .roles > div { padding: var(--s3); }
-  .roles dt { font-weight: 700; font-size: 18px; }
-  .roles dd { margin-top: 6px; color: var(--ink-2); font-size: 15px; }
-
-  /* Бот */
-  .bot { display: grid; gap: var(--s5); align-items: center; }
-  @media (min-width: 1024px) { .bot { grid-template-columns: 1fr 1fr; column-gap: 112px; } }
-  .bot-visual { display: grid; justify-items: center; }
-  .bot-visual :global(.chat) { width: 100%; }
-  .bot-visual :global(figcaption) { color: var(--on-deep-2); }
-  .bot-lead { margin-top: var(--s3); color: var(--on-deep-2); }
-  .bot-list { margin: var(--s3) 0; }
-  .tagline { margin-bottom: var(--s4); font-weight: 700; font-size: 20px; color: var(--gold-on-deep); }
-
-  /* FAQ */
-  .faq-wrap { display: grid; gap: var(--s5); }
-  @media (min-width: 1024px) { .faq-wrap { grid-template-columns: 1fr 1fr; column-gap: 112px; } }
-  .faq-more { margin-top: var(--s3); }
-  .faq { display: grid; gap: 10px; }
-  .faq details { padding: 18px 22px; box-shadow: none; }
-  .faq summary {
-    cursor: pointer;
-    font-weight: 600;
-    list-style: none;
+  /* Вопросы: список слева, ответ справа */
+  .faq-wrap { display: grid; gap: var(--s4); }
+  @media (min-width: 900px) { .faq-wrap { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); column-gap: var(--s6); align-items: start; } }
+  .faq-list { display: grid; margin-top: var(--s3); border-top: 1px solid var(--line); }
+  .faq-list button {
     display: flex;
     justify-content: space-between;
     gap: var(--s2);
+    padding: 14px 0;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: none;
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 17px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
   }
-  .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after { content: '+'; color: var(--gold-ink); font-weight: 600; font-size: 22px; line-height: 1; }
-  .faq details[open] summary::after { content: '−'; }
-  .faq details p { margin-top: var(--s1); font-size: 16px; }
+  .faq-list button::after { content: '→'; color: var(--ink-3); transition: transform .2s ease; }
+  .faq-list button:hover { color: var(--ink); }
+  .faq-list button[aria-selected='true'] { color: var(--ink); font-weight: 600; }
+  .faq-list button[aria-selected='true']::after { color: var(--accent); }
+  .faq-list button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .faq-more { margin-top: var(--s3); }
+  .faq-answer { padding: var(--s4); border-radius: 10px; background: var(--surface); border: 1px solid var(--line); }
+  .faq-answer[hidden] { display: none; }
+  .faq-answer-q { font-family: var(--font-display); font-size: 22px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; margin-bottom: var(--s2); }
+  .faq-answer p:last-child { font-size: 17px; line-height: 1.6; color: var(--ink-2); }
+  @media (min-width: 900px) { .faq-answers { position: sticky; top: 96px; } }
+  /* На телефоне ответ встаёт под выбранный вопрос (скрипт переносит его в список) */
+  @media (max-width: 899px) {
+    .faq-list .faq-answer { margin: 4px 0 12px; padding: var(--s3); }
+    .faq-list .faq-answer-q { display: none; }
+    .faq-answers:empty { display: none; }
+  }
 
-  /* Финальный блок */
-  .final-inner { text-align: center; display: grid; justify-items: center; }
-  .final-text { margin-top: var(--s3); color: var(--on-deep-2); }
-  .final-list { list-style: none; padding: 0; margin: var(--s4) 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  /* Финальный блок: фирменные нити сходятся в узел за кнопками (FinalThreads) */
+  .final { position: relative; overflow: hidden; }
+  .final-inner { position: relative; text-align: center; display: grid; justify-items: center; }
+  .final-text { margin-top: var(--s3); max-width: 34em; color: var(--on-deep-2); }
+  .final-sub { margin-top: var(--s4); font-size: 15px; color: var(--on-deep-2); }
+  .final-list { list-style: none; padding: 0; margin: var(--s2) 0 var(--s4); display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
   .final-list li {
     display: inline-flex;
     align-items: center;

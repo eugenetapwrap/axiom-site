@@ -1,9 +1,34 @@
 ---
-// Внедрение учёта за 40 дней: заголовок слева «прилипает», шаги справа идут при прокрутке.
+// Внедрение учёта за 30 дней: заголовок слева «прилипает», шаги справа идут при прокрутке.
 // Номера шагов стоят на линии между колонками.
 import { rollout } from '../data/home';
 import { site } from '../data/site';
 import { t } from '../lib/typo';
+
+// Плитка «Остаток за месяц»: схематичный водопад без подписей.
+// Остаток на начало, поступления, четыре группы расходов, остаток на конец (условные единицы).
+const steps = [
+  { kind: 'total', v: 30 },
+  { kind: 'in', v: 45 },
+  { kind: 'out', v: -16 },
+  { kind: 'out', v: -11 },
+  { kind: 'out', v: -6 },
+  { kind: 'out', v: -3 },
+];
+const Y = (v: number) => 66 - v * 0.8;
+let run = 0;
+const WF = [...steps, { kind: 'total', v: 0 }].map((st, k) => {
+  const x = 6 + k * 42;
+  if (st.kind === 'total') {
+    const v = k === 0 ? st.v : run;
+    run = v;
+    return { kind: 'total', x, y: Y(v), h: v * 0.8, level: Y(v) };
+  }
+  const from = run;
+  run += st.v;
+  const hi = Math.max(from, run);
+  return { kind: st.kind, x, y: Y(hi), h: Math.abs(st.v) * 0.8, level: Y(run) };
+});
 ---
 
 <div class="story">
@@ -62,10 +87,37 @@ import { t } from '../lib/typo';
           )}
           {i === 4 && (
             <div class="sv-dash">
-              <svg viewBox="0 0 240 70" preserveAspectRatio="none">
-                <path d="M0 58 L30 52 L60 54 L90 40 L120 42 L150 30 L180 26 L210 18 L240 12" fill="none" stroke="var(--accent-2)" stroke-width="2.5" pathLength="1" class="sv-line" />
-                <path d="M0 58 L30 52 L60 54 L90 40 L120 42 L150 30 L180 26 L210 18 L240 12 L240 70 L0 70Z" fill="var(--accent-soft)" opacity=".7" />
-              </svg>
+              <div class="sv-tile">
+                <span class="sv-tile-t">Денежный поток</span>
+                <svg viewBox="0 0 160 70" aria-hidden="true">
+                  {[22, 30, 26, 38, 44, 40, 52, 58].map((h, k) => (
+                    <rect class="sv-bar" x={6 + k * 19} y={66 - h} width="10" height={h} rx="1.5" style={`--d:${k * 70}ms`}></rect>
+                  ))}
+                  <path class="sv-line" d="M11 50 C20 47 26 44 30 43 S44 46 49 42 S62 32 68 30 S80 31 87 29 S100 20 106 18 S120 14 125 12 S140 6 144 5" pathLength="1"></path>
+                </svg>
+              </div>
+              <div class="sv-tile">
+                <span class="sv-tile-t">Расходы по статьям</span>
+                <svg viewBox="0 0 70 70" aria-hidden="true" class="sv-donut">
+                  {[[36, 'var(--th-1)'], [20, 'var(--th-2)'], [12, 'var(--th-3)'], [10, 'var(--th-4)'], [9, 'var(--th-5)'], [8, 'var(--th-7)'], [5, 'var(--th-8)']].reduce((acc, [v, c]) => {
+                    const off = acc.sum;
+                    acc.items.push(<circle cx="35" cy="35" r="24" pathLength="100" stroke={String(c)} style={`--a:${Number(v) - 1.2};--o:${-off}`}></circle>);
+                    acc.sum += Number(v);
+                    return acc;
+                  }, { sum: 0, items: [] as any[] }).items}
+                </svg>
+              </div>
+              <div class="sv-tile sv-tile--wide">
+                <span class="sv-tile-t">Остаток за месяц</span>
+                <svg viewBox="0 0 300 70" preserveAspectRatio="none" aria-hidden="true" class="sv-wf">
+                  {WF.map((b, k) => (
+                    <>
+                      <rect class={`sv-wf-bar sv-wf-bar--${b.kind}`} x={b.x} y={b.y} width="30" height={b.h} rx="1.5" style={`--d:${k * 110}ms`}></rect>
+                      {k < WF.length - 1 && <line class="sv-wf-link" x1={b.x + 30} x2={b.x + 42} y1={b.level} y2={b.level} style={`--d:${k * 110 + 80}ms`}></line>}
+                    </>
+                  ))}
+                </svg>
+              </div>
               <span class="sv-meet">Встреча раз в неделю</span>
             </div>
           )}
@@ -99,7 +151,7 @@ import { t } from '../lib/typo';
   .story-index { display: none; }
   .story-aside .btn { margin-top: var(--s4); }
 
-  .story-steps { list-style: none; padding: 0; display: grid; gap: var(--s4); }
+  .story-steps { list-style: none; padding: 0; display: grid; gap: var(--s2); }
   .story-step { position: relative; display: grid; gap: 8px; padding: var(--s3); }
   .story-step h3 { font-size: 20px; }
   .story-step p { font-size: 16px; }
@@ -109,48 +161,68 @@ import { t } from '../lib/typo';
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: var(--accent);
-    color: #fff;
-    font-weight: 700;
-    font-size: 15px;
-    box-shadow: 0 0 0 6px var(--accent-soft);
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--ink-2);
+    font-weight: 500;
+    font-size: 14px;
   }
   .story-visual { margin-top: var(--s2); padding: var(--s2); border-radius: 8px; background: var(--bg); font-size: 14px; }
 
   .sv-docs { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
   .sv-docs li { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); }
   .sv-docs li::before { content: ''; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--line); flex: none; }
-  .sv-docs li.ok::before { content: '✓'; border: 0; background: var(--growth); color: #fff; font-size: 9px; font-weight: 800; text-align: center; line-height: 14px; }
+  .sv-docs li.ok::before { content: '✓'; border: 0; background: var(--growth); color: var(--surface); font-size: 9px; font-weight: 800; text-align: center; line-height: 14px; }
 
   .sv-tree { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
   .sv-tree div { display: grid; gap: 4px; align-content: start; }
-  .sv-tree b { padding: 6px 8px; border-radius: 6px; background: var(--accent); color: #fff; font-size: 13px; }
+  .sv-tree b { padding: 6px 8px; border-radius: 6px; background: var(--btn-bg); color: var(--btn-ink); font-size: 13px; }
   .sv-tree span { position: relative; margin-left: 12px; padding: 4px 8px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-size: 13px; }
   .sv-tree span::before { content: ''; position: absolute; left: -9px; top: 50%; width: 8px; height: 1px; background: var(--line); }
 
   .sv-route { list-style: none; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
   .sv-route li { padding: 6px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-weight: 600; font-size: 13px; }
   .sv-route li + li::before { content: '→'; margin: 0 8px 0 -2px; color: var(--ink-3); font-weight: 400; }
-  .sv-route li:last-child { background: var(--growth-soft); border-color: #cfe2da; color: var(--growth); }
+  .sv-route li:last-child { background: var(--growth-soft); border-color: color-mix(in srgb, var(--growth) 22%, var(--growth-soft)); color: var(--growth); }
 
   .sv-pf { display: grid; gap: 8px; }
   .sv-pf > div { display: grid; grid-template-columns: 76px 1fr; gap: 10px; align-items: center; }
   .sv-pf-bars { display: grid; gap: 3px; }
   .sv-pf-bars i { display: block; height: 7px; border-radius: 4px; width: 0; transition: width 1s cubic-bezier(.2, .8, .2, 1); }
-  .sv-pf-bars .plan { background: #dcd8cc; }
+  .sv-pf-bars .plan { background: var(--line); }
   .sv-pf-bars .fact { background: var(--accent-2); }
   .sv-pf-bars .fact.over { background: var(--risk); }
   .is-seen .sv-pf-bars i { width: var(--w); }
 
-  .sv-dash { position: relative; }
-  .sv-dash svg { width: 100%; height: 80px; }
-  .sv-line { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s ease; }
+  /* Мини-дашборд: поток, структура расходов и водопад остатка */
+  .sv-dash { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 8px; }
+  .sv-tile { display: grid; gap: 6px; align-content: start; padding: 10px 12px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
+  .sv-tile--wide { grid-column: 1 / -1; }
+  .sv-tile-t { font-size: 12px; font-weight: 600; color: var(--ink-3); }
+  .sv-tile svg { display: block; width: 100%; height: 70px; }
+  .sv-bar { fill: var(--accent-2); opacity: .22; transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); transition: transform .7s cubic-bezier(.2, .8, .2, 1) var(--d); }
+  .is-seen .sv-bar { transform: none; }
+  .sv-line { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s ease .3s; }
   .is-seen .sv-line { stroke-dashoffset: 0; }
-  .sv-meet { position: absolute; top: 0; left: 0; padding: 2px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 12px; font-weight: 600; }
+  .sv-donut { justify-self: center; transform: rotate(-90deg); }
+  .sv-donut circle { fill: none; stroke-width: 9; stroke-dasharray: 0 100; stroke-dashoffset: var(--o); transition: stroke-dasharray 1.2s cubic-bezier(.2, .8, .2, 1); }
+  .is-seen .sv-donut circle { stroke-dasharray: var(--a) calc(100 - var(--a)); }
+  .sv-wf-bar { transform-box: fill-box; transform: scaleY(0); transition: transform .6s cubic-bezier(.2, .8, .2, 1) var(--d); }
+  .sv-wf-bar--total { fill: var(--th-1); opacity: .8; transform-origin: 50% 100%; }
+  .sv-wf-bar--in { fill: var(--accent-2); opacity: .45; transform-origin: 50% 100%; }
+  .sv-wf-bar--out { fill: var(--c-neg); opacity: .55; transform-origin: 50% 0%; }
+  .sv-wf-link { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 2; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity .3s ease var(--d); }
+  .is-seen .sv-wf-bar { transform: none; }
+  .is-seen .sv-wf-link { opacity: 1; }
+  .sv-meet { justify-self: start; grid-column: 1 / -1; padding: 2px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 12px; font-weight: 600; }
 
   @media (prefers-reduced-motion: reduce) {
     .sv-pf-bars i { width: var(--w); }
     .sv-line { stroke-dashoffset: 0; }
+    .sv-bar { transform: none; }
+    .sv-donut circle { stroke-dasharray: var(--a) calc(100 - var(--a)); }
+    .sv-wf-bar { transform: none; }
+    .sv-wf-link { opacity: 1; }
   }
 
   @media (min-width: 1024px) {
@@ -178,10 +250,10 @@ import { t } from '../lib/typo';
     }
     .story-index li::before { content: counter(si); width: 1.2em; color: inherit; }
     .story-index li.is-on { color: var(--ink); }
-    .story-index li.is-on::before { color: var(--gold-ink); }
-    .story-steps { position: relative; gap: var(--s6); padding: var(--s4) 0; }
+    .story-index li.is-on::before { color: var(--accent); }
+    .story-steps { position: relative; gap: var(--s3); padding: var(--s2) 0; }
     /* Линия шагов между колонками */
-    .story-steps::before { content: ''; position: absolute; left: -57px; top: var(--s4); bottom: var(--s4); width: 2px; background: var(--accent-soft); }
+    .story-steps::before { content: ''; position: absolute; left: -57px; top: var(--s2); bottom: var(--s2); width: 1px; background: var(--line); }
     .story-num { position: absolute; left: -74px; top: var(--s3); }
     .story-step { padding: var(--s4); }
   }

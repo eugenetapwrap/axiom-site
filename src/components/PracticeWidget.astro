@@ -1,7 +1,12 @@
 ---
 // Живой виджет справа от описания направления: три шага с номерами, как в интерфейсе.
+// Финмодели и инвестанализ можно трогать: сценарии и ползунки пересчитывают график и показатели.
 // Все значения демонстрационные, кроме IRR 9,0% → 8,2% и NPV «в 3,6 раза» из кейса аудита.
-import { SCENARIOS, YEARS, kpis, barHeight, barTitle } from '../lib/finmodel';
+import { SCENARIOS, YEARS, BASE, INPUTS, fmtInput, kpis, barHeight, barTitle, cumPath, payback, scaleFor, ZERO } from '../lib/finmodel';
+import type { InputKey } from '../lib/finmodel';
+import { OFFERS, DISC, MONTHS, compare, fmtMln, fmtPct, fmtYears } from '../lib/advisory';
+import { MONTHS_SHORT } from '../lib/sankey';
+import { smoothPath } from '../lib/smooth';
 
 interface Props {
   variant: 'models' | 'audit' | 'accounting' | 'advisory';
@@ -12,7 +17,40 @@ const models = SCENARIOS;
 const years = YEARS;
 const m0 = models[0];
 const k0 = kpis(m0.cf);
-const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
+const max0 = scaleFor(m0.cf);
+const pb0 = payback(m0.cf);
+// Порядок строк подобран так, чтобы у каждого сценария его три ползунка шли подряд
+const inputKeys: InputKey[] = ['price', 'pace', 'adr', 'occ', 'cap', 'mat'];
+const pct = (k: InputKey, v: number) => ((v - INPUTS[k].min) / (INPUTS[k].max - INPUTS[k].min)) * 100;
+
+const o0 = OFFERS[0];
+const c0 = compare(o0, o0.disc, o0.months);
+
+// Шаг «Аналитика»: Cash Flow по месяцам с накопленным итогом, как в дашборде портала.
+// Демо-данные, млрд IDR. Январь–октябрь заполнены, ноябрь и декабрь ещё впереди (пустые).
+// Месяцы неровные, как в жизни: итог растёт, проседает, растёт сильнее, проседает глубже.
+const INFLOW = [2.1, 2.6, 2.4, 3.6, 2.7, 3.2, 4.1, 3.3, 4.4, 3.9];
+const OUTFLOW = [1.8, 2.3, 2.5, 2.8, 3.4, 2.8, 3.2, 3.7, 3.4, 3.6];
+const CW = 480;
+const CH = 212;
+const step = (CW - 16) / 12;
+const r1 = (v: number) => Math.round(v * 10) / 10;
+let acc = 0;
+const cfm = INFLOW.map((inflow, m) => {
+  const outflow = OUTFLOW[m];
+  acc = r1(acc + inflow - outflow);
+  return { m, inflow, outflow, cum: acc, cx: 8 + step * (m + 0.5) };
+});
+const NOW = cfm.length - 1;
+const future = [10, 11].map((m) => ({ m, cx: 8 + step * (m + 0.5) }));
+// Один масштаб для столбиков и линии: ноль на высоте ZY, ниже нуля место для минусов итога
+const top = Math.max(...cfm.map((d) => Math.max(d.inflow, d.outflow, d.cum)));
+const bottom = Math.min(0, ...cfm.map((d) => d.cum));
+const ZY = 22 + (top / (top - bottom)) * 150;
+const sc = 150 / (top - bottom);
+const vy = (v: number) => ZY - v * sc;
+const linePath = smoothPath(cfm.map((d) => [d.cx, vy(d.cum)] as [number, number]));
+const fmt1 = (v: number) => v.toFixed(1).replace('.', ',').replace('-', '−');
 ---
 
 <div class="pw" data-pw={variant}>
@@ -22,18 +60,21 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
         <span class="pw-num">1</span>
         <div class="pw-body">
           <p class="pw-title">Стратегия проекта</p>
-          <div class="pw-chips" data-m-chips>
-            {models.map((m, i) => <span class={`pw-chip${i === 0 ? ' is-on' : ''}`}>{m.name}</span>)}
+          <div class="pw-chips" role="group" aria-label="Стратегия проекта">
+            {models.map((m, i) => <button type="button" class={`pw-chip${i === 0 ? ' is-on' : ''}`} aria-pressed={i === 0 ? 'true' : 'false'} data-m-chip={i}>{m.name}</button>)}
           </div>
         </div>
       </div>
       <div class="pw-step">
         <span class="pw-num">2</span>
         <div class="pw-body">
-          <p class="pw-title">Предпосылки</p>
+          <p class="pw-title">Предпосылки <span class="pw-badge">можно двигать</span></p>
           <div class="ui-card pw-panel pw-sliders">
-            {m0.params.map((q, j) => (
-              <div><span data-ml={j}>{q.label}</span><b data-mv={j}>{q.value}</b><i style={`--p:${q.p}%`} data-mp={j}></i></div>
+            {inputKeys.map((key) => (
+              <label class="pw-range" data-in={key} hidden={!m0.keys.includes(key)}>
+                <span>{INPUTS[key].label}</span><b data-iv={key}>{fmtInput(key, BASE[key])}</b>
+                <input type="range" min={INPUTS[key].min} max={INPUTS[key].max} step={INPUTS[key].step} value={BASE[key]} data-ii={key} style={`--p:${pct(key, BASE[key]).toFixed(1)}%`} />
+              </label>
             ))}
           </div>
         </div>
@@ -43,17 +84,24 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
         <div class="pw-body">
           <p class="pw-title">Cash Flow и показатели для инвестора</p>
           <div class="ui-card pw-panel pw-cf-panel">
-            <div class="pw-cf" aria-hidden="true">
+            <div class="pw-cash-legend" aria-hidden="true"><span class="in">Cash Flow по годам</span><span class="cum">Накопленный итог</span></div>
+            <div class="pw-cf" aria-hidden="true" data-cf-box>
               {m0.cf.map((v, i) => (
-                <span class={v < 0 ? 'neg' : 'pos'} style={`--h:${barHeight(v)}`} data-cf={i} title={barTitle(years[i], v)}></span>
+                <span class={v < 0 ? 'neg' : 'pos'} style={`--h:${barHeight(v, max0)}`} data-cf={i} title={barTitle(years[i], v)}></span>
               ))}
+              <svg class="pw-cum" viewBox="0 0 100 100" preserveAspectRatio="none" data-cum>
+                <path d={cumPath(m0.cf, max0)} vector-effect="non-scaling-stroke"></path>
+              </svg>
+              <i class="pw-pb" data-pb style={pb0 ? `left:${pb0.x.toFixed(1)}%;top:${ZERO}%` : 'display:none'}></i>
+              <b class="pw-pb-label" data-pb-label style={pb0 ? `left:${pb0.x.toFixed(1)}%;top:${ZERO}%` : 'display:none'}>{pb0 ? `окупаемость в ${pb0.year}` : ''}</b>
             </div>
-            <div class="pw-cf-axis" aria-hidden="true"><span>{years[0]}</span><span>Cash Flow, млн USD</span><span>{years[years.length - 1]}</span></div>
+            <div class="pw-cf-axis" aria-hidden="true"><span>{years[0]}</span><span>млн USD</span><span>{years[years.length - 1]}</span></div>
             <dl class="pw-kpis">
               <div><dt>IRR</dt><dd data-m="irr">{k0.irr}</dd></div>
               <div><dt>NPV при 12%</dt><dd data-m="npv" class={k0.npvNeg ? 'is-neg' : undefined}>{k0.npv}</dd></div>
               <div><dt>MOIC</dt><dd data-m="moic">{k0.moic}</dd></div>
             </dl>
+            <p class="pw-sub" data-pb-none hidden>Накопленный итог не выходит выше нуля: проект не окупается</p>
           </div>
         </div>
       </div>
@@ -122,21 +170,57 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
       <div class="pw-step">
         <span class="pw-num">2</span>
         <div class="pw-body">
-          <p class="pw-title">Согласование</p>
-          <ol class="pw-route" data-route>
-            <li class="is-ok">Прораб</li>
-            <li class="is-ok">Проект-менеджер</li>
-            <li class="is-ok">Финансовый директор</li>
-          </ol>
+          <p class="pw-title">Антифрод-проверка до оплаты</p>
+          <div class="ui-card pw-panel pw-check" data-check="ok">
+            <p class="pw-check-ok"><b>Совпадений нет</b> · заявка ушла на согласование</p>
+            <p class="pw-check-dup"><b>Дубль № 75</b> · совпадает с заявкой № 63, оплата остановлена</p>
+          </div>
         </div>
       </div>
       <div class="pw-step">
         <span class="pw-num">3</span>
         <div class="pw-body">
-          <p class="pw-title">Антифрод-проверка до оплаты</p>
-          <div class="ui-card pw-panel pw-check" data-check="dup">
-            <p class="pw-check-ok"><b>Совпадений нет</b> · заявка передана в реестр к оплате</p>
-            <p class="pw-check-dup"><b>Дубль № 75</b> · совпадает с заявкой № 63, оплата остановлена</p>
+          <p class="pw-title">Согласование</p>
+          <ol class="pw-route" data-route>
+            <li class="is-ok">Прораб</li>
+            <li class="is-ok">Проект-менеджер</li>
+            <li class="is-ok">Финансовый контроллер</li>
+          </ol>
+        </div>
+      </div>
+      <div class="pw-step">
+        <span class="pw-num">4</span>
+        <div class="pw-body">
+          <p class="pw-title">Аналитика</p>
+          <div class="ui-card pw-panel pw-cash">
+            <div class="pw-cash-legend" aria-hidden="true">
+              <span class="in">Поступления</span><span class="out">Расходы</span><span class="cum">Накопленный итог</span>
+            </div>
+            <svg class="pw-cash-chart" viewBox={`0 0 ${CW} ${CH}`} role="img" aria-label={`Cash Flow за январь–октябрь, млрд IDR: накопленный итог неровно растёт от нуля до ${fmt1(cfm[NOW].cum)}, ноябрь и декабрь ещё впереди`}>
+              <rect class="pw-cash-today" data-today x={(cfm[NOW].cx - step / 2 + 1).toFixed(1)} y="4" width={(step - 2).toFixed(1)} height={CH - 26} rx="4"></rect>
+              <line class="pw-cash-base" x1="8" x2={CW - 8} y1={ZY.toFixed(1)} y2={ZY.toFixed(1)}></line>
+              {cfm.map((d) => (
+                <g>
+                  <rect class="in" x={(d.cx - 11).toFixed(1)} y={vy(d.inflow).toFixed(1)} width="10" height={(d.inflow * sc).toFixed(1)} rx="1.5"><title>{`${MONTHS_SHORT[d.m]}: поступления ${fmt1(d.inflow)}`}</title></rect>
+                  <rect class="out" x={(d.cx + 1).toFixed(1)} y={vy(d.outflow).toFixed(1)} width="10" height={(d.outflow * sc).toFixed(1)} rx="1.5"><title>{`${MONTHS_SHORT[d.m]}: расходы ${fmt1(d.outflow)}`}</title></rect>
+                  <text class={`pw-cash-m${d.m === NOW ? ' is-now' : ''}`} x={d.cx.toFixed(1)} y={CH - 6} text-anchor="middle">{MONTHS_SHORT[d.m]}</text>
+                </g>
+              ))}
+              {future.map((d) => (
+                <g class="pw-cash-future">
+                  <rect x={(d.cx - step / 2 + 3).toFixed(1)} y="22" width={(step - 6).toFixed(1)} height={(ZY - 22).toFixed(1)} rx="4"></rect>
+                  <text class="pw-cash-m" x={d.cx.toFixed(1)} y={CH - 6} text-anchor="middle">{MONTHS_SHORT[d.m]}</text>
+                </g>
+              ))}
+              <path class="pw-cash-line" d={linePath}></path>
+              {cfm.map((d) => (
+                <circle class={`pw-cash-dot${d.cum < 0 ? ' is-neg' : ''}`} cx={d.cx.toFixed(1)} cy={vy(d.cum).toFixed(1)} r={d.m === NOW ? 4 : 2.8}><title>{`${MONTHS_SHORT[d.m]}: накопленный итог ${fmt1(d.cum)}`}</title></circle>
+              ))}
+              {cfm.map((d) => (
+                <text class={`pw-cash-v${d.m === NOW ? ' is-now' : ''}${d.cum < 0 ? ' is-neg' : ''}`} x={d.cx.toFixed(1)} y={(vy(d.cum) + (d.cum < 0 ? 15 : -10)).toFixed(1)} text-anchor="middle">{fmt1(d.cum)}</text>
+              ))}
+            </svg>
+            <p class="pw-sub" data-c-note>Платёж 1 080 000 IDR попал в Cash Flow за октябрь</p>
           </div>
         </div>
       </div>
@@ -149,19 +233,31 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
         <span class="pw-num">1</span>
         <div class="pw-body">
           <p class="pw-title">Объект</p>
-          <div class="pw-chips" data-o-chips>
-            {objects.map((o, i) => <span class={`pw-chip${i === 0 ? ' is-on' : ''}`}>{o}</span>)}
+          <div class="pw-chips" role="group" aria-label="Объект">
+            {OFFERS.map((o, i) => <button type="button" class={`pw-chip${i === 0 ? ' is-on' : ''}`} aria-pressed={i === 0 ? 'true' : 'false'} data-o-chip={i}>{o.name}</button>)}
           </div>
         </div>
       </div>
       <div class="pw-step">
         <span class="pw-num">2</span>
         <div class="pw-body">
-          <p class="pw-title">Скидка или рассрочка</p>
-          <div class="ui-card pw-panel pw-impact" data-o-cmp>
-            <div data-o-row="a" class="is-win"><span>Скидка 10%</span><span class="pw-bar"><i style="--w:78%"></i></span><b data-o-v>1,35 млн</b></div>
-            <div data-o-row="b"><span>Рассрочка 24 мес.</span><span class="pw-bar"><i style="--w:84%"></i></span><b data-o-v>1,41 млн</b></div>
-            <p class="pw-sub">Приведённая стоимость покупки, USD. Меньше — выгоднее</p>
+          <p class="pw-title">Скидка или рассрочка <span class="pw-badge">можно двигать</span></p>
+          <div class="ui-card pw-panel pw-offer">
+            <div class="pw-sliders">
+              <label class="pw-range">
+                <span>Скидка за полную оплату</span><b data-ov="disc">{o0.disc}%</b>
+                <input type="range" min={DISC.min} max={DISC.max} step={DISC.step} value={o0.disc} data-oi="disc" style={`--p:${((o0.disc - DISC.min) / (DISC.max - DISC.min)) * 100}%`} />
+              </label>
+              <label class="pw-range">
+                <span>Рассрочка, месяцев</span><b data-ov="months">{o0.months}</b>
+                <input type="range" min={MONTHS.min} max={MONTHS.max} step={MONTHS.step} value={o0.months} data-oi="months" style={`--p:${((o0.months - MONTHS.min) / (MONTHS.max - MONTHS.min)) * 100}%`} />
+              </label>
+            </div>
+            <div class="pw-impact" data-o-cmp>
+              <div data-o-row="a" class={c0.win === 'a' ? 'is-win' : undefined}><span data-o-name>Скидка {o0.disc}%</span><span class="pw-bar"><i style={`--w:${c0.wa.toFixed(1)}%`}></i></span><b data-o-v>{fmtMln(c0.a)}</b></div>
+              <div data-o-row="b" class={c0.win === 'b' ? 'is-win' : undefined}><span data-o-name>Рассрочка {o0.months} мес.</span><span class="pw-bar"><i style={`--w:${c0.wb.toFixed(1)}%`}></i></span><b data-o-v>{fmtMln(c0.b)}</b></div>
+              <p class="pw-sub">Приведённая стоимость покупки при ставке 12%, USD. Меньше — выгоднее</p>
+            </div>
           </div>
         </div>
       </div>
@@ -171,9 +267,9 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
           <p class="pw-title">Доходность</p>
           <div class="ui-card pw-panel">
             <dl class="pw-kpis">
-              <div><dt>Аренда, в год</dt><dd data-o="yld">8,1%</dd></div>
-              <div><dt>Окупаемость</dt><dd data-o="pb">11,2 года</dd></div>
-              <div><dt>Налоги</dt><dd data-o="tax">10%</dd></div>
+              <div><dt>Аренда, в год</dt><dd data-o="yld">{fmtPct(c0.yld)}</dd></div>
+              <div><dt>Окупаемость</dt><dd data-o="pb">{fmtYears(c0.pb)}</dd></div>
+              <div><dt>Налог на аренду</dt><dd data-o="tax">10%</dd></div>
             </dl>
           </div>
         </div>
@@ -183,51 +279,157 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
 </div>
 
 <script>
-  import { SCENARIOS, YEARS, kpis, barHeight, barTitle } from '../lib/finmodel';
+  import { SCENARIOS, YEARS, BASE, fmtInput, buildCF, kpis, barHeight, barTitle, cumPath, cumulative, payback, scaleFor, ZERO } from '../lib/finmodel';
+  import type { Inputs, InputKey } from '../lib/finmodel';
+  import { OFFERS, DISC, MONTHS, compare, fmtMln, fmtPct, fmtYears } from '../lib/advisory';
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const OBJECTS = [
-    { a: '1,35 млн', b: '1,41 млн', wa: 78, wb: 84, win: 'a', yld: '8,1%', pb: '11,2 года', tax: '10%' },
-    { a: '2,62 млн', b: '2,49 млн', wa: 88, wb: 82, win: 'b', yld: '9,6%', pb: '9,8 года', tax: '10%' },
-    { a: '0,94 млн', b: '0,99 млн', wa: 70, wb: 76, win: 'a', yld: '7,4%', pb: '12,6 года', tax: '10%' },
-  ];
   const FORMS = [
     ['Поставщик № 12', '1 080 000', 'Материалы · цемент'],
     ['Поставщик № 4', '14 300 000', 'Материалы · арматура'],
     ['Поставщик № 9', '9 500 000', 'Техника · аренда'],
   ];
+  const DUP = 1; // вторая заявка в цикле — дубль, её ловит антифрод
 
   const flash = (el: Element) => {
     el.classList.remove('pw-flash');
     void (el as HTMLElement).offsetWidth;
     el.classList.add('pw-flash');
   };
+  const setRange = (el: HTMLInputElement, v: number) => {
+    el.value = String(v);
+    const min = Number(el.min);
+    const max = Number(el.max);
+    el.style.setProperty('--p', `${((v - min) / (max - min)) * 100}%`);
+  };
 
-  const runners: Record<string, (w: HTMLElement) => () => void> = {
+  // Каждый виджет возвращает шаг автопоказа; число — пауза до следующего шага (по умолчанию period).
+  // Как только посетитель трогает виджет, автопоказ останавливается (data-manual).
+  type Tick = () => number | void;
+  const runners: Record<string, (w: HTMLElement) => Tick> = {
     models(w) {
+      const chips = [...w.querySelectorAll<HTMLButtonElement>('[data-m-chip]')];
+      const rows = [...w.querySelectorAll<HTMLElement>('[data-in]')];
+      const inputs = [...w.querySelectorAll<HTMLInputElement>('[data-ii]')];
+      const box = w.querySelector<HTMLElement>('[data-cf-box]')!;
+      const cum = w.querySelector<SVGSVGElement>('[data-cum]')!;
+      const pbEl = w.querySelector<HTMLElement>('[data-pb]')!;
+      const pbLabel = w.querySelector<HTMLElement>('[data-pb-label]')!;
+      const pbNone = w.querySelector<HTMLElement>('[data-pb-none]')!;
+      const state: Inputs = { ...BASE };
       let i = 0;
-      const chips = [...w.querySelectorAll('[data-m-chips] .pw-chip')];
-      return () => {
-        i = (i + 1) % SCENARIOS.length;
+      let last = { cf: SCENARIOS[0].cf, max: scaleFor(SCENARIOS[0].cf), x: payback(SCENARIOS[0].cf)?.x ?? 0 };
+
+      // Подпись окупаемости ставим у точки в тот из четырёх углов, где она меньше всего задевает
+      // столбики и линию накопленного итога и не вылезает за график
+      const SIDES = ['al', 'ar', 'br', 'bl'] as const;
+      const placeLabel = () => {
+        const W = box.clientWidth;
+        const H = box.clientHeight;
+        const lw = pbLabel.offsetWidth;
+        const lh = pbLabel.offsetHeight;
+        if (!W || !lw) return;
+        const { cf, max, x } = last;
+        const dx = (W * x) / 100;
+        const dy = (H * ZERO) / 100;
+        const cw = (W - 9 * 5) / 10;
+        const bars = cf.map((v, j) => {
+          const h = (H * (Math.abs(v) / max) * 56) / 100;
+          return { x0: j * (cw + 5), x1: j * (cw + 5) + cw, y0: v < 0 ? dy : dy - h, y1: v < 0 ? dy + h : dy };
+        });
+        const pts = [[0, dy], ...cumulative(cf).map((v, j) => [(W * (j + 0.5)) / 10, (H * (ZERO - (v / max) * 56)) / 100])];
+        const score = (lx: number, ly: number) => {
+          const r = { x0: lx - 2, x1: lx + lw + 2, y0: ly - 2, y1: ly + lh + 2 };
+          let sc = 0;
+          bars.forEach((b) => {
+            const ow = Math.min(r.x1, b.x1) - Math.max(r.x0, b.x0);
+            const oh = Math.min(r.y1, b.y1) - Math.max(r.y0, b.y0);
+            if (ow > 0 && oh > 0) sc += ow * oh;
+          });
+          for (let k = 0; k < pts.length - 1; k++) {
+            for (let t = 0; t <= 1; t += 0.05) {
+              const px = pts[k][0] + (pts[k + 1][0] - pts[k][0]) * t;
+              const py = pts[k][1] + (pts[k + 1][1] - pts[k][1]) * t;
+              if (px > r.x0 && px < r.x1 && py > r.y0 && py < r.y1) sc += 60;
+            }
+          }
+          const over = Math.max(0, -r.x0) + Math.max(0, r.x1 - W) + Math.max(0, -r.y0) + Math.max(0, r.y1 - H);
+          return sc + over * 400;
+        };
+        const at = {
+          al: [dx - 8 - lw, dy - 9 - lh],
+          ar: [dx + 8, dy - 9 - lh],
+          br: [dx + 8, dy + 7],
+          bl: [dx - 8 - lw, dy + 7],
+        };
+        let best: (typeof SIDES)[number] = 'al';
+        let bestScore = Infinity;
+        SIDES.forEach((sd) => {
+          const v = score(at[sd][0], at[sd][1]);
+          if (v < bestScore - 0.5) { bestScore = v; best = sd; }
+        });
+        SIDES.forEach((sd) => pbLabel.classList.toggle(`is-${sd}`, sd === best));
+      };
+
+      const render = (scenarioChanged: boolean) => {
         const sc = SCENARIOS[i];
-        const k = kpis(sc.cf);
-        chips.forEach((c, n) => c.classList.toggle('is-on', n === i));
-        w.querySelectorAll<HTMLElement>('[data-ml]').forEach((el) => { el.textContent = sc.params[Number(el.dataset.ml)].label; });
-        w.querySelectorAll<HTMLElement>('[data-mv]').forEach((el) => { el.textContent = sc.params[Number(el.dataset.mv)].value; flash(el); });
-        w.querySelectorAll<HTMLElement>('[data-mp]').forEach((el) => el.style.setProperty('--p', `${sc.params[Number(el.dataset.mp)].p}%`));
+        const cf = buildCF(sc.id, state);
+        const max = scaleFor(cf);
+        const k = kpis(cf);
+        chips.forEach((c, n) => { c.classList.toggle('is-on', n === i); c.setAttribute('aria-pressed', String(n === i)); });
+        rows.forEach((r) => { r.hidden = !sc.keys.includes(r.dataset.in as InputKey); });
+        w.querySelectorAll<HTMLElement>('[data-iv]').forEach((el) => {
+          const key = el.dataset.iv as InputKey;
+          el.textContent = fmtInput(key, state[key]);
+        });
         w.querySelectorAll<HTMLElement>('[data-m]').forEach((el) => {
           el.textContent = String(k[el.dataset.m as 'irr' | 'npv' | 'moic']);
           if (el.dataset.m === 'npv') el.classList.toggle('is-neg', k.npvNeg);
-          flash(el);
+          if (scenarioChanged) flash(el);
         });
         w.querySelectorAll<HTMLElement>('[data-cf]').forEach((el) => {
           const n = Number(el.dataset.cf);
-          const v = sc.cf[n];
-          el.style.setProperty('--h', barHeight(v));
+          const v = cf[n];
+          el.style.setProperty('--h', barHeight(v, max));
           el.className = v < 0 ? 'neg' : 'pos';
           el.title = barTitle(YEARS[n], v);
         });
+        cum.querySelector('path')!.setAttribute('d', cumPath(cf, max));
+        if (scenarioChanged && !reduce) {
+          cum.classList.remove('is-draw');
+          void cum.getBoundingClientRect();
+          cum.classList.add('is-draw');
+        }
+        const pb = payback(cf);
+        last = { cf, max, x: pb?.x ?? 0 };
+        pbEl.style.display = pb ? '' : 'none';
+        pbLabel.style.display = pb ? '' : 'none';
+        pbNone.hidden = !!pb;
+        if (pb) {
+          pbEl.style.left = `${pb.x.toFixed(1)}%`;
+          pbLabel.style.left = `${pb.x.toFixed(1)}%`;
+          pbLabel.textContent = `окупаемость в ${pb.year}`;
+          placeLabel();
+          if (scenarioChanged) flash(pbLabel);
+        }
+      };
+
+      chips.forEach((c, n) => c.addEventListener('click', () => { i = n; render(true); }));
+      inputs.forEach((el) => {
+        const key = el.dataset.ii as InputKey;
+        el.addEventListener('input', () => {
+          state[key] = Number(el.value);
+          setRange(el, state[key]);
+          render(false);
+        });
+      });
+      requestAnimationFrame(placeLabel);
+      window.addEventListener('resize', placeLabel);
+
+      return () => {
+        i = (i + 1) % SCENARIOS.length;
+        render(true);
       };
     },
     audit(w) {
@@ -255,57 +457,108 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
       };
     },
     accounting(w) {
+      // Порядок как в системе: заявка → антифрод → согласование → платёж в аналитике.
+      // Дубль останавливается на антифроде и до согласования не доходит.
+      // Поля заявки заполняются быстро, дальше шаги идут спокойнее.
       const fields = [...w.querySelectorAll<HTMLElement>('[data-f]')];
       const route = [...w.querySelectorAll<HTMLElement>('[data-route] li')];
       const check = w.querySelector<HTMLElement>('[data-check]')!;
-      let step = 0;
-      let n = 0;
+      const today = w.querySelector<SVGElement>('[data-today]')!;
+      const note = w.querySelector<HTMLElement>('[data-c-note]')!;
+      let step = 8;
+      let n = FORMS.length - 1;
       return () => {
-        step = (step + 1) % 7;
+        step = (step + 1) % 9;
         if (step === 0) {
           n = (n + 1) % FORMS.length;
           fields.forEach((f) => { f.textContent = ''; f.classList.add('is-typing'); });
           route.forEach((r) => r.classList.remove('is-ok'));
           check.dataset.check = 'wait';
+          today.classList.remove('is-hit');
+          note.textContent = 'Собирается из оплаченных заявок';
+          return 250;
         }
+        const dup = n === DUP;
         if (step >= 1 && step <= 3) {
           const f = fields[step - 1];
           f.textContent = FORMS[n][step - 1];
           f.classList.remove('is-typing');
+          return step < 3 ? 180 : 450;
         }
-        if (step >= 3 && step <= 5) route[step - 3].classList.add('is-ok');
-        if (step === 6) check.dataset.check = n === 0 ? 'dup' : 'ok';
+        if (step === 4) {
+          check.dataset.check = dup ? 'dup' : 'ok';
+          if (dup) step = 7; // дубль сразу идёт к итогу
+          return 900;
+        }
+        if (step >= 5 && step <= 7) {
+          route[step - 5].classList.add('is-ok');
+          return step < 7 ? 420 : 700;
+        }
+        note.textContent = dup ? 'Дубль не оплачен и в отчёт не попал' : `Платёж ${FORMS[n][1]} IDR попал в Cash Flow за октябрь`;
+        if (!dup) today.classList.add('is-hit');
+        flash(note);
+        return 2600;
       };
     },
     advisory(w) {
+      const chips = [...w.querySelectorAll<HTMLButtonElement>('[data-o-chip]')];
+      const disc = w.querySelector<HTMLInputElement>('[data-oi="disc"]')!;
+      const months = w.querySelector<HTMLInputElement>('[data-oi="months"]')!;
       let i = 0;
-      const chips = [...w.querySelectorAll('[data-o-chips] .pw-chip')];
-      return () => {
-        i = (i + 1) % OBJECTS.length;
-        const o = OBJECTS[i] as Record<string, string | number>;
-        chips.forEach((c, k) => c.classList.toggle('is-on', k === i));
-        (['a', 'b'] as const).forEach((k) => {
+      const render = (objectChanged: boolean) => {
+        const o = OFFERS[i];
+        const d = Number(disc.value);
+        const m = Number(months.value);
+        const c = compare(o, d, m);
+        chips.forEach((ch, k) => { ch.classList.toggle('is-on', k === i); ch.setAttribute('aria-pressed', String(k === i)); });
+        w.querySelector<HTMLElement>('[data-ov="disc"]')!.textContent = `${d}%`;
+        w.querySelector<HTMLElement>('[data-ov="months"]')!.textContent = String(m);
+        ([['a', c.a, c.wa, `Скидка ${d}%`], ['b', c.b, c.wb, `Рассрочка ${m} мес.`]] as const).forEach(([k, v, wd, name]) => {
           const row = w.querySelector<HTMLElement>(`[data-o-row="${k}"]`)!;
-          row.classList.toggle('is-win', o.win === k);
-          row.querySelector<HTMLElement>('i')!.style.setProperty('--w', `${k === 'a' ? o.wa : o.wb}%`);
-          row.querySelector<HTMLElement>('[data-o-v]')!.textContent = String(o[k]);
+          row.classList.toggle('is-win', c.win === k);
+          row.querySelector<HTMLElement>('i')!.style.setProperty('--w', `${wd.toFixed(1)}%`);
+          row.querySelector<HTMLElement>('[data-o-v]')!.textContent = fmtMln(v);
+          row.querySelector<HTMLElement>('[data-o-name]')!.textContent = name;
         });
-        w.querySelectorAll<HTMLElement>('[data-o]').forEach((el) => { el.textContent = String(o[el.dataset.o!]); flash(el); });
+        const yld = w.querySelector<HTMLElement>('[data-o="yld"]')!;
+        const pb = w.querySelector<HTMLElement>('[data-o="pb"]')!;
+        yld.textContent = fmtPct(c.yld);
+        pb.textContent = fmtYears(c.pb);
+        if (objectChanged) { flash(yld); flash(pb); }
       };
+      const pick = (k: number) => {
+        i = k;
+        setRange(disc, OFFERS[k].disc);
+        setRange(months, OFFERS[k].months);
+        render(true);
+      };
+      chips.forEach((ch, k) => ch.addEventListener('click', () => pick(k)));
+      [disc, months].forEach((el) => el.addEventListener('input', () => { setRange(el, Number(el.value)); render(false); }));
+      return () => pick((i + 1) % OFFERS.length);
     },
   };
 
-  if (!reduce && 'IntersectionObserver' in window) {
-    document.querySelectorAll<HTMLElement>('[data-pw]').forEach((w) => {
-      const tick = runners[w.dataset.pw!](w);
-      const period = w.dataset.pw === 'accounting' || w.dataset.pw === 'audit' ? 1100 : 3000;
-      let timer = 0;
-      new IntersectionObserver(([e]) => {
-        if (e.isIntersecting && !timer) timer = window.setInterval(tick, period);
-        if (!e.isIntersecting && timer) { clearInterval(timer); timer = 0; }
-      }, { threshold: 0.3 }).observe(w);
-    });
-  }
+  document.querySelectorAll<HTMLElement>('[data-pw]').forEach((w) => {
+    const tick = runners[w.dataset.pw!](w);
+    if (reduce || !('IntersectionObserver' in window)) return;
+    const period = w.dataset.pw === 'audit' ? 1100 : 3200;
+    let timer = 0;
+    let on = false;
+    const loop = () => {
+      if (w.dataset.manual) return;
+      const d = tick();
+      timer = window.setTimeout(loop, typeof d === 'number' ? d : period);
+    };
+    const manual = () => { w.dataset.manual = '1'; clearTimeout(timer); };
+    if (w.dataset.pw === 'models' || w.dataset.pw === 'advisory') {
+      w.addEventListener('pointerdown', manual);
+      w.addEventListener('keydown', manual);
+    }
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !on && !w.dataset.manual) { on = true; timer = window.setTimeout(loop, w.dataset.pw === 'accounting' ? 400 : period); }
+      if (!e.isIntersecting && on) { on = false; clearTimeout(timer); }
+    }, { threshold: 0.3 }).observe(w);
+  });
 </script>
 
 <style is:global>
@@ -317,8 +570,8 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
     left: 13px;
     top: 30px;
     bottom: -22px;
-    width: 2px;
-    background: var(--gold-soft);
+    width: 1px;
+    background: var(--line);
   }
   .pw-num {
     display: grid;
@@ -326,18 +579,18 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: var(--gold);
-    color: #fff;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-2);
     font-size: 13px;
-    font-weight: 700;
-    box-shadow: 0 0 0 4px var(--gold-soft);
+    font-weight: 500;
   }
   .pw-title { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 3px 0 10px; font-weight: 700; font-size: 15px; }
   .pw-badge { padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 600; }
   .pw-panel { padding: 14px 16px; }
   .pw-sub { font-size: 12.5px; color: var(--ink-3); }
   .pw-flash { animation: pw-flash .9s ease; }
-  @keyframes pw-flash { 0% { color: var(--gold-ink); } 100% { color: inherit; } }
+  @keyframes pw-flash { 0% { color: var(--accent-2); } 100% { color: inherit; } }
 
   .pw-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .pw-chip {
@@ -346,61 +599,78 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
     border-radius: 8px;
     background: var(--surface);
     border: 1px solid var(--line);
-    box-shadow: var(--shadow);
     text-align: center;
-    font-weight: 600;
+    font: 500 14px/1.3 var(--font);
+    color: var(--ink-2);
+    cursor: pointer;
     transition: border-color .4s ease, color .4s ease;
   }
-  .pw-chip.is-on { border: 2px solid var(--gold); padding: 11px 7px; color: var(--gold-ink); }
-  .pw-chip.is-on::after {
-    content: '✓';
-    position: absolute;
-    top: -9px;
-    right: -9px;
-    display: grid;
-    place-items: center;
+  .pw-chip:hover { border-color: var(--ink-3); color: var(--ink); }
+  .pw-chip.is-on { border-color: var(--ink); color: var(--ink); }
+  .pw-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* Выбранный вариант отмечен только рамкой, без значков */
+
+  /* Ползунки предпосылок: настоящие, их можно двигать */
+  .pw-sliders { display: grid; gap: 10px; }
+  .pw-range { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: baseline; cursor: pointer; }
+  .pw-range[hidden] { display: none; }
+  .pw-range span { color: var(--ink-2); }
+  .pw-range b { font-variant-numeric: tabular-nums; }
+  .pw-range input { grid-column: 1 / -1; width: 100%; height: 22px; margin: 0; background: transparent; appearance: none; -webkit-appearance: none; cursor: pointer; }
+  .pw-range input::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--gold) var(--p), var(--track) var(--p)); }
+  .pw-range input::-moz-range-track { height: 4px; border-radius: 2px; background: var(--track); }
+  .pw-range input::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--gold); }
+  .pw-range input::-webkit-slider-thumb {
+    -webkit-appearance: none;
     width: 18px;
     height: 18px;
+    margin-top: -7px;
     border-radius: 50%;
-    background: var(--gold);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 800;
-  }
-
-  .pw-sliders { display: grid; gap: 12px; }
-  .pw-sliders div { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; }
-  .pw-sliders span { color: var(--ink-2); }
-  .pw-sliders i {
-    grid-column: 1 / -1;
-    position: relative;
-    height: 4px;
-    border-radius: 2px;
-    background: linear-gradient(90deg, var(--gold) var(--p), #ebe8df var(--p));
-    transition: background .6s ease;
-  }
-  .pw-sliders i::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: var(--p);
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #fff;
+    background: var(--surface);
     border: 2px solid var(--gold);
-    transform: translate(-50%, -50%);
-    transition: left .6s cubic-bezier(.2, .8, .2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transition: transform .15s ease;
   }
+  .pw-range input:active::-webkit-slider-thumb { transform: scale(1.15); }
+  .pw-range input::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--surface); border: 2px solid var(--gold); }
+  .pw-range input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  .pw-offer { display: grid; gap: 14px; }
+  .pw-offer .pw-impact { padding-top: 12px; border-top: 1px solid var(--line); }
 
   .pw-cf-panel { display: grid; gap: 10px; }
-  .pw-cf { position: relative; display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; height: 130px; }
-  .pw-cf::after { content: ''; position: absolute; left: 0; right: 0; top: 80%; height: 1px; background: var(--line); }
-  .pw-cf span { position: relative; height: 100%; }
-  /* Один масштаб для плюсов и минусов, ноль на 80% высоты (высоты считает src/lib/finmodel.ts) */
-  .pw-cf span::before { content: ''; position: absolute; left: 0; right: 0; height: var(--h); border-radius: 2px; transition: height .6s cubic-bezier(.2, .8, .2, 1); }
-  .pw-cf .pos::before { bottom: 20%; background: var(--accent-2); }
-  .pw-cf .neg::before { top: 80%; background: #d7c9a8; }
+  .pw-cf { position: relative; display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; height: 128px; }
+  .pw-cf::after { content: ''; position: absolute; left: 0; right: 0; top: 58%; height: 1px; background: var(--line); }
+  .pw-cf > span { position: relative; height: 100%; }
+  /* Один масштаб для плюсов, минусов и накопленного итога, ноль на 58% высоты (считает src/lib/finmodel.ts) */
+  .pw-cf > span::before { content: ''; position: absolute; left: 0; right: 0; height: var(--h); border-radius: 2px; transition: height .6s cubic-bezier(.2, .8, .2, 1); }
+  .pw-cf .pos::before { bottom: 42%; background: var(--accent-2); opacity: .85; }
+  .pw-cf .neg::before { top: 58%; background: var(--c-neg-soft); }
+  /* J-кривая: накопленный итог поверх столбиков, при смене сценария прорисовывается слева направо */
+  .pw-cum { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .pw-cum path { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linejoin: round; }
+  .pw-cum.is-draw { animation: pw-wipe .9s cubic-bezier(.45, 0, .2, 1) both; }
+  @keyframes pw-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .pw-pb { position: absolute; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-2) 16%, transparent); z-index: 1; }
+  /* Подпись окупаемости у точки: слева над нулём или справа под нулём, на подложке, чтобы не спорить с графиком */
+  .pw-pb-label {
+    position: absolute;
+    z-index: 2;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(calc(-100% - 8px), calc(-100% - 9px));
+    transition: left .6s cubic-bezier(.2, .8, .2, 1);
+  }
+  .pw-pb-label.is-ar { transform: translate(8px, calc(-100% - 9px)); }
+  .pw-pb-label.is-br { transform: translate(8px, 7px); }
+  .pw-pb-label.is-bl { transform: translate(calc(-100% - 8px), 7px); }
+  .pw-pb { transition: left .6s cubic-bezier(.2, .8, .2, 1); }
+
   .pw-cf-axis { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--ink-3); }
   .pw-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .pw-kpis div { padding: 4px 0 0; border-top: 2px solid var(--accent-soft); }
@@ -411,7 +681,7 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
   .pw-file { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: center; }
   .pw-xls { display: grid; place-items: center; width: 44px; height: 52px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 800; }
   .pw-file div { display: grid; gap: 6px; }
-  .pw-progress { height: 6px; border-radius: 3px; background: #ebe8df; overflow: hidden; }
+  .pw-progress { height: 6px; border-radius: 3px; background: var(--track); overflow: hidden; }
   .pw-progress i { display: block; height: 100%; width: 100%; background: var(--accent-2); transition: width 1s ease; }
 
   .pw-sev { list-style: none; padding: 0; display: grid; gap: 10px; }
@@ -420,25 +690,25 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
   .sev { width: 10px; height: 10px; border-radius: 50%; }
   .sev--risk { background: var(--risk); }
   .sev--warn { background: var(--gold); }
-  .sev--low { background: #c9c5b9; }
+  .sev--low { background: color-mix(in srgb, var(--ink-3) 55%, var(--line)); }
 
   .pw-impact { display: grid; gap: 12px; }
   .pw-impact > div { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; }
   .pw-impact > div > span:first-child { color: var(--ink-2); }
   .pw-bar { grid-column: 1 / -1; grid-row: 2; height: 10px; border-radius: 5px; background: var(--bg); overflow: hidden; }
-  .pw-bar i { display: block; height: 100%; width: var(--w); border-radius: 5px; background: #d7c9a8; transition: width .8s cubic-bezier(.2, .8, .2, 1); }
+  .pw-bar i { display: block; height: 100%; width: var(--w); border-radius: 5px; background: var(--c-out); transition: width .8s cubic-bezier(.2, .8, .2, 1); }
   .pw-impact > div:first-child .pw-bar i { background: var(--accent-2); }
   .pw-bar--risk i { background: var(--risk) !important; }
   .pw-impact .pw-bar.is-same i { background: var(--accent-2); }
   .pw-impact .risk { color: var(--risk); }
-  [data-o-cmp] .pw-bar i { background: #d7c9a8 !important; }
+  [data-o-cmp] .pw-bar i { background: var(--c-out) !important; }
   [data-o-cmp] .is-win .pw-bar i { background: var(--accent-2) !important; }
   [data-o-cmp] .is-win > span:first-child { color: var(--accent); font-weight: 700; }
   [data-o-cmp] .is-win > span:first-child::after { content: ' ✓'; }
 
   .pw-form { display: grid; grid-template-columns: 64px 1fr; gap: 16px; align-items: start; }
   .pw-invoice { display: grid; gap: 6px; align-content: start; height: 80px; padding: 10px 8px; border-radius: 4px; background: var(--bg); border: 1px solid var(--line); }
-  .pw-invoice i { height: 4px; border-radius: 2px; background: #dcd8cc; }
+  .pw-invoice i { height: 4px; border-radius: 2px; background: var(--line); }
   .pw-invoice i:nth-child(2) { width: 70%; }
   .pw-invoice i:nth-child(4) { width: 50%; margin-top: 10px; background: var(--gold); }
   .pw-form dl { display: grid; gap: 8px; }
@@ -448,12 +718,14 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
   .pw-form dd.is-typing::after { content: ''; display: inline-block; width: 2px; height: 1em; background: var(--gold); vertical-align: -2px; animation: pw-caret .8s steps(1) infinite; }
   @keyframes pw-caret { 50% { opacity: 0; } }
 
-  .pw-route { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pw-route { list-style: none; padding: 0; display: flex; flex-wrap: nowrap; gap: 6px; }
   .pw-route li {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 12px;
+    white-space: nowrap;
+    font-size: 13px;
+    padding: 7px 10px;
     border-radius: 8px;
     background: var(--surface);
     border: 1px solid var(--line);
@@ -472,9 +744,9 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
     font-weight: 800;
     line-height: 12px;
     text-align: center;
-    color: #fff;
+    color: var(--surface);
   }
-  .pw-route li.is-ok { color: var(--ink); border-color: #cfe2da; }
+  .pw-route li.is-ok { color: var(--ink); border-color: color-mix(in srgb, var(--growth) 22%, var(--growth-soft)); }
   .pw-route li.is-ok::before { content: '✓'; background: var(--growth); border-color: var(--growth); }
 
   .pw-check { position: relative; min-height: 64px; }
@@ -485,6 +757,37 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
   .pw-check[data-check='ok'] .pw-check-dup,
   .pw-check[data-check='dup'] .pw-check-ok,
   .pw-check[data-check='wait'] p { opacity: 0; }
-  .pw-check[data-check='dup'] { border-color: #f0c9c6; background: #fffafa; }
+  .pw-check[data-check='dup'] { border-color: color-mix(in srgb, var(--risk) 25%, var(--surface)); background: color-mix(in srgb, var(--risk-soft) 40%, var(--surface)); }
   .pw-check[data-check='wait']::after { content: 'Проверка…'; color: var(--ink-3); }
+
+  /* Аналитика: Cash Flow с накопленным итогом */
+  .pw-cash { display: grid; gap: 8px; }
+  .pw-cash-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--ink-2); }
+  .pw-cash-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .pw-cash-legend span::before { content: ''; width: 9px; height: 9px; border-radius: 2px; }
+  .pw-cash-legend .in::before { background: var(--accent-2); }
+  .pw-cash-legend .out::before { background: var(--c-out); }
+  .pw-cash-legend .cum::before { width: 14px; height: 2px; border-radius: 1px; background: var(--ink); }
+  .pw-cash-chart { display: block; width: 100%; height: auto; overflow: visible; }
+  .pw-cash-chart .in { fill: var(--accent-2); }
+  .pw-cash-chart .out { fill: var(--c-out); }
+  .pw-cash-base { stroke: var(--line); stroke-width: 1; }
+  .pw-cash-future rect { fill: none; stroke: var(--line); stroke-dasharray: 3 3; }
+  .pw-cash-future text { opacity: .7; }
+  .pw-cash-today { fill: var(--growth-soft); opacity: .6; transition: opacity .4s ease; }
+  .pw-cash-today.is-hit { opacity: 1; }
+  .pw-cash-line { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; }
+  .pw-cash-dot { fill: var(--surface); stroke: var(--ink); stroke-width: 1.4; }
+  .pw-cash-dot.is-neg { stroke: var(--risk); }
+  .pw-cash-m { font-size: 11px; fill: var(--ink-3); }
+  .pw-cash-v { font-size: 11px; font-weight: 600; fill: var(--ink-2); font-variant-numeric: tabular-nums; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; }
+  .pw-cash-v.is-neg { fill: var(--risk); }
+  .pw-cash-m.is-now, .pw-cash-v.is-now { fill: var(--ink); font-weight: 600; }
+  @media (max-width: 640px) {
+    .pw-cash-m, .pw-cash-v { font-size: 16px; }
+  }
+  /* На узком телефоне три согласующих в одну строку не помещаются */
+  @media (max-width: 520px) {
+    .pw-route { flex-wrap: wrap; }
+  }
 </style>

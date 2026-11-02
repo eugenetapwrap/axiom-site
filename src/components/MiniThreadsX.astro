@@ -1,0 +1,214 @@
+---
+// Расширенная версия нитей учёта (Евгений 02.11.2026, кнопка «Расширенная»).
+// Поступления проектов сходятся в счёт, счёт делится на три группы (капитальные расходы, операционные,
+// чистый поток), группы расходятся по статьям. Наведение раскладывает выбранное обратно:
+// статья или группа показывает, из каких проектов пришли деньги, проект показывает, куда ушли его деньги.
+// Разбивка статей по проектам демонстрационная (ALLOC ниже), суммы сходятся с отчётом месяца.
+// «Чистый поток», а не «прибыль»: поступления минус платежи — денежный поток, в нём есть авансы покупателей.
+import { SERIES } from '../lib/sankey';
+import { frame, PROJ_NAMES, COST_NAMES, PROJ_COLORS, COST_COLORS, fmt2 } from '../lib/threads';
+
+const M = SERIES.length - 1;
+const fr = frame(SERIES[M]);
+const p = fr.left.map((t) => t.v);
+const c = fr.right.map((t) => t.v);
+const total = fr.total;
+const f = (n: number) => n.toFixed(1);
+const r2 = (v: number) => Math.round(v * 100) / 100;
+
+// Статьи по проектам, млрд IDR: строка — статья в порядке COST_NAMES, столбец — проект в порядке PROJ_NAMES.
+// Townhouses на проектировании (инжиниринг, без материалов), прочие проекты в основном продают готовое.
+// Последняя статья «Осталось на счетах» считается как остаток проекта: поступления минус его расходы.
+const ALLOC: number[][] = [
+  [0.70, 0.80, 0.54, 0, 0], // Материалы
+  [0.40, 0.35, 0.44, 0.20, 0], // Работы подрядчиков
+  [0, 0.12, 0.14, 0.40, 0], // Инжиниринг
+  [0.16, 0.16, 0.14, 0.12, 0.08], // ФОТ и консалтинг
+  [0.09, 0.09, 0.08, 0.05, 0.04], // Налоги
+  [0.02, 0.02, 0.02, 0.02, 0.01], // Общие расходы
+  [0, 0, 0.25, 0, 0.12], // Основные средства
+];
+ALLOC.push(p.map((pv, k) => r2(pv - ALLOC.reduce((s, row) => s + row[k], 0))));
+ALLOC.forEach((row, i) => {
+  const sum = r2(row.reduce((s, v) => s + v, 0));
+  if (Math.abs(sum - c[i]) > 0.006) throw new Error(`${COST_NAMES[i]}: по проектам ${sum}, в отчёте ${c[i]}`);
+  if (row.some((v) => v < 0)) throw new Error(`${COST_NAMES[i]}: отрицательная доля проекта`);
+});
+
+// Группы: капитальные (стройка и основные средства), операционные, чистый поток
+const GROUPS = [
+  { name: 'Капитальные расходы', costs: [0, 1, 2, 6], color: 'var(--th-1)' },
+  { name: 'Операционные расходы', costs: [3, 4, 5], color: 'var(--th-4)' },
+  { name: 'Чистый поток', costs: [7], color: 'var(--th-8)' },
+];
+const gv = GROUPS.map((g) => r2(g.costs.reduce((s, i) => s + c[i], 0)));
+const gAlloc = GROUPS.map((g) => p.map((_, k) => r2(g.costs.reduce((s, i) => s + ALLOC[i][k], 0))));
+const order = GROUPS.flatMap((g) => g.costs); // статьи справа сверху вниз
+const groupOf = (i: number) => GROUPS.findIndex((g) => g.costs.includes(i));
+
+const W = 1200;
+const H = 254;
+const K = 11;
+const NW = 3;
+const CY = 146;
+const LX1 = 300; // конец прямых участков проектов
+const LMAX = 130;
+const LSTEP = 46;
+const LCY = 140; // проекты чуть выше, внизу слева подсказка
+const PX = 430; // счёт
+const GX = 620; // группы
+const GG = 60; // зазор между группами: в нём подпись группы
+const X2 = 840; // начало прямых участков статей
+const RMAX = 140;
+const RSTEP = 27;
+const maxP = Math.max(...p);
+const maxC = Math.max(...c);
+const cash0 = CY - (total * K) / 2;
+const curve = (x0: number, y0: number, x1: number, y1: number, k0 = 92, k1 = 82) =>
+  `C${f(x0 + k0)},${f(y0)} ${f(x1 - k1)},${f(y1)} ${f(x1)},${f(y1)}`;
+
+// Проекты → счёт
+let acc = cash0;
+const proj = p.map((v, k) => {
+  const h = v * K;
+  const y = LCY + (k - (p.length - 1) / 2) * LSTEP;
+  const x = LX1 - (v / maxP) * LMAX;
+  const yb = acc + h / 2;
+  acc += h;
+  return { v, h, y, x, d: `M${f(x)},${f(y)} L${LX1},${f(y)} ${curve(LX1, y, PX, yb)}` };
+});
+
+// Счёт → группы
+const gTop = CY - (total * K + GG * (GROUPS.length - 1)) / 2;
+acc = cash0;
+let gy = gTop;
+const grp = GROUPS.map((g, j) => {
+  const h = gv[j] * K;
+  const ya = acc + h / 2;
+  acc += h;
+  const top = gy;
+  gy += h + GG;
+  return { ...g, v: gv[j], h, top, yc: top + h / 2, d: `M${PX + NW},${f(ya)} ${curve(PX + NW, ya, GX, top + h / 2)}` };
+});
+
+// Группы → статьи
+const cost: { i: number; v: number; h: number; y: number; x: number; d: string }[] = [];
+grp.forEach((g) => {
+  let a = g.top;
+  g.costs.forEach((i) => {
+    const h = c[i] * K;
+    const ya = a + h / 2;
+    a += h;
+    const y = CY + (order.indexOf(i) - (order.length - 1) / 2) * RSTEP;
+    const x = X2 + (c[i] / maxC) * RMAX;
+    cost.push({ i, v: c[i], h: Math.max(h, 1.2), y, x, d: `M${GX + NW},${f(ya)} ${curve(GX + NW, ya, X2, y)} L${f(x)},${f(y)}` });
+  });
+});
+const share = (v: number) => `${Math.round((v / total) * 100)}%`;
+
+// Наведение: ключ c{i} — статья, g{j} — группа, p{k} — проект
+const projOv = [
+  ...cost.map((t) => ({ key: `c${t.i}`, color: COST_COLORS[t.i], amt: ALLOC[t.i] })),
+  ...grp.map((g, j) => ({ key: `g${j}`, color: g.color, amt: gAlloc[j] })),
+];
+const pKeys = p.map((_, k) => `p${k}`);
+const zero = (v: number) => v < 0.005;
+---
+
+<svg class="mx" viewBox={`0 0 ${W} ${H}`} aria-hidden="true" data-mx>
+  <text class="mx-cap" x="0" y="12">Поступления по проектам</text>
+  <text x={PX + NW / 2} y="12" text-anchor="middle"><tspan class="mx-cap">Счёт</tspan><tspan class="mx-big" dx="8">{fmt2(total)}</tspan><tspan class="mx-unit" dx="5">млрд IDR</tspan></text>
+  <text class="mx-cap" x={X2} y="12">Статьи</text>
+  <text class="mx-cap" x="0" y={H - 2}>Наведите на проект, группу или статью</text>
+  <line class="mx-lead" x1={PX + NW / 2} x2={PX + NW / 2} y1="26" y2={f(cash0 - 10)}></line>
+
+  <!-- Базовые нити -->
+  {proj.map((t, k) => <path class="mx-t" d={t.d} stroke={PROJ_COLORS[k]} stroke-width={f(t.h)} data-hk={`p${k}`} data-k={`p${k}`}></path>)}
+  {grp.map((g, j) => <path class="mx-t" d={g.d} stroke={g.color} stroke-width={f(g.h)} data-hk={`g${j}`} data-k={`g${j}`}></path>)}
+  {cost.map((t) => <path class="mx-t" d={t.d} stroke={COST_COLORS[t.i]} stroke-width={f(t.h)} data-hk={`c${t.i}`} data-k={`c${t.i} g${groupOf(t.i)}`}></path>)}
+
+  <!-- Сердцевины: какая часть нити относится к выбранному -->
+  {projOv.map((o) => proj.map((t, k) => !zero(o.amt[k]) && <path class="mx-ov" d={t.d} stroke={o.color} stroke-width={f(o.amt[k] * K)} data-k={o.key}></path>))}
+  {cost.map((t) => grp.map((g, j) => j === groupOf(t.i) && <path class="mx-ov" d={g.d} stroke={COST_COLORS[t.i]} stroke-width={f(t.v * K)} data-k={`c${t.i}`}></path>))}
+  {pKeys.map((key, k) => (
+    <Fragment>
+      {grp.map((g, j) => !zero(gAlloc[j][k]) && <path class="mx-ov" d={g.d} stroke={PROJ_COLORS[k]} stroke-width={f(gAlloc[j][k] * K)} data-k={key}></path>)}
+      {cost.map((t) => !zero(ALLOC[t.i][k]) && <path class="mx-ov" d={t.d} stroke={PROJ_COLORS[k]} stroke-width={f(ALLOC[t.i][k] * K)} data-k={key}></path>)}
+    </Fragment>
+  ))}
+
+  <rect class="mx-bar" x={PX} y={f(cash0 - 6)} width={NW} height={f(total * K + 12)} rx="1.5"></rect>
+  {grp.map((g, j) => <rect class="mx-node" x={GX} y={f(g.top - 2)} width={NW} height={f(g.h + 4)} rx="1.5" data-hk={`g${j}`}></rect>)}
+
+  <!-- Подписи: обычные и для наведения -->
+  {proj.map((t, k) => (
+    <Fragment>
+      <text class="mx-l mx-base-p" x={f(t.x - 12)} y={f(t.y)} text-anchor="end" data-hk={`p${k}`}><tspan class="mx-name">{PROJ_NAMES[k]}</tspan><tspan class="mx-val" dx="8">{fmt2(t.v)}</tspan></text>
+      {projOv.map((o) => <text class={`mx-l mx-alt${zero(o.amt[k]) ? ' is-zero' : ''}`} x={f(t.x - 12)} y={f(t.y)} text-anchor="end" data-k={o.key}><tspan class="mx-name">{PROJ_NAMES[k]}</tspan><tspan class="mx-hit" dx="8">{zero(o.amt[k]) ? '0' : fmt2(o.amt[k])}</tspan><tspan class="mx-of" dx="5">из {fmt2(t.v)}</tspan></text>)}
+    </Fragment>
+  ))}
+  {grp.map((g, j) => (
+    <Fragment>
+      <text class="mx-l mx-g mx-base-g" x={GX + 8} y={f(g.top - 12)} data-hk={`g${j}`}><tspan class="mx-name">{g.name}</tspan><tspan class="mx-val" dx="8">{fmt2(g.v)}</tspan><tspan class="mx-share" dx="6">{share(g.v)}</tspan></text>
+      {pKeys.map((key, k) => <text class={`mx-l mx-g mx-alt${zero(gAlloc[j][k]) ? ' is-zero' : ''}`} x={GX + 8} y={f(g.top - 12)} data-k={key}><tspan class="mx-name">{g.name}</tspan><tspan class="mx-hit" dx="8">{zero(gAlloc[j][k]) ? '0' : fmt2(gAlloc[j][k])}</tspan><tspan class="mx-of" dx="5">из {fmt2(g.v)}</tspan></text>)}
+    </Fragment>
+  ))}
+  {cost.map((t) => (
+    <Fragment>
+      <text class="mx-l mx-base-c" x={f(t.x + 12)} y={f(t.y)} data-hk={`c${t.i}`}><tspan class="mx-name">{COST_NAMES[t.i]}</tspan><tspan class="mx-val" dx="8">{fmt2(t.v)}</tspan><tspan class="mx-share" dx="6">{share(t.v)}</tspan></text>
+      {pKeys.map((key, k) => <text class={`mx-l mx-alt${zero(ALLOC[t.i][k]) ? ' is-zero' : ''}`} x={f(t.x + 12)} y={f(t.y)} data-k={key}><tspan class="mx-name">{COST_NAMES[t.i]}</tspan><tspan class="mx-hit" dx="8">{zero(ALLOC[t.i][k]) ? '0' : fmt2(ALLOC[t.i][k])}</tspan><tspan class="mx-of" dx="5">из {fmt2(t.v)}</tspan></text>)}
+    </Fragment>
+  ))}
+</svg>
+
+<script>
+  // Наведение на проект, группу или статью: остальное гаснет, сердцевины нитей показывают долю выбранного,
+  // подписи на другой стороне переключаются на «сумма из всего». Касание на планшете работает как наведение
+  document.querySelectorAll<SVGSVGElement>('[data-mx]').forEach((svg) => {
+    const off = () => {
+      svg.classList.remove('has-k');
+      svg.querySelectorAll('.is-on').forEach((e) => e.classList.remove('is-on'));
+    };
+    const on = (key: string) => {
+      off();
+      svg.classList.add('has-k');
+      svg.querySelectorAll(`[data-k~="${key}"]`).forEach((e) => e.classList.add('is-on'));
+      svg.dataset.side = key[0];
+    };
+    svg.querySelectorAll<SVGElement>('[data-hk]').forEach((el) => {
+      el.addEventListener('pointerenter', () => on(el.dataset.hk!));
+      el.addEventListener('pointerleave', off);
+    });
+  });
+</script>
+
+<style>
+  .mx { display: block; width: 100%; height: auto; overflow: visible; }
+  .mx text { dominant-baseline: middle; }
+  .mx-cap { font: 500 13px var(--font); fill: var(--ink-3); }
+  .mx-big { font: 700 20px var(--font); fill: var(--ink); font-variant-numeric: tabular-nums; }
+  .mx-unit { font: 500 13px var(--font); fill: var(--ink-2); }
+  .mx-lead { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; }
+  .mx-bar, .mx-node { fill: var(--ink); }
+  .mx-node { cursor: default; }
+  .mx-t { fill: none; stroke-opacity: .9; transition: stroke-opacity .2s ease; }
+  .mx-ov { fill: none; stroke-opacity: 0; pointer-events: none; transition: stroke-opacity .2s ease; }
+  .mx-l { font: 400 13px var(--font); paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; transition: opacity .2s ease; }
+  .mx-name { font-weight: 500; fill: var(--ink); }
+  .mx-val, .mx-of { fill: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .mx-share { fill: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .mx-hit { font-weight: 700; fill: var(--ink); font-variant-numeric: tabular-nums; }
+  .mx-of { fill: var(--ink-3); }
+  .mx-alt { opacity: 0; pointer-events: none; }
+  .mx-alt.is-zero .mx-name, .mx-alt.is-zero .mx-hit { fill: var(--ink-3); font-weight: 400; }
+
+  /* Выбрано: базовые нити гаснут, выбранная и её сердцевины горят */
+  .mx.has-k .mx-t { stroke-opacity: .16; }
+  .mx.has-k .mx-t.is-on { stroke-opacity: .95; }
+  .mx.has-k .mx-ov.is-on { stroke-opacity: 1; }
+  /* Подписи другой стороны меняются на «сумма из всего» */
+  .mx.has-k[data-side='c'] .mx-base-p, .mx.has-k[data-side='g'] .mx-base-p { opacity: 0; }
+  .mx.has-k[data-side='p'] .mx-base-c, .mx.has-k[data-side='p'] .mx-base-g { opacity: 0; }
+  .mx.has-k .mx-alt.is-on { opacity: 1; }
+  [data-hk] { cursor: pointer; }
+</style>

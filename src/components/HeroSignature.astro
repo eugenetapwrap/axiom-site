@@ -1,0 +1,81 @@
+---
+// Фирменный мотив первого экрана: «Нити» (деньги за месяц) и «J-кривая» (окупаемость проекта).
+// Переключатель — две точки в шапке после логотипа (Header.astro, data-sig-tab).
+// Выбор посетителя запоминается в браузере. Повторный показ заново проигрывает анимацию.
+import HeroThreads from './HeroThreads.astro';
+import HeroJCurve from './HeroJCurve.astro';
+
+---
+
+<div class="sig" data-sig>
+  <div class="sig-view" id="sig-threads" role="tabpanel" aria-labelledby="sig-tab-threads" data-sig-view="threads"><HeroThreads /></div>
+  <div class="sig-view" id="sig-jcurve" role="tabpanel" aria-labelledby="sig-tab-jcurve" data-sig-view="jcurve" hidden><HeroJCurve /></div>
+</div>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const KEY = 'axiom-hero-view';
+
+  // Счётчики набирают итоговое число за 0,8 с; итоговый текст берётся из разметки, чтобы совпасть до знака
+  function count(el: HTMLElement | SVGElement) {
+    const d = el.dataset;
+    const to = Number(d.sigCount);
+    const dec = Number(d.dec ?? 2);
+    const suffix = d.suffix ?? '';
+    const final = d.final ?? el.textContent ?? '';
+    d.final = final;
+    const run = String(Number(d.run ?? 0) + 1);
+    d.run = run;
+    const show = (v: number) => { el.textContent = v.toFixed(dec).replace('.', ',') + suffix; };
+    show(0);
+    window.setTimeout(() => {
+      const t0 = performance.now();
+      const step = (now: number) => {
+        if (d.run !== run) return;
+        const k = Math.min(1, (now - t0) / 800);
+        if (k < 1) { show(to * (1 - Math.pow(1 - k, 3))); requestAnimationFrame(step); }
+        else el.textContent = final;
+      };
+      requestAnimationFrame(step);
+    }, Number(d.delay ?? 0));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-sig]').forEach((root) => {
+    const tabs = [...document.querySelectorAll<HTMLButtonElement>('[data-sig-tab]')];
+    const views = [...root.querySelectorAll<HTMLElement>('[data-sig-view]')];
+    const show = (id: string, save: boolean) => {
+      tabs.forEach((t) => {
+        const on = t.dataset.sigTab === id;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+      });
+      views.forEach((v) => { v.hidden = true; });
+      const view = views.find((v) => v.dataset.sigView === id);
+      if (!view) return;
+      void view.offsetWidth; // из display:none обратно — CSS-анимации начинаются заново
+      view.hidden = false;
+      if (!reduce) view.querySelectorAll<SVGElement>('[data-sig-count]').forEach(count);
+      if (save) { try { localStorage.setItem(KEY, id); } catch { /* без памяти тоже работает */ } }
+    };
+    let start = 'threads';
+    try {
+      const saved = localStorage.getItem(KEY);
+      if (saved && views.some((v) => v.dataset.sigView === saved)) start = saved;
+    } catch { /* приватный режим */ }
+    show(start, false);
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => show(t.dataset.sigTab!, true));
+      t.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        next.focus();
+        show(next.dataset.sigTab!, true);
+      });
+    });
+  });
+</script>
+
+<style>
+  .sig { display: grid; }
+  .sig-view[hidden] { display: none; }
+</style>

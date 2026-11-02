@@ -1,29 +1,31 @@
 ---
 import { site } from '../data/site';
+import PaletteBar from './PaletteBar.astro';
 
 const nav = [
-  { href: '/#practices', label: 'Направления' },
-  { href: '/#expertise', label: 'Экспертиза' },
+  { href: '/#practices', label: 'Услуги' },
+  { href: '/#calc', label: 'Калькуляторы' },
   { href: '/#cases', label: 'Кейсы' },
   { href: '/#team', label: 'Команда' },
+  { href: '/#faq', label: 'Вопросы' },
 ];
 ---
 
 <header class="header">
+  <PaletteBar />
   <div class="container header-inner">
     <a class="logo" href="/" aria-label="Axiom, на главную">
       <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
-        <rect width="32" height="32" rx="6" fill="var(--accent)"></rect>
-        <path d="M9 24 16 8l7 16M11.8 18h8.4" fill="none" stroke="#faf8f3" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+        <rect width="32" height="32" rx="6" fill="var(--btn-bg)"></rect>
+        <path d="M9 24 16 8l7 16M11.8 18h8.4" fill="none" stroke="var(--btn-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
       </svg>
       <span>Axiom</span>
     </a>
     <nav class="nav" aria-label="Основное меню">
       {nav.map((item) => <a href={item.href}>{item.label}</a>)}
     </nav>
-    <a class="header-login" href={site.portalUrl} aria-label="Личный кабинет клиента">
+    <a class="header-login" href={site.portalUrl} aria-label="Личный кабинет клиента" title="Личный кабинет клиента">
       <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.8 16.5c.9-2.9 3.3-4.5 6.2-4.5s5.3 1.6 6.2 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      <span>Личный кабинет</span>
     </a>
     <a class="btn btn-primary header-cta" href={site.telegramUrl}>Написать в Telegram</a>
   </div>
@@ -64,11 +66,11 @@ const nav = [
   .nav a:hover { color: var(--ink); }
   .header-cta { min-height: 40px; padding: 8px 16px; font-size: 15px; }
   .header-login {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
     min-height: 40px;
-    padding: 8px 14px;
+    padding: 0;
     border-radius: 6px;
     border: 1px solid var(--line);
     background: var(--surface);
@@ -88,7 +90,7 @@ const nav = [
   }
   @media (max-width: 519px) {
     .header-inner { gap: var(--s1); }
-    .header-login { padding: 8px 10px; }
-    .header-login span { display: none; }
+    .logo { font-size: 18px; gap: 8px; }
+    .header-cta { padding: 8px 12px; font-size: 14px; white-space: nowrap; }
   }
 </style>

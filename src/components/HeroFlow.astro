@@ -1,0 +1,138 @@
+---
+// Фирменный мотив: ленты денежного потока на первом экране.
+// Тот же первый месяц, что и в большой схеме учёта (src/lib/sankey.ts), но три колонки:
+// проекты → поступления → группы затрат. Ленты «вытягиваются» слева направо один раз.
+import { NODES, LINKS, SERIES, fmt } from '../lib/sankey';
+
+const W = 600;
+const H = 440;
+const PAD_T = 30;
+const PAD_B = 52;
+const NODE_W = 4;
+const GAP = 14;
+const colX = [118, 300, 482];
+const values = SERIES[0];
+
+// Берём только первые две ступени: проекты → поступления → группы
+const used = LINKS.map((l, i) => ({ ...l, v: values[i] })).filter((l) => l.from !== 'cash' ? l.to === 'cash' : true)
+  .filter((l) => !l.from.startsWith('g'));
+const colOf = (id: string) => (id === 'cash' ? 1 : id.startsWith('g') ? 2 : 0);
+const ids = [...new Set(used.flatMap((l) => [l.from, l.to]))];
+const val: Record<string, number> = {};
+ids.forEach((id) => {
+  const out = used.filter((l) => l.from === id).reduce((s, l) => s + l.v, 0);
+  const inn = used.filter((l) => l.to === id).reduce((s, l) => s + l.v, 0);
+  val[id] = Math.max(out, inn);
+});
+const cols = [0, 1, 2].map((c) => ids.filter((id) => colOf(id) === c));
+const maxCol = Math.max(...cols.map((c) => c.reduce((s, id) => s + val[id], 0) + 0));
+const scale = (H - PAD_T - PAD_B - GAP * 4) / maxCol;
+
+const node: Record<string, { x: number; y: number; h: number }> = {};
+cols.forEach((c, ci) => {
+  const total = c.reduce((s, id) => s + val[id] * scale, 0) + GAP * (c.length - 1);
+  let y = PAD_T + (H - PAD_T - PAD_B - total) / 2;
+  c.forEach((id) => {
+    const h = Math.max(val[id] * scale, 2);
+    node[id] = { x: colX[ci], y, h };
+    y += h + GAP;
+  });
+});
+
+const outY: Record<string, number> = {};
+const inY: Record<string, number> = {};
+ids.forEach((id) => { outY[id] = node[id].y; inY[id] = node[id].y; });
+const tone: Record<string, string> = {
+  g1: 'var(--gold)', g2: 'var(--accent-2)', g3: 'var(--ink-3)', g4: 'var(--accent)',
+};
+const ribbons = used.map((l) => {
+  const a = node[l.from];
+  const b = node[l.to];
+  const h = l.v * scale;
+  const x0 = a.x + NODE_W;
+  const x1 = b.x;
+  const y0 = outY[l.from];
+  const y1 = inY[l.to];
+  outY[l.from] += h;
+  inY[l.to] += h;
+  const mx = (x0 + x1) / 2;
+  const f = (n: number) => n.toFixed(1);
+  const d = `M${f(x0)},${f(y0)} C${f(mx)},${f(y0)} ${f(mx)},${f(y1)} ${f(x1)},${f(y1)} L${f(x1)},${f(y1 + h)} C${f(mx)},${f(y1 + h)} ${f(mx)},${f(y0 + h)} ${f(x0)},${f(y0 + h)} Z`;
+  const color = l.from === 'cash' ? tone[l.to] : 'var(--accent)';
+  return { d, color, stage: l.from === 'cash' ? 2 : 1, op: l.from === 'cash' ? 0.42 : 0.2 };
+});
+const label = (id: string) => NODES.find((n) => n.id === id)!.label;
+
+// Подписи мелких узлов не должны налезать друг на друга: не ближе 16px по вертикали
+const labelY: Record<string, number> = {};
+cols.forEach((c) => {
+  let prev = -Infinity;
+  c.forEach((id) => {
+    const y = Math.max(node[id].y + node[id].h / 2, prev + 16);
+    labelY[id] = y;
+    prev = y;
+  });
+});
+---
+
+<figure class="hero-flow" aria-label="Пример: поступления по проектам распределяются на группы затрат">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-hidden="true">
+    <defs>
+      <clipPath id="hf-clip-1"><rect class="hf-wipe hf-wipe--1" x="0" y="0" width={colX[1] + NODE_W} height={H}></rect></clipPath>
+      <clipPath id="hf-clip-2"><rect class="hf-wipe hf-wipe--2" x={colX[1]} y="0" width={W - colX[1]} height={H}></rect></clipPath>
+    </defs>
+    <text class="hf-col" x={colX[0] + NODE_W} y="12" text-anchor="end">Проекты</text>
+    <text class="hf-col" x={colX[1] + NODE_W / 2} y="12" text-anchor="middle">Поступления</text>
+    <text class="hf-col" x={colX[2]} y="12">Группы затрат</text>
+    <g clip-path="url(#hf-clip-1)">
+      {ribbons.filter((r) => r.stage === 1).map((r) => <path d={r.d} fill={r.color} fill-opacity={r.op}></path>)}
+    </g>
+    <g clip-path="url(#hf-clip-2)">
+      {ribbons.filter((r) => r.stage === 2).map((r) => <path d={r.d} fill={r.color} fill-opacity={r.op}></path>)}
+    </g>
+    {ids.map((id) => {
+      const n = node[id];
+      const c = colOf(id);
+      const ly = labelY[id];
+      return (
+        <g class="hf-node">
+          <rect x={n.x} y={n.y} width={NODE_W} height={n.h} rx="1" fill="var(--ink-2)"></rect>
+          {c === 0 && (
+            <text class="hf-side" x={n.x - 10} y={ly} text-anchor="end"><tspan class="hf-name">{label(id)}</tspan><tspan class="hf-val" dx="6">{fmt(val[id])}</tspan></text>
+          )}
+          {c === 1 && (
+            <text x={n.x + NODE_W / 2} y={n.y + n.h + 22} text-anchor="middle"><tspan class="hf-name">{label(id)}</tspan><tspan class="hf-val hf-val--lg" x={n.x + NODE_W / 2} dy="21">{fmt(val[id])} млрд IDR</tspan></text>
+          )}
+          {c === 2 && (
+            <text class="hf-side" x={n.x + NODE_W + 10} y={ly}><tspan class="hf-name">{label(id)}</tspan><tspan class="hf-val" dx="6">{fmt(val[id])}</tspan></text>
+          )}
+        </g>
+      );
+    })}
+  </svg>
+  <figcaption class="hf-cap">Деньги за месяц, млрд IDR. Демо-данные</figcaption>
+</figure>
+
+<style>
+  .hero-flow { margin: 0; }
+  .hero-flow svg { width: 100%; height: auto; overflow: visible; }
+  .hf-col { font: 500 11px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; fill: var(--ink-3); }
+  .hf-name { font: 600 13px var(--font); fill: var(--ink); }
+  .hf-val { font: 400 12px var(--font-mono); fill: var(--ink-2); }
+  .hf-val--lg { font-size: 13px; fill: var(--accent); font-weight: 500; }
+  .hf-node text { dominant-baseline: middle; }
+  .hf-cap { margin-top: 6px; font: 400 12px var(--font-mono); color: var(--ink-3); text-align: right; }
+
+  /* Ленты вытягиваются слева направо: сначала к поступлениям, потом к затратам */
+  .hf-wipe { transform-box: fill-box; transform-origin: left center; animation: hf-wipe 1.4s cubic-bezier(.45, 0, .2, 1) both; }
+  .hf-wipe--2 { animation-delay: 1s; }
+  .hf-node { animation: hf-in .6s ease both; animation-delay: .2s; }
+  /* На телефоне подписи были бы мельче 7px: оставляем ленты и итог в центре */
+  @media (max-width: 640px) {
+    .hf-side, .hf-col { display: none; }
+    .hf-node .hf-name { font-size: 20px; }
+    .hf-val--lg { font-size: 20px; }
+  }
+  @keyframes hf-wipe { from { transform: scaleX(0); } }
+  @keyframes hf-in { from { opacity: 0; } }
+</style>

@@ -1,0 +1,60 @@
+---
+// Влияние на IRR пишем «−0,9%», как просил Евгений (по сути это процентные пункты).
+// Пример результата аудита: фрагмент реестра замечаний и пересчёт IRR. Демо-данные,
+// не из проектов клиентов (отчёты аудита конфиденциальны). Влияние замечаний на IRR складываем приближённо:
+// 14,2% − 0,9 − 0,4 − 0,3 − 0,2 − 0 = 12,4%.
+const rows = [
+  { lvl: 'Высокая', cls: 'hi', sheet: 'График', text: 'Стройка 18 месяцев, а по договору генподряда 24', impact: '−0,9%' },
+  { lvl: 'Средняя', cls: 'mid', sheet: 'Продажи', text: 'Темп продаж выше, чем у соседних проектов', impact: '−0,4%' },
+  { lvl: 'Средняя', cls: 'mid', sheet: 'Затраты', text: 'Нет резерва на непредвиденные расходы', impact: '−0,3%' },
+  { lvl: 'Средняя', cls: 'mid', sheet: 'Финансирование', text: 'Проценты по кредиту начинаются с ввода, а не с первой выдачи', impact: '−0,2%' },
+  { lvl: 'Низкая', cls: 'lo', sheet: 'Ввод', text: 'Курс валюты введён числом, а не ссылкой', impact: '0' },
+];
+---
+
+<figure class="mini" aria-label="Пример реестра замечаний аудита: пять замечаний, IRR после пересчёта 12,4% вместо 14,2%. Демо-данные">
+  <div class="mr-a">
+  <p class="mini-head">Реестр замечаний, фрагмент</p>
+  <ul class="mr">
+    {rows.map((r) => (
+      <li>
+        <span class={`mr-lvl mr-lvl--${r.cls}`}>{r.lvl}</span>
+        <span class="mr-text"><em>{r.sheet}.</em> {r.text}</span>
+        <b class="mr-imp">{r.impact === '0' ? '—' : `IRR ${r.impact}`}</b>
+      </li>
+    ))}
+  </ul>
+  </div>
+  <dl class="mini-kpis">
+    <div><dt>IRR в модели</dt><dd>14,2%</dd></div>
+    <div><dt>После пересчёта</dt><dd class="mr-down">12,4%</dd></div>
+    <div><dt>Замечаний</dt><dd>{rows.length}</dd></div>
+  </dl>
+</figure>
+
+<style>
+  .mini { display: flex; flex-direction: column; justify-content: space-between; gap: 6px; height: 100%; margin: 0; padding: 18px 20px; border-radius: 8px; background: var(--bg); }
+  /* Широкая карточка: реестр слева, показатели справа столбиком */
+  @container (min-width: 1000px) {
+    .mini { display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr); column-gap: 48px; align-items: center; align-content: center; padding: 22px 24px; }
+    .mini figcaption { grid-column: 1 / -1; }
+    .mini > .mini-kpis { grid-template-columns: 1fr; gap: 14px; margin: 0; padding: 0 0 0 32px; border-top: 0; border-left: 1px solid var(--line); }
+    .mini > .mini-kpis dd { font-size: 20px; }
+  }
+  .mini-head { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .mr { display: grid; margin: 10px 0 0; padding: 0; list-style: none; font-size: 13px; line-height: 1.4; }
+  .mr li { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 0; border-top: 1px solid var(--line); }
+  .mr-lvl { font-size: 12px; font-weight: 600; }
+  .mr-lvl::before { content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: currentColor; vertical-align: 1px; }
+  .mr-lvl--hi { color: var(--risk); }
+  .mr-lvl--mid { color: var(--gold-ink, var(--accent-2)); }
+  .mr-lvl--lo { color: var(--ink-3); }
+  .mr-text { color: var(--ink); }
+  .mr-text em { font-style: normal; color: var(--ink-3); }
+  .mr-imp { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .mini-kpis { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 8px; margin: 4px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
+  .mini-kpis dt { font-size: 12px; color: var(--ink-3); }
+  .mini-kpis dd { margin: 0; font-size: 18px; font-weight: 700; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .mini-kpis dd.mr-down { color: var(--risk); }
+  .mini figcaption { margin-top: 8px; font-size: 12px; line-height: 1.4; color: var(--ink-3); }
+</style>
