@@ -30,7 +30,8 @@ const faqLd = {
     <div class="container">
       <div class="hero-top">
         <div class="hero-text">
-          <h1>{t(hero.title)} <span class="hero-aud">{t(hero.audience)}</span></h1>
+          <!-- На широком экране строки заданы явно: четыре строки, кнопки по низу последней -->
+          <h1>{hero.lines.map((l) => <span class="h1-l">{t(l)} </span>)}<span class="hero-aud">{hero.audLines.map((l) => <span class="h1-l">{t(l)} </span>)}</span></h1>
         </div>
         <div class="hero-side">
           <dl class="hero-stats">
@@ -38,7 +39,6 @@ const faqLd = {
               <div><dt>{s.value}</dt><dd>{t(s.text)}</dd></div>
             ))}
           </dl>
-          <p class="hero-note">{t(hero.note)}</p>
           <div class="btn-row hero-btns">
             <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
             <a class="btn btn-secondary" href="#calc">Калькуляторы</a>
@@ -64,33 +64,49 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Услуги строками (Евгений 02.11.2026): под заголовком результат, в центре что входит, справа пример на демо-данных -->
-  <section class="section section--alt practices" id="practices" aria-label="Услуги">
+  <!-- Услуги (Евгений 02.11.2026): у всех четырёх один шаблон из прямоугольных блоков.
+       Название, строка «что это» и результат; «Что входит»; кнопка; пример на демо-данных.
+       Три варианта раскладки для сравнения (html[data-svc]): 1 — текст и пример пополам,
+       2 — два блока рядом и пример снизу, 3 — вкладки и пример сверху. Переключатель в тёмной полосе сверху -->
+  <section class="section section--alt practices" id="practices" aria-label="Услуги" data-pl>
     <div class="container">
+      <div class="pl-tabs" role="tablist" aria-label="Услуги">
+        {practices.map((p, i) => (
+          <button type="button" role="tab" id={`pl-tab-${p.id}`} aria-controls={p.id} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-pl-tab={p.id}>
+            <span>{p.num}</span>{t(p.short)}
+          </button>
+        ))}
+      </div>
       {practices.map((p) => (
-        <article class="practice" id={p.id} data-reveal>
-          <div class="practice-head">
+        <article class="practice" id={p.id} data-reveal data-pl-panel={p.id} aria-labelledby={`pr-h-${p.id}`}>
+          <div class="pr-main">
             <span class="practice-num">{p.num}</span>
-            <h2>{t(p.title)}</h2>
-            <p class="practice-result">{t(p.result)}</p>
-            <a class="btn btn-soft" href={tgLink(p.topic)}>{p.cta}</a>
+            <h2 id={`pr-h-${p.id}`}>{t(p.title)}</h2>
+            <p class="practice-lead">{t(p.card)}</p>
+            <p class="practice-result"><span>Результат</span>{t(p.result)}</p>
           </div>
-          <div class="practice-col">
+          <div class="pr-list">
             <p class="practice-label">Что входит</p>
             <ul class="dots practice-items">
               {p.items.map((i) => <li>{t(i)}</li>)}
             </ul>
           </div>
-          <div class="practice-ex">
+          <div class="pr-cta">
+            <a class="btn btn-soft" href={tgLink(p.topic)}>{p.cta}</a>
+          </div>
+          <div class="pr-ex">
             {p.id === 'models' && <MiniJCurve />}
             {p.id === 'accounting' && <MiniThreads />}
             {p.id === 'audit' && <MiniRegister />}
             {p.id === 'advisory' && (
               <div class="calc-links">
                 <p class="calc-links-head">Посчитайте сами на сайте</p>
-                <a href="#calc" data-open-calc="inst"><b>Рассрочка или скидка</b><span>Какая скидка за полную оплату выгодна обеим сторонам</span></a>
-                <a href="#calc" data-open-calc="villa"><b>Доходность виллы</b><span>Cash Flow инвестора по годам, IRR и NPV</span></a>
-                <a href="#calc" data-open-calc="dup"><b>Дубли и ошибки</b><span>Ориентир по проектам наших клиентов</span></a>
+                <div class="calc-links-list">
+                  <a href="#calc" data-open-calc="villa"><b>Доходность виллы</b><span>Чистый доход, IRR и MOIC за срок владения</span></a>
+                  <a href="#calc" data-open-calc="growth"><b>Рост стоимости</b><span>Прогноз цены на 1–5 лет</span></a>
+                  <a href="#calc" data-open-calc="value"><b>Оценка виллы</b><span>Затратный и доходный методы</span></a>
+                  <a href="#calc" data-open-calc="inst"><b>Рассрочка или скидка</b><span>Реальная ставка рассрочки и что выгоднее</span></a>
+                </div>
               </div>
             )}
           </div>
@@ -102,13 +118,6 @@ const faqLd = {
   <!-- Калькуляторы вместо демо-виджетов: считают цифры самого посетителя -->
   <section class="section" id="calc">
     <div class="container">
-      <div class="section-head section-head--row" data-reveal>
-        <div>
-          <p class="eyebrow">Калькуляторы</p>
-          <h2>Посчитайте сами</h2>
-        </div>
-        <p class="caption">Считает ваш браузер, цифры никуда не отправляются</p>
-      </div>
       <Calculators />
     </div>
   </section>
@@ -252,6 +261,37 @@ const faqLd = {
 </Base>
 
 <script>
+  // Услуги вкладками (раскладка 3): видна одна услуга. Ссылки на #models и другие открывают нужную вкладку
+  document.querySelectorAll<HTMLElement>('[data-pl]').forEach((pl) => {
+    const tabs = [...pl.querySelectorAll<HTMLButtonElement>('[data-pl-tab]')];
+    const panels = [...pl.querySelectorAll<HTMLElement>('[data-pl-panel]')];
+    const pick = (id: string) => {
+      if (!panels.some((p) => p.dataset.plPanel === id)) return false;
+      tabs.forEach((t) => {
+        const on = t.dataset.plTab === id;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+      });
+      panels.forEach((p) => p.toggleAttribute('data-pl-off', p.dataset.plPanel !== id));
+      return true;
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => pick(t.dataset.plTab!));
+      t.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        n.focus();
+        pick(n.dataset.plTab!);
+      });
+    });
+    // Клик по ссылке на услугу: сначала показываем вкладку, потом браузер прокручивает к ней
+    document.addEventListener('click', (e) => {
+      const a = (e.target as Element).closest<HTMLAnchorElement>('a[href*="#"]');
+      if (a && a.pathname === location.pathname) pick(a.hash.slice(1));
+    });
+    if (!pick(location.hash.slice(1))) pick(panels[0].dataset.plPanel!);
+  });
+
   // Вопросы: клик по вопросу показывает ответ справа. На узком экране ответ встаёт под вопросом.
   document.querySelectorAll<HTMLElement>('[data-faq]').forEach((root) => {
     const qs = [...root.querySelectorAll<HTMLButtonElement>('[data-faq-q]')];
@@ -323,23 +363,28 @@ const faqLd = {
 </script>
 
 <style>
-  /* Первый экран */
+  /* Первый экран. Цифры справа: их линии стоят на высоте заглавных первой строки, кнопки по базовой линии последней.
+     Смещения считаны с метрик Inter Tight при межстрочном 1,06: от края строки до верха заглавных и до базовой линии около 0,17 кегля */
   .hero { padding: var(--s5) 0 var(--s6); background-color: var(--bg); }
-  .hero-top { display: grid; gap: var(--s4); align-items: end; }
-  @media (min-width: 1024px) { .hero-top { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); column-gap: var(--s6); } }
-  .hero h1 { font-size: clamp(30px, 3.6vw, 60px); line-height: 1.06; max-width: 16em; text-wrap: balance; }
+  .hero-top { --hfs: clamp(30px, 3.6vw, 60px); display: grid; gap: var(--s4); }
+  .hero h1 { font-size: var(--hfs); line-height: 1.06; max-width: 16em; text-wrap: balance; }
   .hero-aud { color: var(--ink-3); }
-  /* Крупные цифры, как в презентации: значение и подпись */
+  .hero-side { display: grid; gap: var(--s4); }
+  @media (min-width: 1200px) {
+    .hero-top { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); column-gap: var(--s6); align-items: stretch; }
+    .h1-l { display: block; }
+    .hero-side { display: flex; flex-direction: column; justify-content: space-between; padding: calc(var(--hfs) * 0.166) 0 calc(var(--hfs) * 0.167); }
+  }
+  /* Крупные цифры, как в презентации. Линии в цветах нитей */
   .hero-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); margin: 0; }
-  .hero-stats div { padding-top: 12px; border-top: 2px solid var(--ink); }
+  .hero-stats div { padding-top: 14px; border-top: 3px solid var(--th-1); }
+  .hero-stats div:nth-child(2) { border-top-color: var(--th-2); }
+  .hero-stats div:nth-child(3) { border-top-color: var(--th-3); }
   .hero-stats dt { font-family: var(--font-display); font-size: clamp(26px, 2.5vw, 40px); font-weight: 600; line-height: 1.05; letter-spacing: -0.03em; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .hero-stats dd { margin: 8px 0 0; font-size: 14px; line-height: 1.35; color: var(--ink-2); }
-  .hero-note { margin-top: var(--s3); font-size: 14px; color: var(--ink-3); }
-  .hero-btns { margin-top: 12px; }
   @media (max-width: 520px) {
     .hero-stats { grid-template-columns: 1fr; gap: 0; }
-    .hero-stats div { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: var(--s2); align-items: baseline; padding: 10px 0; border-top: 1px solid var(--line); }
-    .hero-stats div:first-child { border-top: 2px solid var(--ink); }
+    .hero-stats div { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: var(--s2); align-items: baseline; padding: 10px 0; border-top-width: 2px; }
     .hero-stats dd { margin: 0; }
   }
 
@@ -379,34 +424,82 @@ const faqLd = {
   .service-more { margin-top: auto; padding-top: var(--s1); color: var(--accent); font-size: 15px; font-weight: 600; }
   .service-more::after { content: ' ↓'; }
 
-  /* Услуги: строки с тонкой линией между ними. Слева название и результат, в центре что входит, справа пример */
+  /* Услуги: у каждой одна карточка с четырьмя областями — main (название, что это, результат), list (что входит),
+     cta (кнопка), ex (пример). Раскладку задаёт html[data-svc]: 1 пополам, 2 пример снизу, 3 вкладки. На телефоне всё столбиком.
+     Кнопка всегда в нижнем ряду своей колонки: её низ совпадает с низом соседнего блока */
   .practices { padding-top: var(--s5); }
-  .practice { display: grid; gap: var(--s4); padding: var(--s5) 0; border-top: 1px solid var(--line); }
-  .practice:last-child { border-bottom: 1px solid var(--line); }
-  @media (min-width: 760px) {
-    /* Две колонки: слева название и пример под ним, справа что входит */
-    .practice { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--s5); align-items: start; }
-    .practice-head { grid-column: 1; grid-row: 1; }
-    .practice-col { grid-column: 2; grid-row: 1 / span 2; }
-    .practice-ex { grid-column: 1; grid-row: 2; }
+  .practice {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'main' 'list' 'cta' 'ex';
+    gap: var(--s3);
+    margin-bottom: var(--s3);
+    padding: var(--s4);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+    scroll-margin-top: 96px;
   }
-  @media (min-width: 1180px) {
-    .practice { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr) minmax(0, 1.15fr); column-gap: var(--s5); align-items: start; }
-    .practice-head, .practice-col, .practice-ex { grid-column: auto; grid-row: auto; }
-  }
+  .practice:last-child { margin-bottom: 0; }
+  @media (max-width: 600px) { .practice { padding: var(--s3) 18px; } }
+  .pr-main { grid-area: main; }
+  .pr-list { grid-area: list; }
+  .pr-cta { grid-area: cta; align-self: end; }
+  .pr-ex { grid-area: ex; container-type: inline-size; display: grid; min-width: 0; }
   .practice-num { display: block; margin-bottom: var(--s1); font-size: 14px; color: var(--ink-3); }
   .practice h2 { font-size: clamp(24px, 2.2vw, 32px); line-height: 1.15; letter-spacing: -0.02em; }
-  .practice-result { margin: var(--s2) 0 var(--s3); font-size: 18px; line-height: 1.45; color: var(--ink-2); max-width: 26em; }
+  .practice-lead { margin-top: var(--s2); font-size: 18px; line-height: 1.45; color: var(--ink); max-width: 30em; }
+  .practice-result { margin-top: var(--s2); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: 16px; line-height: 1.45; color: var(--ink-2); max-width: 32em; }
+  .practice-result span { display: block; margin-bottom: 4px; font-size: 13px; font-weight: 600; color: var(--ink-3); }
   .practice-label { font-size: 13px; font-weight: 600; color: var(--ink-3); margin-bottom: 12px; }
   .practice-items { gap: 8px; }
-  /* Ссылки на калькуляторы у инвестанализа */
-  .calc-links { display: grid; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; }
+
+  @media (min-width: 1024px) {
+    /* 1. Пополам: слева название, состав и кнопка, справа пример той же высоты */
+    .practice { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto 1fr auto; grid-template-areas: 'main ex' 'list ex' 'cta ex'; column-gap: var(--s5); row-gap: var(--s4); }
+    /* 2. Два блока рядом, пример снизу во всю ширину карточки */
+    :global(html[data-svc='2']) .practice { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); grid-template-rows: auto 1fr auto; grid-template-areas: 'main list' 'cta list' 'ex ex'; }
+    :global(html[data-svc='2']) .pr-list { padding-left: var(--s5); border-left: 1px solid var(--line); }
+    :global(html[data-svc='2']) .practice-items { display: block; columns: 2; column-gap: var(--s5); }
+    :global(html[data-svc='2']) .practice-items li { break-inside: avoid; margin-bottom: 8px; }
+    :global(html[data-svc='2']) .pr-ex { margin-top: var(--s1); }
+    /* 3. Вкладки: пример сверху, под ним два блока, как у claude.com */
+    :global(html[data-svc='3']) .practice { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); grid-template-rows: auto auto 1fr; grid-template-areas: 'ex ex' 'main list' 'cta list'; }
+    :global(html[data-svc='3']) .pr-list { padding-left: var(--s5); border-left: 1px solid var(--line); }
+    :global(html[data-svc='3']) .practice-items { display: block; columns: 2; column-gap: var(--s5); }
+    :global(html[data-svc='3']) .practice-items li { break-inside: avoid; margin-bottom: 8px; }
+    :global(html[data-svc='3']) .pr-ex { margin-bottom: var(--s1); }
+  }
+  /* Вкладки услуг видны только в варианте 3 */
+  .pl-tabs { display: none; }
+  :global(html[data-svc='3']) .pl-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: var(--s3); }
+  @media (min-width: 900px) { :global(html[data-svc='3']) .pl-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .pl-tabs button {
+    display: flex; align-items: baseline; gap: 10px; padding: 14px 18px;
+    border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
+    color: var(--ink-2); font: 600 16px/1.25 var(--font-display); text-align: left; cursor: pointer;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .pl-tabs button span { font: 400 13px var(--font); color: var(--ink-3); }
+  .pl-tabs button:hover { color: var(--ink); border-color: var(--ink-3); }
+  .pl-tabs button[aria-selected='true'] { color: var(--ink); border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .pl-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  :global(html[data-svc='3']) .practice[data-pl-off] { display: none; }
+
+  /* Ссылки на калькуляторы у инвестанализа: в узкой колонке списком, в широкой в ряд */
+  .calc-links { display: flex; flex-direction: column; border-radius: 8px; background: var(--bg); overflow: hidden; }
   .calc-links-head { padding: 16px 18px 10px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
-  .calc-links a { display: grid; gap: 2px; padding: 12px 18px; border-top: 1px solid var(--line); color: var(--ink); text-decoration: none; }
-  .calc-links a:hover { background: color-mix(in srgb, var(--accent) 5%, var(--surface)); }
+  .calc-links-list { display: grid; flex: 1; grid-auto-rows: 1fr; }
+  .calc-links a { display: grid; align-content: center; gap: 2px; padding: 12px 18px; border-top: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+  .calc-links a:hover { background: color-mix(in srgb, var(--accent) 6%, var(--bg)); }
   .calc-links a b { color: var(--accent); font-weight: 600; font-size: 16px; }
   .calc-links a b::after { content: ' →'; }
   .calc-links a span { font-size: 14px; color: var(--ink-2); }
+  @container (min-width: 1000px) {
+    .calc-links-list { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: auto; }
+    .calc-links a { align-content: start; padding: 16px 18px 20px; }
+    .calc-links a + a { border-left: 1px solid var(--line); }
+  }
 
   /* Результаты за 2 года: три равные цифры */
   .results { padding: var(--s6) 0; }

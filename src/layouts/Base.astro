@@ -50,6 +50,13 @@ const org = {
         if (q) localStorage.setItem('axiom-palette', q);
         if (p && p !== 'forest') document.documentElement.dataset.palette = p;
       } catch (e) {}
+      // Раскладка блоков услуг для сравнения: 1, 2 или 3 (?svc=3 тоже работает)
+      try {
+        var sq = new URLSearchParams(location.search).get('svc');
+        var sv = sq || localStorage.getItem('axiom-svc') || '2';
+        if (sq) localStorage.setItem('axiom-svc', sq);
+        document.documentElement.dataset.svc = /^[123]$/.test(sv) ? sv : '2';
+      } catch (e) { document.documentElement.dataset.svc = '2'; }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

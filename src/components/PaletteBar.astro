@@ -1,6 +1,12 @@
 ---
 // Переключатель палитр для сравнения вариантов. Только в превью редизайна, перед запуском убрать.
 // Значения цветов в src/styles/global.css (html[data-palette=…]). Выбор запоминается в браузере.
+// Раскладки блоков услуг (02.11.2026): html[data-svc], по умолчанию 2. Значения в src/pages/index.astro
+const LAYOUTS = [
+  { id: '1', label: 'Пополам', ref: 'текст слева, пример справа (Stripe, Ramp)' },
+  { id: '2', label: 'Пример снизу', ref: 'два блока рядом, пример под ними' },
+  { id: '3', label: 'Вкладки', ref: 'одна услуга на экране (claude.com)' },
+];
 const PALETTES = [
   { id: 'forest', label: 'Лес', ref: 'текущая палитра', sw: ['#f5f3ec', '#0b5345', '#f0d98c'] },
   { id: 'clay', label: 'Глина', ref: 'референс: Anthropic', sw: ['#f0eee6', '#cc785c', '#1f1e1d'] },
@@ -13,6 +19,14 @@ const PALETTES = [
 
 <div class="pbar" data-pbar>
   <div class="container pbar-inner">
+    <span class="pbar-label pbar-label--first">Услуги</span>
+    <div class="pbar-list pbar-list--svc" role="group" aria-label="Раскладка услуг">
+      {LAYOUTS.map((l) => (
+        <button type="button" class="pbar-btn pbar-btn--svc" data-svc-btn={l.id} aria-pressed={l.id === '2' ? 'true' : 'false'} title={l.ref}>
+          <b>{l.id}</b>{l.label}
+        </button>
+      ))}
+    </div>
     <span class="pbar-label">Палитра</span>
     <div class="pbar-list" role="group" aria-label="Палитра сайта">
       {PALETTES.map((p, i) => (
@@ -22,7 +36,6 @@ const PALETTES = [
         </button>
       ))}
     </div>
-    <span class="pbar-ref" data-pbar-ref>{PALETTES[0].ref}</span>
   </div>
 </div>
 
@@ -48,6 +61,18 @@ const PALETTES = [
     };
     mark(root.dataset.palette ?? 'forest');
     btns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.paletteBtn!)));
+
+    // Раскладка услуг
+    const sbtns = [...bar.querySelectorAll<HTMLButtonElement>('[data-svc-btn]')];
+    const smark = (id: string) => sbtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.svcBtn === id)));
+    smark(root.dataset.svc ?? '2');
+    sbtns.forEach((b) => b.addEventListener('click', () => {
+      const id = b.dataset.svcBtn!;
+      root.dataset.svc = id;
+      smark(id);
+      try { localStorage.setItem('axiom-svc', id); } catch { /* без памяти тоже работает */ }
+      document.dispatchEvent(new CustomEvent('axiom:svc', { detail: id }));
+    }));
   });
 </script>
 
@@ -80,10 +105,15 @@ const PALETTES = [
   .pbar-sw i { width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 0 1.5px #1c1c1b, inset 0 0 0 1px rgba(255, 255, 255, 0.3); }
   .pbar-btn[aria-pressed='true'] .pbar-sw i { box-shadow: 0 0 0 1.5px #f2f1ec, inset 0 0 0 1px rgba(0, 0, 0, 0.12); }
   .pbar-sw i + i { margin-left: -4px; }
-  .pbar-ref { margin-left: auto; flex: none; color: #a6a49c; white-space: nowrap; }
-  @media (max-width: 1100px) { .pbar-ref { display: none; } }
+  .pbar-list--svc { flex: none; }
+  .pbar-btn--svc { padding: 5px 12px; }
+  .pbar-btn--svc b { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: rgba(255, 255, 255, 0.14); font-size: 11px; }
+  .pbar-btn--svc[aria-pressed='true'] b { background: #1c1c1b; color: #f2f1ec; }
+  .pbar-label:not(.pbar-label--first) { margin-left: 12px; padding-left: 16px; border-left: 1px solid rgba(255, 255, 255, 0.16); }
   @media (max-width: 719px) {
     .pbar-label { display: none; }
+    .pbar-inner { overflow-x: auto; scrollbar-width: none; }
+    .pbar-btn--svc { padding: 5px 8px; font-size: 12px; }
   }
   :global(html) { scroll-padding-top: 124px; }
 </style>

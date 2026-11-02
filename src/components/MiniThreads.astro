@@ -67,39 +67,54 @@ const rest = c[c.length - 1];
 ---
 
 <figure class="mini" aria-label={`Пример отчёта для собственника: ${MONTHS[M].toLowerCase()}, поступления ${fmt2(total)} млрд IDR от пяти проектов. На стройку ушло ${fmt2(build)}, на счетах осталось ${fmt2(rest)}`}>
-  <p class="mini-head">Отчёт собственнику: {MONTHS[M].toLowerCase()}, пять проектов</p>
-  <dl class="mini-kpis">
-    <div><dt>Поступления</dt><dd>{fmt2(total)}</dd></div>
-    <div><dt>На стройку</dt><dd>{fmt2(build)}</dd></div>
-    <div><dt>Осталось на счетах</dt><dd>{fmt2(rest)}</dd></div>
-  </dl>
-  <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-    {top.map((t, i) => <path class="mt" d={t.d} fill={PROJ_COLORS[i]}><title>{PROJ_NAMES[i]}: {fmt2(t.v)} млрд IDR</title></path>)}
-    {bottom.map((t, i) => <path class="mt" d={t.d} fill={COST_COLORS[i]}><title>{COST_NAMES[i]}: {fmt2(t.v)} млрд IDR, {share(t.v)}</title></path>)}
-    <rect class="mt-bar" x={f(CX - (total * K) / 2 - 6)} y={PY} width={f(total * K + 12)} height={NW} rx="1.5"></rect>
-    {top.map((t, i) => (
-      <Fragment>
-        <text class="mt-lab" x={f(t.x)} y={f(t.y - 20)} text-anchor="middle">{SHORT[PROJ_NAMES[i]] ?? PROJ_NAMES[i]}</text>
-        <text class="mt-val" x={f(t.x)} y={f(t.y - 6)} text-anchor="middle">{fmt2(t.v)}</text>
-      </Fragment>
-    ))}
-    {bottom.map((t) => <text class="mt-val" x={f(t.x)} y={f(t.y + 14)} text-anchor="middle">{fmt2(t.v)}</text>)}
-  </svg>
-  <ul class="mb-list">
-    {fr.right.map((t, i) => <li><i style={`background:${COST_COLORS[i]}`}></i><span>{COST_NAMES[i]}</span><b>{share(t.v)}</b></li>)}
-  </ul>
+  <div class="mt-a">
+    <p class="mini-head">Отчёт собственнику: {MONTHS[M].toLowerCase()}, пять проектов</p>
+    <dl class="mini-kpis">
+      <div><dt>Поступления</dt><dd>{fmt2(total)}</dd></div>
+      <div><dt>На стройку</dt><dd>{fmt2(build)}</dd></div>
+      <div><dt>Осталось на счетах</dt><dd>{fmt2(rest)}</dd></div>
+    </dl>
+  </div>
+  <div class="mt-b">
+    <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
+      {top.map((t, i) => <path class="mt" d={t.d} fill={PROJ_COLORS[i]}><title>{PROJ_NAMES[i]}: {fmt2(t.v)} млрд IDR</title></path>)}
+      {bottom.map((t, i) => <path class="mt" d={t.d} fill={COST_COLORS[i]}><title>{COST_NAMES[i]}: {fmt2(t.v)} млрд IDR, {share(t.v)}</title></path>)}
+      <rect class="mt-bar" x={f(CX - (total * K) / 2 - 6)} y={PY} width={f(total * K + 12)} height={NW} rx="1.5"></rect>
+      {top.map((t, i) => (
+        <Fragment>
+          <text class="mt-lab" x={f(t.x)} y={f(t.y - 20)} text-anchor="middle">{SHORT[PROJ_NAMES[i]] ?? PROJ_NAMES[i]}</text>
+          <text class="mt-val" x={f(t.x)} y={f(t.y - 6)} text-anchor="middle">{fmt2(t.v)}</text>
+        </Fragment>
+      ))}
+      {bottom.map((t) => <text class="mt-val" x={f(t.x)} y={f(t.y + 14)} text-anchor="middle">{fmt2(t.v)}</text>)}
+    </svg>
+  </div>
+  <div class="mt-c">
+    <ul class="mb-list">
+      {fr.right.map((t, i) => <li><i style={`background:${COST_COLORS[i]}`}></i><span>{COST_NAMES[i]}</span><b>{share(t.v)}</b></li>)}
+    </ul>
+  </div>
   <figcaption>Пример, демо-данные, млрд IDR. Сверху поступления по проектам, снизу куда ушли деньги</figcaption>
 </figure>
 
 <style>
-  .mini { margin: 0; padding: 16px 18px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
-  .mini svg { display: block; width: 100%; height: auto; margin-top: 14px; overflow: visible; }
+  .mini { display: flex; flex-direction: column; justify-content: space-between; gap: 6px; height: 100%; margin: 0; padding: 18px 20px 14px; border-radius: 8px; background: var(--bg); }
+  .mini svg { display: block; width: 100%; max-width: 460px; height: auto; margin: 14px auto 0; overflow: visible; }
+  /* Широкая карточка: показатели слева, схема в центре, статьи справа */
+  @container (min-width: 1000px) {
+    .mini { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 440px) minmax(0, 1fr); column-gap: 40px; align-items: center; padding: 22px 24px 16px; }
+    .mini figcaption { grid-column: 1 / -1; }
+    .mini svg { margin-top: 0; }
+    .mt-a .mini-kpis { grid-template-columns: 1fr; gap: 14px; }
+    .mt-a .mini-kpis dd { font-size: 24px; }
+    .mt-c .mb-list { grid-template-columns: 1fr; gap: 8px; margin: 0; font-size: 13.5px; }
+  }
   .mini-head { font-size: 13px; font-weight: 600; color: var(--ink-2); }
   .mb-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 12.5px; color: var(--ink-2); }
   .mb-list li { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
   .mb-list i { width: 8px; height: 8px; border-radius: 2px; }
   .mb-list b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
-  @media (max-width: 380px) { .mb-list { grid-template-columns: 1fr; } }
+  @container (max-width: 440px) { .mb-list { grid-template-columns: 1fr; } }
   .mt { fill-opacity: .9; transition: fill-opacity .2s ease; }
   .mini svg:hover .mt { fill-opacity: .35; }
   .mini svg:hover .mt:hover { fill-opacity: 1; }

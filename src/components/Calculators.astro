@@ -1,5 +1,5 @@
 ---
-// Блок «Посчитайте сами»: три калькулятора на вкладках.
+// Блок «Посчитайте сами»: пять вкладок, три калькулятора работают, рост стоимости и оценка виллы пока заготовки.
 // 1. Рассрочка или скидка (для девелопера, первая вкладка): коридор скидки при двух ставках.
 // 2. Вилла: кэшфлоу инвестора по годам, продажа в конце срока, IRR, NPV, MOIC.
 // 3. Дубли и ошибки: ориентир по клиентам Axiom (около 0,9% затрат), в IDR или USD.
@@ -44,6 +44,30 @@ const dupFields: Field[] = [
   { k: 'months', label: 'Срок стройки', unit: 'мес.' },
 ];
 
+// Вкладки в порядке Евгения: вилла, рост стоимости, оценка, рассрочка; дубли — наш ориентир по клиентам
+const TABS = [
+  { id: 'villa', label: 'Доходность виллы' },
+  { id: 'growth', label: 'Рост стоимости' },
+  { id: 'value', label: 'Оценка виллы' },
+  { id: 'inst', label: 'Рассрочка или скидка' },
+  { id: 'dup', label: 'Дубли и ошибки' },
+];
+// Заготовки (идеи Евгения 02.11.2026). Поля и выводы взяты из его описания, расчёт пока не делаем
+const STUBS = [
+  {
+    id: 'growth',
+    q: 'Сколько будет стоить объект через 1–5 лет',
+    inputs: ['Цена сегодня', 'Горизонт прогноза, 1–5 лет', 'Факторы роста', 'Факторы падения'],
+    outputs: ['Прогноз цены по годам', 'Рост за весь срок', 'Рост в среднем за год'],
+  },
+  {
+    id: 'value',
+    q: 'Сколько стоит вилла: затратный и доходный методы',
+    inputs: ['Земля', 'Строительство', 'Износ', 'Чистый операционный доход, NOI', 'Ставка капитализации', 'Ставка дисконтирования'],
+    outputs: ['Стоимость по затратному методу', 'Стоимость по NOI', 'Стоимость по DCF'],
+  },
+];
+
 const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace('.', ','));
 
 const vo = villa(VILLA_DEFAULT);
@@ -57,14 +81,34 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
 ---
 
 <div class="calc" data-calc>
-  <div class="calc-tabs" role="tablist" aria-label="Калькуляторы">
-    <button type="button" role="tab" id="ct-inst" aria-controls="cp-inst" aria-selected="true" data-ct="inst">Рассрочка или скидка</button>
-    <button type="button" role="tab" id="ct-villa" aria-controls="cp-villa" aria-selected="false" tabindex="-1" data-ct="villa">Доходность виллы</button>
-    <button type="button" role="tab" id="ct-dup" aria-controls="cp-dup" aria-selected="false" tabindex="-1" data-ct="dup">Дубли и ошибки</button>
+  <!-- Заголовок и вкладки в одну строку (Евгений 02.11.2026). Порядок вкладок — его список калькуляторов -->
+  <div class="calc-head">
+    <h2>Посчитайте сами</h2>
+    <div class="calc-tabs" role="tablist" aria-label="Калькуляторы">
+      {TABS.map((tb, i) => (
+        <button type="button" role="tab" id={`ct-${tb.id}`} aria-controls={`cp-${tb.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-ct={tb.id}>{tb.label}</button>
+      ))}
+    </div>
   </div>
 
+  <!-- Заготовки новых калькуляторов: блок вводных и блок результата. Поля и расчёт Евгений уточнит -->
+  {STUBS.map((st) => (
+    <div class="calc-panel calc-panel--stub ui-card" id={`cp-${st.id}`} role="tabpanel" aria-labelledby={`ct-${st.id}`} data-cp={st.id} hidden>
+      <div class="stub">
+        <p class="calc-q">{t(st.q)}</p>
+        <p class="stub-h">Вводные</p>
+        <ul class="stub-in">{st.inputs.map((f) => <li><span>{t(f)}</span><i></i></li>)}</ul>
+      </div>
+      <div class="stub stub--out">
+        <p class="stub-h">Результат</p>
+        <ul class="stub-out">{st.outputs.map((o) => <li><span>{t(o)}</span><b>—</b></li>)}</ul>
+        <p class="caption">Калькулятор готовим: поля и порядок расчёта уточняем.</p>
+      </div>
+    </div>
+  ))}
+
   <!-- 1. Рассрочка или скидка -->
-  <div class="calc-panel ui-card" id="cp-inst" role="tabpanel" aria-labelledby="ct-inst" data-cp="inst">
+  <div class="calc-panel ui-card" id="cp-inst" role="tabpanel" aria-labelledby="ct-inst" data-cp="inst" hidden>
     <form class="calc-form" data-form="inst" onsubmit="return false">
       <p class="calc-q">{t('Какая скидка за полную оплату выгодна и девелоперу, и покупателю')}</p>
       <div class="cf-grid">
@@ -106,7 +150,7 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
   </div>
 
   <!-- 2. Вилла -->
-  <div class="calc-panel ui-card" id="cp-villa" role="tabpanel" aria-labelledby="ct-villa" data-cp="villa" hidden>
+  <div class="calc-panel ui-card" id="cp-villa" role="tabpanel" aria-labelledby="ct-villa" data-cp="villa">
     <form class="calc-form" data-form="villa" onsubmit="return false">
       <p class="calc-q">{t('Сколько вилла принесёт за срок владения: аренда и продажа')}</p>
       <div class="cf-grid">
@@ -201,6 +245,8 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
       </div>
     </div>
   </div>
+
+  <p class="caption calc-foot">Считает ваш браузер, цифры никуда не отправляются</p>
 </div>
 
 <script>
@@ -218,7 +264,31 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
     spend: [0, 1e13],
   };
   const clamp = (k: string, v: number) => Math.min(LIM[k][1], Math.max(LIM[k][0], v));
-  const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace('.', ','));
+  // Вкладки в порядке Евгения: вилла, рост стоимости, оценка, рассрочка; дубли — наш ориентир по клиентам
+const TABS = [
+  { id: 'villa', label: 'Доходность виллы' },
+  { id: 'growth', label: 'Рост стоимости' },
+  { id: 'value', label: 'Оценка виллы' },
+  { id: 'inst', label: 'Рассрочка или скидка' },
+  { id: 'dup', label: 'Дубли и ошибки' },
+];
+// Заготовки (идеи Евгения 02.11.2026). Поля и выводы взяты из его описания, расчёт пока не делаем
+const STUBS = [
+  {
+    id: 'growth',
+    q: 'Сколько будет стоить объект через 1–5 лет',
+    inputs: ['Цена сегодня', 'Горизонт прогноза, 1–5 лет', 'Факторы роста', 'Факторы падения'],
+    outputs: ['Прогноз цены по годам', 'Рост за весь срок', 'Рост в среднем за год'],
+  },
+  {
+    id: 'value',
+    q: 'Сколько стоит вилла: затратный и доходный методы',
+    inputs: ['Земля', 'Строительство', 'Износ', 'Чистый операционный доход, NOI', 'Ставка капитализации', 'Ставка дисконтирования'],
+    outputs: ['Стоимость по затратному методу', 'Стоимость по NOI', 'Стоимость по DCF'],
+  },
+];
+
+const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace('.', ','));
   const yWord = (y: number) => (y % 10 === 1 && y % 100 !== 11 ? 'год' : [2, 3, 4].includes(y % 10) && ![12, 13, 14].includes(y % 100) ? 'года' : 'лет');
 
   function read<T extends Record<string, number>>(form: HTMLFormElement, base: T): T {
@@ -429,9 +499,23 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
 
 <style>
   .calc { display: grid; gap: var(--s2); }
+  /* Заголовок слева, вкладки справа в одну строку; на узком экране вкладки под заголовком и прокручиваются */
+  .calc-head { display: grid; gap: var(--s3); margin-bottom: var(--s4); }
+  @media (min-width: 1200px) { .calc-head { grid-template-columns: auto minmax(0, 1fr); align-items: end; column-gap: var(--s5); } .calc-tabs { justify-content: flex-end; } }
   .calc-tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px; }
   .calc-tabs::-webkit-scrollbar { display: none; }
-  @media (min-width: 720px) { .calc-tabs { margin: 0; padding: 0; } }
+  @media (min-width: 720px) { .calc-tabs { margin: 0; padding: 0; flex-wrap: wrap; } }
+  .calc-foot { margin-top: var(--s2); }
+  /* Заготовки: два прямоугольных блока, вводные и результат */
+  .stub { display: grid; align-content: start; gap: 12px; }
+  .stub-h { font-size: 13px; font-weight: 600; color: var(--ink-3); }
+  .stub-in, .stub-out { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  @media (min-width: 480px) { .stub-in { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; } }
+  .stub-in li { display: grid; gap: 6px; align-content: end; font-size: 14px; color: var(--ink-2); }
+  .stub-in i { display: block; height: 44px; border: 1px dashed var(--line); border-radius: 6px; background: var(--bg); }
+  .stub--out { padding: var(--s3); border-radius: 8px; background: var(--bg); }
+  .stub-out li { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+  .stub-out b { color: var(--ink-3); font-weight: 600; }
   .calc-tabs button {
     padding: 10px 16px;
     border: 1px solid var(--line);
