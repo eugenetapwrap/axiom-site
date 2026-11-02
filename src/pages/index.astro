@@ -2,8 +2,9 @@
 import Base from '../layouts/Base.astro';
 import ServiceIcon from '../components/ServiceIcon.astro';
 import Calculators from '../components/Calculators.astro';
-import BotMessage from '../components/BotMessage.astro';
-import HeroSignature from '../components/HeroSignature.astro';
+import BotReceipt from '../components/BotReceipt.astro';
+import HeroThreads from '../components/HeroThreads.astro';
+import HeroJCurve from '../components/HeroJCurve.astro';
 import FinalThreads from '../components/FinalThreads.astro';
 import { site, tgLink } from '../data/site';
 import {
@@ -34,7 +35,7 @@ const faqLd = {
           <p class="hero-lead">{t(hero.lead)}</p>
           <div class="btn-row hero-btns">
             <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
-            <a class="btn btn-secondary" href="#calc">Посчитать доходность</a>
+            <a class="btn btn-secondary" href="#calc">Калькуляторы</a>
           </div>
           <p class="hero-note">{t(hero.note)}</p>
         </div>
@@ -58,21 +59,12 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Фирменная фишка: нити денег во всю ширину сразу под первым экраном
-       (переключатель на J-кривую — две точки в шапке, техническая строка до выбора) -->
-  <section class="section section--white sig-band" aria-labelledby="sig-title">
-    <div class="container">
-      <p class="sig-head"><b id="sig-title">Так мы показываем деньги проекта.</b> Поступления по проектам и расходы по статьям, месяц за месяцем</p>
-      <HeroSignature />
-    </div>
-  </section>
-
   <!-- Услуги подробно: для каждой что входит и что клиент получает на руки -->
   <section class="section section--alt" id="practices">
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Услуги</p>
-        <h2>Четыре направления работы</h2>
+        <h2>Услуги и что вы получите</h2>
       </div>
       {practices.map((p) => (
         <article class="practice" id={p.id} data-reveal>
@@ -90,6 +82,19 @@ const faqLd = {
             <p class="practice-label">На выходе</p>
             <p class="practice-result">{t(p.result)}</p>
           </div>
+          {/* Пример результата на демо-данных: показываем, что клиент получит на руки */}
+          {p.id === 'models' && (
+            <div class="practice-demo">
+              <p class="practice-label">Пример: накопленный денежный поток проекта и показатели для инвестора</p>
+              <HeroJCurve />
+            </div>
+          )}
+          {p.id === 'accounting' && (
+            <div class="practice-demo">
+              <p class="practice-label">Пример отчёта для собственника</p>
+              <HeroThreads />
+            </div>
+          )}
         </article>
       ))}
     </div>
@@ -106,29 +111,6 @@ const faqLd = {
         <p class="caption">Считает ваш браузер, цифры никуда не отправляются</p>
       </div>
       <Calculators />
-    </div>
-  </section>
-
-  <!-- Продукт: бот -->
-  <section class="section section--alt" id="bot">
-    <div class="container bot">
-      <div class="bot-visual" data-reveal>
-        <BotMessage />
-      </div>
-      <div data-reveal style="--d: 120ms">
-        <p class="eyebrow">Продукт · {bot.badge}</p>
-        <h2>{bot.title}</h2>
-        <p class="bot-lead">{t(bot.lead)}</p>
-        <p class="bot-aud">{t(bot.audience)}</p>
-        <ul class="dots bot-list">
-          {bot.items.map((i) => <li>{t(i)}</li>)}
-        </ul>
-        <p class="tagline">{t(bot.tagline)}</p>
-        <div class="btn-row">
-          <a class="btn btn-primary" href={tgLink(bot.topic)}>{bot.cta}</a>
-          {site.channelUrl && <a class="btn btn-secondary" href={site.channelUrl}>Канал «{site.channelName}»</a>}
-        </div>
-      </div>
     </div>
   </section>
 
@@ -254,6 +236,29 @@ const faqLd = {
             </div>
           ))}
         </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- Продукт: бот -->
+  <section class="section section--alt" id="bot">
+    <div class="container bot">
+      <div class="bot-visual" data-reveal>
+        <BotReceipt />
+      </div>
+      <div data-reveal style="--d: 120ms">
+        <p class="eyebrow">Продукт · {bot.badge}</p>
+        <h2>{bot.title}</h2>
+        <p class="bot-lead">{t(bot.lead)}</p>
+        <p class="bot-aud">{t(bot.audience)}</p>
+        <ul class="dots bot-list">
+          {bot.items.map((i) => <li>{t(i)}</li>)}
+        </ul>
+        <p class="tagline">{t(bot.tagline)}</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href={tgLink(bot.topic)}>{bot.cta}</a>
+          {site.channelUrl && <a class="btn btn-secondary" href={site.channelUrl}>Канал «{site.channelName}»</a>}
+        </div>
       </div>
     </div>
   </section>
@@ -400,11 +405,6 @@ const faqLd = {
   .service-more { margin-top: auto; padding-top: var(--s1); color: var(--accent); font-size: 15px; font-weight: 600; }
   .service-more::after { content: ' ↓'; }
 
-  /* Полоса с нитями */
-  .sig-band { padding-top: var(--s5); }
-  .sig-head { margin-bottom: var(--s2); max-width: none; font-size: 16px; color: var(--ink-2); }
-  .sig-head b { color: var(--ink); font-weight: 600; }
-
   /* Услуги подробно */
   .practice {
     display: grid;
@@ -422,6 +422,8 @@ const faqLd = {
   .practice-items { margin-bottom: var(--s3); }
   @media (min-width: 720px) { .practice-items { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s3); } }
   .practice-result { font-weight: 600; color: var(--ink); max-width: 30em; }
+  .practice-demo { grid-column: 1 / -1; margin-top: var(--s3); padding: var(--s4); border-radius: 10px; background: var(--surface); border: 1px solid var(--line); }
+  @media (max-width: 599px) { .practice-demo { padding: var(--s3) var(--s2); } }
 
   /* Сигнальная полоса */
   .signal { display: grid; gap: var(--s5); align-items: end; }

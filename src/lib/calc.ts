@@ -1,6 +1,6 @@
 // Калькуляторы на главной: доходность виллы (кэшфлоу инвестора), рассрочка или скидка, дубли и ошибки.
 // Одни и те же функции считают при сборке (значения по умолчанию) и в браузере (цифры посетителя).
-// Показатели не вписываются руками: IRR, NPV, MOIC и окупаемость выводятся из потоков.
+// Показатели не вписываются руками: IRR, NPV и MOIC выводятся из потоков.
 
 import { npv, irr } from './finmodel';
 
@@ -25,8 +25,10 @@ export type VillaIn = {
   mgmt: number; // комиссия управляющей компании, % от выручки после комиссий площадок
   years: number; // срок владения, лет; продажа в конце последнего года
   growth: number; // рост цены объекта в год, %
+  fixed: number; // постоянные расходы, USD в год в ценах сегодня: персонал, коммунальные, страховка
+  build: number; // лет до сдачи: вилла куплена на стройке, аренды в эти годы нет
   ota: number; // комиссии площадок бронирования, % выручки
-  opex: number; // содержание: персонал, коммунальные, ремонт, бассейн, % выручки
+  opex: number; // переменные расходы: расходники, прачечная, мелкий ремонт, % выручки
   tax: number; // налоги, % выручки
   adrGrowth: number; // рост цены ночи в год, %
   saleCost: number; // расходы на продажу, % от цены продажи
@@ -34,24 +36,29 @@ export type VillaIn = {
   rate: number; // ставка дисконтирования для NPV, %
 };
 
+// Значения по умолчанию ждут подтверждения Евгения (его реальные цифры содержания вилл)
 export const VILLA_DEFAULT: VillaIn = {
-  price: 300000, adr: 200, occ: 70, mgmt: 20, years: 10, growth: 3,
-  ota: 15, opex: 12, tax: 10, adrGrowth: 3, saleCost: 5, lease: 0, rate: 10,
+  price: 300000, adr: 200, occ: 70, mgmt: 20, fixed: 9000, years: 10, lease: 0, growth: 3,
+  build: 0, ota: 15, opex: 8, tax: 10, adrGrowth: 3, saleCost: 5, rate: 10,
 };
 
 export type VillaRow = {
-  year: number; rev: number; ota: number; mgmt: number; opex: number; tax: number;
+  year: number; rev: number; ota: number; mgmt: number; opex: number; fixed: number; tax: number;
   net: number; sale: number; cf: number; cum: number;
 };
 
-// Одна строка аренды за год t (t от 1): цена ночи растёт с первого года владения
+// Одна строка за год t (t от 1). Цена ночи и постоянные расходы растут с даты покупки.
+// Пока вилла строится, аренды и расходов нет.
 function rentYear(v: VillaIn, t: number) {
-  const rev = v.adr * (1 + v.adrGrowth / 100) ** (t - 1) * 365 * (v.occ / 100);
+  if (t <= v.build) return { rev: 0, ota: 0, mgmt: 0, opex: 0, fixed: 0, tax: 0, net: 0 };
+  const k = (1 + v.adrGrowth / 100) ** (t - 1);
+  const rev = v.adr * k * 365 * (v.occ / 100);
   const ota = rev * (v.ota / 100);
   const mgmt = (rev - ota) * (v.mgmt / 100);
   const opex = rev * (v.opex / 100);
+  const fixed = v.fixed * k;
   const tax = rev * (v.tax / 100);
-  return { rev, ota, mgmt, opex, tax, net: rev - ota - mgmt - opex - tax };
+  return { rev, ota, mgmt, opex, fixed, tax, net: rev - ota - mgmt - opex - fixed - tax };
 }
 
 export function villa(input: VillaIn) {
@@ -65,7 +72,7 @@ export function villa(input: VillaIn) {
 
   const rows: VillaRow[] = [];
   let cum = -v.price;
-  rows.push({ year: 0, rev: 0, ota: 0, mgmt: 0, opex: 0, tax: 0, net: 0, sale: 0, cf: -v.price, cum });
+  rows.push({ year: 0, rev: 0, ota: 0, mgmt: 0, opex: 0, fixed: 0, tax: 0, net: 0, sale: 0, cf: -v.price, cum });
   for (let t = 1; t <= years; t++) {
     const r = rentYear(v, t);
     const s = t === years ? sale : 0;
@@ -76,35 +83,39 @@ export function villa(input: VillaIn) {
   const cf = rows.map((r) => r.cf);
   const inflow = cf.slice(1).reduce((s, c) => s + c, 0);
 
-  // Окупаемость только арендой, без продажи: сколько лет чистый доход возвращает цену покупки.
-  // Считается и за пределами срока владения (до 50 лет), с дробной частью внутри года.
-  let paid = 0;
-  let payback: number | null = null;
-  for (let t = 1; t <= 50; t++) {
-    const n = rentYear(v, t).net;
-    if (n <= 0) break;
-    if (paid + n >= v.price) { payback = t - 1 + (v.price - paid) / n; break; }
-    paid += n;
-  }
-
-  const r1 = rows[1];
+  // Первый год аренды (после сдачи), если он попадает в срок владения
+  const r1 = rows.find((r) => r.year > v.build && r.year > 0) ?? null;
   return {
     rows,
     years,
     exitValue,
     sale,
+    rent: rows.reduce((s, r) => s + r.net, 0),
     irr: irr(cf),
     npv: npv(cf, v.rate / 100),
     moic: inflow / v.price,
-    profit: inflow - v.price,
-    payback,
-    gross1: r1.rev / v.price,
-    net1: r1.net / v.price,
-    netShare: r1.rev > 0 ? r1.net / r1.rev : 0,
+    net1: r1 ? r1.net / v.price : 0,
+    netShare: r1 && r1.rev > 0 ? r1.net / r1.rev : 0,
+    // Лизхолд кончается к концу срока владения или раньше: продавать нечего
+    leaseEnd: v.lease > 0 && v.years >= v.lease,
     leaseCut: v.lease > 0 && v.years > v.lease,
   };
 }
 export type VillaOut = ReturnType<typeof villa>;
+
+// Цена ночи, при которой NPV по ставке инвестора равен нулю, то есть IRR равен ставке.
+// NPV растёт вместе с ценой ночи, поэтому хватает деления пополам. null, если не выйти и при $100 000.
+export function villaAdrFor(v: VillaIn) {
+  const f = (adr: number) => villa({ ...v, adr }).npv;
+  let lo = 0;
+  let hi = 100000;
+  if (f(hi) < 0) return null;
+  for (let i = 0; i < 60; i++) {
+    const m = (lo + hi) / 2;
+    if (f(m) < 0) lo = m; else hi = m;
+  }
+  return hi;
+}
 
 // SVG кэшфлоу: столбики по годам (покупка, чистый доход, продажа) и линия накопленного итога.
 // Одна ось в долларах для всех рядов. Подписи текстом, цвета из токенов палитры.
@@ -166,8 +177,9 @@ export function villaChart(o: VillaOut, W = VC.W, H = VC.H) {
     if (r.year === 0) s += bar(x, 0, r.cf, 'vc-buy');
     else {
       s += bar(x, 0, r.net, 'vc-net');
-      // Продажа ставится на чистый доход последнего года, между сегментами зазор 2px
-      if (r.sale > 0) s += bar(x, r.net + (2 * (top - bot)) / ph, r.net + r.sale, 'vc-sale');
+      // Продажа ставится на чистый доход последнего года (если он в плюсе), между сегментами зазор 2px
+      const base = Math.max(0, r.net);
+      if (r.sale > 0) s += bar(x, base + (base > 0 ? (2 * (top - bot)) / ph : 0), base + r.sale, 'vc-sale');
     }
   });
   // Накопленный итог: линия по концам лет
@@ -190,6 +202,7 @@ export function villaChart(o: VillaOut, W = VC.W, H = VC.H) {
 // Подсказка по году для наведения
 export function villaTip(r: VillaRow) {
   if (r.year === 0) return `<b>Покупка</b><span>Вложено</span><em>${usd(r.cf)}</em><span>Накопленный итог</span><em>${usd(r.cum)}</em>`;
+  if (r.rev === 0 && r.net === 0 && r.sale === 0) return `<b>Год ${r.year}</b><span>Стройка, аренды нет</span><em></em><span>Накопленный итог</span><em>${usd(r.cum)}</em>`;
   return `<b>Год ${r.year}</b>`
     + `<span>Выручка</span><em>${usd(r.rev)}</em>`
     + `<span>Чистый доход</span><em>${usd(r.net)}</em>`
@@ -199,12 +212,12 @@ export function villaTip(r: VillaRow) {
 
 // Таблица кэшфлоу по годам (для чтения без графика)
 export function villaTable(o: VillaOut) {
-  const head = ['Год', 'Выручка', 'Площадки', 'УК', 'Содержание', 'Налоги', 'Чистый доход', 'Продажа', 'Поток', 'Накопленный итог'];
+  const head = ['Год', 'Выручка', 'Площадки', 'УК', 'Переменные', 'Постоянные', 'Налоги', 'Чистый доход', 'Продажа', 'Поток', 'Накопленный итог'];
   const cell = (v: number) => (Math.abs(v) < 0.5 ? '—' : usd(v));
   let h = `<thead><tr>${head.map((c) => `<th scope="col">${c}</th>`).join('')}</tr></thead><tbody>`;
   o.rows.forEach((r) => {
     h += `<tr><th scope="row">${r.year === 0 ? 'Покупка' : r.year}</th>`
-      + [r.rev, -r.ota, -r.mgmt, -r.opex, -r.tax, r.net, r.sale, r.cf, r.cum].map((v) => `<td>${cell(v)}</td>`).join('')
+      + [r.rev, -r.ota, -r.mgmt, -r.opex, -r.fixed, -r.tax, r.net, r.sale, r.cf, r.cum].map((v) => `<td>${cell(v)}</td>`).join('')
       + '</tr>';
   });
   return `${h}</tbody>`;
@@ -212,39 +225,63 @@ export function villaTable(o: VillaOut) {
 
 // ---------- 2. Рассрочка или скидка ----------
 // Как в виджете инвестанализа: первый взнос сразу, остаток равными платежами в конце каждого месяца,
-// ставка в месяц = годовая / 12.
-export type InstIn = { price: number; down: number; months: number; rate: number; disc: number };
-export const INST_DEFAULT: InstIn = { price: 300000, down: 30, months: 18, rate: 12, disc: 5 };
+// ставка в месяц = годовая / 12 (12% годовых = 1% в месяц).
+// У сторон деньги стоят по-разному: девелопер считает по ставке кредита или инвестора, покупатель по депозиту.
+// Скидка, равная рассрочке, у каждого своя. Между ними коридор, где полная оплата выгодна обоим.
+export type InstIn = { price: number; down: number; months: number; dev: number; buy: number; disc: number };
+export const INST_DEFAULT: InstIn = { price: 300000, down: 30, months: 18, dev: 15, buy: 5, disc: 5 };
+
+// Рассрочка в сегодняшних деньгах при годовой ставке rate, %
+export function instPv(price: number, down: number, months: number, rate: number) {
+  const n = Math.max(1, Math.round(months));
+  const r = rate / 100 / 12;
+  const rest = price * (1 - down / 100);
+  const pay = rest / n;
+  return price * (down / 100) + (r > 0 ? (pay * (1 - (1 + r) ** -n)) / r : rest);
+}
 
 export function installment(v: InstIn) {
   const n = Math.max(1, Math.round(v.months));
-  const r = v.rate / 100 / 12;
-  const rest = v.price * (1 - v.down / 100);
-  const pay = rest / n;
-  const pv = v.price * (v.down / 100) + (r > 0 ? (pay * (1 - (1 + r) ** -n)) / r : rest);
-  const even = 1 - pv / v.price; // скидка, равная рассрочке
+  const pay = (v.price * (1 - v.down / 100)) / n;
+  const pvDev = instPv(v.price, v.down, n, v.dev);
+  const pvBuy = instPv(v.price, v.down, n, v.buy);
+  const evenDev = 1 - pvDev / v.price; // больше этой скидки девелоперу выгоднее рассрочка
+  const evenBuy = 1 - pvBuy / v.price; // меньше этой скидки покупателю выгоднее рассрочка
   const cash = v.price * (1 - v.disc / 100); // полная оплата со скидкой
-  return { pay, pv, even, cash, diff: cash - pv, months: n };
+  return {
+    pay, months: n, pvDev, pvBuy, evenDev, evenBuy, cash,
+    gainDev: cash - pvDev, // выигрыш девелопера от полной оплаты в сегодняшних деньгах
+    gainBuy: pvBuy - cash, // выигрыш покупателя
+    corridor: evenBuy < evenDev,
+  };
 }
 
 // ---------- 3. Дубли и ошибки ----------
 // У клиентов Axiom дубли и ошибки, остановленные до оплаты, составили 3,55 млрд IDR, около 0,9% затрат.
-// Вместе с двойными оплатами и завышенными ценами инциденты набирались на 4,7% объёма операций.
+// Долю 4,7% (инциденты первых недель учёта) здесь не используем: её нельзя растягивать на всю стройку.
 export const DUP_SHARE = 0.009;
-export const INC_SHARE = 0.047;
 export type DupIn = { spend: number; months: number };
-export const DUP_DEFAULT: DupIn = { spend: 150000, months: 24 };
+export const DUP_DEFAULT: DupIn = { spend: 2000000000, months: 24 };
+export const DUP_DEFAULT_USD: DupIn = { spend: 150000, months: 24 };
 
 export function dupes(v: DupIn) {
   const m = Math.max(1, Math.round(v.months));
   return {
     month: v.spend * DUP_SHARE,
     total: v.spend * m * DUP_SHARE,
-    incidents: v.spend * m * INC_SHARE,
     volume: v.spend * m,
     months: m,
   };
 }
+
+// Рупии крупно: 432 млн IDR, 1,73 млрд IDR
+const trim = (s: string) => s.replace(/(,\d*?)0+$/, '$1').replace(/,$/, '');
+export const idr = (v: number) => {
+  const a = Math.abs(v);
+  if (a >= 1e9) return `${trim(group(v / 1e9, 2))} млрд IDR`;
+  if (a >= 1e6) return `${trim(group(v / 1e6, a >= 1e8 ? 0 : 1))} млн IDR`;
+  return `${group(v)} IDR`;
+};
 
 // Разбор числа из поля ввода: пробелы в разрядах, запятая как десятичный знак
 export const parseNum = (s: string) => {

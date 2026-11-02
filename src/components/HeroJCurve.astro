@@ -1,5 +1,6 @@
 ---
-// Фирменный мотив «J-кривая»: накопленный денежный поток демо-проекта по годам.
+// «J-кривая»: накопленный денежный поток демо-проекта по годам. Пример результата в услуге «Финансовое моделирование».
+// Анимация и счётчики стартуют, когда график доскроллили до экрана.
 // Сценарий «Смешанный» из виджета финмоделей (src/lib/finmodel.ts): стройка 2026–2028,
 // аренда 2029–2034, продажа объекта в 2035. IRR, MOIC и NPV считаются из тех же потоков.
 // Анимация в три такта: бам (вложения роняют линию в яму), пум (аренда поднимает её к нулю),
@@ -49,7 +50,7 @@ const kpiList = [
 ];
 ---
 
-<figure class="hj" aria-label={`Накопленный денежный поток демо-проекта: минус ${fmt(-cum[trough])} млн USD на пике вложений, выход выше нуля в ${YEARS[be]} после продажи. IRR ${k.irr}, MOIC ${k.moic}, NPV ${k.npv} USD`}>
+<figure class="hj hj-wait" data-hj aria-label={`Накопленный денежный поток демо-проекта: минус ${fmt(-cum[trough])} млн USD на пике вложений, выход выше нуля в ${YEARS[be]} после продажи. IRR ${k.irr}, MOIC ${k.moic}, NPV ${k.npv} USD`}>
   <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
     <line class="hj-zero" x1="60" x2="1170" y1={Y0} y2={Y0}></line>
     <text class="hj-yr" x="50" y={Y0} text-anchor="end">0</text>
@@ -77,13 +78,13 @@ const kpiList = [
     {kpiList.map((q, i) => (
       <g class="hj-t" style={`--d:${2200 + i * 120}ms`}>
         <text class="hj-kl" x={80 + i * 190} y="30">{q.label}</text>
-        <text class="hj-kv" x={80 + i * 190} y="62" data-sig-count={q.v} data-dec={q.dec} data-suffix={q.suffix} data-delay={2200 + i * 120}>{q.text}</text>
+        <text class="hj-kv" x={80 + i * 190} y="62" data-hj-count={q.v} data-dec={q.dec} data-suffix={q.suffix} data-delay={2200 + i * 120}>{q.text}</text>
       </g>
     ))}
     <text class="hj-cap hj-t" x="80" y="96" style="--d:2500ms">Смешанный сценарий: аренда, затем продажа</text>
   </svg>
   <figcaption class="hj-figcap">
-    <span class="hj-mobile-kpi">IRR {k.irr} · MOIC {k.moic} · NPV при 12% {k.npv} USD</span>
+    <span class="hj-mobile-kpi">IRR {k.irr} · MOIC {k.moic} · NPV при 12% {`${k.npv} USD`.replace(/ /g, "\u00a0")}</span>
     <span>Демо-проект: стройка {YEARS[0]}–{YEARS[2]}, аренда, продажа в {YEARS[last]}. Накопленный поток, млн USD</span>
   </figcaption>
 </figure>
@@ -114,6 +115,8 @@ const kpiList = [
   .hj-figcap { display: flex; justify-content: flex-end; margin-top: 8px; font-size: 13px; color: var(--ink-3); }
   .hj-mobile-kpi { display: none; }
 
+  /* До появления на экране анимации стоят на первом кадре */
+  .hj-wait, .hj-wait :global(*) { animation-play-state: paused !important; }
   /* Бам → пум → вау */
   .hj-bar { animation: hj-grow 520ms cubic-bezier(.16, 1, .3, 1) var(--d) both; }
   .hj-bar--pos { animation: hj-grow 420ms cubic-bezier(.34, 1.56, .64, 1) var(--d) both; }
@@ -134,3 +137,41 @@ const kpiList = [
     .hj-mobile-kpi { display: block; font-size: 15px; font-weight: 500; color: var(--ink); }
   }
 </style>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Счётчики набирают итоговое число за 0,8 с; итоговый текст берётся из разметки, чтобы совпасть до знака
+  function count(el: SVGElement) {
+    const d = el.dataset;
+    const to = Number(d.hjCount);
+    const dec = Number(d.dec ?? 2);
+    const suffix = d.suffix ?? '';
+    const final = el.textContent ?? '';
+    const show = (v: number) => { el.textContent = v.toFixed(dec).replace('.', ',') + suffix; };
+    show(0);
+    window.setTimeout(() => {
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const k = Math.min(1, (now - t0) / 800);
+        if (k < 1) { show(to * (1 - Math.pow(1 - k, 3))); requestAnimationFrame(step); }
+        else el.textContent = final;
+      };
+      requestAnimationFrame(step);
+    }, Number(d.delay ?? 0));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-hj]').forEach((root) => {
+    const start = () => {
+      root.classList.remove('hj-wait');
+      if (!reduce) root.querySelectorAll<SVGElement>('[data-hj-count]').forEach(count);
+    };
+    if (reduce || !('IntersectionObserver' in window)) { start(); return; }
+    const io = new IntersectionObserver((es) => {
+      if (!es.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      start();
+    }, { threshold: 0.35 });
+    io.observe(root);
+  });
+</script>

@@ -24,7 +24,7 @@ export const NODES: SNode[] = [
   { id: 'c5', label: 'Налоги', col: 3, color: 'var(--th-7)' },
   { id: 'c6', label: 'Общие расходы', col: 3, color: 'var(--th-8)' },
   { id: 'c7', label: 'Основные средства', col: 3, color: 'var(--th-6)' },
-  { id: 'c8', label: 'Остаток на счетах', col: 3, color: 'var(--th-5)' },
+  { id: 'c8', label: 'Осталось на счетах', col: 3, color: 'var(--th-5)' },
 ];
 
 export const LINKS: SLink[] = [

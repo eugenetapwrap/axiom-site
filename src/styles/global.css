@@ -211,10 +211,12 @@ body {
   font-family: var(--font);
   font-size: 17px;
   line-height: 1.55;
-  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  /* Табличные цифры только там, где числа стоят столбиком (ниже): на всём тексте они расширяют дефис */
+  font-feature-settings: 'lnum' 1;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
+table, svg text, input, [data-count] { font-variant-numeric: tabular-nums; }
 
 @media (min-width: 1024px) {
   body { font-size: 18px; }

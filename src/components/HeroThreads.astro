@@ -1,5 +1,5 @@
 ---
-// Фирменный мотив «Нити» — главная фишка первого экрана.
+// Фирменный мотив «Нити»: пример отчёта для собственника в услуге «Управленческий учёт».
 // Поступления проектов сходятся в один счёт и расходятся по статьям. Схема сама проигрывает год:
 // в январе деньги идут с одного проекта, в феврале и марте добавляется по проекту, в апреле ещё два.
 // Под схемой шкала месяцев: клик открывает любой месяц. Наведение на нить показывает сумму и долю.
@@ -20,10 +20,17 @@ const right = fr.right.map((c, i) => {
   const delay = 1080 + i * 55;
   return { ...c, dur, delay };
 });
-const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
+// Вывод над схемой: сколько из поступлений месяца ушло на стройку и сколько осталось на счетах
+const projWord = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? 'проект' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'проекта' : 'проектов');
+const headline = (m: number, right: { v: number }[], total: number) => {
+  const n = MONTH_TOTALS[m].filter((v) => v > 0).length;
+  const build = right[0].v + right[1].v + right[2].v;
+  return `${MONTHS[m]}, ${n} ${projWord(n)}: из ${fmt2(total)} млрд IDR поступлений на стройку ушло ${fmt2(build)}, на счетах осталось ${fmt2(right[right.length - 1].v)}`;
+};
 ---
 
 <figure class="ht ht-wait" data-ht aria-label="Пример отчёта на демо-данных: поступления проектов по месяцам сходятся в один счёт и расходятся по статьям">
+  <p class="ht-head" data-ht-info aria-live="polite">{headline(START, fr.right, fr.total)}</p>
   <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
     <text class="ht-cap ht-t" x="0" y="22" style="--d:0ms">Проекты</text>
     <text class="ht-cap ht-t" x={W} y="22" text-anchor="end" style="--d:1300ms">Куда ушли поступления</text>
@@ -81,14 +88,22 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
     </div>
   </div>
 
+  <!-- На телефоне подписи в схеме не помещаются: статьи и суммы списком -->
+  <ul class="ht-list" aria-hidden="true">
+    {fr.right.map((c, i) => (
+      <li data-hl={i}><i style={`background:${COST_COLORS[i]}`}></i><span>{COST_NAMES[i]}</span><b data-v>{fmt2(c.v)}</b></li>
+    ))}
+  </ul>
+
   <figcaption class="ht-figcap">
-    <span class="ht-info" data-ht-info>{MONTHS[START]}: поступления {fmt2(fr.total)} млрд IDR от {projCount} проекта</span>
-    <span class="ht-demo">Пример отчёта на демо-данных, млрд IDR</span>
+    <span class="ht-hover" data-ht-hover>Так собственник видит деньги портфеля в нашей системе</span>
+    <span class="ht-demo">Демо-данные, млрд IDR</span>
   </figcaption>
 </figure>
 
 <style>
   .ht { margin: 0; }
+  .ht-head { max-width: 46em; margin-bottom: var(--s2); font-family: var(--font-display); font-size: clamp(18px, 1.6vw, 22px); font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; color: var(--ink); font-variant-numeric: tabular-nums; }
   .ht > svg { display: block; width: 100%; height: auto; overflow: visible; }
   .ht text { dominant-baseline: middle; }
   .ht-cap { font: 500 12px var(--font); fill: var(--ink-3); }
@@ -168,13 +183,19 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
   .ht-month.is-on .ht-m { color: var(--ink); font-weight: 700; }
 
   .ht-figcap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px var(--s3); margin-top: 6px; font-size: 13px; color: var(--ink-3); }
-  .ht-info { color: var(--ink-2); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .ht-hover { color: var(--ink-2); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .ht-list { display: none; }
 
   /* На телефоне подписи в схеме были бы мельче 5px: оставляем сами нити, сумму пишем под ними */
   @media (max-width: 760px) {
     .ht svg text, .ht-lead { display: none; }
     .ht-figcap { flex-direction: column; }
-    .ht-info { font-size: 15px; }
+    .ht-hover { display: none; }
+    .ht-list { display: grid; gap: 0; margin: var(--s2) 0 0; padding: 0; list-style: none; font-size: 15px; }
+    .ht-list li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--line); transition: opacity .3s ease; }
+    .ht-list li.is-off { opacity: .35; }
+    .ht-list i { width: 10px; height: 10px; border-radius: 2px; }
+    .ht-list b { font-weight: 500; font-variant-numeric: tabular-nums; }
   }
   @media (max-width: 599px) {
     .ht-month:nth-child(even) .ht-m { visibility: hidden; }
@@ -189,7 +210,7 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
   const G = 70;
   const LAST = MONTHS.length - 1;
   const f = (n: number) => n.toFixed(1);
-  const projWord = (n: number) => (n === 1 ? 'проекта' : 'проектов');
+  const projWord = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? 'проект' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'проекта' : 'проектов');
 
   document.querySelectorAll<HTMLElement>('[data-ht]').forEach((root) => {
     const q = <T extends Element>(s: string) => [...root.querySelectorAll<T>(s)];
@@ -204,6 +225,9 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
     const totalEl = root.querySelector<SVGTSpanElement>('[data-total]')!;
     const monEl = root.querySelector<SVGTSpanElement>('[data-mon]')!;
     const info = root.querySelector<HTMLElement>('[data-ht-info]')!;
+    const hoverEl = root.querySelector<HTMLElement>('[data-ht-hover]')!;
+    const hoverDefault = hoverEl.textContent ?? '';
+    const hl = q<HTMLLIElement>('[data-hl]');
     const months = q<HTMLButtonElement>('[data-ht-m]');
     const playBtn = root.querySelector<HTMLButtonElement>('[data-ht-play]')!;
 
@@ -212,12 +236,19 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
     let fr = frame(cur);
     let hovered: (() => string) | null = null;
 
+    // Вывод считается по месяцу, а не по промежуточному кадру анимации
     const summary = () => {
-      const n = MONTH_TOTALS[month].filter((v) => v > 0).length;
-      const total = MONTH_TOTALS[month].reduce((s, v) => s + v, 0);
-      return `${MONTHS[month]}: поступления ${fmt2(total)} млрд IDR от ${n} ${projWord(n)}`;
+      const v = SERIES[month];
+      const n = MONTH_TOTALS[month].filter((x) => x > 0).length;
+      const r = frame(v).right;
+      const build = r[0].v + r[1].v + r[2].v;
+      const total = MONTH_TOTALS[month].reduce((s, x) => s + x, 0);
+      return `${MONTHS[month]}, ${n} ${projWord(n)}: из ${fmt2(total)} млрд IDR поступлений на стройку ушло ${fmt2(build)}, на счетах осталось ${fmt2(r[r.length - 1].v)}`;
     };
-    const showInfo = () => { info.textContent = hovered ? hovered() : summary(); };
+    const showInfo = () => {
+      info.textContent = summary();
+      hoverEl.textContent = hovered ? hovered() : hoverDefault;
+    };
 
     const place = (g: SVGGElement, x: number, y: number, v: number) => {
       const t = g.querySelector('text')!;
@@ -245,6 +276,10 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
         gr[k].setAttribute('stroke-width', f(t.h));
         gr[k].style.setProperty('--g', (G / t.len).toFixed(3));
         place(rl[k], t.x + 12, t.y, t.v);
+        if (hl[k]) {
+          hl[k].querySelector('[data-v]')!.textContent = fmt2(t.v);
+          hl[k].classList.toggle('is-off', t.v < 0.005);
+        }
       });
       bar.setAttribute('y', f(fr.top - 10));
       bar.setAttribute('height', f(fr.total * TG.K + 20));
@@ -324,8 +359,6 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
 
     if (reduce) { root.classList.remove('ht-wait'); goTo(LAST, false); return; }
 
-    // Мотив может быть скрыт (выбрана J-кривая): год проигрывается при первом показе
-    const view = root.closest<HTMLElement>('[data-sig-view]');
     let started = false;
     const start = () => {
       if (started) return;
@@ -334,9 +367,9 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
       countIn();
       window.setTimeout(() => { if (!timer && month === 0) play(); }, 2600);
     };
-    // Мотив стоит ниже первого экрана: рисуется и проигрывает год, когда до него доскроллили
+    // Схема стоит ниже первого экрана: рисуется и проигрывает год, когда до неё доскроллили
     let inView = !('IntersectionObserver' in window);
-    const tryStart = () => { if (inView && (!view || !view.hidden)) start(); };
+    const tryStart = () => { if (inView) start(); };
     if (!inView) {
       const io = new IntersectionObserver((es) => {
         if (!es.some((e) => e.isIntersecting)) return;
@@ -347,8 +380,5 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
       io.observe(root);
     }
     tryStart();
-    if (view) {
-      new MutationObserver(tryStart).observe(view, { attributes: true, attributeFilter: ['hidden'] });
-    }
   });
 </script>
