@@ -53,13 +53,15 @@ export const MONTHS = [
 ];
 export const MONTHS_SHORT = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
 
-// Поступления по проектам: Вилла A распродаётся, Апарт-отель и Таунхаусы набирают ход.
+// Поступления по проектам. Портфель растёт: в январе деньги идут только с Виллы A,
+// в феврале и марте добавляется по проекту, в апреле ещё два, дальше все набирают ход.
+// Июнь совпадает с первым экраном (4,70 млрд IDR).
 const inflow = [
-  [2.4, 2.1, 1.9, 1.8, 1.6, 1.5, 1.4, 1.3, 1.2, 1.2, 1.1, 1.1],
-  [0.6, 0.8, 1.0, 1.2, 1.3, 1.4, 1.4, 1.3, 1.3, 1.2, 1.2, 1.4],
-  [0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.5],
-  [0.1, 0.1, 0.15, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9, 0.9, 1.0, 1.0],
-  [0.4, 0.3, 0.4, 0.3, 0.4, 0.4, 0.3, 0.4, 0.3, 0.4, 0.4, 0.5],
+  [1.2, 1.3, 1.4, 1.4, 1.5, 1.5, 1.5, 1.6, 1.6, 1.7, 1.7, 1.8],
+  [0, 0.6, 0.9, 1.1, 1.3, 1.4, 1.5, 1.6, 1.7, 1.7, 1.8, 1.9],
+  [0, 0, 0.3, 0.5, 0.7, 0.8, 0.95, 1.1, 1.25, 1.4, 1.5, 1.7],
+  [0, 0, 0, 0.3, 0.45, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2],
+  [0, 0, 0, 0.2, 0.3, 0.4, 0.45, 0.5, 0.5, 0.55, 0.6, 0.7],
 ];
 const invest = [0.12, 0.1, 0.04, 0.03, 0.02, 0.08, 0.03, 0.02, 0.06, 0.02, 0.03, 0.05];
 const r2 = (v: number) => Math.round(v * 100) / 100;
@@ -86,8 +88,8 @@ export const SERIES: number[][] = MONTHS.map((_, m) => {
   return [...p, g1, g2, g3, g4, c1, c2, c3, c4, c5, c6, g3, g4];
 });
 
-// Тонкие нити: узлы-планки 3 px, между узлами воздух, потоки почти вдвое тоньше прежних лент
-export const GEOM = { W: 1100, H: 520, PAD_T: 36, NODE_W: 3, GAP: 24, colX: [190, 430, 660, 860] };
+// Узлы-планки 6 px, между узлами место под подписи средних колонок
+export const GEOM = { W: 1100, H: 540, PAD_T: 44, NODE_W: 6, GAP: 30, colX: [190, 440, 670, 860] };
 
 const cols = [0, 1, 2, 3].map((c) => NODES.filter((n) => n.col === c));
 
@@ -103,13 +105,17 @@ function nodeValues(values: number[]) {
   return v;
 }
 
-// Масштаб один на все месяцы, чтобы было видно, как меняется объём.
+// Масштаб один на все месяцы: в декабре колонка статей заполняет высоту, в январе поток тонкий.
+// Так видно, как растёт портфель.
 const maxTotal = Math.max(...SERIES.map((vals) => {
   const v = nodeValues(vals);
   return Math.max(...cols.map((ns) => ns.reduce((s, n) => s + v[n.id], 0)));
 }));
 const { H, PAD_T, GAP, NODE_W, colX } = GEOM;
-export const SCALE = ((H - PAD_T - 10 - GAP * 7) / maxTotal) * 0.55;
+export const SCALE = (H - PAD_T - 10 - GAP * 7) / maxTotal;
+
+// Поступления по месяцам и по проектам: для столбиков под схемой
+export const MONTH_TOTALS = SERIES.map((vals) => vals.slice(0, 5));
 
 export type Layout = {
   nodes: Record<string, { x: number; y: number; h: number; value: number }>;
@@ -122,16 +128,20 @@ export function layout(values: number[]): Layout {
   const nodes: Layout['nodes'] = {};
   const outY: Record<string, number> = {};
   const inY: Record<string, number> = {};
+  // Отступ перед узлом плавно появляется вместе с проектом, чтобы новый проект «вырастал», а не прыгал
+  const gapOf = (n: SNode) => (n.col === 0 ? GAP * Math.min(1, v[n.id] / 0.15) : GAP);
   for (const ns of cols) {
-    const colH = ns.reduce((s, n) => s + v[n.id] * SCALE, 0) + GAP * (ns.length - 1);
+    const gaps = ns.slice(1).reduce((s, n) => s + gapOf(n), 0);
+    const colH = ns.reduce((s, n) => s + v[n.id] * SCALE, 0) + gaps;
     let y = PAD_T + (H - PAD_T - 10 - colH) / 2;
-    for (const n of ns) {
+    ns.forEach((n, k) => {
+      if (k > 0) y += gapOf(n);
       const h = v[n.id] * SCALE;
       nodes[n.id] = { x: colX[n.col], y, h, value: v[n.id] };
       outY[n.id] = y;
       inY[n.id] = y;
-      y += h + GAP;
-    }
+      y += h;
+    });
   }
   const links = LINKS.map((l, i) => {
     const a = nodes[l.from];
@@ -151,7 +161,8 @@ export function layout(values: number[]): Layout {
   return { nodes, links, total: v.cash };
 }
 
-export const fmt = (v: number) => v.toFixed(1).replace('.', ',');
+// Мелкие суммы с двумя знаками, чтобы не показывать «0,0»
+export const fmt = (v: number) => (v > 0.005 && v < 0.095 ? v.toFixed(2) : v.toFixed(1)).replace('.', ',');
 
 export function linkColor(l: SLink) {
   const src = NODES.find((n) => n.id === l.from)!;

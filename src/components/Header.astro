@@ -2,6 +2,13 @@
 import { site } from '../data/site';
 import PaletteBar from './PaletteBar.astro';
 
+// На главной после логотипа две точки: переключают мотив первого экрана (нити или J-кривая)
+const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+const sigViews = [
+  { id: 'threads', label: 'Деньги за месяц' },
+  { id: 'jcurve', label: 'Окупаемость проекта' },
+];
+
 const nav = [
   { href: '/#practices', label: 'Направления' },
   { href: '/#expertise', label: 'Экспертиза' },
@@ -20,6 +27,24 @@ const nav = [
       </svg>
       <span>Axiom</span>
     </a>
+    {isHome && (
+      <div class="sig-dots" role="tablist" aria-label="Пример на первом экране">
+        {sigViews.map((v, i) => (
+          <button
+            type="button"
+            role="tab"
+            class="sig-dot"
+            id={`sig-tab-${v.id}`}
+            aria-controls={`sig-${v.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            aria-label={v.label}
+            title={v.label}
+            tabindex={i === 0 ? 0 : -1}
+            data-sig-tab={v.id}
+          ></button>
+        ))}
+      </div>
+    )}
     <nav class="nav" aria-label="Основное меню">
       {nav.map((item) => <a href={item.href}>{item.label}</a>)}
     </nav>
@@ -56,6 +81,29 @@ const nav = [
     text-decoration: none;
     letter-spacing: -0.01em;
   }
+  .sig-dots { display: inline-flex; gap: 2px; margin-left: calc(var(--s2) * -1); }
+  .sig-dot {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+  .sig-dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink-3);
+    transition: background-color .2s ease, border-color .2s ease;
+  }
+  .sig-dot:hover::before { border-color: var(--ink); }
+  .sig-dot[aria-selected='true']::before { background: var(--ink); border-color: var(--ink); }
+  .sig-dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
   .nav {
     display: flex;
     gap: var(--s3);
@@ -90,6 +138,10 @@ const nav = [
   }
   @media (max-width: 519px) {
     .header-inner { gap: var(--s1); }
+    .sig-dots { margin-left: -4px; gap: 0; }
+    .sig-dot { width: 18px; }
+    .logo { font-size: 18px; gap: 8px; }
+    .header-cta { padding: 8px 12px; font-size: 14px; white-space: nowrap; }
     .header-login { padding: 8px 10px; }
     .header-login span { display: none; }
   }

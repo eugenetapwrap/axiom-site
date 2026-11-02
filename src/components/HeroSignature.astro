@@ -1,30 +1,13 @@
 ---
-// Фирменный мотив первого экрана с переключателем: «Нити» (деньги за месяц) и «J-кривая» (окупаемость проекта).
+// Фирменный мотив первого экрана: «Нити» (деньги за месяц) и «J-кривая» (окупаемость проекта).
+// Переключатель — две точки в шапке после логотипа (Header.astro, data-sig-tab).
 // Выбор посетителя запоминается в браузере. Повторный показ заново проигрывает анимацию.
 import HeroThreads from './HeroThreads.astro';
 import HeroJCurve from './HeroJCurve.astro';
 
-const views = [
-  { id: 'threads', label: 'Деньги за месяц' },
-  { id: 'jcurve', label: 'Окупаемость проекта' },
-];
 ---
 
 <div class="sig" data-sig>
-  <div class="sig-tabs" role="tablist" aria-label="Пример на первом экране">
-    {views.map((v, i) => (
-      <button
-        type="button"
-        role="tab"
-        class="sig-tab"
-        id={`sig-tab-${v.id}`}
-        aria-controls={`sig-${v.id}`}
-        aria-selected={i === 0 ? 'true' : 'false'}
-        tabindex={i === 0 ? 0 : -1}
-        data-sig-tab={v.id}
-      >{v.label}</button>
-    ))}
-  </div>
   <div class="sig-view" id="sig-threads" role="tabpanel" aria-labelledby="sig-tab-threads" data-sig-view="threads"><HeroThreads /></div>
   <div class="sig-view" id="sig-jcurve" role="tabpanel" aria-labelledby="sig-tab-jcurve" data-sig-view="jcurve" hidden><HeroJCurve /></div>
 </div>
@@ -58,7 +41,7 @@ const views = [
   }
 
   document.querySelectorAll<HTMLElement>('[data-sig]').forEach((root) => {
-    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-sig-tab]')];
+    const tabs = [...document.querySelectorAll<HTMLButtonElement>('[data-sig-tab]')];
     const views = [...root.querySelectorAll<HTMLElement>('[data-sig-view]')];
     const show = (id: string, save: boolean) => {
       tabs.forEach((t) => {
@@ -93,20 +76,6 @@ const views = [
 </script>
 
 <style>
-  .sig { display: grid; gap: var(--s3); }
-  .sig-tabs { display: inline-flex; justify-self: start; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
-  .sig-tab {
-    border: 0;
-    background: transparent;
-    padding: 7px 16px;
-    border-radius: 999px;
-    font: 500 14px var(--font);
-    color: var(--ink-2);
-    cursor: pointer;
-    transition: background-color .2s ease, color .2s ease;
-  }
-  .sig-tab:hover { color: var(--ink); }
-  .sig-tab[aria-selected='true'] { background: var(--ink); color: var(--surface); }
-  .sig-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sig { display: grid; }
   .sig-view[hidden] { display: none; }
 </style>

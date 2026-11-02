@@ -1,18 +1,29 @@
 ---
 // Схема движения денег по мотивам экрана Cash Flow Sankey в портале.
-// Ползунок по месяцам: потоки плавно перестраиваются. Данные демонстрационные (млрд IDR).
-import { NODES, LINKS, MONTHS, MONTHS_SHORT, SERIES, GEOM, layout, fmt, linkColor } from '../lib/sankey';
+// Под схемой столбики поступлений по месяцам: видно, как портфель растёт и добавляются проекты.
+// Клик по месяцу или кнопка воспроизведения перестраивают потоки. Данные демонстрационные (млрд IDR).
+import { NODES, LINKS, MONTHS, MONTHS_SHORT, SERIES, MONTH_TOTALS, GEOM, layout, fmt, linkColor } from '../lib/sankey';
 
 const { W, H, NODE_W, colX } = GEOM;
 const colTitles = ['Проекты', 'Поступления', 'Группы затрат', 'Статьи расходов'];
 const first = layout(SERIES[0]);
+const visible = (v: number) => v > 0.005;
 
-const labelPos = (id: string) => {
+const sideLabel = (id: string) => {
   const n = NODES.find((x) => x.id === id)!;
   const p = first.nodes[id];
   const right = n.col === 3;
-  return { x: right ? p.x + NODE_W + 10 : p.x - 10, y: p.y + p.h / 2, anchor: right ? 'start' : 'end', compact: p.h < 30 };
+  return { x: right ? p.x + NODE_W + 12 : p.x - 12, y: p.y + p.h / 2, anchor: right ? 'start' : 'end', compact: p.h < 34 };
 };
+// Подписи средних колонок — плашки над узлом, чтобы не лежать на лентах
+const chipPos = (id: string) => {
+  const p = first.nodes[id];
+  return { x: p.x + NODE_W / 2, y: p.y - 14 };
+};
+const estW = (text: string) => text.length * 7.4 + 18;
+
+const totals = MONTH_TOTALS.map((p) => p.reduce((s, v) => s + v, 0));
+const maxTotal = Math.max(...totals);
 ---
 
 <figure class="sankey theme-paper" data-sankey>
@@ -20,7 +31,7 @@ const labelPos = (id: string) => {
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="sankey-title sankey-desc">
       <title id="sankey-title">Движение денег по проектам за месяц</title>
       <desc id="sankey-desc">
-        Пример на демонстрационных данных: поступления по проектам распределяются на строительство, операционные расходы, инвестиции и прирост остатка. Ползунок под схемой переключает месяцы.
+        Пример на демонстрационных данных: поступления по проектам распределяются на строительство, операционные расходы, инвестиции и прирост остатка. В январе деньги идут с одного проекта, к концу года с пяти. Столбики под схемой переключают месяцы.
       </desc>
       <defs>
         <clipPath id="sankey-reveal">
@@ -28,7 +39,7 @@ const labelPos = (id: string) => {
         </clipPath>
       </defs>
       {colTitles.map((t, i) => (
-        <text class="col-title" x={i === 3 ? colX[i] : colX[i] + NODE_W / 2} y="14" text-anchor={i === 3 ? 'start' : 'middle'}>{t}</text>
+        <text class="col-title" x={i === 3 ? colX[i] : i === 0 ? colX[i] + NODE_W : colX[i] + NODE_W / 2} y="14" text-anchor={i === 3 ? 'start' : i === 0 ? 'end' : 'middle'}>{t}</text>
       ))}
       <g clip-path="url(#sankey-reveal)">
         {LINKS.map((l, i) => (
@@ -37,19 +48,31 @@ const labelPos = (id: string) => {
       </g>
       {NODES.map((n) => {
         const p = first.nodes[n.id];
-        return <rect class="node" x={p.x} y={p.y} width={NODE_W} height={Math.max(p.h, 2)} rx="1.5" fill="var(--ink)" data-node={n.id}></rect>;
+        return <rect class={`node${visible(p.value) ? '' : ' is-off'}`} x={p.x} y={p.y} width={NODE_W} height={Math.max(p.h, 2)} rx="2" fill="var(--ink)" data-node={n.id}></rect>;
       })}
-      {NODES.map((n) => {
-        const lp = labelPos(n.id);
+      {NODES.filter((n) => n.col === 0 || n.col === 3).map((n) => {
+        const lp = sideLabel(n.id);
         const val = `${fmt(first.nodes[n.id].value)} млрд`;
+        const off = visible(first.nodes[n.id].value) ? '' : ' is-off';
         return lp.compact ? (
-          <text class="node-label" x={lp.x} y={lp.y} text-anchor={lp.anchor} data-label={n.id}>
-            <tspan data-t="name" x={lp.x} dy="0">{n.label}</tspan><tspan class="node-value" data-t="val" dx="5" dy="0">{val}</tspan>
+          <text class={`node-label${off}`} x={lp.x} y={lp.y} text-anchor={lp.anchor} data-label={n.id}>
+            <tspan data-t="name" x={lp.x} dy="0">{n.label}</tspan><tspan class="node-value" data-t="val" dx="6" dy="0">{val}</tspan>
           </text>
         ) : (
-          <text class="node-label" x={lp.x} y={lp.y} text-anchor={lp.anchor} data-label={n.id}>
-            <tspan data-t="name" x={lp.x} dy="-0.2em">{n.label}</tspan><tspan class="node-value" data-t="val" x={lp.x} dy="1.25em">{val}</tspan>
+          <text class={`node-label${off}`} x={lp.x} y={lp.y} text-anchor={lp.anchor} data-label={n.id}>
+            <tspan data-t="name" x={lp.x} dy="-0.25em">{n.label}</tspan><tspan class="node-value" data-t="val" x={lp.x} dy="1.3em">{val}</tspan>
           </text>
+        );
+      })}
+      {NODES.filter((n) => n.col === 1 || n.col === 2).map((n) => {
+        const c = chipPos(n.id);
+        const val = `${fmt(first.nodes[n.id].value)} млрд`;
+        const w = estW(`${n.label} ${val}`);
+        return (
+          <g class="chip" data-chip={n.id} transform={`translate(${c.x.toFixed(1)} ${c.y.toFixed(1)})`}>
+            <rect x={(-w / 2).toFixed(1)} y="-11" width={w.toFixed(1)} height="22" rx="11"></rect>
+            <text text-anchor="middle" y="0.5"><tspan class="chip-name">{n.label}</tspan><tspan class="node-value" dx="5" data-t="val">{val}</tspan></text>
+          </g>
         );
       })}
     </svg>
@@ -60,15 +83,20 @@ const labelPos = (id: string) => {
       <svg class="sk-i-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7.5-4.5Z" fill="currentColor"/></svg>
       <svg class="sk-i-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 3.5h2.5v9H4.5zM9 3.5h2.5v9H9z" fill="currentColor"/></svg>
     </button>
-    <div class="sk-range">
-      <input type="range" min="0" max={MONTHS.length - 1} step="1" value="0" data-range aria-label="Месяц" aria-valuetext={MONTHS[0]} />
-      <div class="sk-ticks" aria-hidden="true">
-        {MONTHS_SHORT.map((m, i) => <span data-tick={i} class={i === 0 ? 'is-on' : ''}>{m}</span>)}
-      </div>
+    <div class="sk-months" role="group" aria-label="Поступления по месяцам">
+      {MONTH_TOTALS.map((p, i) => (
+        <button type="button" class={`sk-month${i === 0 ? ' is-on' : ' is-ahead'}`} aria-pressed={i === 0 ? 'true' : 'false'} aria-label={`${MONTHS[i]}: ${fmt(totals[i])} млрд IDR`} data-month-btn={i}>
+          <span class="sk-stack" style={`--h:${((totals[i] / maxTotal) * 100).toFixed(1)}%`}>
+            {p.map((v, k) => (v > 0 ? <i style={`flex-grow:${v};background:var(--th-${k + 1})`}></i> : null))}
+          </span>
+          <span class="sk-m">{MONTHS_SHORT[i]}</span>
+        </button>
+      ))}
     </div>
     <div class="sk-period">
       <b data-month>{MONTHS[0]}</b>
       <span>Поступления <b data-total>{fmt(first.total)}</b> млрд IDR</span>
+      <span class="sk-projects" data-projects>Проектов: {MONTH_TOTALS[0].filter((v) => v > 0).length}</span>
     </div>
   </div>
 
@@ -86,33 +114,38 @@ const labelPos = (id: string) => {
     padding: var(--s3) var(--s3) var(--s2);
   }
   .sankey-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .sankey-scroll svg { width: 100%; min-width: 720px; height: auto; font-family: var(--font); }
-  .col-title { font-size: 12px; font-weight: 500; fill: var(--ink-3); }
-  .flow { fill-opacity: 0.72; transition: fill-opacity 0.2s ease; cursor: pointer; }
-  .flow:hover, .flow.is-active { fill-opacity: 0.92; }
-  .sankey.has-active .flow:not(.is-active) { fill-opacity: 0.18; }
-  .node { cursor: pointer; }
-  .node-label { font-size: 13px; fill: var(--ink); dominant-baseline: middle; cursor: default; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-opacity: .8; stroke-linejoin: round; }
-  .node-value { font-size: 12px; font-weight: 700; fill: var(--ink-2); }
+  .sankey-scroll svg { width: 100%; min-width: 760px; height: auto; font-family: var(--font); }
+  .col-title { font-size: 13px; font-weight: 500; fill: var(--ink-3); }
+  .flow { fill-opacity: 0.82; transition: fill-opacity 0.2s ease; cursor: pointer; }
+  .flow:hover, .flow.is-active { fill-opacity: 0.95; }
+  .sankey.has-active .flow:not(.is-active) { fill-opacity: 0.15; }
+  .node { cursor: pointer; transition: opacity .4s ease; }
+  .node-label { font-size: 14px; fill: var(--ink); dominant-baseline: middle; cursor: default; transition: opacity .4s ease; }
+  .node-value { font-size: 13px; font-weight: 700; fill: var(--ink-2); }
+  .node.is-off, .node-label.is-off, .chip.is-off { opacity: 0; }
+  .chip { transition: opacity .4s ease; cursor: default; }
+  .chip rect { fill: var(--surface); stroke: var(--line); }
+  .chip text { font-size: 13px; dominant-baseline: middle; fill: var(--ink); }
+  .chip .chip-name { font-weight: 600; }
   .sankey-clip { transform-origin: left; }
   .sankey.is-armed .sankey-clip { transform: scaleX(0); }
-  .sankey.is-armed .node, .sankey.is-armed .node-label { opacity: 0; }
+  .sankey.is-armed .node, .sankey.is-armed .node-label, .sankey.is-armed .chip { opacity: 0; }
   .sankey.is-visible .sankey-clip { transform: scaleX(1); transition: transform 1.8s cubic-bezier(0.65, 0, 0.35, 1); }
-  .sankey.is-visible .node, .sankey.is-visible .node-label { opacity: 1; transition: opacity 0.6s ease 0.2s; }
 
   .sk-controls {
     display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
     gap: var(--s2) var(--s3);
     margin-top: var(--s2);
     padding-top: var(--s2);
     border-top: 1px solid var(--line);
   }
-  @media (min-width: 900px) { .sk-controls { grid-template-columns: auto 1fr 230px; } }
+  @media (min-width: 900px) { .sk-controls { grid-template-columns: auto minmax(0, 1fr) 210px; } }
   .sk-play {
     display: grid;
     place-items: center;
+    align-self: center;
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -126,48 +159,40 @@ const labelPos = (id: string) => {
   .sk-i-pause, .sankey.is-playing .sk-i-play { display: none; }
   .sankey.is-playing .sk-i-pause { display: block; }
 
-  .sk-range input {
-    width: 100%;
-    height: 24px;
-    margin: 0;
+  /* Месяцы: столбик поступлений по проектам, цвета как у проектов на схеме */
+  .sk-months { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px; }
+  .sk-month {
+    display: grid;
+    grid-template-rows: 64px auto;
+    gap: 4px;
+    padding: 4px 0 2px;
+    border: 0;
+    border-radius: 6px;
     background: transparent;
-    appearance: none;
-    -webkit-appearance: none;
+    font: inherit;
     cursor: pointer;
+    transition: opacity .3s ease, background-color .2s ease;
   }
-  .sk-range input::-webkit-slider-runnable-track {
-    height: 6px;
-    border-radius: 3px;
-    background: linear-gradient(90deg, var(--gold) var(--fill, 0%), var(--track) var(--fill, 0%));
+  .sk-month:hover { background: var(--track); }
+  .sk-month.is-ahead { opacity: .32; }
+  .sk-month.is-ahead:hover { opacity: .7; }
+  .sk-month:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .sk-stack { align-self: end; justify-self: center; display: flex; flex-direction: column-reverse; width: min(26px, 70%); height: var(--h); border-radius: 3px; overflow: hidden; }
+  .sk-stack i { display: block; min-height: 0; }
+  .sk-stack i + i { border-bottom: 1px solid var(--surface); }
+  .sk-m { font-size: 12px; color: var(--ink-3); text-align: center; }
+  .sk-month.is-on { background: var(--track); }
+  .sk-month.is-on .sk-m { color: var(--ink); font-weight: 700; }
+  @media (max-width: 599px) {
+    .sk-month { grid-template-rows: 48px auto; }
+    .sk-month:nth-child(even) .sk-m { visibility: hidden; }
   }
-  .sk-range input::-moz-range-track { height: 6px; border-radius: 3px; background: var(--track); }
-  .sk-range input::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--gold); }
-  .sk-range input::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    margin-top: -7px;
-    border-radius: 50%;
-    background: var(--surface);
-    border: 3px solid var(--gold);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-  }
-  .sk-range input::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--surface);
-    border: 3px solid var(--gold);
-  }
-  .sk-ticks { display: flex; justify-content: space-between; margin: 2px 7px 0; font-size: 11.5px; color: var(--ink-3); }
-  .sk-ticks span { width: 0; display: flex; justify-content: center; white-space: nowrap; }
-  .sk-ticks span.is-on { color: var(--gold-ink); font-weight: 700; }
-  @media (max-width: 599px) { .sk-ticks span:nth-child(even) { visibility: hidden; } }
 
   .sk-period { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: 15px; color: var(--ink-2); }
   .sk-period > b { font-size: 18px; color: var(--ink); }
   .sk-period span b { color: var(--accent); }
-  @media (min-width: 900px) { .sk-period { grid-column: auto; display: grid; gap: 2px; justify-items: end; text-align: right; } }
+  .sk-projects { color: var(--ink-3); }
+  @media (min-width: 900px) { .sk-period { grid-column: auto; align-self: center; display: grid; gap: 2px; justify-items: end; text-align: right; } }
 
   .sankey-caption {
     display: flex;
@@ -188,6 +213,7 @@ const labelPos = (id: string) => {
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const label = Object.fromEntries(NODES.map((n) => [n.id, n.label]));
+  const col = Object.fromEntries(NODES.map((n) => [n.id, n.col]));
 
   document.querySelectorAll<HTMLElement>('[data-sankey]').forEach((root) => {
     const info = root.querySelector<HTMLElement>('.sankey-info')!;
@@ -195,10 +221,11 @@ const labelPos = (id: string) => {
     const flows = [...root.querySelectorAll<SVGPathElement>('[data-link]')];
     const rects = Object.fromEntries([...root.querySelectorAll<SVGRectElement>('[data-node]')].map((r) => [r.dataset.node!, r]));
     const texts = Object.fromEntries([...root.querySelectorAll<SVGTextElement>('[data-label]')].map((t) => [t.dataset.label!, t]));
-    const range = root.querySelector<HTMLInputElement>('[data-range]')!;
-    const ticks = [...root.querySelectorAll<HTMLElement>('[data-tick]')];
+    const chips = Object.fromEntries([...root.querySelectorAll<SVGGElement>('[data-chip]')].map((g) => [g.dataset.chip!, g]));
+    const months = [...root.querySelectorAll<HTMLButtonElement>('[data-month-btn]')];
     const monthEl = root.querySelector<HTMLElement>('[data-month]')!;
     const totalEl = root.querySelector<HTMLElement>('[data-total]')!;
+    const projEl = root.querySelector<HTMLElement>('[data-projects]')!;
     const playBtn = root.querySelector<HTMLButtonElement>('[data-play]')!;
 
     let month = 0;
@@ -217,59 +244,82 @@ const labelPos = (id: string) => {
       el.addEventListener('mouseleave', () => { root.classList.remove('has-active'); el.classList.remove('is-active'); hovered = null; showInfo(); });
       el.addEventListener('click', () => { hovered = () => linkInfo(i); showInfo(); });
     });
-    [...Object.values(rects), ...Object.values(texts)].forEach((el) => {
-      const id = (el as SVGElement).dataset.node ?? (el as SVGElement).dataset.label!;
+    [...Object.entries(rects), ...Object.entries(texts), ...Object.entries(chips)].forEach(([id, el]) => {
       el.addEventListener('mouseenter', () => { hovered = () => nodeInfo(id); showInfo(); });
       el.addEventListener('mouseleave', () => { hovered = null; showInfo(); });
     });
 
-    // Перерисовка по значениям
+    // Ширина плашки по настоящему тексту
+    const fitChip = (g: SVGGElement) => {
+      const t = g.querySelector('text')!;
+      const w = t.getComputedTextLength() + 20;
+      const r = g.querySelector('rect')!;
+      r.setAttribute('x', (-w / 2).toFixed(1));
+      r.setAttribute('width', w.toFixed(1));
+    };
+
     const draw = (values: number[]) => {
       current = values;
       lay = layout(values);
       lay.links.forEach((l, i) => flows[i].setAttribute('d', l.d));
       NODES.forEach((n) => {
         const p = lay.nodes[n.id];
+        const on = p.value > 0.005;
         const r = rects[n.id];
         r.setAttribute('y', p.y.toFixed(1));
         r.setAttribute('height', Math.max(p.h, 2).toFixed(1));
+        r.classList.toggle('is-off', !on);
+        const val = `${fmt(p.value)} млрд`;
+        if (col[n.id] === 1 || col[n.id] === 2) {
+          const g = chips[n.id];
+          g.setAttribute('transform', `translate(${(p.x + GEOM.NODE_W / 2).toFixed(1)} ${(p.y - 14).toFixed(1)})`);
+          const v = g.querySelector('[data-t="val"]')!;
+          if (v.textContent !== val) { v.textContent = val; fitChip(g); }
+          g.classList.toggle('is-off', !on);
+          return;
+        }
         const t = texts[n.id];
+        t.classList.toggle('is-off', !on);
         const right = n.col === 3;
-        const x = right ? p.x + GEOM.NODE_W + 10 : p.x - 10;
+        const x = right ? p.x + GEOM.NODE_W + 12 : p.x - 12;
         t.setAttribute('y', (p.y + p.h / 2).toFixed(1));
-        const [name, val] = [t.querySelector('[data-t="name"]')!, t.querySelector('[data-t="val"]')!];
-        val.textContent = `${fmt(p.value)} млрд`;
-        if (p.h < 30) {
+        const [name, v] = [t.querySelector('[data-t="name"]')!, t.querySelector('[data-t="val"]')!];
+        v.textContent = val;
+        if (p.h < 34) {
           name.setAttribute('dy', '0');
-          val.removeAttribute('x');
-          val.setAttribute('dx', '5');
-          val.setAttribute('dy', '0');
+          v.removeAttribute('x');
+          v.setAttribute('dx', '6');
+          v.setAttribute('dy', '0');
         } else {
-          name.setAttribute('dy', '-0.2em');
-          val.setAttribute('x', String(x));
-          val.setAttribute('dx', '0');
-          val.setAttribute('dy', '1.25em');
+          name.setAttribute('dy', '-0.25em');
+          v.setAttribute('x', String(x));
+          v.setAttribute('dx', '0');
+          v.setAttribute('dy', '1.3em');
         }
       });
       if (hovered) showInfo();
     };
+    Object.values(chips).forEach(fitChip);
 
     // Плавный переход между месяцами
     let raf = 0;
     const goTo = (m: number, animate = true) => {
       month = m;
-      range.value = String(m);
-      range.style.setProperty('--fill', `${(m / (MONTHS.length - 1)) * 100}%`);
-      range.setAttribute('aria-valuetext', MONTHS[m]);
-      ticks.forEach((t, i) => t.classList.toggle('is-on', i === m));
+      months.forEach((b, i) => {
+        b.classList.toggle('is-on', i === m);
+        b.classList.toggle('is-ahead', i > m);
+        b.setAttribute('aria-pressed', String(i === m));
+      });
       monthEl.textContent = MONTHS[m];
       const target = SERIES[m];
-      totalEl.textContent = fmt(target.slice(0, 5).reduce((s, v) => s + v, 0));
+      const proj = target.slice(0, 5);
+      totalEl.textContent = fmt(proj.reduce((s, v) => s + v, 0));
+      projEl.textContent = `Проектов: ${proj.filter((v) => v > 0).length}`;
       cancelAnimationFrame(raf);
       if (!animate || reduce) { draw(target.slice()); return; }
       const from = current.slice();
       const t0 = performance.now();
-      const dur = 750;
+      const dur = 800;
       const step = (now: number) => {
         const k = Math.min(1, (now - t0) / dur);
         const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
@@ -289,12 +339,12 @@ const labelPos = (id: string) => {
       timer = window.setInterval(() => {
         if (month >= MONTHS.length - 1) { stop(); return; }
         goTo(month + 1);
-      }, 1400);
+      }, 1500);
     };
     playBtn.addEventListener('click', () => (timer ? stop() : play()));
-    range.addEventListener('input', () => { stop(); goTo(Number(range.value)); });
+    months.forEach((b, i) => b.addEventListener('click', () => { stop(); goTo(i); }));
 
-    if (reduce || !('IntersectionObserver' in window)) return;
+    if (reduce || !('IntersectionObserver' in window)) { goTo(11, false); return; }
     root.classList.add('is-armed');
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
@@ -303,7 +353,7 @@ const labelPos = (id: string) => {
           root.classList.remove('is-armed');
           io.disconnect();
           // После появления схемы один раз проигрываем год
-          window.setTimeout(() => { if (!timer && month === 0) play(); }, 2000);
+          window.setTimeout(() => { if (!timer && month === 0) play(); }, 1900);
         }
       });
     }, { threshold: 0.3 });

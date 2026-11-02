@@ -79,6 +79,7 @@
 :root {
   --btn-bg: var(--accent);
   --btn-ink: var(--accent-ink);
+  --paper-bg: var(--bg);
   --paper-surface: var(--surface);
   --paper-ink: var(--ink);
   --paper-ink-2: var(--ink-2);
@@ -267,6 +268,7 @@ p { max-width: var(--measure); text-wrap: pretty; }
 }
 /* Светлая «бумага» внутри тёмного блока (карточки, чаты): берёт светлые токены текущей палитры */
 .theme-paper {
+  --bg: var(--paper-bg);
   --surface: var(--paper-surface);
   --ink: var(--paper-ink);
   --ink-2: var(--paper-ink-2);

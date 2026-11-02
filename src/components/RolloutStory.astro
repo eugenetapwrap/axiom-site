@@ -4,6 +4,31 @@
 import { rollout } from '../data/home';
 import { site } from '../data/site';
 import { t } from '../lib/typo';
+
+// Плитка «Остаток за месяц»: схематичный водопад без подписей.
+// Остаток на начало, поступления, четыре группы расходов, остаток на конец (условные единицы).
+const steps = [
+  { kind: 'total', v: 30 },
+  { kind: 'in', v: 45 },
+  { kind: 'out', v: -16 },
+  { kind: 'out', v: -11 },
+  { kind: 'out', v: -6 },
+  { kind: 'out', v: -3 },
+];
+const Y = (v: number) => 66 - v * 0.8;
+let run = 0;
+const WF = [...steps, { kind: 'total', v: 0 }].map((st, k) => {
+  const x = 6 + k * 42;
+  if (st.kind === 'total') {
+    const v = k === 0 ? st.v : run;
+    run = v;
+    return { kind: 'total', x, y: Y(v), h: v * 0.8, level: Y(v) };
+  }
+  const from = run;
+  run += st.v;
+  const hi = Math.max(from, run);
+  return { kind: st.kind, x, y: Y(hi), h: Math.abs(st.v) * 0.8, level: Y(run) };
+});
 ---
 
 <div class="story">
@@ -83,11 +108,15 @@ import { t } from '../lib/typo';
                 </svg>
               </div>
               <div class="sv-tile sv-tile--wide">
-                <span class="sv-tile-t">Задачи недели</span>
-                <ul class="sv-tasks">
-                  <li><span>Финансовая модель девелоперского проекта: 50 000 м², пятизвёздочный отель</span><b class="done">Готово</b></li>
-                  <li><span>Аудит финансовой модели</span><b>В работе</b></li>
-                </ul>
+                <span class="sv-tile-t">Остаток за месяц</span>
+                <svg viewBox="0 0 300 70" preserveAspectRatio="none" aria-hidden="true" class="sv-wf">
+                  {WF.map((b, k) => (
+                    <>
+                      <rect class={`sv-wf-bar sv-wf-bar--${b.kind}`} x={b.x} y={b.y} width="30" height={b.h} rx="1.5" style={`--d:${k * 110}ms`}></rect>
+                      {k < WF.length - 1 && <line class="sv-wf-link" x1={b.x + 30} x2={b.x + 42} y1={b.level} y2={b.level} style={`--d:${k * 110 + 80}ms`}></line>}
+                    </>
+                  ))}
+                </svg>
               </div>
               <span class="sv-meet">Встреча раз в неделю</span>
             </div>
@@ -122,7 +151,7 @@ import { t } from '../lib/typo';
   .story-index { display: none; }
   .story-aside .btn { margin-top: var(--s4); }
 
-  .story-steps { list-style: none; padding: 0; display: grid; gap: var(--s4); }
+  .story-steps { list-style: none; padding: 0; display: grid; gap: var(--s2); }
   .story-step { position: relative; display: grid; gap: 8px; padding: var(--s3); }
   .story-step h3 { font-size: 20px; }
   .story-step p { font-size: 16px; }
@@ -165,7 +194,7 @@ import { t } from '../lib/typo';
   .sv-pf-bars .fact.over { background: var(--risk); }
   .is-seen .sv-pf-bars i { width: var(--w); }
 
-  /* Мини-дашборд: поток, структура расходов и задачи недели */
+  /* Мини-дашборд: поток, структура расходов и водопад остатка */
   .sv-dash { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 8px; }
   .sv-tile { display: grid; gap: 6px; align-content: start; padding: 10px 12px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
   .sv-tile--wide { grid-column: 1 / -1; }
@@ -178,11 +207,13 @@ import { t } from '../lib/typo';
   .sv-donut { justify-self: center; transform: rotate(-90deg); }
   .sv-donut circle { fill: none; stroke-width: 9; stroke-dasharray: 0 100; stroke-dashoffset: var(--o); transition: stroke-dasharray 1.2s cubic-bezier(.2, .8, .2, 1); }
   .is-seen .sv-donut circle { stroke-dasharray: var(--a) calc(100 - var(--a)); }
-  .sv-tasks { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
-  .sv-tasks li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 13px; line-height: 1.35; }
-  .sv-tasks li + li { padding-top: 6px; border-top: 1px solid var(--line); }
-  .sv-tasks b { flex: none; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--bg); color: var(--ink-2); }
-  .sv-tasks b.done { background: var(--growth-soft); color: var(--growth); }
+  .sv-wf-bar { transform-box: fill-box; transform: scaleY(0); transition: transform .6s cubic-bezier(.2, .8, .2, 1) var(--d); }
+  .sv-wf-bar--total { fill: var(--th-1); opacity: .8; transform-origin: 50% 100%; }
+  .sv-wf-bar--in { fill: var(--accent-2); opacity: .45; transform-origin: 50% 100%; }
+  .sv-wf-bar--out { fill: var(--c-neg); opacity: .55; transform-origin: 50% 0%; }
+  .sv-wf-link { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 2; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity .3s ease var(--d); }
+  .is-seen .sv-wf-bar { transform: none; }
+  .is-seen .sv-wf-link { opacity: 1; }
   .sv-meet { justify-self: start; grid-column: 1 / -1; padding: 2px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 12px; font-weight: 600; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -190,6 +221,8 @@ import { t } from '../lib/typo';
     .sv-line { stroke-dashoffset: 0; }
     .sv-bar { transform: none; }
     .sv-donut circle { stroke-dasharray: var(--a) calc(100 - var(--a)); }
+    .sv-wf-bar { transform: none; }
+    .sv-wf-link { opacity: 1; }
   }
 
   @media (min-width: 1024px) {
@@ -218,9 +251,9 @@ import { t } from '../lib/typo';
     .story-index li::before { content: counter(si); width: 1.2em; color: inherit; }
     .story-index li.is-on { color: var(--ink); }
     .story-index li.is-on::before { color: var(--accent); }
-    .story-steps { position: relative; gap: var(--s6); padding: var(--s4) 0; }
+    .story-steps { position: relative; gap: var(--s3); padding: var(--s2) 0; }
     /* Линия шагов между колонками */
-    .story-steps::before { content: ''; position: absolute; left: -57px; top: var(--s4); bottom: var(--s4); width: 1px; background: var(--line); }
+    .story-steps::before { content: ''; position: absolute; left: -57px; top: var(--s2); bottom: var(--s2); width: 1px; background: var(--line); }
     .story-num { position: absolute; left: -74px; top: var(--s3); }
     .story-step { padding: var(--s4); }
   }

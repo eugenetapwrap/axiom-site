@@ -104,9 +104,9 @@ export const expertise = {
 export const geography = {
   title: 'География',
   regions: [
-    { title: 'Юго-Восточная Азия', countries: 'Индонезия, Таиланд' },
-    { title: 'СНГ', countries: 'Узбекистан' },
-    { title: 'Ближний Восток', countries: 'ОАЭ' },
+    { title: 'Юго-Восточная Азия' },
+    { title: 'СНГ' },
+    { title: 'Ближний Восток' },
   ],
   note: 'Модели и отчётность в валюте проекта и в USD, с учётом местных налогов.',
 };

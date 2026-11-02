@@ -33,12 +33,11 @@ const widgetFor = {
 ---
 
 <Base title="Axiom — финансовый консалтинг для девелопмента и строительства" jsonLd={[faqLd]}>
-  <!-- Первый экран: заголовок слева, лид и кнопки справа, под ними во всю ширину фирменный мотив с переключателем (нити или J-кривая), ниже четыре услуги -->
+  <!-- Первый экран: заголовок слева, лид и кнопки справа, под ними во всю ширину фирменный мотив (нити или J-кривая, переключатель — две точки в шапке), ниже четыре услуги -->
   <section class="hero">
     <div class="container">
       <div class="hero-top">
         <div class="hero-text">
-          <p class="eyebrow">{hero.eyebrow}</p>
           <h1>{t(hero.title)}</h1>
         </div>
         <div class="hero-side">
@@ -180,8 +179,7 @@ const widgetFor = {
         </div>
         {geography.regions.map((r) => (
           <div class="col">
-            <p class="geo-region">{r.title}</p>
-            <p class="geo-countries">{r.countries}</p>
+            <p class="geo-countries">{r.title}</p>
           </div>
         ))}
       </div>
@@ -373,13 +371,14 @@ const widgetFor = {
 
 <style>
   /* Первый экран */
-  .hero { padding: var(--s6) 0 var(--s6); background-color: var(--bg); }
-  .hero-top { display: grid; gap: var(--s3); align-items: end; }
+  .hero { padding: var(--s5) 0 var(--s6); background-color: var(--bg); }
+  .hero-top { display: grid; gap: var(--s3); align-items: start; }
+  @media (min-width: 1024px) { .hero-side { padding-top: 8px; } }
   @media (min-width: 1024px) { .hero-top { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); column-gap: var(--s6); } }
   .hero h1 { font-size: clamp(32px, 4vw, 56px); line-height: 1.05; max-width: 15em; text-wrap: balance; }
   .hero-lead { max-width: 26em; font-size: clamp(19px, 1.5vw, 21px); line-height: 1.4; color: var(--ink-2); }
   .hero-btns { margin-top: var(--s3); }
-  .hero-art { min-width: 0; margin-top: var(--s5); }
+  .hero-art { min-width: 0; margin-top: var(--s4); }
 
   .services {
     list-style: none;
