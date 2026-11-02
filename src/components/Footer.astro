@@ -1,46 +1,91 @@
 ---
 import { site } from '../data/site';
-import { ketut } from '../data/home';
+import { ketut, practices } from '../data/home';
 import { t } from '../lib/typo';
 
 const year = new Date().getFullYear();
+const company = [
+  { href: '/#expertise', label: 'Экспертиза' },
+  { href: '/#accounting-system', label: 'Система учёта' },
+  { href: '/#cases', label: 'Кейсы' },
+  { href: '/#team', label: 'Команда' },
+  { href: '/#faq', label: 'Вопросы' },
+];
 ---
 
-<footer class="footer">
+<footer class="footer gridded">
   <div class="container footer-grid">
-    <figure class="ketut" aria-label="Кетут">
-      <p>— {t(ketut.q)}</p>
-      <p>— {t(ketut.a)}</p>
-    </figure>
-    <div class="footer-contacts">
-      <a href={site.telegramUrl}>Telegram @{site.telegram}</a>
-      <a href={`mailto:${site.email}`}>{site.email}</a>
+    <div class="footer-brand">
+      <a class="footer-logo" href="/" aria-label="Axiom, на главную">
+        <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="6" fill="var(--accent)"></rect>
+          <path d="M9 24 16 8l7 16M11.8 18h8.4" fill="none" stroke="#faf8f3" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>Axiom</span>
+      </a>
+      <p class="caption">{t('Финансовый консалтинг для девелопмента и строительства. Юго-Восточная Азия и СНГ.')}</p>
     </div>
-    <p class="caption footer-legal">{site.legalName} · Юго-Восточная Азия и СНГ · {year}</p>
+
+    <nav aria-label="Направления">
+      <p class="footer-h">Направления</p>
+      <ul>
+        {practices.map((p) => <li><a href={`/#${p.id}`}>{t(p.title)}</a></li>)}
+        <li><a href="/#bot">Бот для чеков <span class="badge">бета</span></a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label="Компания">
+      <p class="footer-h">Компания</p>
+      <ul>
+        {company.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div>
+      <p class="footer-h">Контакты</p>
+      <ul>
+        <li><a href={site.telegramUrl}>Telegram @{site.telegram}</a></li>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+      </ul>
+      <figure class="ketut" aria-label="Кетут">
+        <p>— {t(ketut.q)}</p>
+        <p>— {t(ketut.a)}</p>
+      </figure>
+    </div>
+
+    <p class="caption footer-legal">{site.legalName} · {year}</p>
   </div>
 </footer>
 
 <style>
   .footer {
-    background: var(--accent);
-    color: #e9f1ee;
-    padding: var(--s6) 0 var(--s5);
+    background-color: var(--surface);
+    border-top: 1px solid var(--line);
+    padding: var(--s6) 0 var(--s4);
+    font-size: 16px;
   }
-  .footer-grid {
-    display: grid;
-    gap: var(--s4);
+  .footer-grid { display: grid; gap: var(--s4); }
+  @media (min-width: 720px) { .footer-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) {
+    .footer-grid { grid-template-columns: repeat(4, 1fr); gap: var(--s4) 0; }
+    .footer-grid > * { padding-right: var(--s3); }
+    .footer-grid > *:not(:first-child):not(.footer-legal) { padding-left: var(--s3); }
   }
-  @media (min-width: 900px) {
-    .footer-grid { grid-template-columns: 2fr 1fr; align-items: end; }
-    .footer-legal { grid-column: 1 / -1; }
+  .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: var(--s2);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 20px;
+    text-decoration: none;
   }
-  .ketut {
-    font-size: clamp(20px, 2.4vw, 26px);
-    line-height: 1.4;
-    font-weight: 500;
-  }
-  .ketut p:last-child { color: #e3c48c; }
-  .footer-contacts { display: grid; gap: var(--s1); font-size: 17px; }
-  .footer a { color: #ffffff; }
-  .footer-legal { color: #a9c3bc; }
+  .footer-h { margin-bottom: var(--s2); font-size: 14px; color: var(--ink-3); }
+  .footer ul { list-style: none; padding: 0; display: grid; gap: 10px; }
+  .footer a { color: var(--ink); text-decoration: none; }
+  .footer a:hover { color: var(--accent); text-decoration: underline; }
+  .ketut { margin-top: var(--s3); font-size: 15px; line-height: 1.45; color: var(--ink-2); }
+  .ketut p:last-child { color: var(--gold-ink); }
+  .footer-legal { grid-column: 1 / -1; padding-top: var(--s3); border-top: 1px solid var(--line); }
 </style>

@@ -1,0 +1,504 @@
+---
+// «Лента» первого экрана: четыре живые карточки по направлениям и кнопка посередине.
+// Слева зелёная часть ленты (модели и анализ), справа золотая (учёт и контроль).
+// Все цифры в карточках демонстрационные, кроме IRR 9,0% → 8,2% из кейса аудита.
+import { site } from '../data/site';
+
+const scenarios = [
+  { name: 'Продажа', irr: '24,6%', npv: '1,8 млн', moic: '1,6×', bars: [-40, -70, -55, 20, 60, 85, 70, 40] },
+  { name: 'Аренда', irr: '14,2%', npv: '2,4 млн', moic: '2,1×', bars: [-45, -75, -30, 15, 25, 32, 38, 44] },
+  { name: 'Смешанный', irr: '19,8%', npv: '2,1 млн', moic: '1,8×', bars: [-42, -72, -40, 18, 45, 58, 52, 46] },
+];
+const s0 = scenarios[0];
+
+const auditRows = [
+  { name: 'Формулы и связи', state: 'ok' },
+  { name: 'Предпосылки', state: 'warn' },
+  { name: 'График стройки', state: 'risk' },
+];
+
+const payments = [
+  { name: 'Плитка, 120 м²', amount: '36,0 млн', status: 'ok' },
+  { name: 'Арматура 12 мм', amount: '14,3 млн', status: 'wait' },
+  { name: 'Песок, 5 м³', amount: '2,75 млн', status: 'ok' },
+];
+
+// Инвестанализ: что выгоднее, скидка или рассрочка. Меньше приведённая стоимость — выгоднее.
+const objects = [
+  { name: 'Апартаменты', a: '1,35 млн', b: '1,41 млн', wa: 78, wb: 84, win: 'a', yld: '8,1%' },
+  { name: 'Вилла', a: '2,62 млн', b: '2,49 млн', wa: 88, wb: 82, win: 'b', yld: '9,6%' },
+  { name: 'Таунхаус', a: '0,94 млн', b: '0,99 млн', wa: 70, wb: 76, win: 'a', yld: '7,4%' },
+];
+const o0 = objects[0];
+---
+
+<div class="band" data-band>
+  <div class="container band-row">
+    <!-- 1. Финмодель -->
+    <article class="bcard ui-card" data-bcard="0">
+      <header class="bcard-head">
+        <span class="bcard-title">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 13.5h12M3.5 11l3-3.5 2.5 2 4-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Финмодель
+        </span>
+        <span class="bcard-tag" data-scn-name>{s0.name}</span>
+      </header>
+      <dl class="kpis">
+        <div><dt>IRR</dt><dd data-k="irr">{s0.irr}</dd></div>
+        <div><dt>NPV, USD</dt><dd data-k="npv">{s0.npv}</dd></div>
+        <div><dt>MOIC</dt><dd data-k="moic">{s0.moic}</dd></div>
+      </dl>
+      <div class="jbars" aria-hidden="true">
+        {s0.bars.map((v) => (
+          <span class={v < 0 ? 'neg' : 'pos'} style={`--h:${Math.abs(v)}%`}></span>
+        ))}
+      </div>
+    </article>
+
+    <!-- 2. Аудит модели -->
+    <article class="bcard ui-card" data-bcard="1">
+      <header class="bcard-head">
+        <span class="bcard-title">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m10.5 10.5 3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Аудит модели
+        </span>
+        <span class="bcard-tag">реестр</span>
+      </header>
+      <ul class="audit">
+        {auditRows.map((r) => (
+          <li data-state={r.state} class="is-done">
+            <span>{r.name}</span>
+            <i aria-hidden="true"></i>
+          </li>
+        ))}
+      </ul>
+      <p class="audit-impact">IRR <b>9,0%</b> → <b class="risk">8,2%</b></p>
+    </article>
+
+    <!-- Кнопка на ленте -->
+    <div class="band-cta">
+      <span class="band-dot band-dot--green" aria-hidden="true">
+        <svg viewBox="0 0 16 16"><path d="M3 12.5 6.5 8l2.5 2.5L13 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <a class="btn btn-primary band-btn" href={site.telegramUrl}>Обсудить проект</a>
+      <span class="band-dot band-dot--gold" aria-hidden="true">
+        <svg viewBox="0 0 16 16"><path d="M8 1.8 13 4v4c0 3-2.2 5.2-5 6.2C5.2 13.2 3 11 3 8V4l5-2.2Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m5.8 8 1.6 1.6L10.4 6.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </div>
+
+    <!-- 3. Платежи -->
+    <article class="bcard ui-card" data-bcard="2">
+      <header class="bcard-head">
+        <span class="bcard-title">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3.5" width="12" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 6.5h12" stroke="currentColor" stroke-width="1.6"/></svg>
+          Платежи
+        </span>
+        <span class="bcard-tag bcard-tag--gold">антифрод</span>
+      </header>
+      <ul class="pays" data-pays>
+        {payments.map((p) => (
+          <li class="pay">
+            <span class="pay-name">{p.name}</span>
+            <span class="pay-amt">{p.amount}</span>
+            <span class={`pay-st pay-st--${p.status}`}>{p.status === 'ok' ? 'проверен' : 'согласование'}</span>
+          </li>
+        ))}
+      </ul>
+    </article>
+
+    <!-- 4. Инвестанализ -->
+    <article class="bcard ui-card" data-bcard="3">
+      <header class="bcard-head">
+        <span class="bcard-title">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13V8M6.3 13V5M9.7 13V9.5M13 13V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Инвестанализ
+        </span>
+        <span class="bcard-tag bcard-tag--gold" data-obj-name>{o0.name}</span>
+      </header>
+      <p class="cmp-cap">PV платежей за объект, USD</p>
+      <div class="cmp">
+        <div class={`cmp-row${o0.win === 'a' ? ' is-win' : ''}`} data-row="a">
+          <span class="cmp-label">Скидка 10%</span>
+          <span class="cmp-bar"><i style={`--w:${o0.wa}%`}></i></span>
+          <b data-v>{o0.a}</b>
+        </div>
+        <div class={`cmp-row${o0.win === 'b' ? ' is-win' : ''}`} data-row="b">
+          <span class="cmp-label">Рассрочка 24 мес.</span>
+          <span class="cmp-bar"><i style={`--w:${o0.wb}%`}></i></span>
+          <b data-v>{o0.b}</b>
+        </div>
+      </div>
+      <p class="cf-foot"><span>Доходность аренды</span><b data-yld>{o0.yld}</b></p>
+    </article>
+  </div>
+
+  <nav class="container band-chips" aria-label="Направления">
+    <a href="#models" data-chip="0"><b>01</b> Финмодели</a>
+    <a href="#audit" data-chip="1"><b>02</b> Аудит моделей</a>
+    <span class="band-chips-gap" aria-hidden="true"></span>
+    <a href="#accounting" data-chip="2"><b>03</b> Учёт и платежи</a>
+    <a href="#advisory" data-chip="3"><b>04</b> Инвестанализ</a>
+  </nav>
+  <p class="container caption band-note">Интерфейсы показаны на демонстрационных данных</p>
+</div>
+
+<script define:vars={{ scenarios, payments, objects }}>
+  const root = document.querySelector('[data-band]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (root && !reduce) {
+    const cards = [...root.querySelectorAll('[data-bcard]')];
+    const chips = [...root.querySelectorAll('[data-chip]')];
+
+    // Подсветка карточек по очереди
+    let active = 0;
+    const highlight = () => {
+      cards.forEach((c, i) => c.classList.toggle('is-active', i === active));
+      chips.forEach((c, i) => c.classList.toggle('is-active', i === active));
+    };
+
+    // 1. Финмодель: переключение сценариев
+    let scn = 0;
+    const model = cards[0];
+    const bars = [...model.querySelectorAll('.jbars span')];
+    const setScenario = () => {
+      const s = scenarios[scn];
+      model.querySelector('[data-scn-name]').textContent = s.name;
+      ['irr', 'npv', 'moic'].forEach((k) => {
+        const el = model.querySelector(`[data-k="${k}"]`);
+        el.classList.remove('flash');
+        void el.offsetWidth;
+        el.textContent = s[k];
+        el.classList.add('flash');
+      });
+      s.bars.forEach((v, i) => {
+        bars[i].style.setProperty('--h', `${Math.abs(v)}%`);
+        bars[i].className = v < 0 ? 'neg' : 'pos';
+      });
+    };
+
+    // 2. Аудит: проверка строк по одной
+    const audit = [...cards[1].querySelectorAll('.audit li')];
+    const impact = cards[1].querySelector('.audit-impact');
+    let auditStep = 0;
+    const auditTick = () => {
+      if (auditStep === 0) {
+        audit.forEach((li) => li.classList.remove('is-done', 'is-checking'));
+        impact.classList.remove('is-shown');
+      }
+      if (auditStep < audit.length) {
+        audit.forEach((li) => li.classList.remove('is-checking'));
+        audit[auditStep].classList.add('is-checking');
+        const li = audit[auditStep];
+        setTimeout(() => { li.classList.remove('is-checking'); li.classList.add('is-done'); }, 650);
+      } else {
+        impact.classList.add('is-shown');
+      }
+      auditStep = (auditStep + 1) % (audit.length + 2);
+    };
+
+    // 3. Платежи: новые заявки сверху, иногда дубль
+    const list = cards[2].querySelector('[data-pays]');
+    const pool = [
+      { name: 'Цемент, 40 мешков', amount: '1,08 млн', status: 'dup' },
+      { name: 'Аренда экскаватора', amount: '9,5 млн', status: 'ok' },
+      { name: 'Окна, 14 шт.', amount: '52,4 млн', status: 'wait' },
+      { name: 'Электрика, этап 2', amount: '18,9 млн', status: 'ok' },
+      { name: 'Цемент, 40 мешков', amount: '1,08 млн', status: 'dup' },
+      { name: 'Кровля, этап 1', amount: '27,6 млн', status: 'ok' },
+      ...payments,
+    ];
+    const label = { ok: 'проверен', wait: 'согласование', dup: 'дубль' };
+    let p = 0;
+    const payTick = () => {
+      const item = pool[p % pool.length];
+      p += 1;
+      const li = document.createElement('li');
+      li.className = 'pay is-new';
+      li.innerHTML = `<span class="pay-name"></span><span class="pay-amt"></span><span class="pay-st pay-st--${item.status}"></span>`;
+      li.children[0].textContent = item.name;
+      li.children[1].textContent = item.amount;
+      li.children[2].textContent = label[item.status];
+      list.prepend(li);
+      requestAnimationFrame(() => requestAnimationFrame(() => li.classList.remove('is-new')));
+      while (list.children.length > 3) list.lastElementChild.remove();
+    };
+
+    // 4. Инвестанализ: перебор объектов
+    let obj = 0;
+    const inv = cards[3];
+    const rows = { a: inv.querySelector('[data-row="a"]'), b: inv.querySelector('[data-row="b"]') };
+    const invTick = () => {
+      obj = (obj + 1) % objects.length;
+      const o = objects[obj];
+      inv.querySelector('[data-obj-name]').textContent = o.name;
+      inv.querySelector('[data-yld]').textContent = o.yld;
+      ['a', 'b'].forEach((k) => {
+        rows[k].classList.toggle('is-win', o.win === k);
+        rows[k].querySelector('i').style.setProperty('--w', `${k === 'a' ? o.wa : o.wb}%`);
+        rows[k].querySelector('[data-v]').textContent = o[k];
+      });
+    };
+
+    let timers = [];
+    const start = () => {
+      if (timers.length) return;
+      root.classList.add('is-live');
+      highlight();
+      timers = [
+        setInterval(() => { active = (active + 1) % cards.length; highlight(); }, 2600),
+        setInterval(() => { scn = (scn + 1) % scenarios.length; setScenario(); }, 3200),
+        setInterval(auditTick, 900),
+        setInterval(payTick, 1900),
+        setInterval(invTick, 3400),
+      ];
+    };
+    const stop = () => { timers.forEach(clearInterval); timers = []; };
+
+    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop()), { threshold: 0.2 });
+    io.observe(root);
+  }
+</script>
+
+<style is:global>
+  .band { position: relative; margin-top: var(--s5); }
+
+  .band-row {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    gap: var(--s2);
+  }
+
+  /* Сама лента: на всю ширину окна, центр совпадает с центром кнопки */
+  .band-cta {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 14px 0;
+  }
+  .band-cta::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 26px;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(90deg, var(--accent) 50%, var(--gold) 50%);
+  }
+  .band-btn {
+    min-height: 56px;
+    padding: 14px 30px;
+    font-size: 18px;
+    box-shadow: 0 0 0 6px var(--bg);
+  }
+  .band-dot {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid currentColor;
+    box-shadow: 0 0 0 5px var(--bg);
+  }
+  .band-dot svg { width: 20px; height: 20px; }
+  .band-dot--green { color: var(--accent); }
+  .band-dot--gold { color: var(--gold-ink); }
+
+  /* Карточки */
+  .bcard {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 14px 14px;
+    font-size: 13px;
+    line-height: 1.35;
+    transition: box-shadow .4s ease, border-color .4s ease, transform .4s ease;
+  }
+  .bcard.is-active { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-soft), var(--shadow); }
+  .bcard-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .bcard-title { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; color: var(--accent); }
+  .bcard-title svg { width: 16px; height: 16px; flex: none; }
+  .bcard-tag {
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .bcard-tag--gold { background: var(--gold-soft); color: var(--gold-ink); }
+
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .kpis div { padding: 6px 8px; border-radius: 6px; background: var(--bg); }
+  .kpis dt { font-size: 10.5px; color: var(--ink-3); white-space: nowrap; }
+  .kpis dd { font-weight: 700; font-size: 13.5px; white-space: nowrap; }
+  .flash { animation: hb-flash .9s ease; }
+  @keyframes hb-flash { 0% { color: var(--gold-ink); } 100% { color: inherit; } }
+
+  .jbars {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+    height: 54px;
+  }
+  .jbars::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--line); }
+  .jbars span { position: relative; height: 100%; }
+  .jbars span::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: calc(var(--h) / 2);
+    border-radius: 2px;
+    transition: height .6s cubic-bezier(.2, .8, .2, 1);
+  }
+  .jbars .pos::before { bottom: 50%; background: var(--accent-2); }
+  .jbars .neg::before { top: 50%; background: #d7c9a8; }
+
+  .audit { list-style: none; padding: 0; display: grid; gap: 6px; }
+  .audit li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: var(--bg);
+  }
+  .audit i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--line); flex: none; }
+  .audit li.is-checking i { border-color: var(--gold) transparent var(--gold) var(--gold); animation: hb-spin .6s linear infinite; }
+  @keyframes hb-spin { to { transform: rotate(360deg); } }
+  .audit li.is-done i { border: 0; display: grid; place-items: center; }
+  .audit li.is-done i::before { font-style: normal; font-size: 10px; font-weight: 800; color: #fff; line-height: 16px; }
+  .audit li.is-done[data-state='ok'] i { background: var(--growth); }
+  .audit li.is-done[data-state='ok'] i::before { content: '✓'; }
+  .audit li.is-done[data-state='warn'] i { background: var(--gold); }
+  .audit li.is-done[data-state='warn'] i::before { content: '!'; }
+  .audit li.is-done[data-state='risk'] i { background: var(--risk); }
+  .audit li.is-done[data-state='risk'] i::before { content: '×'; font-size: 13px; }
+  .audit-impact { margin-top: auto; font-size: 13px; color: var(--ink-2); transition: opacity .4s ease; }
+  .audit-impact .risk { color: var(--risk); }
+  .band.is-live .audit-impact:not(.is-shown) { opacity: 0; }
+
+  .pays { list-style: none; padding: 0; display: grid; gap: 6px; overflow: hidden; }
+  .pay {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0 8px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    background: var(--bg);
+    transition: opacity .45s ease, transform .45s ease, background-color .45s ease;
+  }
+  .pay.is-new { opacity: 0; transform: translateY(-10px); }
+  .pay-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pay-amt { color: var(--ink-3); font-size: 11.5px; grid-row: 2; }
+  .pay-st {
+    grid-row: 1 / 3;
+    grid-column: 2;
+    align-self: center;
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .pay-st--ok { background: var(--growth-soft); color: var(--growth); }
+  .pay-st--wait { background: #eceae4; color: var(--ink-2); }
+  .pay-st--dup { background: var(--risk-soft); color: var(--risk); }
+
+  .cmp-cap { font-size: 11.5px; color: var(--ink-3); }
+  .cmp { display: grid; gap: 8px; }
+  .cmp-row { display: grid; grid-template-columns: 1fr auto; gap: 3px 8px; align-items: center; }
+  .cmp-label { font-size: 12px; color: var(--ink-2); }
+  .cmp-row b { font-size: 12.5px; }
+  .cmp-bar { grid-column: 1 / -1; height: 8px; border-radius: 4px; background: var(--bg); overflow: hidden; }
+  .cmp-bar i { display: block; height: 100%; width: var(--w); border-radius: 4px; background: #d7c9a8; transition: width .7s cubic-bezier(.2, .8, .2, 1), background-color .4s ease; }
+  .cmp-row.is-win .cmp-bar i { background: var(--accent-2); }
+  .cmp-row.is-win .cmp-label { color: var(--accent); font-weight: 700; }
+  .cmp-row.is-win .cmp-label::after { content: ' ✓'; }
+  .cf-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: auto; color: var(--ink-2); }
+  .cf-foot b { color: var(--accent); }
+
+  /* Подписи-ссылки под карточками */
+  .band-chips { display: none; }
+  .band-note { margin-top: var(--s2); text-align: center; }
+
+  /* Телефон и планшет: лента с кнопкой, карточки сеткой ниже */
+  @media (max-width: 1279px) {
+    .band-row { grid-template-columns: 1fr; }
+    .band-cta { order: -1; margin-bottom: var(--s3); }
+    .bcard { min-height: 0; }
+  }
+  @media (min-width: 640px) and (max-width: 1279px) {
+    .band-row { grid-template-columns: 1fr 1fr; }
+    .band-cta { grid-column: 1 / -1; }
+  }
+  @media (max-width: 639px) {
+    .band-dot { display: none; }
+    .band-btn { width: auto; }
+    .bcard:nth-of-type(n + 3) { display: none; }
+  }
+
+  /* Узкий десктоп: без кружков на ленте, чтобы карточкам хватило ширины */
+  @media (min-width: 1280px) and (max-width: 1439px) {
+    .band-dot { display: none; }
+  }
+  @media (min-width: 1440px) {
+    .band { --cta-w: 328px; }
+  }
+
+  /* Десктоп: всё в одну линию на ленте */
+  @media (min-width: 1280px) {
+    .band { --cta-w: 240px; }
+    .container.band-row, .container.band-chips { max-width: calc(1340px + 2 * var(--gutter)); }
+    .band-cta { width: var(--cta-w); }
+    .band-row {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--cta-w) minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+    }
+    .bcard { min-height: 188px; }
+    .band-chips {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--cta-w) minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--s2);
+      margin-top: 14px;
+    }
+    .band-chips a {
+      position: relative;
+      justify-self: center;
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink-2);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color .4s ease, color .4s ease, border-color .4s ease;
+    }
+    .band-chips a::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      width: 1px;
+      height: 14px;
+      background: var(--line);
+    }
+    .band-chips a b { color: var(--ink-3); font-weight: 600; margin-right: 4px; }
+    .band-chips a.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .band-chips a.is-active b { color: #cfe3dc; }
+    .band-chips a:hover { border-color: var(--accent); color: var(--accent); }
+    .band-chips a.is-active:hover { color: #fff; }
+  }
+</style>

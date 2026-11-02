@@ -1,25 +1,38 @@
 /*
-  Дизайн-система Axiom.
-  Принципы: сетка и единый шаг отступов (8 px), иерархия размером и воздухом,
-  заголовки строчными, один акцентный цвет, красный и зелёный только в данных.
-  Палитра пока рабочая: тёмный бирюзово-зелёный из логотипа и презентаций,
-  тёплый белый и золото с аватара канала (только для мелких акцентов).
+  Дизайн-система Axiom, версия 5.
+  Референс по подаче: видимая сетка страницы, «лента» на первом экране,
+  блоки «текст слева, живой интерфейс справа», тёмные полосы для цифр и контактов.
+  Палитра: тёмно-зелёный из логотипа и презентаций, тёплый белый, золото для акцентов.
+  Красный и зелёный статусы только в данных.
 */
 
 :root {
-  --bg: #faf8f3;
+  --bg: #faf9f6;
+  --bg-alt: #f3f2ed;
   --surface: #ffffff;
-  --ink: #16201f;
-  --ink-2: #4a5654;
-  --ink-3: #7b8684;
-  --line: #e4e1d8;
+  --ink: #13201d;
+  --ink-2: #4b5754;
+  --ink-3: #7c8784;
+  --line: #e3e1da;
+  --grid: #d9d6cc;
+
   --accent: #0b5345;
+  --accent-2: #12705d;
   --accent-ink: #ffffff;
-  --accent-soft: #e6efec;
-  --gold: #b8893a;
+  --accent-soft: #e5efeb;
+  --gold: #c4973f;
+  --gold-ink: #8a6a2b;
+  --gold-soft: #f6efe1;
   --risk: #b3261e;
   --risk-soft: #fbebea;
-  --growth: #2e7d4f;
+  --growth: #1f7a4d;
+  --growth-soft: #e3f2ea;
+
+  --deep: #0a2a24;
+  --deep-2: #113a32;
+  --on-deep: #eef4f1;
+  --on-deep-2: #a9c0b9;
+  --gold-on-deep: #d9b26a;
 
   --font: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
@@ -32,10 +45,11 @@
   --s7: 96px;
   --s8: 128px;
 
-  --radius: 6px;
+  --radius: 8px;
   --measure: 36em;
   --page: 1200px;
   --gutter: 16px;
+  --shadow: 0 1px 2px rgba(19, 32, 29, 0.04), 0 8px 24px rgba(19, 32, 29, 0.06);
 }
 
 @media (min-width: 720px) {
@@ -61,14 +75,15 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font);
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.55;
   font-feature-settings: 'tnum' 1, 'lnum' 1;
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
 @media (min-width: 1024px) {
-  body { font-size: 20px; }
+  body { font-size: 18px; }
 }
 
 img, svg { display: block; max-width: 100%; }
@@ -79,53 +94,143 @@ a:hover { text-decoration-thickness: 2px; }
 
 h1, h2, h3, p, ul, ol, blockquote, figure, dl, dd { margin: 0; }
 
-h1, h2, h3 { font-weight: 700; letter-spacing: -0.015em; text-wrap: balance; }
+h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
 
-h1 { font-size: clamp(32px, 5.2vw, 56px); line-height: 1.1; }
-h2 { font-size: clamp(28px, 3.6vw, 40px); line-height: 1.15; }
-h3 { font-size: 1.1em; line-height: 1.3; }
+h1 { font-size: clamp(34px, 5.4vw, 64px); line-height: 1.06; }
+h2 { font-size: clamp(28px, 3.4vw, 44px); line-height: 1.1; }
+h3 { font-size: 1.1em; line-height: 1.3; letter-spacing: -0.01em; }
 
 p { max-width: var(--measure); text-wrap: pretty; }
 
 .container {
+  position: relative;
   width: 100%;
   max-width: calc(var(--page) + 2 * var(--gutter));
   margin: 0 auto;
   padding: 0 var(--gutter);
 }
 
-.section { padding: var(--s7) 0; }
-.section + .section { border-top: 1px solid var(--line); }
+/*
+  Видимая сетка: пунктирные вертикали по краям контейнера и между четырьмя колонками.
+  Рисуется фоном у каждой секции, поэтому проходит и через тёмные полосы.
+*/
+.gridded {
+  --gl: var(--grid);
+  --gx0: max(var(--gutter), calc(50% - var(--page) / 2));
+  --gw: min(calc(100% - 2 * var(--gutter)), var(--page));
+  background-image:
+    linear-gradient(var(--gl) 50%, transparent 0),
+    linear-gradient(var(--gl) 50%, transparent 0),
+    linear-gradient(var(--gl) 50%, transparent 0),
+    linear-gradient(var(--gl) 50%, transparent 0),
+    linear-gradient(var(--gl) 50%, transparent 0);
+  background-size: 1px 8px;
+  background-repeat: repeat-y;
+  background-position:
+    var(--gx0) 0,
+    calc(var(--gx0) + var(--gw) * 0.25) 0,
+    calc(var(--gx0) + var(--gw) * 0.5) 0,
+    calc(var(--gx0) + var(--gw) * 0.75) 0,
+    calc(var(--gx0) + var(--gw) - 1px) 0;
+}
+@media (max-width: 719px) {
+  .gridded {
+    background-image:
+      linear-gradient(var(--gl) 50%, transparent 0),
+      linear-gradient(var(--gl) 50%, transparent 0);
+    background-position: var(--gx0) 0, calc(var(--gx0) + var(--gw) - 1px) 0;
+  }
+}
+
+.section { padding: var(--s7) 0; background-color: var(--bg); }
+.section--alt { background-color: var(--bg-alt); }
+.section--white { background-color: var(--surface); }
+.section--dark {
+  --gl: rgba(255, 255, 255, 0.09);
+  background-color: var(--deep);
+  color: var(--on-deep);
+}
+.section--dark .muted, .section--dark .section-head p:not(.eyebrow) { color: var(--on-deep-2); }
+.section--dark .eyebrow { color: var(--gold-on-deep); }
 @media (max-width: 719px) { .section { padding: var(--s6) 0; } }
 
-.section-head { margin-bottom: var(--s5); max-width: 44rem; }
-.section-head p { margin-top: var(--s2); color: var(--ink-2); }
+.section-head { margin-bottom: var(--s5); max-width: 48rem; }
+.section-head p:not(.eyebrow) { margin-top: var(--s2); color: var(--ink-2); }
+.section-head--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--s2) var(--s4);
+  max-width: none;
+}
+
+.eyebrow {
+  margin-bottom: var(--s2);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--gold-ink);
+}
+@media (min-width: 1024px) { .eyebrow { font-size: 19px; } }
 
 .muted { color: var(--ink-2); }
 .small { font-size: 0.85em; }
 .caption { font-size: 14px; line-height: 1.4; color: var(--ink-3); }
 
+/* Списки с золотой точкой */
+.dots { list-style: none; padding: 0; display: grid; gap: 10px; }
+.dots li { position: relative; padding-left: 26px; }
+.dots li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0.55em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 4px var(--gold-soft);
+}
+.section--dark .dots li::before { box-shadow: 0 0 0 4px rgba(217, 178, 106, 0.18); }
+
 /* Кнопки */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--s1);
   min-height: 48px;
   padding: 12px 22px;
-  border-radius: 4px;
-  border: 1px solid var(--accent);
+  border-radius: 6px;
+  border: 1px solid transparent;
   font: inherit;
   font-size: 17px;
   font-weight: 600;
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color .15s ease, color .15s ease;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
 }
 .btn-primary { background: var(--accent); color: var(--accent-ink); }
 .btn-primary:hover { background: #083f35; }
-.btn-secondary { background: transparent; color: var(--accent); }
+.btn-soft { background: var(--accent-soft); color: var(--accent); }
+.btn-soft:hover { background: #d6e7e0; }
+.btn-soft::after, .btn-chevron::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  margin-left: 2px;
+  border-right: 2px solid currentColor;
+  border-top: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+.btn-secondary { background: transparent; color: var(--accent); border-color: var(--accent); }
 .btn-secondary:hover { background: var(--accent-soft); }
+.btn-light { background: var(--on-deep); color: var(--deep); }
+.btn-light:hover { background: #ffffff; }
+.btn-ghost-light { background: rgba(255, 255, 255, 0.08); color: var(--on-deep); }
+.btn-ghost-light:hover { background: rgba(255, 255, 255, 0.14); }
 .btn-row { display: flex; flex-wrap: wrap; gap: var(--s2); }
 
 .link-arrow { font-weight: 600; text-decoration: none; }
@@ -140,7 +245,16 @@ p { max-width: var(--measure); text-wrap: pretty; }
   color: var(--accent);
   font-size: 13px;
   font-weight: 600;
+  letter-spacing: 0;
   vertical-align: middle;
+}
+
+/* Карточка интерфейса */
+.ui-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
 }
 
 .visually-hidden {
@@ -150,6 +264,6 @@ p { max-width: var(--measure); text-wrap: pretty; }
   white-space: nowrap;
 }
 
-/* Появление секций при прокрутке (скрипт в Base.astro) */
-.reveal > .container { opacity: 0; transform: translateY(24px); }
-.reveal.is-in > .container { opacity: 1; transform: none; transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+/* Появление блоков при прокрутке (скрипт в Base.astro) */
+.reveal { opacity: 0; transform: translateY(28px); }
+.reveal.is-in { opacity: 1; transform: none; transition: opacity 0.8s ease var(--d, 0ms), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0ms); }

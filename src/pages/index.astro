@@ -1,10 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
+import HeroBand from '../components/HeroBand.astro';
+import PracticeWidget from '../components/PracticeWidget.astro';
 import SankeyFlow from '../components/SankeyFlow.astro';
 import PaymentBoard from '../components/PaymentBoard.astro';
+import RolloutStory from '../components/RolloutStory.astro';
+import BotMessage from '../components/BotMessage.astro';
 import { site } from '../data/site';
 import {
-  hero, practices, expertise, geography, flow, stats, payment, rollout, approach, cases, team, bot, faq, finalCta,
+  hero, practices, expertise, geography, flow, stats, payment, approach, cases, team, bot, faq, finalCta,
 } from '../data/home';
 import { t } from '../lib/typo';
 
@@ -17,19 +21,26 @@ const faqLd = {
     acceptedAnswer: { '@type': 'Answer', text: f.a },
   })),
 };
+
+const [titleFirst, ...titleRest] = hero.title.split(' ');
+const widgetFor = {
+  models: 'models',
+  audit: 'audit',
+  accounting: 'accounting',
+  advisory: 'advisory',
+} as const;
 ---
 
 <Base title="Axiom — финансовый консалтинг для девелопмента и строительства" jsonLd={[faqLd]}>
   <!-- Первый экран -->
-  <section class="hero">
-    <div class="container">
-      <p class="eyebrow">{hero.eyebrow}</p>
-      <h1>{t(hero.title)}</h1>
+  <section class="hero gridded">
+    <div class="container hero-head">
+      <p class="eyebrow">{hero.eyebrow} · Юго-Восточная Азия и СНГ</p>
+      <h1><span class="h1-accent">{titleFirst}</span> {t(titleRest.join(' '))}</h1>
       <p class="hero-lead">{t(hero.lead)}</p>
-      <div class="btn-row">
-        <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
-        <a class="btn btn-secondary" href="#practices">Направления</a>
-      </div>
+    </div>
+    <HeroBand />
+    <div class="container">
       <dl class="facts">
         {hero.facts.map((f) => (
           <div>
@@ -41,71 +52,46 @@ const faqLd = {
     </div>
   </section>
 
-  <!-- Направления -->
-  <section class="section" id="practices" data-reveal>
+  <!-- Направления: текст слева, живой интерфейс справа -->
+  <section class="section section--alt gridded" id="practices">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <p class="eyebrow">Направления</p>
-        <h2>Чем мы занимаемся</h2>
+        <h2>Четыре практики для девелоперов, генподрядчиков и инвесторов</h2>
       </div>
-      <div class="practices">
-        {practices.map((p) => (
-          <article class="practice" id={p.id}>
-            <span class="practice-num">{p.num}</span>
+      {practices.map((p) => (
+        <article class="practice" id={p.id}>
+          <div class="practice-text" data-reveal>
             <div class="practice-head">
-              <h3>{t(p.title)}</h3>
-              <p class="muted">{t(p.lead)}</p>
-              <a class="link-arrow" href={site.telegramUrl}>{p.cta}</a>
+              <p class="eyebrow">Направление {p.num}</p>
+              <h2>{t(p.title)}</h2>
             </div>
-            <ul class="practice-list">
+            <p class="practice-lead">{t(p.lead)}</p>
+            <ul class="dots">
               {p.items.map((i) => <li>{t(i)}</li>)}
             </ul>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Экспертиза и география -->
-  <section class="section" id="expertise" data-reveal>
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">{expertise.title}</p>
-        <h2>Девелопмент, строительство, инвестиции и технологии</h2>
-      </div>
-      <div class="areas">
-        {expertise.areas.map((a) => (
-          <div class="area">
-            <h3>{a.title}</h3>
-            <ul>
-              {a.items.map((i) => <li>{t(i)}</li>)}
-            </ul>
+            <a class="btn btn-soft" href={site.telegramUrl}>{p.cta}</a>
           </div>
-        ))}
-      </div>
-      <div class="geo">
-        <h3 class="geo-title">{geography.title}</h3>
-        <dl class="geo-list">
-          {geography.regions.map((r) => (
-            <div>
-              <dt>{r.title}</dt>
-              <dd>{r.countries}</dd>
-            </div>
-          ))}
-        </dl>
-        <p class="caption geo-note">{t(geography.note)}</p>
-      </div>
+          <div class="practice-widget" data-reveal style="--d: 120ms">
+            <PracticeWidget variant={widgetFor[p.id as keyof typeof widgetFor]} />
+          </div>
+        </article>
+      ))}
+      <p class="caption practices-note">Интерфейсы показаны на демонстрационных данных</p>
     </div>
   </section>
 
-  <!-- Цифры -->
-  <section class="section stats-section" aria-labelledby="stats-title">
+  <!-- Ключевые цифры -->
+  <section class="section section--dark gridded" aria-labelledby="stats-title">
     <div class="container">
-      <h2 id="stats-title" class="section-head">Результаты в цифрах</h2>
-      <dl class="stats">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Результаты</p>
+        <h2 id="stats-title">Цифры из наших систем учёта</h2>
+      </div>
+      <dl class="stats" data-reveal>
         {stats.map((s) => (
           <div class="stat">
-            <dt><span class="stat-value">{s.value}</span> <span class="stat-unit">{s.unit}</span></dt>
+            <dt><span class="stat-value" data-count={s.value}>{s.value}</span> <span class="stat-unit">{s.unit}</span></dt>
             <dd>{t(s.text)}</dd>
           </div>
         ))}
@@ -114,54 +100,113 @@ const faqLd = {
   </section>
 
   <!-- Движение денег -->
-  <section class="section" id="flow" data-reveal>
+  <section class="section section--white gridded" id="accounting-system">
     <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">Управленческий учёт</p>
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Система учёта</p>
         <h2>{t(flow.title)}</h2>
         <p>{t(flow.lead)}</p>
       </div>
-      <SankeyFlow />
+      <div data-reveal><SankeyFlow /></div>
     </div>
   </section>
 
-  <!-- Контроль платежей и внедрение -->
-  <section class="section" id="system" data-reveal>
+  <!-- Контроль платежей -->
+  <section class="section section--alt gridded" id="payments">
     <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">Управленческий учёт</p>
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Система учёта</p>
         <h2>{t(payment.title)}</h2>
         <p>{t(payment.lead)}</p>
       </div>
-      <PaymentBoard columns={payment.columns.map((c) => ({ title: t(c.title), text: t(c.text) }))} />
-      <div class="rollout">
-        <h3>{t(rollout.title)}</h3>
-        <ol class="timeline">
-          {rollout.steps.map((s) => <li>{t(s)}</li>)}
-        </ol>
+      <div data-reveal>
+        <PaymentBoard columns={payment.columns.map((c) => ({ title: t(c.title), text: t(c.text) }))} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Внедрение за 40 дней -->
+  <section class="section gridded" id="rollout">
+    <div class="container">
+      <RolloutStory />
+    </div>
+  </section>
+
+  <!-- Экспертиза и география -->
+  <section class="section section--white gridded" id="expertise">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">{expertise.title}</p>
+        <h2>Девелопмент, строительство, инвестиции и технологии</h2>
+      </div>
+      <div class="cols4 areas" data-reveal>
+        {expertise.areas.map((a, i) => (
+          <div class="col">
+            <span class="col-num">0{i + 1}</span>
+            <h3>{a.title}</h3>
+            <ul>
+              {a.items.map((item) => <li>{t(item)}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div class="cols4 geo" data-reveal>
+        <div class="col">
+          <h3>{geography.title}</h3>
+          <p class="caption">{t(geography.note)}</p>
+        </div>
+        {geography.regions.map((r) => (
+          <div class="col">
+            <p class="geo-region">{r.title}</p>
+            <p class="geo-countries">{r.countries}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
   <!-- Кейсы -->
-  <section class="section" id="cases" data-reveal>
+  <section class="section section--alt gridded" id="cases">
     <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">Кейсы</p>
-        <h2>Задачи, которые мы решали</h2>
+      <div class="section-head section-head--row" data-reveal>
+        <div>
+          <p class="eyebrow">Кейсы</p>
+          <h2>Задачи, которые мы решали</h2>
+        </div>
         <p class="caption">Клиентов и проекты не называем</p>
       </div>
       <div class="cases">
-        {cases.map((c) => (
-          <article class="case">
-            <p class="caption">{c.tag}</p>
-            <h3>{t(c.problem)}</h3>
-            <dl class="case-dl">
-              <dt>Решение</dt>
-              <dd>{t(c.action)}</dd>
-              <dt>Результат</dt>
-              <dd class="case-result">{t(c.result)}</dd>
-            </dl>
+        {cases.map((c, i) => (
+          <article class="case ui-card" data-reveal style={`--d: ${i * 100}ms`}>
+            <div class="case-visual" aria-hidden="true">
+              <span class="case-tag">{c.tag}</span>
+              {i === 0 && (
+                <div class="cv-card">
+                  <p><span>Заявка № 63</span><b>1 080 000 IDR</b></p>
+                  <p class="cv-dup"><span>Заявка № 75</span><b>1 080 000 IDR</b><em>дубль</em></p>
+                </div>
+              )}
+              {i === 1 && (
+                <div class="cv-card cv-bars">
+                  <p><span>Норма</span><i style="--w:62%"></i></p>
+                  <p class="cv-over"><span>Факт</span><i style="--w:88%"></i></p>
+                </div>
+              )}
+              {i === 2 && (
+                <div class="cv-card cv-irr">
+                  <span>IRR</span><b>9,0%</b><span>→</span><b class="cv-risk">8,2%</b>
+                </div>
+              )}
+            </div>
+            <div class="case-body">
+              <h3>{t(c.problem)}</h3>
+              <dl class="case-dl">
+                <dt>Решение</dt>
+                <dd>{t(c.action)}</dd>
+                <dt>Результат</dt>
+                <dd class="case-result">{t(c.result)}</dd>
+              </dl>
+            </div>
           </article>
         ))}
       </div>
@@ -169,16 +214,16 @@ const faqLd = {
   </section>
 
   <!-- Как работаем -->
-  <section class="section" data-reveal>
+  <section class="section gridded" id="approach">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <p class="eyebrow">Подход</p>
         <h2>{approach.title}</h2>
       </div>
-      <ol class="approach">
+      <ol class="cols4 approach" data-reveal>
         {approach.steps.map((s, i) => (
-          <li>
-            <span class="approach-num">{String(i + 1).padStart(2, '0')}</span>
+          <li class="col">
+            <span class="approach-num">{i + 1}</span>
             <h3>{s.title}</h3>
             <p class="muted">{t(s.text)}</p>
           </li>
@@ -188,55 +233,58 @@ const faqLd = {
   </section>
 
   <!-- Команда -->
-  <section class="section" id="team" data-reveal>
-    <div class="container two-col">
-      <div>
+  <section class="section section--white gridded" id="team">
+    <div class="container team">
+      <div data-reveal>
         <p class="eyebrow">{team.title}</p>
         <h2>Кто работает над проектом</h2>
         <p class="muted team-lead">{t(team.lead)}</p>
-      </div>
-      <div>
-        <dl class="roles">
-          {team.roles.map((r) => (
-            <div>
-              <dt>{r.title}</dt>
-              <dd>{t(r.text)}</dd>
-            </div>
-          ))}
-        </dl>
         <p class="founder">{t(team.founder)}</p>
       </div>
+      <dl class="roles" data-reveal style="--d: 120ms">
+        {team.roles.map((r) => (
+          <div class="ui-card">
+            <dt>{r.title}</dt>
+            <dd>{t(r.text)}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
   </section>
 
   <!-- Продукт: бот -->
-  <section class="section bot-section" id="bot" data-reveal>
-    <div class="container bot-grid">
-      <div>
-        <p class="eyebrow">Продукт</p>
-        <h2>{bot.title} <span class="badge">{bot.badge}</span></h2>
+  <section class="section section--dark gridded" id="bot">
+    <div class="container bot">
+      <div class="bot-visual" data-reveal>
+        <BotMessage />
       </div>
-      <div>
-        <p>{t(bot.lead)}</p>
-        <ul class="inline-list">
+      <div data-reveal style="--d: 120ms">
+        <p class="eyebrow">Продукт · {bot.badge}</p>
+        <h2>{bot.title}</h2>
+        <p class="bot-lead">{t(bot.lead)}</p>
+        <ul class="dots bot-list">
           {bot.items.map((i) => <li>{t(i)}</li>)}
         </ul>
         <p class="tagline">{t(bot.tagline)}</p>
-        <a class="btn btn-secondary" href={site.botUrl}>{bot.cta}</a>
+        <div class="btn-row">
+          <a class="btn btn-light" href={site.botUrl}>{bot.cta}</a>
+          <a class="btn btn-ghost-light" href={site.telegramUrl}>Задать вопрос</a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section class="section" id="faq">
-    <div class="container two-col">
-      <div>
+  <section class="section gridded" id="faq">
+    <div class="container faq-wrap">
+      <div data-reveal>
         <p class="eyebrow">Вопросы</p>
         <h2>Частые вопросы</h2>
+        <p class="muted faq-more">Не нашли ответ? <a href={site.telegramUrl}>Напишите в Telegram</a></p>
       </div>
-      <div class="faq">
+      <div class="faq" data-reveal style="--d: 120ms">
         {faq.map((f) => (
-          <details>
+          <details class="ui-card">
             <summary>{t(f.q)}</summary>
             <p class="muted">{t(f.a)}</p>
           </details>
@@ -246,182 +294,211 @@ const faqLd = {
   </section>
 
   <!-- Финальный блок -->
-  <section class="section final">
-    <div class="container two-col">
+  <section class="section section--dark gridded final" id="contact">
+    <div class="container final-inner" data-reveal>
+      <p class="eyebrow">Контакты</p>
       <h2>{finalCta.title}</h2>
-      <div>
-        <p class="muted">Что прислать:</p>
-        <ul class="practice-list final-list">
-          {finalCta.items.map((i) => <li>{t(i)}</li>)}
-        </ul>
-        <p class="final-text">{t(finalCta.text)}</p>
-        <a class="btn btn-primary" href={site.telegramUrl}>Написать в Telegram @{site.telegram}</a>
+      <p class="final-text">{t(finalCta.text)}</p>
+      <ul class="final-list">
+        {finalCta.items.map((i, k) => <li><b>{k + 1}</b>{t(i)}</li>)}
+      </ul>
+      <div class="btn-row final-btns">
+        <a class="btn btn-light" href={site.telegramUrl}>Написать в Telegram @{site.telegram}</a>
+        <a class="btn btn-ghost-light" href={`mailto:${site.email}`}>{site.email}</a>
       </div>
     </div>
   </section>
 </Base>
 
+<script>
+  // Счётчики в полосе цифр: от нуля до значения, один раз
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const nums = document.querySelectorAll<HTMLElement>('[data-count]');
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        io.unobserve(e.target);
+        const el = e.target as HTMLElement;
+        const final = el.dataset.count!;
+        const m = final.match(/^([\d\s ]+)(?:,(\d+))?(.*)$/);
+        if (!m) return;
+        const whole = Number(m[1].replace(/[\s ]/g, ''));
+        const dec = m[2] ?? '';
+        const target = Number(`${whole}.${dec || 0}`);
+        const tail = m[3];
+        const t0 = performance.now();
+        const dur = 1400;
+        const fmt = (v: number) => {
+          const [a, b] = v.toFixed(dec.length).split('.');
+          const grouped = a.length > 4 ? a.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : a;
+          return b ? `${grouped},${b}` : grouped;
+        };
+        const step = (now: number) => {
+          const k = Math.min(1, (now - t0) / dur);
+          const eased = 1 - Math.pow(1 - k, 3);
+          el.textContent = k < 1 ? fmt(target * eased) + tail : final;
+          if (k < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.5 });
+    nums.forEach((n) => io.observe(n));
+  }
+</script>
+
 <style>
-  .eyebrow {
-    margin-bottom: var(--s2);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
+  /* Первый экран */
+  .hero { padding: var(--s6) 0 var(--s6); background-color: var(--bg); }
+  .hero-head { text-align: center; }
+  .hero-head p { margin-left: auto; margin-right: auto; }
+  .hero h1 { max-width: 14em; margin: 0 auto; }
+  .h1-accent { color: var(--accent); }
+  .hero-lead { margin-top: var(--s3); max-width: 38em; color: var(--ink-2); font-size: 1.08em; }
+  @media (max-width: 719px) {
+    .hero { padding-top: var(--s6); }
+    .hero-head { text-align: left; }
+    .hero-head p { margin-left: 0; }
+    .hero h1 { margin: 0; }
   }
 
-  /* Первый экран: только типографика и факты */
-  .hero { padding: var(--s7) 0 var(--s6); }
-  .hero h1 { max-width: 15em; font-size: clamp(36px, 5.6vw, 68px); line-height: 1.06; letter-spacing: -0.025em; }
-  .hero-lead { margin: var(--s4) 0; max-width: 40em; color: var(--ink-2); font-size: 1.1em; }
   .facts {
     display: grid;
-    gap: var(--s3);
-    margin-top: var(--s6);
-    padding-top: var(--s3);
-    border-top: 1px solid var(--ink);
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s4) var(--s3);
+    margin-top: var(--s5);
   }
-  @media (min-width: 640px) { .facts { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .facts { grid-template-columns: repeat(4, 1fr); gap: var(--s4); } }
-  .facts dt { font-size: clamp(32px, 3.6vw, 44px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
-  .facts dd { margin-top: var(--s1); max-width: 18em; color: var(--ink-2); font-size: 16px; }
+  @media (min-width: 1024px) { .facts { grid-template-columns: repeat(4, 1fr); gap: 0; text-align: center; } }
+  .facts dt { font-size: clamp(30px, 3.2vw, 40px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--accent); }
+  .facts dd { margin: var(--s1) auto 0; max-width: 16em; color: var(--ink-2); font-size: 15px; line-height: 1.45; }
+  @media (max-width: 1023px) { .facts dd { margin-left: 0; } }
 
-  .two-col { display: grid; gap: var(--s4); }
-  @media (min-width: 1024px) { .two-col { grid-template-columns: 4fr 8fr; gap: var(--s6); } }
-
-  /* Направления: строгие строки с номерами */
-  .practices { border-top: 1px solid var(--ink); }
+  /* Направления */
   .practice {
     display: grid;
-    gap: var(--s2) var(--s4);
-    padding: var(--s4) 0;
-    border-bottom: 1px solid var(--line);
+    gap: var(--s5);
+    padding: var(--s6) 0;
+    border-top: 1px solid var(--line);
   }
-  @media (min-width: 900px) {
-    .practice { grid-template-columns: 64px 5fr 6fr; padding: var(--s5) 0; }
+  .practice:first-of-type { border-top: 0; padding-top: 0; }
+  @media (min-width: 1024px) {
+    .practice { grid-template-columns: 1fr 1fr; column-gap: 112px; align-items: start; padding: var(--s7) 0; }
   }
-  .practice-num { font-size: 15px; font-weight: 600; color: var(--ink-3); padding-top: 6px; }
-  .practice-head h3 { font-size: clamp(22px, 2.2vw, 28px); line-height: 1.2; }
-  .practice-head p { margin: var(--s1) 0 var(--s2); font-size: 17px; }
-  .practice-head .link-arrow { font-size: 16px; }
-  .practice-list { list-style: none; padding: 0; display: grid; gap: 0; }
-  .practice-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid var(--line);
-    font-size: 17px;
-  }
-  .practice-list li:first-child { padding-top: 0; }
-  .practice-list li:last-child { border-bottom: 0; }
-
-  /* Экспертиза */
-  .areas { display: grid; gap: var(--s4); border-top: 1px solid var(--ink); padding-top: var(--s3); }
-  @media (min-width: 720px) { .areas { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1100px) { .areas { grid-template-columns: repeat(4, 1fr); } }
-  .area h3 { margin-bottom: var(--s2); }
-  .area ul { list-style: none; padding: 0; display: grid; gap: 6px; color: var(--ink-2); font-size: 16px; }
-
-  .geo {
-    display: grid;
-    gap: var(--s2) var(--s4);
-    margin-top: var(--s6);
-    padding: var(--s4);
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 4px;
-  }
-  @media (min-width: 900px) { .geo { grid-template-columns: 3fr 9fr; align-items: start; } }
-  .geo-list { display: grid; gap: var(--s2); }
-  @media (min-width: 720px) { .geo-list { grid-template-columns: repeat(3, 1fr); } }
-  .geo-list dt { font-size: 14px; color: var(--ink-3); }
-  .geo-list dd { margin-top: 2px; font-weight: 600; }
-  .geo-note { grid-column: 1 / -1; }
-  @media (min-width: 900px) { .geo-note { grid-column: 2; } }
+  .practice-head { border-left: 2px solid var(--gold); padding-left: var(--s3); margin-left: -1px; }
+  .practice-head .eyebrow { margin-bottom: var(--s1); }
+  .practice-lead { margin: var(--s3) 0; color: var(--ink-2); }
+  .practice .dots { margin-bottom: var(--s4); }
+  .practices-note { margin-top: var(--s2); }
 
   /* Цифры */
-  .stats-section { background: var(--accent); color: #fff; border-top: 0 !important; }
-  .stats-section + .section { border-top: 0; }
-  .stats { display: grid; gap: var(--s4); margin: 0; }
+  .stats { display: grid; gap: var(--s4) 0; }
   @media (min-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1100px) { .stats { grid-template-columns: repeat(4, 1fr); } }
-  .stat { border-top: 1px solid rgba(255, 255, 255, 0.3); padding-top: var(--s2); }
-  .stat-value { font-size: clamp(36px, 4vw, 48px); font-weight: 700; letter-spacing: -0.02em; }
-  .stat-unit { font-size: 18px; font-weight: 600; color: #e3c48c; }
-  .stat dd { margin-top: var(--s1); color: #d3e3de; font-size: 16px; max-width: 18em; }
+  @media (min-width: 1024px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+  .stat { padding: 0 var(--s3) 0 0; }
+  @media (min-width: 720px) { .stat:not(:first-child) { padding-left: var(--s3); } }
+  @media (min-width: 720px) and (max-width: 1023px) { .stat:nth-child(3) { padding-left: 0; } }
+  .stat-value { font-size: clamp(40px, 4.4vw, 60px); font-weight: 700; letter-spacing: -0.03em; color: var(--gold-on-deep); line-height: 1; }
+  .stat-unit { display: block; margin-top: var(--s1); font-size: 18px; font-weight: 600; color: var(--on-deep); }
+  .stat dd { margin-top: 6px; color: var(--on-deep-2); font-size: 15px; max-width: 18em; }
 
-  /* Внедрение */
-  .rollout { margin-top: var(--s6); }
-  .rollout h3 { margin-bottom: var(--s3); }
-  .timeline { list-style: none; padding: 0; display: grid; gap: var(--s3); }
-  .timeline li { position: relative; padding-left: var(--s4); font-weight: 600; font-size: 17px; }
-  .timeline li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.4em;
-    width: 10px;
-    height: 10px;
-    background: var(--accent);
-  }
-  .timeline li::after {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: calc(0.4em + 14px);
-    bottom: calc(-1 * var(--s3) + 4px);
-    width: 2px;
-    background: var(--line);
-  }
-  .timeline li:last-child::after { display: none; }
-  @media (min-width: 1024px) {
-    .timeline { grid-template-columns: repeat(5, 1fr); }
-    .timeline li { padding-left: 0; padding-top: var(--s4); padding-right: var(--s2); }
-    .timeline li::before { top: 0; }
-    .timeline li::after { left: 14px; right: calc(-1 * var(--s3) + 4px); top: 4px; bottom: auto; width: auto; height: 2px; }
-  }
+  /* Сетка из четырёх колонок по линиям страницы */
+  .cols4 { display: grid; gap: var(--s4) 0; list-style: none; padding: 0; }
+  @media (min-width: 720px) { .cols4 { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .cols4 { grid-template-columns: repeat(4, 1fr); } }
+  .col { padding-right: var(--s3); }
+  @media (min-width: 1024px) { .col:not(:first-child) { padding-left: var(--s3); } }
+  @media (min-width: 720px) and (max-width: 1023px) { .col:nth-child(even) { padding-left: var(--s3); } }
+
+  .col-num { display: block; margin-bottom: var(--s2); font-size: 14px; font-weight: 700; color: var(--gold-ink); }
+  .areas h3 { margin-bottom: var(--s2); font-size: 22px; }
+  .areas ul { list-style: none; padding: 0; display: grid; gap: 8px; color: var(--ink-2); font-size: 16px; }
+  .geo { margin-top: var(--s6); padding-top: var(--s4); border-top: 1px solid var(--line); }
+  .geo h3 { font-size: 22px; margin-bottom: var(--s1); }
+  .geo-region { font-size: 14px; color: var(--ink-3); }
+  .geo-countries { margin-top: 2px; font-size: 20px; font-weight: 700; }
 
   /* Кейсы */
-  .cases { display: grid; gap: var(--s4); }
+  .cases { display: grid; gap: var(--s3); }
   @media (min-width: 900px) { .cases { grid-template-columns: repeat(3, 1fr); } }
-  .case { display: grid; gap: var(--s1); align-content: start; padding-top: var(--s2); border-top: 1px solid var(--ink); }
-  .case-dl { display: grid; gap: 2px; margin-top: var(--s1); font-size: 17px; }
-  .case-dl dt { color: var(--ink-3); font-size: 14px; margin-top: var(--s1); }
-  .case-result { font-weight: 600; color: var(--accent); }
+  .case { display: flex; flex-direction: column; padding: 8px; }
+  .case-visual {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 180px;
+    padding: 48px var(--s3) var(--s3);
+    border-radius: 6px;
+    background: var(--deep);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+  .case-tag { position: absolute; top: 14px; left: 16px; color: var(--gold-on-deep); font-size: 13px; font-weight: 600; }
+  .cv-card { width: 100%; max-width: 280px; padding: 12px 14px; border-radius: 8px; background: var(--surface); font-size: 13px; display: grid; gap: 8px; }
+  .cv-card p { display: flex; align-items: center; justify-content: space-between; gap: 8px; max-width: none; }
+  .cv-card span { color: var(--ink-3); }
+  .cv-dup { padding: 4px 6px; margin: 0 -6px; border-radius: 6px; background: var(--risk-soft); }
+  .cv-dup em { font-style: normal; font-weight: 700; color: var(--risk); }
+  .cv-bars p { display: grid; grid-template-columns: 52px 1fr; }
+  .cv-bars i { display: block; height: 10px; width: var(--w); border-radius: 5px; background: var(--accent-2); }
+  .cv-over i { background: var(--risk); }
+  .cv-irr { display: flex; align-items: baseline; justify-content: center; gap: 10px; font-size: 15px; }
+  .cv-irr b { font-size: 30px; letter-spacing: -0.02em; }
+  .cv-risk { color: var(--risk); }
+  .case-body { padding: var(--s3) var(--s2) var(--s2); }
+  .case-body h3 { font-size: 21px; }
+  .case-dl { display: grid; gap: 2px; margin-top: var(--s2); font-size: 16px; }
+  .case-dl dt { color: var(--ink-3); font-size: 13px; margin-top: var(--s1); }
+  .case-result { font-weight: 700; color: var(--accent); }
 
-  /* Подход */
-  .approach { list-style: none; padding: 0; display: grid; gap: var(--s4); border-top: 1px solid var(--ink); padding-top: var(--s3); }
-  @media (min-width: 720px) { .approach { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1100px) { .approach { grid-template-columns: repeat(4, 1fr); } }
-  .approach-num { display: block; margin-bottom: var(--s2); font-size: 15px; font-weight: 600; color: var(--ink-3); }
-  .approach p { margin-top: 4px; font-size: 16px; }
+  /* Подход: номера на линиях сетки */
+  .approach .col { position: relative; }
+  .approach-num {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    margin-bottom: var(--s3);
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 0 0 6px var(--accent-soft);
+  }
+  @media (min-width: 1024px) {
+    .approach .col { padding-left: var(--s4); }
+    .approach-num { margin-left: calc(-1 * var(--s4) - 18px); }
+  }
+  .approach h3 { font-size: 21px; }
+  .approach p { margin-top: 6px; font-size: 16px; }
 
   /* Команда */
-  .team-lead { margin-top: var(--s2); font-size: 17px; }
-  .roles { display: grid; border-top: 1px solid var(--ink); }
-  .roles > div {
-    display: grid;
-    gap: 2px var(--s3);
-    padding: var(--s2) 0;
-    border-bottom: 1px solid var(--line);
-  }
-  @media (min-width: 720px) { .roles > div { grid-template-columns: 5fr 7fr; } }
-  .roles dt { font-weight: 600; }
-  .roles dd { color: var(--ink-2); font-size: 17px; }
-  .founder { margin-top: var(--s3); color: var(--ink-2); font-size: 17px; }
+  .team { display: grid; gap: var(--s5); }
+  @media (min-width: 1024px) { .team { grid-template-columns: 1fr 1fr; column-gap: 112px; } }
+  .team-lead { margin-top: var(--s3); }
+  .founder { margin-top: var(--s3); padding-left: var(--s3); border-left: 2px solid var(--gold); font-size: 17px; }
+  .roles { display: grid; gap: var(--s2); }
+  @media (min-width: 640px) { .roles { grid-template-columns: 1fr 1fr; } }
+  .roles > div { padding: var(--s3); }
+  .roles dt { font-weight: 700; font-size: 18px; }
+  .roles dd { margin-top: 6px; color: var(--ink-2); font-size: 15px; }
 
   /* Бот */
-  .bot-section { background: var(--surface); }
-  .bot-grid { display: grid; gap: var(--s3); }
-  @media (min-width: 1024px) { .bot-grid { grid-template-columns: 4fr 8fr; gap: var(--s6); } }
-  .bot-grid h2 { font-size: clamp(24px, 2.8vw, 32px); }
-  .inline-list { list-style: none; padding: 0; margin: var(--s2) 0; display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); color: var(--ink-2); font-size: 16px; }
-  .inline-list li::before { content: '— '; color: var(--ink-3); }
-  .tagline { font-weight: 600; margin-bottom: var(--s3); }
+  .bot { display: grid; gap: var(--s5); align-items: center; }
+  @media (min-width: 1024px) { .bot { grid-template-columns: 1fr 1fr; column-gap: 112px; } }
+  .bot-visual { display: grid; justify-items: center; }
+  .bot-visual :global(.chat) { width: 100%; }
+  .bot-visual :global(figcaption) { color: var(--on-deep-2); }
+  .bot-lead { margin-top: var(--s3); color: var(--on-deep-2); }
+  .bot-list { margin: var(--s3) 0; }
+  .tagline { margin-bottom: var(--s4); font-weight: 700; font-size: 20px; color: var(--gold-on-deep); }
 
   /* FAQ */
-  .faq details { border-top: 1px solid var(--line); padding: var(--s2) 0; }
-  .faq details:first-child { border-top: 1px solid var(--ink); }
-  .faq details:last-child { border-bottom: 1px solid var(--line); }
+  .faq-wrap { display: grid; gap: var(--s5); }
+  @media (min-width: 1024px) { .faq-wrap { grid-template-columns: 1fr 1fr; column-gap: 112px; } }
+  .faq-more { margin-top: var(--s3); }
+  .faq { display: grid; gap: 10px; }
+  .faq details { padding: 18px 22px; box-shadow: none; }
   .faq summary {
     cursor: pointer;
     font-weight: 600;
@@ -431,10 +508,24 @@ const faqLd = {
     gap: var(--s2);
   }
   .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after { content: '+'; color: var(--accent); font-weight: 500; }
+  .faq summary::after { content: '+'; color: var(--gold-ink); font-weight: 600; font-size: 22px; line-height: 1; }
   .faq details[open] summary::after { content: '−'; }
-  .faq details p { margin-top: var(--s1); font-size: 17px; }
+  .faq details p { margin-top: var(--s1); font-size: 16px; }
 
-  .final-list { margin-top: var(--s1); }
-  .final-text { margin: var(--s3) 0; color: var(--ink-2); }
+  /* Финальный блок */
+  .final-inner { text-align: center; display: grid; justify-items: center; }
+  .final-text { margin-top: var(--s3); color: var(--on-deep-2); }
+  .final-list { list-style: none; padding: 0; margin: var(--s4) 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .final-list li {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 16px;
+  }
+  .final-list b { color: var(--gold-on-deep); }
+  .final-btns { justify-content: center; }
 </style>

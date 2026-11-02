@@ -1,0 +1,187 @@
+---
+// Внедрение учёта за 40 дней: заголовок слева «прилипает», шаги справа идут при прокрутке.
+// Номера шагов стоят на центральной линии сетки.
+import { rollout } from '../data/home';
+import { site } from '../data/site';
+import { t } from '../lib/typo';
+---
+
+<div class="story">
+  <div class="story-aside">
+    <div class="story-sticky">
+      <p class="eyebrow">Управленческий учёт</p>
+      <h2>{t(rollout.title)}</h2>
+      <p class="muted story-lead">{t(rollout.lead)}</p>
+      <ol class="story-index" aria-hidden="true">
+        {rollout.steps.map((s, i) => <li data-story-index={i}>{t(s.title)}</li>)}
+      </ol>
+      <a class="btn btn-soft" href={site.telegramUrl}>Обсудить внедрение</a>
+    </div>
+  </div>
+
+  <ol class="story-steps">
+    {rollout.steps.map((s, i) => (
+      <li class="story-step ui-card" data-story-step={i}>
+        <span class="story-num">{i + 1}</span>
+        <h3>{t(s.title)}</h3>
+        <p class="muted">{t(s.text)}</p>
+        <div class="story-visual" aria-hidden="true">
+          {i === 0 && (
+            <ul class="sv-docs">
+              <li class="ok">Банковские выписки</li>
+              <li class="ok">Счета и кассы</li>
+              <li class="ok">Договоры и BOQ</li>
+              <li>Таблицы учёта</li>
+            </ul>
+          )}
+          {i === 1 && (
+            <div class="sv-tree">
+              <div><b>Строительство</b><span>Материалы</span><span>Работы</span><span>Техника</span></div>
+              <div><b>Операционные</b><span>Команда</span><span>Офис</span></div>
+              <div><b>Продажи</b><span>Комиссии</span><span>Маркетинг</span></div>
+            </div>
+          )}
+          {i === 2 && (
+            <ol class="sv-route">
+              <li>Заявка</li><li>Согласование</li><li>К оплате</li><li>Оплачено</li>
+            </ol>
+          )}
+          {i === 3 && (
+            <div class="sv-pf">
+              {[['Объект 1', 72, 68], ['Объект 2', 64, 81], ['Объект 3', 58, 55]].map(([n, plan, fact]) => (
+                <div>
+                  <span>{n}</span>
+                  <span class="sv-pf-bars">
+                    <i class="plan" style={`--w:${plan}%`}></i>
+                    <i class={Number(fact) > Number(plan) ? 'fact over' : 'fact'} style={`--w:${fact}%`}></i>
+                  </span>
+                </div>
+              ))}
+              <p class="caption">Серый — бюджет, цвет — факт</p>
+            </div>
+          )}
+          {i === 4 && (
+            <div class="sv-dash">
+              <svg viewBox="0 0 240 70" preserveAspectRatio="none">
+                <path d="M0 58 L30 52 L60 54 L90 40 L120 42 L150 30 L180 26 L210 18 L240 12" fill="none" stroke="var(--accent-2)" stroke-width="2.5" pathLength="1" class="sv-line" />
+                <path d="M0 58 L30 52 L60 54 L90 40 L120 42 L150 30 L180 26 L210 18 L240 12 L240 70 L0 70Z" fill="var(--accent-soft)" opacity=".7" />
+              </svg>
+              <span class="sv-meet">Встреча раз в неделю</span>
+            </div>
+          )}
+        </div>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<script>
+  // Подсветка текущего шага в оглавлении слева
+  const steps = document.querySelectorAll<HTMLElement>('[data-story-step]');
+  const idx = document.querySelectorAll<HTMLElement>('[data-story-index]');
+  if (steps.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const i = Number((e.target as HTMLElement).dataset.storyStep);
+          idx.forEach((el, k) => el.classList.toggle('is-on', k === i));
+          e.target.classList.add('is-seen');
+        }
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    steps.forEach((s) => io.observe(s));
+  }
+</script>
+
+<style is:global>
+  .story { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s5); }
+  .story-lead { margin-top: var(--s2); }
+  .story-index { display: none; }
+  .story-aside .btn { margin-top: var(--s4); }
+
+  .story-steps { list-style: none; padding: 0; display: grid; gap: var(--s4); }
+  .story-step { position: relative; display: grid; gap: 8px; padding: var(--s3); }
+  .story-step h3 { font-size: 20px; }
+  .story-step p { font-size: 16px; }
+  .story-num {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 0 0 6px var(--accent-soft);
+  }
+  .story-visual { margin-top: var(--s2); padding: var(--s2); border-radius: 8px; background: var(--bg); font-size: 14px; }
+
+  .sv-docs { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+  .sv-docs li { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); }
+  .sv-docs li::before { content: ''; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--line); flex: none; }
+  .sv-docs li.ok::before { content: '✓'; border: 0; background: var(--growth); color: #fff; font-size: 9px; font-weight: 800; text-align: center; line-height: 14px; }
+
+  .sv-tree { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+  .sv-tree div { display: grid; gap: 4px; align-content: start; }
+  .sv-tree b { padding: 6px 8px; border-radius: 6px; background: var(--accent); color: #fff; font-size: 13px; }
+  .sv-tree span { position: relative; margin-left: 12px; padding: 4px 8px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-size: 13px; }
+  .sv-tree span::before { content: ''; position: absolute; left: -9px; top: 50%; width: 8px; height: 1px; background: var(--grid); }
+
+  .sv-route { list-style: none; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .sv-route li { padding: 6px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-weight: 600; font-size: 13px; }
+  .sv-route li + li::before { content: '→'; margin: 0 8px 0 -2px; color: var(--ink-3); font-weight: 400; }
+  .sv-route li:last-child { background: var(--growth-soft); border-color: #cfe2da; color: var(--growth); }
+
+  .sv-pf { display: grid; gap: 8px; }
+  .sv-pf > div { display: grid; grid-template-columns: 76px 1fr; gap: 10px; align-items: center; }
+  .sv-pf-bars { display: grid; gap: 3px; }
+  .sv-pf-bars i { display: block; height: 7px; border-radius: 4px; width: 0; transition: width 1s cubic-bezier(.2, .8, .2, 1); }
+  .sv-pf-bars .plan { background: #dcd8cc; }
+  .sv-pf-bars .fact { background: var(--accent-2); }
+  .sv-pf-bars .fact.over { background: var(--risk); }
+  .is-seen .sv-pf-bars i { width: var(--w); }
+
+  .sv-dash { position: relative; }
+  .sv-dash svg { width: 100%; height: 80px; }
+  .sv-line { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s ease; }
+  .is-seen .sv-line { stroke-dashoffset: 0; }
+  .sv-meet { position: absolute; top: 0; left: 0; padding: 2px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 12px; font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sv-pf-bars i { width: var(--w); }
+    .sv-line { stroke-dashoffset: 0; }
+  }
+
+  @media (min-width: 1024px) {
+    .story { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 112px; }
+    .story-sticky { position: sticky; top: 112px; }
+    .story-index {
+      display: grid;
+      gap: 0;
+      margin-top: var(--s4);
+      padding: 0;
+      list-style: none;
+      counter-reset: si;
+      border-top: 1px solid var(--line);
+    }
+    .story-index li {
+      counter-increment: si;
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink-3);
+      font-size: 16px;
+      font-weight: 600;
+      transition: color .3s ease;
+    }
+    .story-index li::before { content: counter(si); width: 1.2em; color: inherit; }
+    .story-index li.is-on { color: var(--ink); }
+    .story-index li.is-on::before { color: var(--gold-ink); }
+    .story-steps { gap: var(--s6); padding: var(--s4) 0; }
+    /* Номер шага на центральной линии сетки */
+    .story-num { position: absolute; left: -74px; top: var(--s3); }
+    .story-step { padding: var(--s4); }
+  }
+</style>

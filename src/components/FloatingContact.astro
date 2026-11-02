@@ -1,0 +1,119 @@
+---
+// Плавающая кнопка Telegram справа внизу. Появляется после первого экрана.
+// Карточка с быстрыми темами показывается один раз за визит, её можно закрыть.
+import { site } from '../data/site';
+
+const topics = [
+  { label: 'Финмодель', text: 'Здравствуйте! Нужна финансовая модель проекта.' },
+  { label: 'Аудит модели', text: 'Здравствуйте! Хочу отправить финмодель на аудит.' },
+  { label: 'Учёт', text: 'Здравствуйте! Интересует управленческий учёт и контроль платежей.' },
+];
+---
+
+<div class="fc" data-fc hidden>
+  <div class="fc-card ui-card" data-fc-card hidden>
+    <button class="fc-close" type="button" aria-label="Закрыть" data-fc-close>×</button>
+    <p class="fc-q">Какая у вас задача?</p>
+    <div class="fc-topics">
+      {topics.map((tp) => (
+        <a href={`${site.telegramUrl}?text=${encodeURIComponent(tp.text)}`}>{tp.label}</a>
+      ))}
+    </div>
+  </div>
+  <a class="fc-btn" href={site.telegramUrl}>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.2 2.9 11.4c-1 .4-1 1.6 0 1.9l4.6 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6L22.9 5.6c.3-1-.5-1.8-1.4-1.4Z" fill="currentColor"/></svg>
+    Написать в Telegram
+  </a>
+</div>
+
+<script>
+  const fc = document.querySelector<HTMLElement>('[data-fc]');
+  const card = document.querySelector<HTMLElement>('[data-fc-card]');
+  if (fc && card) {
+    let dismissed = false;
+    try { dismissed = sessionStorage.getItem('fc-dismissed') === '1'; } catch { /* хранилище недоступно */ }
+    let shown = false;
+    const wide = window.matchMedia('(min-width: 720px)').matches;
+    const onScroll = () => {
+      const y = window.scrollY;
+      fc.hidden = y < window.innerHeight * 0.9;
+      const half = (document.documentElement.scrollHeight - window.innerHeight) * 0.5;
+      if (wide && !dismissed && !shown && y > half) {
+        shown = true;
+        card.hidden = false;
+        window.setTimeout(() => { card.hidden = true; }, 12000);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    document.querySelector('[data-fc-close]')?.addEventListener('click', () => {
+      card.hidden = true;
+      dismissed = true;
+      try { sessionStorage.setItem('fc-dismissed', '1'); } catch { /* ничего */ }
+    });
+  }
+</script>
+
+<style>
+  .fc {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 20;
+    display: grid;
+    justify-items: end;
+    gap: 10px;
+    max-width: calc(100vw - 32px);
+  }
+  .fc[hidden], .fc-card[hidden] { display: none; }
+  .fc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: var(--deep);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(10, 42, 36, 0.3);
+  }
+  .fc-btn svg { width: 18px; height: 18px; color: var(--gold-on-deep); }
+  .fc-btn:hover { background: var(--deep-2); }
+  .fc-card {
+    position: relative;
+    width: 300px;
+    max-width: 100%;
+    padding: 14px 16px;
+    font-size: 15px;
+    line-height: 1.4;
+    animation: fc-in .4s ease;
+  }
+  @keyframes fc-in { from { opacity: 0; transform: translateY(8px); } }
+  .fc-q { padding-right: 20px; font-weight: 600; }
+  .fc-topics { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .fc-topics a {
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .fc-topics a:hover { border-color: var(--accent); color: var(--accent); }
+  .fc-close {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    border: 0;
+    background: none;
+    color: var(--ink-3);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  @media (min-width: 720px) {
+    .fc { right: 24px; bottom: 24px; }
+  }
+</style>
