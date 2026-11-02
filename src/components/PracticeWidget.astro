@@ -2,6 +2,7 @@
 // Живой виджет справа от описания направления: три шага с номерами, как в интерфейсе.
 // Все значения демонстрационные, кроме IRR 9,0% → 8,2% и NPV «в 3,6 раза» из кейса аудита.
 import { SCENARIOS, YEARS, kpis, barHeight, barTitle } from '../lib/finmodel';
+import { SERIES, MONTHS_SHORT } from '../lib/sankey';
 
 interface Props {
   variant: 'models' | 'audit' | 'accounting' | 'advisory';
@@ -13,6 +14,28 @@ const years = YEARS;
 const m0 = models[0];
 const k0 = kpis(m0.cf);
 const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
+
+// Шаг «Аналитика»: Cash Flow по месяцам с накопленным итогом, как в дашборде портала.
+// Те же демо-данные, что в схеме движения денег (src/lib/sankey.ts), млрд IDR:
+// поступления = все проекты, расходы = стройка + операционные + инвестиции, итог копится из разницы.
+const CW = 480;
+const CH = 196;
+const BASE = 168;
+const step = (CW - 16) / 12;
+const r2 = (v: number) => Math.round(v * 100) / 100;
+let acc = 0;
+const cfm = SERIES.map((v, m) => {
+  const inflow = r2(v.slice(0, 5).reduce((s, x) => s + x, 0));
+  const outflow = r2(v[5] + v[6] + v[7]);
+  acc = r2(acc + inflow - outflow);
+  return { m, inflow, outflow, cum: acc, cx: 8 + step * (m + 0.5) };
+});
+const maxFlow = Math.max(...cfm.map((d) => Math.max(d.inflow, d.outflow)));
+const maxCum = Math.max(...cfm.map((d) => d.cum));
+const barY = (v: number) => (v / maxFlow) * 72;
+const lineY = (v: number) => 92 - (v / maxCum) * 64;
+const linePath = cfm.map((d, i) => `${i ? 'L' : 'M'}${d.cx.toFixed(1)},${lineY(d.cum).toFixed(1)}`).join(' ');
+const fmt2 = (v: number) => v.toFixed(2).replace('.', ',');
 ---
 
 <div class="pw" data-pw={variant}>
@@ -122,21 +145,51 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
       <div class="pw-step">
         <span class="pw-num">2</span>
         <div class="pw-body">
-          <p class="pw-title">Согласование</p>
-          <ol class="pw-route" data-route>
-            <li class="is-ok">Прораб</li>
-            <li class="is-ok">Проект-менеджер</li>
-            <li class="is-ok">Финансовый директор</li>
-          </ol>
+          <p class="pw-title">Антифрод-проверка до оплаты</p>
+          <div class="ui-card pw-panel pw-check" data-check="ok">
+            <p class="pw-check-ok"><b>Совпадений нет</b> · заявка ушла на согласование</p>
+            <p class="pw-check-dup"><b>Дубль № 75</b> · совпадает с заявкой № 63, оплата остановлена</p>
+          </div>
         </div>
       </div>
       <div class="pw-step">
         <span class="pw-num">3</span>
         <div class="pw-body">
-          <p class="pw-title">Антифрод-проверка до оплаты</p>
-          <div class="ui-card pw-panel pw-check" data-check="dup">
-            <p class="pw-check-ok"><b>Совпадений нет</b> · заявка передана в реестр к оплате</p>
-            <p class="pw-check-dup"><b>Дубль № 75</b> · совпадает с заявкой № 63, оплата остановлена</p>
+          <p class="pw-title">Согласование</p>
+          <ol class="pw-route" data-route>
+            <li class="is-ok">Прораб</li>
+            <li class="is-ok">Проект-менеджер</li>
+            <li class="is-ok">Финансовый контроллер</li>
+          </ol>
+        </div>
+      </div>
+      <div class="pw-step">
+        <span class="pw-num">4</span>
+        <div class="pw-body">
+          <p class="pw-title">Аналитика</p>
+          <div class="ui-card pw-panel pw-cash">
+            <div class="pw-cash-legend" aria-hidden="true">
+              <span class="in">Поступления</span><span class="out">Расходы</span><span class="cum">Накопленный итог</span>
+            </div>
+            <svg class="pw-cash-chart" viewBox={`0 0 ${CW} ${CH}`} role="img" aria-label={`Cash Flow по месяцам, млрд IDR: накопленный итог вырос с ${fmt2(cfm[0].cum)} в январе до ${fmt2(cfm[11].cum)} в декабре`}>
+              <rect class="pw-cash-today" data-today x={(cfm[11].cx - step / 2 + 1).toFixed(1)} y="6" width={(step - 2).toFixed(1)} height={BASE - 6} rx="4"></rect>
+              <line class="pw-cash-base" x1="8" x2={CW - 8} y1={BASE} y2={BASE}></line>
+              {cfm.map((d) => (
+                <g>
+                  <rect class="in" x={(d.cx - 11).toFixed(1)} y={(BASE - barY(d.inflow)).toFixed(1)} width="10" height={barY(d.inflow).toFixed(1)} rx="1.5"><title>{`${MONTHS_SHORT[d.m]}: поступления ${fmt2(d.inflow)}`}</title></rect>
+                  <rect class="out" x={(d.cx + 1).toFixed(1)} y={(BASE - barY(d.outflow)).toFixed(1)} width="10" height={barY(d.outflow).toFixed(1)} rx="1.5"><title>{`${MONTHS_SHORT[d.m]}: расходы ${fmt2(d.outflow)}`}</title></rect>
+                  <text class={`pw-cash-m${d.m === 11 ? ' is-now' : ''}`} x={d.cx.toFixed(1)} y={BASE + 18} text-anchor="middle">{MONTHS_SHORT[d.m]}</text>
+                </g>
+              ))}
+              <path class="pw-cash-line" d={linePath}></path>
+              {cfm.map((d) => (
+                <circle class="pw-cash-dot" cx={d.cx.toFixed(1)} cy={lineY(d.cum).toFixed(1)} r={d.m === 11 ? 4 : 2.6}><title>{`${MONTHS_SHORT[d.m]}: накопленный итог ${fmt2(d.cum)}`}</title></circle>
+              ))}
+              {cfm.filter((d) => d.m % 3 === 2).map((d) => (
+                <text class={`pw-cash-v${d.m === 11 ? ' is-now' : ''}`} x={d.cx.toFixed(1)} y={(lineY(d.cum) - 11).toFixed(1)} text-anchor="middle">{fmt2(d.cum)}</text>
+              ))}
+            </svg>
+            <p class="pw-sub" data-c-note>Платёж 1 080 000 IDR попал в Cash Flow за декабрь</p>
           </div>
         </div>
       </div>
@@ -197,6 +250,7 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
     ['Поставщик № 4', '14 300 000', 'Материалы · арматура'],
     ['Поставщик № 9', '9 500 000', 'Техника · аренда'],
   ];
+  const DUP = 1; // вторая заявка в цикле — дубль, её ловит антифрод
 
   const flash = (el: Element) => {
     el.classList.remove('pw-flash');
@@ -255,26 +309,39 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
       };
     },
     accounting(w) {
+      // Порядок как в системе: заявка → антифрод → согласование → платёж в аналитике.
+      // Дубль останавливается на антифроде и до согласования не доходит.
       const fields = [...w.querySelectorAll<HTMLElement>('[data-f]')];
       const route = [...w.querySelectorAll<HTMLElement>('[data-route] li')];
       const check = w.querySelector<HTMLElement>('[data-check]')!;
-      let step = 0;
-      let n = 0;
+      const today = w.querySelector<SVGElement>('[data-today]')!;
+      const note = w.querySelector<HTMLElement>('[data-c-note]')!;
+      // Первый тик сразу сбрасывает виджет и заново проводит первую заявку по всем шагам
+      let step = 9;
+      let n = FORMS.length - 1;
       return () => {
-        step = (step + 1) % 7;
+        step = (step + 1) % 10;
         if (step === 0) {
           n = (n + 1) % FORMS.length;
           fields.forEach((f) => { f.textContent = ''; f.classList.add('is-typing'); });
           route.forEach((r) => r.classList.remove('is-ok'));
           check.dataset.check = 'wait';
+          today.classList.remove('is-hit');
+          note.textContent = 'Собирается из оплаченных заявок';
         }
+        const dup = n === DUP;
         if (step >= 1 && step <= 3) {
           const f = fields[step - 1];
           f.textContent = FORMS[n][step - 1];
           f.classList.remove('is-typing');
         }
-        if (step >= 3 && step <= 5) route[step - 3].classList.add('is-ok');
-        if (step === 6) check.dataset.check = n === 0 ? 'dup' : 'ok';
+        if (step === 4) check.dataset.check = dup ? 'dup' : 'ok';
+        if (!dup && step >= 5 && step <= 7) route[step - 5].classList.add('is-ok');
+        if (step === 8) {
+          note.textContent = dup ? 'Дубль не оплачен и в отчёт не попал' : `Платёж ${FORMS[n][1]} IDR попал в Cash Flow за декабрь`;
+          if (!dup) today.classList.add('is-hit');
+          flash(note);
+        }
       };
     },
     advisory(w) {
@@ -472,4 +539,27 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
   .pw-check[data-check='wait'] p { opacity: 0; }
   .pw-check[data-check='dup'] { border-color: #f0c9c6; background: #fffafa; }
   .pw-check[data-check='wait']::after { content: 'Проверка…'; color: var(--ink-3); }
+
+  /* Аналитика: Cash Flow с накопленным итогом */
+  .pw-cash { display: grid; gap: 8px; }
+  .pw-cash-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--ink-2); }
+  .pw-cash-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .pw-cash-legend span::before { content: ''; width: 9px; height: 9px; border-radius: 2px; }
+  .pw-cash-legend .in::before { background: var(--accent-2); }
+  .pw-cash-legend .out::before { background: #d7c9a8; }
+  .pw-cash-legend .cum::before { width: 14px; height: 2px; border-radius: 1px; background: var(--ink); }
+  .pw-cash-chart { display: block; width: 100%; height: auto; overflow: visible; }
+  .pw-cash-chart .in { fill: var(--accent-2); }
+  .pw-cash-chart .out { fill: #d7c9a8; }
+  .pw-cash-base { stroke: var(--line); stroke-width: 1; }
+  .pw-cash-today { fill: var(--growth-soft); opacity: .6; transition: opacity .4s ease; }
+  .pw-cash-today.is-hit { opacity: 1; }
+  .pw-cash-line { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; }
+  .pw-cash-dot { fill: var(--surface); stroke: var(--ink); stroke-width: 1.4; }
+  .pw-cash-m { font-size: 11px; fill: var(--ink-3); }
+  .pw-cash-v { font-size: 11px; font-weight: 600; fill: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .pw-cash-m.is-now, .pw-cash-v.is-now { fill: var(--ink); font-weight: 600; }
+  @media (max-width: 640px) {
+    .pw-cash-m, .pw-cash-v { font-size: 16px; }
+  }
 </style>
