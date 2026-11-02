@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import PracticeWidget from '../components/PracticeWidget.astro';
-import RolloutStory from '../components/RolloutStory.astro';
+import ServiceIcon from '../components/ServiceIcon.astro';
+import Calculators from '../components/Calculators.astro';
 import BotMessage from '../components/BotMessage.astro';
 import HeroSignature from '../components/HeroSignature.astro';
 import FinalThreads from '../components/FinalThreads.astro';
@@ -20,18 +20,10 @@ const faqLd = {
     acceptedAnswer: { '@type': 'Answer', text: f.a },
   })),
 };
-
-const widgetFor = {
-  models: 'models',
-  audit: 'audit',
-  accounting: 'accounting',
-  advisory: 'advisory',
-} as const;
 ---
 
 <Base title="Axiom — финансовый консалтинг для девелопмента и строительства" jsonLd={[faqLd]}>
-  <!-- Первый экран: заголовок слева, цифры и кнопка справа, под ними во всю ширину фишка — поток денег по месяцам
-       (переключатель на J-кривую — две точки в шапке, техническая строка до выбора) -->
+  <!-- Первый экран (каталог): заголовок, цифры и кнопка, под ними четыре услуги карточками -->
   <section class="hero">
     <div class="container">
       <div class="hero-top">
@@ -42,37 +34,101 @@ const widgetFor = {
           <p class="hero-lead">{t(hero.lead)}</p>
           <div class="btn-row hero-btns">
             <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
-            <a class="btn btn-secondary" href="#practices">Направления</a>
+            <a class="btn btn-secondary" href="#calc">Посчитать доходность</a>
           </div>
           <p class="hero-note">{t(hero.note)}</p>
         </div>
       </div>
-      <div class="hero-art"><HeroSignature /></div>
+
+      <ul class="services">
+        {practices.map((p) => (
+          <li>
+            <a class="service" href={`#${p.id}`}>
+              <span class="service-top">
+                <ServiceIcon name={p.id} />
+                <span class="service-num">{p.num}</span>
+              </span>
+              <span class="service-title">{t(p.title)}</span>
+              <span class="service-lead">{t(p.card)}</span>
+              <span class="service-more">Что входит</span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
-  <!-- Направления: текст слева, живой интерфейс справа -->
+  <!-- Фирменная фишка: нити денег во всю ширину сразу под первым экраном
+       (переключатель на J-кривую — две точки в шапке, техническая строка до выбора) -->
+  <section class="section section--white sig-band" aria-labelledby="sig-title">
+    <div class="container">
+      <p class="sig-head"><b id="sig-title">Так мы показываем деньги проекта.</b> Поступления по проектам и расходы по статьям, месяц за месяцем</p>
+      <HeroSignature />
+    </div>
+  </section>
+
+  <!-- Услуги подробно: для каждой что входит и что клиент получает на руки -->
   <section class="section section--alt" id="practices">
     <div class="container">
-      <h2 class="visually-hidden">Направления</h2>
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Услуги</p>
+        <h2>Четыре направления работы</h2>
+      </div>
       {practices.map((p) => (
-        <article class="practice" id={p.id}>
-          <div class="practice-text" data-reveal>
-            <div class="practice-head">
-              <h2>{t(p.title)}</h2>
-            </div>
+        <article class="practice" id={p.id} data-reveal>
+          <div class="practice-text">
+            <span class="practice-num">{p.num}</span>
+            <h3>{t(p.title)}</h3>
             <p class="practice-lead">{t(p.lead)}</p>
-            <ul class="dots">
-              {p.items.map((i) => <li>{t(i)}</li>)}
-            </ul>
             <a class="btn btn-soft" href={tgLink(p.topic)}>{p.cta}</a>
           </div>
-          <div class="practice-widget" data-reveal style="--d: 120ms">
-            <PracticeWidget variant={widgetFor[p.id as keyof typeof widgetFor]} />
+          <div class="practice-body">
+            <p class="practice-label">Что входит</p>
+            <ul class="dots practice-items">
+              {p.items.map((i) => <li>{t(i)}</li>)}
+            </ul>
+            <p class="practice-label">На выходе</p>
+            <p class="practice-result">{t(p.result)}</p>
           </div>
         </article>
       ))}
-      <p class="caption practices-note">Интерфейсы показаны на демонстрационных данных</p>
+    </div>
+  </section>
+
+  <!-- Калькуляторы вместо демо-виджетов: считают цифры самого посетителя -->
+  <section class="section" id="calc">
+    <div class="container">
+      <div class="section-head section-head--row" data-reveal>
+        <div>
+          <p class="eyebrow">Калькуляторы</p>
+          <h2>Посчитайте сами</h2>
+        </div>
+        <p class="caption">Считает ваш браузер, цифры никуда не отправляются</p>
+      </div>
+      <Calculators />
+    </div>
+  </section>
+
+  <!-- Продукт: бот -->
+  <section class="section section--alt" id="bot">
+    <div class="container bot">
+      <div class="bot-visual" data-reveal>
+        <BotMessage />
+      </div>
+      <div data-reveal style="--d: 120ms">
+        <p class="eyebrow">Продукт · {bot.badge}</p>
+        <h2>{bot.title}</h2>
+        <p class="bot-lead">{t(bot.lead)}</p>
+        <p class="bot-aud">{t(bot.audience)}</p>
+        <ul class="dots bot-list">
+          {bot.items.map((i) => <li>{t(i)}</li>)}
+        </ul>
+        <p class="tagline">{t(bot.tagline)}</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href={tgLink(bot.topic)}>{bot.cta}</a>
+          {site.channelUrl && <a class="btn btn-secondary" href={site.channelUrl}>Канал «{site.channelName}»</a>}
+        </div>
+      </div>
     </div>
   </section>
 
@@ -92,13 +148,6 @@ const widgetFor = {
           </div>
         ))}
       </dl>
-    </div>
-  </section>
-
-  <!-- Внедрение за 30 дней -->
-  <section class="section" id="rollout">
-    <div class="container">
-      <RolloutStory />
     </div>
   </section>
 
@@ -209,29 +258,6 @@ const widgetFor = {
     </div>
   </section>
 
-  <!-- Продукт: бот -->
-  <section class="section section--alt" id="bot">
-    <div class="container bot">
-      <div class="bot-visual" data-reveal>
-        <BotMessage />
-      </div>
-      <div data-reveal style="--d: 120ms">
-        <p class="eyebrow">Продукт · {bot.badge}</p>
-        <h2>{bot.title}</h2>
-        <p class="bot-lead">{t(bot.lead)}</p>
-        <p class="bot-aud">{t(bot.audience)}</p>
-        <ul class="dots bot-list">
-          {bot.items.map((i) => <li>{t(i)}</li>)}
-        </ul>
-        <p class="tagline">{t(bot.tagline)}</p>
-        <div class="btn-row">
-          <a class="btn btn-primary" href={tgLink(bot.topic)}>{bot.cta}</a>
-          {site.channelUrl && <a class="btn btn-secondary" href={site.channelUrl}>Канал «{site.channelName}»</a>}
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- FAQ -->
   <section class="section" id="faq">
     <div class="container faq-wrap">
@@ -337,23 +363,65 @@ const widgetFor = {
   .hero-lead { max-width: 26em; font-size: clamp(17px, 1.35vw, 19px); line-height: 1.45; color: var(--ink-2); }
   .hero-btns { margin-top: var(--s3); }
   .hero-note { margin-top: 10px; font-size: 14px; color: var(--ink-3); }
-  .hero-art { min-width: 0; margin-top: var(--s4); }
 
-  /* Направления */
-  .practice {
+  .services {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--s5);
     display: grid;
-    gap: var(--s5);
-    padding: var(--s6) 0;
     border-top: 1px solid var(--line);
   }
-  .practice:first-of-type { border-top: 0; padding-top: 0; }
-  @media (min-width: 1024px) {
-    .practice { grid-template-columns: 1fr 1fr; column-gap: 112px; align-items: start; padding: var(--s7) 0; }
+  @media (min-width: 640px) { .services { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .services { grid-template-columns: repeat(4, 1fr); } }
+  .services li { display: flex; border-bottom: 1px solid var(--line); }
+  @media (min-width: 640px) { .services li:nth-child(odd) { border-right: 1px solid var(--line); } }
+  @media (min-width: 1100px) {
+    .services li { border-bottom: 0; }
+    .services li:not(:last-child) { border-right: 1px solid var(--line); }
   }
-  .practice-head { padding-top: 0; }
-  .practice-lead { margin: var(--s3) 0; color: var(--ink-2); }
-  .practice .dots { margin-bottom: var(--s4); }
-  .practices-note { margin-top: var(--s2); }
+  .service {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: var(--s3) var(--s3) var(--s3) 0;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  @media (min-width: 640px) { .services li:nth-child(even) .service { padding-left: var(--s3); } }
+  @media (min-width: 1100px) { .services li:not(:first-child) .service { padding-left: var(--s3); } }
+  .service:hover .service-title { color: var(--accent); }
+  .service:hover .service-more { text-decoration: underline; }
+  .service-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; color: var(--accent); }
+  .service-top :global(.s-icon) { width: 36px; height: 36px; }
+  .service-num { font-size: 14px; color: var(--ink-3); }
+  .service-title { font-family: var(--font-display); font-size: 21px; font-weight: 600; line-height: 1.2; letter-spacing: -0.02em; transition: color .2s ease; }
+  .service-lead { color: var(--ink-2); font-size: 15px; line-height: 1.45; }
+  .service-more { margin-top: auto; padding-top: var(--s1); color: var(--accent); font-size: 15px; font-weight: 600; }
+  .service-more::after { content: ' ↓'; }
+
+  /* Полоса с нитями */
+  .sig-band { padding-top: var(--s5); }
+  .sig-head { margin-bottom: var(--s2); max-width: none; font-size: 16px; color: var(--ink-2); }
+  .sig-head b { color: var(--ink); font-weight: 600; }
+
+  /* Услуги подробно */
+  .practice {
+    display: grid;
+    gap: var(--s3);
+    padding: var(--s5) 0;
+    border-top: 1px solid var(--line);
+  }
+  @media (min-width: 1024px) {
+    .practice { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); column-gap: 112px; align-items: start; }
+  }
+  .practice-num { display: block; margin-bottom: var(--s1); font-size: 14px; color: var(--ink-3); }
+  .practice h3 { font-size: clamp(24px, 2.4vw, 32px); line-height: 1.15; letter-spacing: -0.02em; }
+  .practice-lead { margin: var(--s2) 0 var(--s3); color: var(--ink-2); }
+  .practice-label { font-size: 13px; font-weight: 600; color: var(--ink-3); margin-bottom: 12px; }
+  .practice-items { margin-bottom: var(--s3); }
+  @media (min-width: 720px) { .practice-items { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s3); } }
+  .practice-result { font-weight: 600; color: var(--ink); max-width: 30em; }
 
   /* Сигнальная полоса */
   .signal { display: grid; gap: var(--s5); align-items: end; }

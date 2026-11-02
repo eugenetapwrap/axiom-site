@@ -23,7 +23,7 @@ const right = fr.right.map((c, i) => {
 const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
 ---
 
-<figure class="ht" data-ht aria-label="Пример отчёта на демо-данных: поступления проектов по месяцам сходятся в один счёт и расходятся по статьям">
+<figure class="ht ht-wait" data-ht aria-label="Пример отчёта на демо-данных: поступления проектов по месяцам сходятся в один счёт и расходятся по статьям">
   <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
     <text class="ht-cap ht-t" x="0" y="22" style="--d:0ms">Проекты</text>
     <text class="ht-cap ht-t" x={W} y="22" text-anchor="end" style="--d:1300ms">Куда ушли поступления</text>
@@ -107,6 +107,8 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
   .ht-glint { fill: none; stroke: var(--surface); stroke-opacity: .5; stroke-dasharray: var(--g) 2; stroke-dashoffset: var(--g); pointer-events: none; }
 
   /* Бам: нити разгоняются и бьют в счёт */
+  /* До появления на экране анимации стоят на первом кадре */
+  .ht-wait, .ht-wait :global(*) { animation-play-state: paused !important; }
   .ht-in { animation: ht-draw 720ms cubic-bezier(.7, 0, .84, 0) var(--d) both; }
   /* Пум: планка вздрагивает, расходятся кольца */
   .ht-bar { animation: ht-pum 520ms cubic-bezier(.3, .7, .3, 1) 700ms both; }
@@ -320,7 +322,7 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
       requestAnimationFrame(step);
     };
 
-    if (reduce) { goTo(LAST, false); return; }
+    if (reduce) { root.classList.remove('ht-wait'); goTo(LAST, false); return; }
 
     // Мотив может быть скрыт (выбрана J-кривая): год проигрывается при первом показе
     const view = root.closest<HTMLElement>('[data-sig-view]');
@@ -328,12 +330,25 @@ const projCount = MONTH_TOTALS[START].filter((v) => v > 0).length;
     const start = () => {
       if (started) return;
       started = true;
+      root.classList.remove('ht-wait');
       countIn();
       window.setTimeout(() => { if (!timer && month === 0) play(); }, 2600);
     };
-    if (!view || !view.hidden) start();
+    // Мотив стоит ниже первого экрана: рисуется и проигрывает год, когда до него доскроллили
+    let inView = !('IntersectionObserver' in window);
+    const tryStart = () => { if (inView && (!view || !view.hidden)) start(); };
+    if (!inView) {
+      const io = new IntersectionObserver((es) => {
+        if (!es.some((e) => e.isIntersecting)) return;
+        inView = true;
+        io.disconnect();
+        tryStart();
+      }, { threshold: 0.35 });
+      io.observe(root);
+    }
+    tryStart();
     if (view) {
-      new MutationObserver(() => { if (!view.hidden) start(); }).observe(view, { attributes: true, attributeFilter: ['hidden'] });
+      new MutationObserver(tryStart).observe(view, { attributes: true, attributeFilter: ['hidden'] });
     }
   });
 </script>
