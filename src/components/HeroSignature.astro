@@ -1,0 +1,112 @@
+---
+// Фирменный мотив первого экрана с переключателем: «Нити» (деньги за месяц) и «J-кривая» (окупаемость проекта).
+// Выбор посетителя запоминается в браузере. Повторный показ заново проигрывает анимацию.
+import HeroThreads from './HeroThreads.astro';
+import HeroJCurve from './HeroJCurve.astro';
+
+const views = [
+  { id: 'threads', label: 'Деньги за месяц' },
+  { id: 'jcurve', label: 'Окупаемость проекта' },
+];
+---
+
+<div class="sig" data-sig>
+  <div class="sig-tabs" role="tablist" aria-label="Пример на первом экране">
+    {views.map((v, i) => (
+      <button
+        type="button"
+        role="tab"
+        class="sig-tab"
+        id={`sig-tab-${v.id}`}
+        aria-controls={`sig-${v.id}`}
+        aria-selected={i === 0 ? 'true' : 'false'}
+        tabindex={i === 0 ? 0 : -1}
+        data-sig-tab={v.id}
+      >{v.label}</button>
+    ))}
+  </div>
+  <div class="sig-view" id="sig-threads" role="tabpanel" aria-labelledby="sig-tab-threads" data-sig-view="threads"><HeroThreads /></div>
+  <div class="sig-view" id="sig-jcurve" role="tabpanel" aria-labelledby="sig-tab-jcurve" data-sig-view="jcurve" hidden><HeroJCurve /></div>
+</div>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const KEY = 'axiom-hero-view';
+
+  // Счётчики набирают итоговое число за 0,8 с; итоговый текст берётся из разметки, чтобы совпасть до знака
+  function count(el: HTMLElement | SVGElement) {
+    const d = el.dataset;
+    const to = Number(d.count);
+    const dec = Number(d.dec ?? 2);
+    const suffix = d.suffix ?? '';
+    const final = d.final ?? el.textContent ?? '';
+    d.final = final;
+    const run = String(Number(d.run ?? 0) + 1);
+    d.run = run;
+    const show = (v: number) => { el.textContent = v.toFixed(dec).replace('.', ',') + suffix; };
+    show(0);
+    window.setTimeout(() => {
+      const t0 = performance.now();
+      const step = (now: number) => {
+        if (d.run !== run) return;
+        const k = Math.min(1, (now - t0) / 800);
+        if (k < 1) { show(to * (1 - Math.pow(1 - k, 3))); requestAnimationFrame(step); }
+        else el.textContent = final;
+      };
+      requestAnimationFrame(step);
+    }, Number(d.delay ?? 0));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-sig]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-sig-tab]')];
+    const views = [...root.querySelectorAll<HTMLElement>('[data-sig-view]')];
+    const show = (id: string, save: boolean) => {
+      tabs.forEach((t) => {
+        const on = t.dataset.sigTab === id;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+      });
+      views.forEach((v) => { v.hidden = true; });
+      const view = views.find((v) => v.dataset.sigView === id);
+      if (!view) return;
+      void view.offsetWidth; // из display:none обратно — CSS-анимации начинаются заново
+      view.hidden = false;
+      if (!reduce) view.querySelectorAll<SVGElement>('[data-count]').forEach(count);
+      if (save) { try { localStorage.setItem(KEY, id); } catch { /* без памяти тоже работает */ } }
+    };
+    let start = 'threads';
+    try {
+      const saved = localStorage.getItem(KEY);
+      if (saved && views.some((v) => v.dataset.sigView === saved)) start = saved;
+    } catch { /* приватный режим */ }
+    show(start, false);
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => show(t.dataset.sigTab!, true));
+      t.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        next.focus();
+        show(next.dataset.sigTab!, true);
+      });
+    });
+  });
+</script>
+
+<style>
+  .sig { display: grid; gap: var(--s3); }
+  .sig-tabs { display: inline-flex; justify-self: start; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+  .sig-tab {
+    border: 0;
+    background: transparent;
+    padding: 7px 16px;
+    border-radius: 999px;
+    font: 500 14px var(--font);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease;
+  }
+  .sig-tab:hover { color: var(--ink); }
+  .sig-tab[aria-selected='true'] { background: var(--ink); color: var(--surface); }
+  .sig-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sig-view[hidden] { display: none; }
+</style>

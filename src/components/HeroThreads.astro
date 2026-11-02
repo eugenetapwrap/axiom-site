@@ -2,6 +2,7 @@
 // Фирменный мотив «Нити»: поступления проектов сходятся в один счёт и расходятся по статьям.
 // Чем больше сумма, тем длиннее прямой участок нити. Данные — июнь из схемы учёта (src/lib/sankey.ts).
 // Анимация в три такта на CSS: бам (нити бьют в счёт), пум (вспышка и сумма), вау (веер статей).
+// Счётчик суммы запускает HeroSignature.
 // Базовые стили — конечное состояние, поэтому при reduced motion схема просто стоит готовой.
 import { NODES, LINKS, SERIES } from '../lib/sankey';
 
@@ -101,33 +102,13 @@ const G = 70; // длина блика, px
     <circle class="ht-ring ht-ring--2" cx={PX + NW / 2} cy={CY} r="80" style="--d:860ms"></circle>
     <rect class="ht-bar" x={PX} y={f(top - 10)} width={NW} height={f(total * K + 20)} rx="1.5"></rect>
     <text class="ht-cap ht-t" x={PX + NW / 2} y="22" text-anchor="middle" style="--d:760ms">Поступления за {MONTH_LABEL}</text>
-    <text class="ht-t" x={PX + NW / 2} y="52" text-anchor="middle" style="--d:760ms"><tspan class="ht-big" data-ht-count={total.toFixed(2)}>{fmt(total)}</tspan><tspan class="ht-unit" dx="6">млрд IDR</tspan></text>
+    <text class="ht-t" x={PX + NW / 2} y="52" text-anchor="middle" style="--d:760ms"><tspan class="ht-big" data-count={total.toFixed(2)} data-dec="2" data-delay="760">{fmt(total)}</tspan><tspan class="ht-unit" dx="6">млрд IDR</tspan></text>
   </svg>
   <figcaption class="ht-figcap">
     <span class="ht-mobile-sum">Поступления за {MONTH_LABEL}: {fmt(total)} млрд IDR от {projects.length} проектов, разложены по {costs.length} статьям.</span>
     <span>Демо-данные, млрд IDR</span>
   </figcaption>
 </figure>
-
-<script>
-  // Пум: сумма месяца набирается за 0,8 с, пока расходится кольцо
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.querySelectorAll<SVGTSpanElement>('[data-ht-count]').forEach((el) => {
-    if (reduce) return;
-    const to = Number(el.dataset.htCount);
-    const show = (v: number) => { el.textContent = v.toFixed(2).replace('.', ','); };
-    show(0);
-    setTimeout(() => {
-      const t0 = performance.now();
-      const step = (now: number) => {
-        const k = Math.min(1, (now - t0) / 800);
-        show(to * (1 - Math.pow(1 - k, 3)));
-        if (k < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    }, 760);
-  });
-</script>
 
 <style>
   .ht {

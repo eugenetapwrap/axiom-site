@@ -5,7 +5,7 @@ import SankeyFlow from '../components/SankeyFlow.astro';
 import PaymentBoard from '../components/PaymentBoard.astro';
 import RolloutStory from '../components/RolloutStory.astro';
 import BotMessage from '../components/BotMessage.astro';
-import HeroThreads from '../components/HeroThreads.astro';
+import HeroSignature from '../components/HeroSignature.astro';
 import ServiceIcon from '../components/ServiceIcon.astro';
 import { site } from '../data/site';
 import {
@@ -32,7 +32,7 @@ const widgetFor = {
 ---
 
 <Base title="Axiom — финансовый консалтинг для девелопмента и строительства" jsonLd={[faqLd]}>
-  <!-- Первый экран: заголовок слева, лид и кнопки справа, под ними во всю ширину фирменные нити, ниже четыре услуги -->
+  <!-- Первый экран: заголовок слева, лид и кнопки справа, под ними во всю ширину фирменный мотив с переключателем (нити или J-кривая), ниже четыре услуги -->
   <section class="hero">
     <div class="container">
       <div class="hero-top">
@@ -48,7 +48,7 @@ const widgetFor = {
           </div>
         </div>
       </div>
-      <div class="hero-art"><HeroThreads /></div>
+      <div class="hero-art"><HeroSignature /></div>
 
       <ul class="services">
         {practices.map((p) => (

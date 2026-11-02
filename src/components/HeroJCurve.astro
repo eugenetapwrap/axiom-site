@@ -1,0 +1,136 @@
+---
+// Фирменный мотив «J-кривая»: накопленный денежный поток демо-проекта по годам.
+// Сценарий «Смешанный» из виджета финмоделей (src/lib/finmodel.ts): стройка 2026–2028,
+// аренда 2029–2034, продажа объекта в 2035. IRR, MOIC и NPV считаются из тех же потоков.
+// Анимация в три такта: бам (вложения роняют линию в яму), пум (аренда поднимает её к нулю),
+// вау (продажа выбрасывает линию выше нуля, вспыхивает точка окупаемости, считаются показатели).
+import { SCENARIOS, YEARS, kpis, irr, npv, moic } from '../lib/finmodel';
+
+const sc = SCENARIOS.find((s) => s.name === 'Смешанный')!;
+const cf = sc.cf;
+const k = kpis(cf);
+const r2 = (v: number) => Math.round(v * 100) / 100;
+let c = 0;
+const cum = cf.map((v) => (c = r2(c + v)));
+const fmt = (v: number, d = 2) => v.toFixed(d).replace('.', ',').replace('-', '−');
+
+const W = 1200;
+const H = 320;
+const Y0 = 180;
+const S = 12; // px на 1 млн USD
+const BW = 34;
+const X = (i: number) => 134 + i * 108;
+const Y = (v: number) => Y0 - v * S;
+const f = (n: number) => n.toFixed(1);
+
+const last = cf.length - 1;
+const trough = cum.indexOf(Math.min(...cum));
+// Год, в котором накопленный поток впервые выходит выше нуля, и точка пересечения нуля
+const be = cum.findIndex((v) => v > 0);
+const xc = X(be - 1) + ((0 - cum[be - 1]) / (cum[be] - cum[be - 1])) * 108;
+
+const bars = cf.map((v, i) => {
+  const neg = v < 0;
+  const h = Math.abs(v) * S;
+  const kind = neg ? 'neg' : i === last ? 'exit' : 'pos';
+  // Тайминг: вложения падают сразу, аренда поднимается по году, продажа — последней
+  const delay = neg ? i * 160 : i === last ? 1980 : 1000 + (i - 3) * 140;
+  return { x: X(i) - BW / 2, y: neg ? Y0 : Y0 - h, h, kind, delay, title: `${YEARS[i]}: ${v > 0 ? '+' : ''}${fmt(v)} млн USD` };
+});
+const pts: [number, number][] = [[80, Y0], ...cum.map((v, i) => [X(i), Y(v)] as [number, number])];
+const seg = (a: number, b: number) => 'M' + pts.slice(a, b + 1).map((p) => `${f(p[0])},${f(p[1])}`).join(' L');
+const pit = [[80, Y0], ...cum.slice(0, be).map((v, i) => [X(i), Y(v)]), [xc, Y0]].map((p) => `${f(p[0])},${f(p[1])}`).join(' ');
+const dotDelay = (i: number) => (i <= trough ? 220 + i * 260 : i === last ? 2380 : 1110 + (i - 3) * 140);
+
+const kpiList = [
+  { label: 'IRR', text: k.irr, v: Math.round(irr(cf) * 1000) / 10, dec: 1, suffix: '%' },
+  { label: 'MOIC', text: k.moic, v: Math.round(moic(cf) * 100) / 100, dec: 2, suffix: '×' },
+  { label: 'NPV при 12%', text: `${k.npv} USD`, v: Math.round(npv(cf) * 10) / 10, dec: 1, suffix: ' млн USD' },
+];
+---
+
+<figure class="hj" aria-label={`Накопленный денежный поток демо-проекта: минус ${fmt(-cum[trough])} млн USD на пике вложений, выход выше нуля в ${YEARS[be]} после продажи. IRR ${k.irr}, MOIC ${k.moic}, NPV ${k.npv} USD`}>
+  <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
+    <line class="hj-zero" x1="60" x2="1170" y1={Y0} y2={Y0}></line>
+    <text class="hj-yr" x="50" y={Y0} text-anchor="end">0</text>
+    {YEARS.map((yr, i) => <text class="hj-yr" x={X(i)} y="310" text-anchor="middle">{yr}</text>)}
+
+    <polygon class="hj-pit" points={pit}></polygon>
+    {bars.map((b) => (
+      <rect class={`hj-bar hj-bar--${b.kind}`} x={f(b.x)} y={f(b.y)} width={BW} height={f(b.h)} rx="2" style={`--d:${b.delay}ms`}><title>{b.title}</title></rect>
+    ))}
+
+    <path class="hj-line" d={seg(0, trough + 1)} pathLength="1" style="--d:0ms;--t:820ms;--e:cubic-bezier(.5,0,.5,1)"></path>
+    <path class="hj-line" d={seg(trough + 1, last)} pathLength="1" style="--d:1000ms;--t:860ms;--e:linear"></path>
+    <path class="hj-line hj-line--exit" d={seg(last, last + 1)} pathLength="1" style="--d:1980ms;--t:520ms;--e:cubic-bezier(.16,1,.3,1)"></path>
+    {cum.map((v, i) => (
+      <circle class={`hj-dot${i === last ? ' hj-dot--end' : ''}`} cx={X(i)} cy={f(Y(v))} r={i === last ? 4.5 : 3} style={`--d:${dotDelay(i)}ms`}></circle>
+    ))}
+
+    <circle class="hj-ring hj-ring--pit" cx={X(trough)} cy={f(Y(cum[trough]))} r="30" style="--d:820ms"></circle>
+    <circle class="hj-ring hj-ring--be" cx={f(xc)} cy={Y0} r="34" style="--d:2030ms"></circle>
+    <circle class="hj-ring hj-ring--be2" cx={f(xc)} cy={Y0} r="60" style="--d:2150ms"></circle>
+
+    <text class="hj-note hj-t" x={X(trough)} y="284" text-anchor="middle" style="--d:860ms">{fmt(cum[trough])} млн: пик вложений</text>
+    <text class="hj-note hj-t" x="990" y="140" text-anchor="end" style="--d:2150ms">Окупаемость: {YEARS[be]}, после продажи</text>
+    <text class="hj-note hj-t" x={X(last)} y="18" text-anchor="middle" style="--d:2300ms">Продажа +{fmt(cf[last])}</text>
+    {kpiList.map((q, i) => (
+      <g class="hj-t" style={`--d:${2200 + i * 120}ms`}>
+        <text class="hj-kl" x={80 + i * 190} y="30">{q.label}</text>
+        <text class="hj-kv" x={80 + i * 190} y="62" data-count={q.v} data-dec={q.dec} data-suffix={q.suffix} data-delay={2200 + i * 120}>{q.text}</text>
+      </g>
+    ))}
+    <text class="hj-cap hj-t" x="80" y="96" style="--d:2500ms">Смешанный сценарий: аренда, затем продажа</text>
+  </svg>
+  <figcaption class="hj-figcap">
+    <span class="hj-mobile-kpi">IRR {k.irr} · MOIC {k.moic} · NPV при 12% {k.npv} USD</span>
+    <span>Демо-проект: стройка {YEARS[0]}–{YEARS[2]}, аренда, продажа в {YEARS[last]}. Накопленный поток, млн USD</span>
+  </figcaption>
+</figure>
+
+<style>
+  .hj { margin: 0; --hj-neg: #c0739a; --hj-pos: #2e8b7a; --hj-exit: #0b5345; }
+  .hj svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .hj text { dominant-baseline: middle; }
+  .hj-zero { stroke: var(--line); stroke-width: 1.2; }
+  .hj-yr { font: 400 12px var(--font); fill: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .hj-pit { fill: var(--hj-neg); fill-opacity: .08; }
+  .hj-bar { transform-box: fill-box; }
+  .hj-bar--neg { fill: var(--hj-neg); fill-opacity: .75; transform-origin: 50% 0%; }
+  .hj-bar--pos { fill: var(--hj-pos); fill-opacity: .85; transform-origin: 50% 100%; }
+  .hj-bar--exit { fill: var(--hj-exit); fill-opacity: .85; transform-origin: 50% 100%; }
+  .hj-line { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+  .hj-line--exit { stroke-width: 2.4; stroke-linecap: round; }
+  .hj-dot { fill: var(--bg); stroke: var(--ink); stroke-width: 1.5; }
+  .hj-dot--end { fill: var(--ink); }
+  .hj-ring { fill: none; stroke-width: 1.5; opacity: 0; transform-box: fill-box; transform-origin: center; }
+  .hj-ring--pit { stroke: var(--hj-neg); }
+  .hj-ring--be { stroke: var(--hj-exit); }
+  .hj-ring--be2 { stroke: var(--hj-pos); }
+  .hj-note { font: 500 12.5px var(--font); fill: var(--ink-2); }
+  .hj-kl { font: 500 12px var(--font); fill: var(--ink-3); }
+  .hj-kv { font: 600 30px var(--font-display); fill: var(--ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .hj-cap { font: 500 12px var(--font); fill: var(--ink-3); }
+  .hj-figcap { display: flex; justify-content: flex-end; margin-top: 8px; font-size: 13px; color: var(--ink-3); }
+  .hj-mobile-kpi { display: none; }
+
+  /* Бам → пум → вау */
+  .hj-bar { animation: hj-grow 520ms cubic-bezier(.16, 1, .3, 1) var(--d) both; }
+  .hj-bar--pos { animation: hj-grow 420ms cubic-bezier(.34, 1.56, .64, 1) var(--d) both; }
+  .hj-bar--exit { animation-duration: 620ms; }
+  .hj-line { animation: hj-draw var(--t) var(--e) var(--d) both; }
+  .hj-dot, .hj-t, .hj-pit { animation: hj-fade 420ms cubic-bezier(.2, .7, .2, 1) var(--d, 820ms) both; }
+  .hj-ring { animation: hj-ring 900ms cubic-bezier(.2, .7, .2, 1) var(--d) both; }
+
+  @keyframes hj-grow { from { transform: scaleY(0); } }
+  @keyframes hj-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @keyframes hj-fade { from { opacity: 0; } }
+  @keyframes hj-ring { from { opacity: .7; transform: scale(.15); } to { opacity: 0; transform: scale(1); } }
+
+  /* На телефоне подписи в схеме были бы мельче 5px: показатели пишем под графиком */
+  @media (max-width: 760px) {
+    .hj svg text { display: none; }
+    .hj-figcap { flex-direction: column; gap: 2px; justify-content: flex-start; }
+    .hj-mobile-kpi { display: block; font-size: 15px; font-weight: 500; color: var(--ink); }
+  }
+</style>
