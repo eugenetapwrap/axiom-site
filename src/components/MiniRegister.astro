@@ -4,11 +4,11 @@
 // не из проектов клиентов (отчёты аудита конфиденциальны). Влияние замечаний на IRR складываем приближённо:
 // 14,2% − 0,9 − 0,4 − 0,3 − 0,2 − 0 = 12,4%.
 const rows = [
-  { lvl: 'Высокая', cls: 'hi', sheet: 'График', text: 'Стройка 18 месяцев, а по договору генподряда 24', impact: '−0,9%' },
-  { lvl: 'Средняя', cls: 'mid', sheet: 'Продажи', text: 'Темп продаж выше, чем у соседних проектов', impact: '−0,4%' },
-  { lvl: 'Средняя', cls: 'mid', sheet: 'Затраты', text: 'Нет резерва на непредвиденные расходы', impact: '−0,3%' },
-  { lvl: 'Средняя', cls: 'mid', sheet: 'Финансирование', text: 'Проценты по кредиту начинаются с ввода, а не с первой выдачи', impact: '−0,2%' },
-  { lvl: 'Низкая', cls: 'lo', sheet: 'Ввод', text: 'Курс валюты введён числом, а не ссылкой', impact: '0' },
+  { lvl: 'Критичное', cls: 'hi', sheet: 'График', text: 'Стройка 18 месяцев, а по договору генподряда 24', impact: '−0,9%' },
+  { lvl: 'Существенное', cls: 'mid', sheet: 'Продажи', text: 'Темп продаж выше, чем у соседних проектов', impact: '−0,4%' },
+  { lvl: 'Существенное', cls: 'mid', sheet: 'Затраты', text: 'Нет резерва на непредвиденные расходы', impact: '−0,3%' },
+  { lvl: 'Существенное', cls: 'mid', sheet: 'Финансирование', text: 'Проценты по кредиту начинаются с ввода, а не с первой выдачи', impact: '−0,2%' },
+  { lvl: 'Незначительное', cls: 'lo', sheet: 'Ввод', text: 'Курс валюты введён числом, а не ссылкой', impact: '0' },
 ];
 ---
 
@@ -43,8 +43,15 @@ const rows = [
   }
   .mini-head { font-size: 13px; font-weight: 600; color: var(--ink-2); }
   .mr { display: grid; margin: 10px 0 0; padding: 0; list-style: none; font-size: 13px; line-height: 1.4; }
-  .mr li { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 0; border-top: 1px solid var(--line); }
-  .mr-lvl { font-size: 12px; font-weight: 600; }
+  .mr li { display: grid; grid-template-columns: 124px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 8px 0; border-top: 1px solid var(--line); }
+  .mr-lvl { font-size: 12px; font-weight: 600; white-space: nowrap; }
+  /* Узкая карточка: уровень и влияние в первой строке, текст замечания под ними во всю ширину */
+  @container (max-width: 560px) {
+    .mr li { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'lvl imp' 'txt txt'; row-gap: 4px; }
+    .mr-lvl { grid-area: lvl; }
+    .mr-imp { grid-area: imp; }
+    .mr-text { grid-area: txt; }
+  }
   .mr-lvl::before { content: ''; display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: currentColor; vertical-align: 1px; }
   .mr-lvl--hi { color: var(--risk); }
   .mr-lvl--mid { color: var(--gold-ink, var(--accent-2)); }

@@ -8,7 +8,7 @@ import MiniRegister from '../components/MiniRegister.astro';
 import FinalThreads from '../components/FinalThreads.astro';
 import { site, tgLink } from '../data/site';
 import {
-  hero, practices, results, cases, team, faq, finalCta,
+  hero, practices, results, cases, team, faq, finalCta, method, requestForm,
 } from '../data/home';
 import { t } from '../lib/typo';
 import { villa, VILLA_DEFAULT, installment, INST_DEFAULT, usd, pct, group } from '../lib/calc';
@@ -60,8 +60,9 @@ const faqLd = {
             ))}
           </dl>
           <div class="btn-row hero-btns">
-            <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
-            <a class="btn btn-secondary" href="#calc">Калькуляторы</a>
+            <!-- Ветка intl: «Обсудить проект» ведёт к выбору канала и форме, второй путь — проверка модели (исследование 02.11.2026) -->
+            <a class="btn btn-primary" href="#contact" data-cta="hero_discuss">Обсудить проект</a>
+            <a class="btn btn-secondary" href="#contact" data-open-req={requestForm.services[2]} data-cta="hero_review">Проверить модель</a>
           </div>
         </div>
       </div>
@@ -139,6 +140,44 @@ const faqLd = {
       ))}
       </div>
       <p class="practices-note">Цифры в примерах — демо-данные.</p>
+    </div>
+  </section>
+
+  <!-- Методика (ветка intl): правила моделирования, две ступени аудита, чего не делаем.
+       Крупные консультанты доказывают уровень именно этим, а не числом картинок (исследование 02.11.2026) -->
+  <section class="section section--white method" id="method" aria-labelledby="method-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">{method.eyebrow}</p>
+        <h2 id="method-title">{t(method.title)}</h2>
+      </div>
+      <div class="m-grid" data-reveal style="--d: 100ms">
+        <div class="m-col">
+          <h3>{t(method.rules.title)}</h3>
+          <ol class="m-rules">
+            {method.rules.items.map((i) => <li>{t(i)}</li>)}
+          </ol>
+          <p class="m-note">{t(method.rules.note)}</p>
+        </div>
+        <div class="m-col m-audit">
+          <h3>{t(method.audit.title)}</h3>
+          <ol class="m-steps">
+            {method.audit.steps.map((st) => <li><b>{t(st.name)}</b><span>{t(st.text)}</span></li>)}
+          </ol>
+          <p class="m-deliv">{t(method.audit.deliverables)}</p>
+          <div class="m-stat">
+            <p class="m-stat-top"><b>{method.audit.stat.value}</b><span>{t(method.audit.stat.text)}</span></p>
+            <p class="m-bar" aria-hidden="true">{method.audit.stat.parts.map((x) => <i class={`m-${x.cls}`} style={`flex: ${x.n}`}></i>)}</p>
+            <p class="m-legend">{method.audit.stat.parts.map((x) => <span class={`m-${x.cls}`}><b>{x.n}</b> {x.label}</span>)}</p>
+          </div>
+        </div>
+        <div class="m-col">
+          <h3>{t(method.limits.title)}</h3>
+          <ul class="m-limits">
+            {method.limits.items.map((i) => <li>{t(i)}</li>)}
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -272,7 +311,9 @@ const faqLd = {
   </section>
 
   <!-- Финальный блок -->
+  <!-- Нити лежат только под верхней частью блока: раскрытая форма не растягивает их (ветка intl) -->
   <section class="section section--dark final" id="contact">
+    <div class="final-top">
     <FinalThreads />
     <div class="container final-inner" data-reveal>
       <p class="eyebrow">Контакты</p>
@@ -282,15 +323,43 @@ const faqLd = {
       <ul class="final-list">
         {finalCta.items.map((i, k) => <li><b>{k + 1}</b>{t(i)}</li>)}
       </ul>
+      <!-- Ветка intl: три канала рядом. Telegram остаётся первым, почта и форма запроса для корпоративных клиентов -->
       <div class="btn-row final-btns">
-        <a class="btn btn-light" href={site.telegramUrl}>Написать в Telegram @{site.telegram}</a>
-        <a class="btn btn-ghost-light" href={`mailto:${site.email}`}>{site.email}</a>
+        <a class="btn btn-light" href={site.telegramUrl} data-cta="final_telegram">Написать в Telegram @{site.telegram}</a>
+        <a class="btn btn-ghost-light" href={`mailto:${site.email}`} data-cta="final_email">{site.email}</a>
+        <button type="button" class="btn btn-ghost-light req-open" aria-expanded="false" aria-controls="req" data-req-open>{requestForm.open}</button>
       </div>
+    </div>
+    </div>
+    <div class="container final-req">
+      <form class="req" id="req" hidden data-req data-email={site.email} data-greet={requestForm.greet} data-subject={requestForm.subject}>
+        <p class="req-title">{requestForm.title}</p>
+        <div class="req-grid">
+          <label><span>{requestForm.name}</span><input name="name" autocomplete="name" required /></label>
+          <label><span>{requestForm.company}</span><input name="company" autocomplete="organization" /></label>
+          <label><span>{requestForm.service}</span><select name="service"><option value="">{requestForm.choose}</option>{requestForm.services.map((o) => <option>{o}</option>)}</select></label>
+          <label><span>{requestForm.country}</span><select name="country"><option value="">{requestForm.choose}</option>{requestForm.countries.map((o) => <option>{o}</option>)}</select></label>
+          <label><span>{requestForm.stage}</span><select name="stage"><option value="">{requestForm.choose}</option>{requestForm.stages.map((o) => <option>{o}</option>)}</select></label>
+          <label class="req-wide"><span>{requestForm.task}</span><textarea name="task" rows="3" placeholder={requestForm.taskHint}></textarea></label>
+        </div>
+        <fieldset class="req-ch">
+          <legend>{requestForm.channel}</legend>
+          <label><input type="radio" name="channel" value="telegram" checked /> Telegram</label>
+          <label><input type="radio" name="channel" value="email" /> {site.email}</label>
+        </fieldset>
+        <div class="req-foot">
+          <button class="btn btn-light" type="submit">{requestForm.submit}</button>
+          <p>{t(requestForm.note)}</p>
+        </div>
+      </form>
     </div>
   </section>
 </Base>
 
 <script>
+  import { track } from '../lib/track';
+  import { tgLink } from '../data/site';
+
   // «Что входит» на телефоне: 4 пункта и кнопка «Ещё N пунктов». На десктопе CSS кнопку не показывает
   document.querySelectorAll<HTMLElement>('.practice').forEach((card) => {
     const more = card.querySelector<HTMLButtonElement>('[data-more]');
@@ -337,40 +406,48 @@ const faqLd = {
     place();
   });
 
-  // Счётчики в полосе цифр: от нуля до значения, один раз
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const nums = document.querySelectorAll<HTMLElement>('[data-count]');
-  if (!reduce && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (!e.isIntersecting) return;
-        io.unobserve(e.target);
-        const el = e.target as HTMLElement;
-        const final = el.dataset.count!;
-        const m = final.match(/^([\d\s ]+)(?:,(\d+))?(.*)$/);
-        if (!m) return;
-        const whole = Number(m[1].replace(/[\s ]/g, ''));
-        const dec = m[2] ?? '';
-        const target = Number(`${whole}.${dec || 0}`);
-        const tail = m[3];
-        const t0 = performance.now();
-        const dur = 1400;
-        const fmt = (v: number) => {
-          const [a, b] = v.toFixed(dec.length).split('.');
-          const grouped = a.length > 4 ? a.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : a;
-          return b ? `${grouped},${b}` : grouped;
-        };
-        const step = (now: number) => {
-          const k = Math.min(1, (now - t0) / dur);
-          const eased = 1 - Math.pow(1 - k, 3);
-          el.textContent = k < 1 ? fmt(target * eased) + tail : final;
-          if (k < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      });
-    }, { threshold: 0.5 });
-    nums.forEach((n) => io.observe(n));
-  }
+  // Форма запроса: собирает сообщение и открывает Telegram или почту. Сервера у сайта нет
+  const req = document.querySelector<HTMLFormElement>('[data-req]');
+  const reqBtn = document.querySelector<HTMLButtonElement>('[data-req-open]');
+  const openReq = (service?: string) => {
+    if (!req) return;
+    req.hidden = false;
+    reqBtn?.setAttribute('aria-expanded', 'true');
+    if (service) (req.elements.namedItem('service') as HTMLSelectElement).value = service;
+    track('request_open', { service: service ?? '' });
+  };
+  reqBtn?.addEventListener('click', () => {
+    if (!req) return;
+    if (req.hidden) {
+      openReq();
+      req.querySelector<HTMLInputElement>('input')?.focus({ preventScroll: true });
+    } else {
+      req.hidden = true;
+      reqBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+  document.querySelectorAll<HTMLElement>('[data-open-req]').forEach((a) => {
+    a.addEventListener('click', () => openReq(a.dataset.openReq));
+  });
+  req?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const lines = [req.dataset.greet!, ''];
+    req.querySelectorAll<HTMLElement>('.req-grid label').forEach((l) => {
+      const f = l.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea')!;
+      const v = f.value.trim();
+      if (v) lines.push(`${l.querySelector('span')!.textContent}: ${v}`);
+    });
+    const text = lines.join('\n');
+    const ch = (req.elements.namedItem('channel') as RadioNodeList).value;
+    track('lead', { channel: ch, service: (req.elements.namedItem('service') as HTMLSelectElement).value });
+    if (ch === 'email') location.href = `mailto:${req.dataset.email}?subject=${encodeURIComponent(req.dataset.subject!)}&body=${encodeURIComponent(text)}`;
+    else window.open(tgLink(text), '_blank', 'noopener');
+  });
+
+  // События кнопок для аналитики
+  document.querySelectorAll<HTMLElement>('[data-cta]').forEach((a) => {
+    a.addEventListener('click', () => track('cta_click', { id: a.dataset.cta! }));
+  });
 </script>
 
 <style>
@@ -639,4 +716,80 @@ const faqLd = {
   }
   .final-list b { color: var(--gold-on-deep); }
   .final-btns { justify-content: center; }
+  /* Методика (ветка intl): три колонки через линии, как ряд услуг в первом экране. На узком экране столбиком */
+  .method .section-head { margin-bottom: var(--s4); }
+  .m-grid { display: grid; border-top: 1px solid var(--line); }
+  .m-col { padding: var(--s4) 0; min-width: 0; }
+  .m-col + .m-col { border-top: 1px solid var(--line); }
+  @media (min-width: 1100px) {
+    .m-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr); }
+    .m-col { padding-right: var(--s4); }
+    .m-col + .m-col { border-top: 0; border-left: 1px solid var(--line); padding-left: var(--s4); }
+    .m-col:last-child { padding-right: 0; }
+  }
+  .m-col h3 { font-size: 21px; line-height: 1.25; margin-bottom: var(--s2); }
+  .m-rules, .m-limits, .m-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 16px; line-height: 1.45; color: var(--ink-2); }
+  /* Правила пронумерованы: это стандарт, на пункт можно сослаться */
+  .m-rules { counter-reset: r; }
+  .m-rules li { counter-increment: r; display: grid; grid-template-columns: 30px minmax(0, 1fr); }
+  .m-rules li::before { content: counter(r, decimal-leading-zero); font-size: 13px; line-height: 1.85; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .m-note { margin-top: var(--s3); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: 14px; line-height: 1.45; color: var(--ink-3); }
+  .m-steps { gap: 14px; counter-reset: st; }
+  .m-steps li { counter-increment: st; display: grid; grid-template-columns: 30px minmax(0, 1fr); row-gap: 2px; }
+  .m-steps li::before { content: counter(st); grid-row: span 2; font-family: var(--font-display); font-size: 18px; font-weight: 600; line-height: 1.3; color: var(--accent); }
+  .m-steps b { color: var(--ink); font-weight: 600; }
+  .m-deliv { margin-top: var(--s2); padding-left: 30px; font-size: 15px; line-height: 1.45; color: var(--ink); }
+  .m-stat { margin-top: var(--s3); padding: 16px 18px; border-radius: 8px; background: var(--bg); }
+  .m-stat-top { display: flex; align-items: baseline; gap: 12px; }
+  .m-stat-top b { font-family: var(--font-display); font-size: 40px; font-weight: 600; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .m-stat-top span { font-size: 15px; color: var(--ink-2); }
+  .m-bar { display: flex; gap: 3px; height: 8px; margin-top: 14px; }
+  .m-bar i { border-radius: 2px; }
+  .m-bar .m-hi { background: var(--risk); }
+  .m-bar .m-mid { background: var(--gold); }
+  .m-bar .m-lo { background: color-mix(in srgb, var(--ink-3) 35%, var(--bg)); }
+  .m-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: 13px; color: var(--ink-2); }
+  .m-legend span::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 2px; background: color-mix(in srgb, var(--ink-3) 35%, var(--bg)); vertical-align: 0; }
+  .m-legend .m-hi::before { background: var(--risk); }
+  .m-legend .m-mid::before { background: var(--gold); }
+  .m-legend b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  /* Исключения: короткая черта вместо точки, чтобы не путать со списком услуг */
+  .m-limits li { position: relative; padding-left: 26px; }
+  .m-limits li::before { content: ''; position: absolute; left: 0; top: 0.72em; width: 12px; height: 2px; border-radius: 1px; background: var(--ink-3); }
+
+  /* Форма запроса в контактах: раскрывается по кнопке, поля на тёмном фоне */
+  .final { padding: 0; }
+  .final-top { position: relative; padding: var(--s7) 0; }
+  @media (max-width: 719px) { .final-top { padding: var(--s6) 0; } }
+  .final-req { display: flex; justify-content: center; }
+  .req { position: relative; width: 100%; max-width: 760px; margin: calc(var(--s4) - var(--s7)) 0 var(--s7); padding: var(--s4); border-radius: 12px; background: var(--deep-2); border: 1px solid rgba(255, 255, 255, 0.12); text-align: left; }
+  @media (max-width: 719px) { .req { margin: calc(var(--s3) - var(--s6)) 0 var(--s6); padding: var(--s3) 18px; } }
+  .req[hidden] { display: none; }
+  .req-title { font-family: var(--font-display); font-size: 21px; font-weight: 600; margin-bottom: var(--s3); }
+  .req-grid { display: grid; gap: var(--s2); }
+  @media (min-width: 640px) { .req-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .req-wide { grid-column: 1 / -1; } }
+  .req label, .req legend { display: grid; gap: 6px; font-size: 13px; color: var(--on-deep-2); }
+  .req input:not([type='radio']), .req select, .req textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--on-deep);
+    font: 400 16px/1.4 var(--font);
+  }
+  .req select option { color: #111; }
+  .req textarea { resize: vertical; min-height: 84px; }
+  .req textarea::placeholder { color: color-mix(in srgb, var(--on-deep-2) 70%, transparent); }
+  .req input:focus-visible, .req select:focus-visible, .req textarea:focus-visible { outline: 2px solid var(--gold-on-deep); outline-offset: 1px; }
+  .req-ch { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; margin: var(--s3) 0 0; padding: 0; border: 0; }
+  .req-ch legend { float: left; margin-right: 8px; }
+  @media (max-width: 639px) { .req-ch legend { float: none; width: 100%; margin: 0 0 2px; } }
+  .req-ch label { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; color: var(--on-deep); cursor: pointer; }
+  .req-ch input { accent-color: var(--gold-on-deep); width: 16px; height: 16px; }
+  .req-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s3); margin-top: var(--s3); }
+  .req-foot p { flex: 1 1 260px; font-size: 13px; line-height: 1.45; color: var(--on-deep-2); }
+  .req-open[aria-expanded='true'] { background: rgba(255, 255, 255, 0.16); }
+  .req-open::after { content: ' ↓'; }
+  .req-open[aria-expanded='true']::after { content: ' ↑'; }
 </style>

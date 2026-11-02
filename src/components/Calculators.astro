@@ -175,6 +175,7 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
     usd, pct, group, parseNum, type VillaIn, type InstIn, type VillaOut,
   } from '../lib/calc';
   import { tgLink } from '../data/site';
+  import { track } from '../lib/track';
 
   // Допустимые пределы: если ввели лишнее, считаем по границе и не ломаем график
   const LIM: Record<string, [number, number]> = {
@@ -210,6 +211,7 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
       });
       panels.forEach((p) => { p.hidden = p.dataset.cp !== id; });
       if (id === 'villa') renderVilla();
+      if (seen) opened(id);
     };
     // Ссылки из услуг («Инвестиционный анализ») открывают нужную вкладку, прокрутку делает href="#calc"
     document.querySelectorAll<HTMLElement>('[data-open-calc]').forEach((a) => {
@@ -223,6 +225,39 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
         next.focus();
         select(next.dataset.ct!);
       });
+    });
+
+    // ---------- События для аналитики (план из исследования 02.11.2026) ----------
+    // calc_open — калькулятор на экране, calc_first_input — первое изменение, calc_adjust — поле изменено,
+    // calc_result_view — блок результата на экране, calc_cta_telegram — кнопка «Обсудить»
+    const cur = () => tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.dataset.ct ?? 'villa';
+    const once = new Set<string>();
+    const fire = (name: string, calc: string, extra: Record<string, string> = {}) => {
+      const key = `${name}:${calc}`;
+      if (once.has(key)) return;
+      once.add(key);
+      track(name, { calc, ...extra });
+    };
+    let seen = false;
+    const opened = (id: string) => fire('calc_open', id);
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((es) => {
+        es.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const el = e.target as HTMLElement;
+          if (el === root) { seen = true; opened(cur()); } else fire('calc_result_view', el.closest<HTMLElement>('[data-cp]')!.dataset.cp!);
+        });
+      }, { threshold: 0.3 });
+      io.observe(root);
+      root.querySelectorAll('.calc-out').forEach((o) => io.observe(o));
+    }
+    root.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((f) => {
+      const calc = f.dataset.form!;
+      f.addEventListener('input', () => fire('calc_first_input', calc));
+      f.addEventListener('change', (e) => track('calc_adjust', { calc, field: (e.target as HTMLInputElement).dataset.k ?? '' }));
+    });
+    root.querySelectorAll<HTMLElement>('[data-tg]').forEach((a) => {
+      a.addEventListener('click', () => track('calc_cta_telegram', { calc: a.dataset.tg! }));
     });
 
     // Поля: пересчёт на каждый ввод, красивое число при выходе из поля

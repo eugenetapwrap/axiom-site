@@ -4,6 +4,7 @@ import PaletteBar from './PaletteBar.astro';
 
 const nav = [
   { href: '/#practices', label: 'Услуги' },
+  { href: '/#method', label: 'Методика' },
   { href: '/#calc', label: 'Калькуляторы' },
   { href: '/#cases', label: 'Кейсы' },
   { href: '/#team', label: 'Команда' },
@@ -27,7 +28,8 @@ const nav = [
     <a class="header-login" href={site.portalUrl} aria-label="Личный кабинет клиента" title="Личный кабинет клиента">
       <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.8 16.5c.9-2.9 3.3-4.5 6.2-4.5s5.3 1.6 6.2 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     </a>
-    <a class="btn btn-primary header-cta" href={site.telegramUrl}>Написать в Telegram</a>
+    <!-- Ветка intl: кнопка ведёт к выбору канала (Telegram, почта, форма), Telegram остаётся в плавающей кнопке -->
+    <a class="btn btn-primary header-cta" href="/#contact" data-cta="header_discuss">Обсудить проект</a>
   </div>
 </header>
 
