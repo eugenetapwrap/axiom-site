@@ -95,8 +95,8 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
           <p class="pw-title">Влияние на показатели</p>
           <div class="ui-card pw-panel pw-impact">
             <div><span>IRR до аудита</span><span class="pw-bar"><i style="--w:90%"></i></span><b>9,0%</b></div>
-            <div><span>IRR после</span><span class="pw-bar pw-bar--risk"><i style="--w:82%" data-a-after></i></span><b class="risk">8,2%</b></div>
-            <p class="pw-sub">NPV меньше в 3,6 раза</p>
+            <div><span>IRR после</span><span class="pw-bar pw-bar--risk"><i style="--w:82%" data-a-after></i></span><b class="risk" data-a-irr>8,2%</b></div>
+            <p class="pw-sub" data-a-note>NPV меньше в 3,6 раза</p>
           </div>
         </div>
       </div>
@@ -235,6 +235,8 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
       const pct = w.querySelector<HTMLElement>('[data-a-pct]')!;
       const counts = [...w.querySelectorAll<HTMLElement>('[data-a-count]')];
       const after = w.querySelector<HTMLElement>('[data-a-after]')!;
+      const irrAfter = w.querySelector<HTMLElement>('[data-a-irr]')!;
+      const note = w.querySelector<HTMLElement>('[data-a-note]')!;
       let step = 0;
       return () => {
         step = (step + 1) % 6;
@@ -242,7 +244,14 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
         bar.style.width = `${p}%`;
         pct.textContent = String(p);
         counts.forEach((c) => { c.textContent = String(Math.round(Number(c.dataset.aCount) * p / 100)); });
-        after.style.setProperty('--w', p === 100 ? '82%' : '90%');
+        // До проверки IRR после = IRR до (9,0%), дальше снижается по мере правок до 8,2%
+        const irr = 9 - 0.8 * p / 100;
+        after.style.setProperty('--w', `${irr * 10}%`);
+        irrAfter.textContent = `${irr.toFixed(1).replace('.', ',')}%`;
+        irrAfter.classList.toggle('risk', p > 0);
+        after.parentElement!.classList.toggle('pw-bar--risk', p > 0);
+        after.parentElement!.classList.toggle('is-same', p === 0);
+        note.textContent = p === 100 ? 'NPV меньше в 3,6 раза' : p === 0 ? 'Проверка ещё не началась' : 'Пересчитываем по найденным замечаниям';
       };
     },
     accounting(w) {
@@ -420,6 +429,7 @@ const objects = ['Апартаменты', 'Вилла', 'Таунхаус'];
   .pw-bar i { display: block; height: 100%; width: var(--w); border-radius: 5px; background: #d7c9a8; transition: width .8s cubic-bezier(.2, .8, .2, 1); }
   .pw-impact > div:first-child .pw-bar i { background: var(--accent-2); }
   .pw-bar--risk i { background: var(--risk) !important; }
+  .pw-impact .pw-bar.is-same i { background: var(--accent-2); }
   .pw-impact .risk { color: var(--risk); }
   [data-o-cmp] .pw-bar i { background: #d7c9a8 !important; }
   [data-o-cmp] .is-win .pw-bar i { background: var(--accent-2) !important; }
