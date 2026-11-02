@@ -5,6 +5,8 @@ import SankeyFlow from '../components/SankeyFlow.astro';
 import PaymentBoard from '../components/PaymentBoard.astro';
 import RolloutStory from '../components/RolloutStory.astro';
 import BotMessage from '../components/BotMessage.astro';
+import HeroFlow from '../components/HeroFlow.astro';
+import ServiceIcon from '../components/ServiceIcon.astro';
 import { site } from '../data/site';
 import {
   hero, practices, expertise, geography, flow, stats, payment, approach, cases, team, bot, faq, finalCta,
@@ -21,16 +23,6 @@ const faqLd = {
   })),
 };
 
-const titleWords = hero.title.split(' ');
-const titleAccent = titleWords.slice(0, hero.accent).join(' ');
-const titleRest = titleWords.slice(hero.accent).join(' ');
-
-const serviceIcons: Record<string, string> = {
-  models: 'M2 13.5h12M3.5 11l3-3.5 2.5 2 4-5',
-  audit: 'M11.2 11.2 14 14M7 11.5a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z',
-  accounting: 'M2 4.5h12v8H2zM2 7.5h12M5 10.5h3',
-  advisory: 'M3 13V8M6.3 13V5M9.7 13V9.5M13 13V3',
-};
 const widgetFor = {
   models: 'models',
   audit: 'audit',
@@ -40,24 +32,28 @@ const widgetFor = {
 ---
 
 <Base title="Axiom — финансовый консалтинг для девелопмента и строительства" jsonLd={[faqLd]}>
-  <!-- Первый экран: кто мы, для кого и четыре услуги -->
+  <!-- Первый экран: фраза-манифест слева, ленты денежного потока справа, ниже четыре услуги -->
   <section class="hero">
     <div class="container">
-      <p class="eyebrow">{hero.eyebrow}</p>
-      <h1><span class="h1-accent">{titleAccent}</span> {t(titleRest)}</h1>
-      <p class="hero-lead">{t(hero.lead)}</p>
-      <div class="btn-row hero-btns">
-        <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
-        <a class="btn btn-secondary" href="#practices">Все направления</a>
+      <div class="hero-top">
+        <div class="hero-text">
+          <p class="eyebrow">{hero.eyebrow}</p>
+          <h1><span class="h1-lead">{t(hero.title)}.</span> <span class="h1-rest">{t(hero.lead)}</span></h1>
+          <div class="btn-row hero-btns">
+            <a class="btn btn-primary" href={site.telegramUrl}>Обсудить проект</a>
+            <a class="btn btn-secondary" href="#practices">Все направления</a>
+          </div>
+        </div>
+        <div class="hero-art"><HeroFlow /></div>
       </div>
 
       <ul class="services">
         {practices.map((p) => (
           <li>
-            <a class="service ui-card" href={`#${p.id}`}>
+            <a class="service" href={`#${p.id}`}>
               <span class="service-top">
+                <ServiceIcon name={p.id} />
                 <span class="service-num">{p.num}</span>
-                <svg viewBox="0 0 16 16" aria-hidden="true"><path d={serviceIcons[p.id]} fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
               </span>
               <span class="service-title">{t(p.title)}</span>
               <span class="service-lead">{t(p.lead)}</span>
@@ -68,11 +64,11 @@ const widgetFor = {
       </ul>
 
       <dl class="facts">
-          {hero.facts.map((f) => (
-            <div>
-              <dt>{f.value}</dt>
-              <dd>{t(f.text)}</dd>
-            </div>
+        {hero.facts.map((f) => (
+          <div>
+            <dt>{f.value}</dt>
+            <dd>{t(f.text)}</dd>
+          </div>
         ))}
       </dl>
     </div>
@@ -107,17 +103,18 @@ const widgetFor = {
     </div>
   </section>
 
-  <!-- Ключевые цифры -->
-  <section class="section section--dark" aria-labelledby="stats-title">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Результаты</p>
-        <h2 id="stats-title">Цифры из наших систем учёта</h2>
+  <!-- Ключевые цифры: сигнальная полоса, главная цифра крупно -->
+  <section class="section section--signal" aria-labelledby="stats-title">
+    <div class="container signal">
+      <div class="signal-main" data-reveal>
+        <h2 id="stats-title" class="eyebrow">Результаты</h2>
+        <p class="signal-value"><span data-count={stats[2].value}>{stats[2].value}</span> <span class="signal-unit">{stats[2].unit}</span></p>
+        <p class="signal-text">{t(stats[2].text)}</p>
       </div>
-      <dl class="stats" data-reveal>
-        {stats.map((s) => (
-          <div class="stat">
-            <dt><span class="stat-value" data-count={s.value}>{s.value}</span> <span class="stat-unit">{s.unit}</span></dt>
+      <dl class="signal-rest" data-reveal style="--d: 120ms">
+        {[stats[0], stats[1], stats[3]].map((s) => (
+          <div>
+            <dt><span class="num" data-count={s.value}>{s.value}</span> {s.unit}</dt>
             <dd>{t(s.text)}</dd>
           </div>
         ))}
@@ -125,8 +122,8 @@ const widgetFor = {
     </div>
   </section>
 
-  <!-- Движение денег -->
-  <section class="section section--white" id="accounting-system">
+  <!-- Движение денег: единственный тёмный блок, система учёта как главный герой -->
+  <section class="section section--dark" id="accounting-system">
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Система учёта</p>
@@ -279,7 +276,7 @@ const widgetFor = {
   </section>
 
   <!-- Продукт: бот -->
-  <section class="section section--dark" id="bot">
+  <section class="section section--alt" id="bot">
     <div class="container bot">
       <div class="bot-visual" data-reveal>
         <BotMessage />
@@ -293,8 +290,8 @@ const widgetFor = {
         </ul>
         <p class="tagline">{t(bot.tagline)}</p>
         <div class="btn-row">
-          <a class="btn btn-light" href={site.botUrl}>{bot.cta}</a>
-          <a class="btn btn-ghost-light" href={site.telegramUrl}>Задать вопрос</a>
+          <a class="btn btn-primary" href={site.botUrl}>{bot.cta}</a>
+          <a class="btn btn-secondary" href={site.telegramUrl}>Задать вопрос</a>
         </div>
       </div>
     </div>
@@ -321,6 +318,13 @@ const widgetFor = {
 
   <!-- Финальный блок -->
   <section class="section section--dark final" id="contact">
+    <svg class="final-flow" viewBox="0 0 1440 420" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,40 C480,40 600,300 720,300 L720,306 C600,306 480,92 0,92 Z" />
+      <path d="M0,150 C420,150 580,306 720,306 L720,312 C580,312 420,178 0,178 Z" />
+      <path d="M0,300 C420,300 560,312 720,312 L720,316 C560,316 420,318 0,318 Z" />
+      <path d="M1440,60 C960,60 840,300 720,300 L720,304 C840,304 960,104 1440,104 Z" />
+      <path d="M1440,210 C980,210 860,306 720,306 L720,312 C860,312 980,240 1440,240 Z" />
+    </svg>
     <div class="container final-inner" data-reveal>
       <p class="eyebrow">Контакты</p>
       <h2>{finalCta.title}</h2>
@@ -375,53 +379,60 @@ const widgetFor = {
 
 <style>
   /* Первый экран */
-  .hero { padding: var(--s6) 0; background-color: var(--bg); }
-  .hero h1 { max-width: 17em; font-size: clamp(32px, 4.6vw, 58px); }
-  .h1-accent { color: var(--accent); }
-  .hero-lead { margin-top: var(--s3); max-width: 34em; color: var(--ink-2); font-size: 1.1em; }
+  .hero { padding: var(--s6) 0 var(--s6); background-color: var(--bg); }
+  .hero-top { display: grid; gap: var(--s4); align-items: center; }
+  @media (min-width: 1024px) { .hero-top { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); column-gap: var(--s6); } }
+  .hero h1 { font-size: clamp(30px, 3.7vw, 50px); line-height: 1.12; max-width: 16em; }
+  .h1-lead { font-family: var(--font); font-weight: 700; letter-spacing: -0.03em; }
+  .h1-rest { color: var(--ink-2); }
+  .hero-btns { margin-top: var(--s4); }
+  .hero-art { min-width: 0; }
 
   .services {
     list-style: none;
     padding: 0;
-    margin-top: var(--s5);
+    margin-top: var(--s6);
     display: grid;
-    gap: var(--s2);
+    border-top: 1px solid var(--ink);
   }
   @media (min-width: 640px) { .services { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1100px) { .services { grid-template-columns: repeat(4, 1fr); } }
-  .services li { display: flex; }
+  .services li { display: flex; border-bottom: 1px solid var(--line); }
+  @media (min-width: 640px) { .services li:nth-child(odd) { border-right: 1px solid var(--line); } }
+  @media (min-width: 1100px) {
+    .services li { border-bottom: 0; }
+    .services li:not(:last-child) { border-right: 1px solid var(--line); }
+  }
   .service {
     display: flex;
     flex-direction: column;
     gap: 10px;
     width: 100%;
-    padding: var(--s3);
+    padding: var(--s3) var(--s3) var(--s3) 0;
     color: var(--ink);
     text-decoration: none;
-    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    transition: background-color .2s ease;
   }
-  .service:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .service-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-  .service-num { font-size: 15px; font-weight: 700; color: var(--gold-ink); }
-  .service-top svg { width: 22px; height: 22px; color: var(--accent); }
-  .service-title { font-size: 20px; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; }
+  @media (min-width: 640px) { .services li:nth-child(even) .service { padding-left: var(--s3); } }
+  @media (min-width: 1100px) { .services li:not(:first-child) .service { padding-left: var(--s3); } }
+  .service:hover .service-title { color: var(--accent); }
+  .service:hover .service-more { text-decoration: underline; }
+  .service-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .service-num { font-family: var(--font-mono); font-size: 13px; color: var(--gold-ink); }
+  .service-title { font-family: var(--font-display); font-size: 23px; line-height: 1.2; letter-spacing: -0.01em; transition: color .2s ease; }
   .service-lead { color: var(--ink-2); font-size: 15px; line-height: 1.45; }
   .service-more { margin-top: auto; padding-top: var(--s1); color: var(--accent); font-size: 15px; font-weight: 600; }
   .service-more::after { content: ' →'; }
-
-  .hero-btns { margin-top: var(--s4); }
 
   .facts {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--s3);
     margin-top: var(--s5);
-    padding-top: var(--s4);
-    border-top: 1px solid var(--line);
   }
   @media (min-width: 720px) { .facts { grid-template-columns: repeat(4, 1fr); } }
-  .facts dt { font-size: clamp(26px, 2.6vw, 34px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--accent); }
-  .facts dd { margin-top: 4px; max-width: 17em; color: var(--ink-2); font-size: 15px; line-height: 1.4; }
+  .facts dt { font-family: var(--font-display); font-size: clamp(30px, 3vw, 42px); line-height: 1.05; letter-spacing: -0.02em; color: var(--accent); }
+  .facts dd { margin-top: 6px; max-width: 17em; color: var(--ink-2); font-size: 15px; line-height: 1.4; }
 
   /* Направления */
   .practice {
@@ -434,22 +445,25 @@ const widgetFor = {
   @media (min-width: 1024px) {
     .practice { grid-template-columns: 1fr 1fr; column-gap: 112px; align-items: start; padding: var(--s7) 0; }
   }
-  .practice-head { border-left: 2px solid var(--gold); padding-left: var(--s3); margin-left: -1px; }
+  .practice-head { padding-top: var(--s2); border-top: 1px solid var(--ink); }
   .practice-head .eyebrow { margin-bottom: var(--s1); }
   .practice-lead { margin: var(--s3) 0; color: var(--ink-2); }
   .practice .dots { margin-bottom: var(--s4); }
   .practices-note { margin-top: var(--s2); }
 
-  /* Цифры */
-  .stats { display: grid; gap: var(--s4) 0; }
-  @media (min-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .stats { grid-template-columns: repeat(4, 1fr); } }
-  .stat { padding: 0 var(--s3) 0 0; }
-  @media (min-width: 720px) { .stat:not(:first-child) { padding-left: var(--s3); } }
-  @media (min-width: 720px) and (max-width: 1023px) { .stat:nth-child(3) { padding-left: 0; } }
-  .stat-value { font-size: clamp(40px, 4.4vw, 60px); font-weight: 700; letter-spacing: -0.03em; color: var(--gold-on-deep); line-height: 1; }
-  .stat-unit { display: block; margin-top: var(--s1); font-size: 18px; font-weight: 600; color: var(--on-deep); }
-  .stat dd { margin-top: 6px; color: var(--on-deep-2); font-size: 15px; max-width: 18em; }
+  /* Сигнальная полоса */
+  .signal { display: grid; gap: var(--s5); align-items: end; }
+  @media (min-width: 1024px) { .signal { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); column-gap: var(--s7); } }
+  .signal .eyebrow { color: var(--ink); }
+  .signal-value { max-width: none; font-family: var(--font-display); font-size: clamp(64px, 10vw, 136px); line-height: .95; letter-spacing: -0.04em; }
+  .signal-unit { font-size: .32em; letter-spacing: 0; font-family: var(--font-mono); vertical-align: .9em; }
+  .signal-text { margin-top: var(--s2); font-size: 20px; max-width: 22em; }
+  .signal-rest { display: grid; gap: 0; border-top: 1px solid var(--ink); }
+  .signal-rest > div { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: var(--s2); padding: 14px 0; border-bottom: 1px solid rgba(20, 33, 29, .25); align-items: baseline; }
+  .signal-rest dt { font-weight: 700; font-size: 18px; }
+  .signal-rest dt .num { font-weight: 500; font-size: 22px; }
+  .signal-rest dd { font-size: 15px; }
+  @media (max-width: 520px) { .signal-rest > div { grid-template-columns: 1fr; gap: 2px; } }
 
   /* Четыре колонки */
   .cols4 { display: grid; gap: var(--s4) 0; list-style: none; padding: 0; }
@@ -534,10 +548,9 @@ const widgetFor = {
   @media (min-width: 1024px) { .bot { grid-template-columns: 1fr 1fr; column-gap: 112px; } }
   .bot-visual { display: grid; justify-items: center; }
   .bot-visual :global(.chat) { width: 100%; }
-  .bot-visual :global(figcaption) { color: var(--on-deep-2); }
-  .bot-lead { margin-top: var(--s3); color: var(--on-deep-2); }
+  .bot-lead { margin-top: var(--s3); color: var(--ink-2); }
   .bot-list { margin: var(--s3) 0; }
-  .tagline { margin-bottom: var(--s4); font-weight: 700; font-size: 20px; color: var(--gold-on-deep); }
+  .tagline { margin-bottom: var(--s4); font-family: var(--font-display); font-size: 24px; color: var(--accent); }
 
   /* FAQ */
   .faq-wrap { display: grid; gap: var(--s5); }
@@ -558,8 +571,12 @@ const widgetFor = {
   .faq details[open] summary::after { content: '−'; }
   .faq details p { margin-top: var(--s1); font-size: 16px; }
 
-  /* Финальный блок */
-  .final-inner { text-align: center; display: grid; justify-items: center; }
+  /* Финальный блок: ленты сходятся к кнопке */
+  .final { position: relative; overflow: hidden; }
+  .final-flow { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .final-flow path { fill: var(--gold-on-deep); opacity: .1; }
+  .final-flow path:nth-child(2n) { fill: #86d3b8; opacity: .08; }
+  .final-inner { position: relative; text-align: center; display: grid; justify-items: center; }
   .final-text { margin-top: var(--s3); color: var(--on-deep-2); }
   .final-list { list-style: none; padding: 0; margin: var(--s4) 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
   .final-list li {

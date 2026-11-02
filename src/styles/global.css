@@ -1,39 +1,41 @@
 /*
-  Дизайн-система Axiom, версия 5.
-  Подача по референсу: блоки «текст слева, живой интерфейс справа»,
-  тёмные полосы для цифр и контактов, плавные появления при прокрутке.
-  Палитра: тёмно-зелёный из логотипа и презентаций, тёплый белый, золото для акцентов.
-  Красный и зелёный статусы только в данных.
+  Дизайн-система Axiom, версия 8: «деловой журнал с живыми деньгами».
+  Бумажный фон, антиква в заголовках, моноширинные подписи и суммы с кодом валюты.
+  Одна яркая полоса с главной цифрой, один тёмный блок с системой учёта.
+  Фирменный мотив: ленты денежного потока (первый экран, схема учёта, финальный блок).
 */
 
 :root {
-  --bg: #faf9f6;
-  --bg-alt: #f3f2ed;
-  --surface: #ffffff;
-  --ink: #13201d;
-  --ink-2: #4b5754;
-  --ink-3: #7c8784;
-  --line: #e3e1da;
+  --bg: #f5f3ec;
+  --bg-alt: #ecebe2;
+  --surface: #fffdf8;
+  --ink: #14211d;
+  --ink-2: #4a5652;
+  --ink-3: #7b8682;
+  --line: #dcd9ce;
 
   --accent: #0b5345;
   --accent-2: #12705d;
   --accent-ink: #ffffff;
-  --accent-soft: #e5efeb;
-  --gold: #c4973f;
-  --gold-ink: #8a6a2b;
-  --gold-soft: #f6efe1;
+  --accent-soft: #e2ece6;
+  --gold: #b88a35;
+  --gold-ink: #85652a;
+  --gold-soft: #f2e9d6;
+  --signal: #f0d98c;
   --risk: #b3261e;
   --risk-soft: #fbebea;
   --growth: #1f7a4d;
   --growth-soft: #e3f2ea;
 
-  --deep: #0a2a24;
-  --deep-2: #113a32;
+  --deep: #0b241f;
+  --deep-2: #12342d;
   --on-deep: #eef4f1;
   --on-deep-2: #a9c0b9;
   --gold-on-deep: #d9b26a;
 
   --font: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Source Serif 4', 'PT Serif', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   --s1: 8px;
   --s2: 16px;
@@ -48,7 +50,7 @@
   --measure: 36em;
   --page: 1200px;
   --gutter: 16px;
-  --shadow: 0 1px 2px rgba(19, 32, 29, 0.04), 0 8px 24px rgba(19, 32, 29, 0.06);
+  --shadow: 0 1px 2px rgba(20, 33, 29, 0.04);
 }
 
 @media (min-width: 720px) {
@@ -95,8 +97,9 @@ h1, h2, h3, p, ul, ol, blockquote, figure, dl, dd { margin: 0; }
 
 h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
 
-h1 { font-size: clamp(34px, 5.4vw, 64px); line-height: 1.06; }
-h2 { font-size: clamp(28px, 3.4vw, 44px); line-height: 1.1; }
+h1, h2 { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.015em; font-optical-sizing: auto; }
+h1 { font-size: clamp(36px, 5.6vw, 68px); line-height: 1.04; }
+h2 { font-size: clamp(30px, 3.6vw, 48px); line-height: 1.08; }
 h3 { font-size: 1.1em; line-height: 1.3; letter-spacing: -0.01em; }
 
 p { max-width: var(--measure); text-wrap: pretty; }
@@ -112,10 +115,36 @@ p { max-width: var(--measure); text-wrap: pretty; }
 .section { padding: var(--s7) 0; background-color: var(--bg); }
 .section--alt { background-color: var(--bg-alt); }
 .section--white { background-color: var(--surface); }
+/* Тёмный блок: токены переопределены, компоненты внутри перекрашиваются сами */
 .section--dark {
+  --bg: var(--deep);
+  --surface: #0f2e28;
+  --ink: #eef4f1;
+  --ink-2: #b4c8c1;
+  --ink-3: #87a199;
+  --line: rgba(238, 244, 241, 0.13);
+  --accent: #86d3b8;
+  --accent-ink: #0b241f;
+  --accent-soft: rgba(134, 211, 184, 0.12);
+  --gold-ink: #d9b26a;
   background-color: var(--deep);
   color: var(--on-deep);
 }
+/* Светлая «бумага» внутри тёмного блока (карточки, чаты) */
+.theme-paper {
+  --surface: #fffdf8;
+  --ink: #14211d;
+  --ink-2: #4a5652;
+  --ink-3: #7b8682;
+  --line: #dcd9ce;
+  --accent: #0b5345;
+  --accent-ink: #ffffff;
+  --accent-soft: #e2ece6;
+  --gold-ink: #85652a;
+  color: var(--ink);
+}
+/* Сигнальная полоса с главной цифрой */
+.section--signal { background-color: var(--signal); color: var(--ink); }
 .section--dark .muted, .section--dark .section-head p:not(.eyebrow) { color: var(--on-deep-2); }
 .section--dark .eyebrow { color: var(--gold-on-deep); }
 @media (max-width: 719px) { .section { padding: var(--s6) 0; } }
@@ -133,12 +162,17 @@ p { max-width: var(--measure); text-wrap: pretty; }
 
 .eyebrow {
   margin-bottom: var(--s2);
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--gold-ink);
 }
-@media (min-width: 1024px) { .eyebrow { font-size: 19px; } }
+@media (min-width: 1024px) { .eyebrow { font-size: 14px; } }
+
+/* Суммы, коды валют, подписи данных */
+.num, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }
 
 .muted { color: var(--ink-2); }
 .small { font-size: 0.85em; }
@@ -222,6 +256,7 @@ p { max-width: var(--measure); text-wrap: pretty; }
   border-radius: 10px;
   box-shadow: var(--shadow);
 }
+.section--dark .ui-card { box-shadow: none; }
 
 .visually-hidden {
   position: absolute !important;
