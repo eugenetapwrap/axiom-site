@@ -7,15 +7,22 @@
 // раз в несколько секунд пробегает блик. В узкой колонке и на телефоне вертикальная схема и легенда.
 // Данные демонстрационные (src/lib/sankey.ts). Геометрия своя, в пикселях колонки.
 import { SERIES, MONTHS } from '../lib/sankey';
-import { frame, PROJ_NAMES, COST_NAMES, PROJ_COLORS, COST_COLORS, fmt2 } from '../lib/threads';
+import { frame, PROJ_NAMES as PN0, COST_NAMES as CN0, PROJ_COLORS, COST_COLORS, fmt2 } from '../lib/threads';
 import MiniThreadsX from './MiniThreadsX.astro';
+import { tr, isEn } from '../lib/i18n';
+
+const en = isEn();
+const PROJ_NAMES = PN0.map(tr);
+const COST_NAMES = CN0.map(tr);
+const EN_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const BN = en ? 'IDR bn' : 'млрд IDR';
 
 const M = SERIES.length - 1;
 const fr = frame(SERIES[M]);
 const p = fr.left.map((t) => t.v);
 const c = fr.right.map((t) => t.v);
 const total = fr.total;
-const month = MONTHS[M].toLowerCase();
+const month = en ? EN_MONTHS[M] : MONTHS[M].toLowerCase();
 const f = (n: number) => n.toFixed(1);
 const maxP = Math.max(...p);
 const maxC = Math.max(...c);
@@ -75,7 +82,7 @@ const VY1 = 34 + VLMAX;
 const VPY = VY1 + VBEND;
 const VY2 = VPY + NW + VBEND;
 const VH = VY2 + VRMAX + 20;
-const SHORT = (name: string) => name.replace(/^Arvo /, '').replace('Прочие проекты', 'Прочие');
+const SHORT = (name: string) => name.replace(/^Arvo /, '').replace(tr('Прочие проекты'), tr('Прочие'));
 
 // Лента ширины w: прямой участок ya→yb на x0, изгиб yb→yc с x0 на x1, прямой участок yc→yd на x1.
 // Края ленты — кривые с одинаковыми вертикальными опорами, поэтому соседние ленты не перекрываются.
@@ -106,30 +113,32 @@ const vbottom = c.map((v, k) => {
 });
 ---
 
-<figure class="mini" aria-label={`Пример отчёта для собственника: ${month}, поступления ${fmt2(total)} млрд IDR от пяти проектов. На стройку ушло ${fmt2(build)}, на счетах осталось ${fmt2(rest)}`}>
+<figure class="mini" aria-label={en
+  ? `Owner report example: ${month}, receipts of ${fmt2(total)} IDR bn from five projects. ${fmt2(build)} went to construction, ${fmt2(rest)} left on accounts`
+  : `Пример отчёта для собственника: ${month}, поступления ${fmt2(total)} млрд IDR от пяти проектов. На стройку ушло ${fmt2(build)}, на счетах осталось ${fmt2(rest)}`}>
   <div class="mt-a">
-    <p class="mini-head">Отчёт собственнику за {month}, млрд IDR</p>
+    <p class="mini-head">{en ? `Owner report for ${month}, IDR bn` : `Отчёт собственнику за ${month}, млрд IDR`}</p>
     <dl class="mini-kpis">
-      <div><dt>Поступления</dt><dd>{fmt2(total)}</dd></div>
-      <div><dt>На стройку</dt><dd>{fmt2(build)}</dd></div>
-      <div><dt>Осталось на счетах</dt><dd>{fmt2(rest)}</dd></div>
+      <div><dt>{tr('Поступления')}</dt><dd>{fmt2(total)}</dd></div>
+      <div><dt>{en ? 'To construction' : 'На стройку'}</dt><dd>{fmt2(build)}</dd></div>
+      <div><dt>{tr('Осталось на счетах')}</dt><dd>{fmt2(rest)}</dd></div>
     </dl>
   </div>
 
   <!-- Широкая карточка: основная схема и расширенная (группы, раскладка по проектам при наведении) -->
   <div class="mt-w" data-mtw>
-  <div class="mt-sw" role="group" aria-label="Вид схемы">
-    <button type="button" aria-pressed="true" data-sw="0">Основная</button>
-    <button type="button" aria-pressed="false" data-sw="1">Расширенная</button>
+  <div class="mt-sw" role="group" aria-label={tr('Вид схемы')}>
+    <button type="button" aria-pressed="true" data-sw="0">{tr('Основная')}</button>
+    <button type="button" aria-pressed="false" data-sw="1">{tr('Расширенная')}</button>
   </div>
   <div class="mt-h" data-mt>
     <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-      <text class="mt-cap mt-t" x="0" y="12" style="--d:0ms">Поступления по проектам</text>
-      <text class="mt-cap mt-t" x={X2 + 60} y="12" style="--d:1000ms">Куда ушли деньги</text>
-      <text class="mt-t" x={PX + NW / 2} y="12" text-anchor="middle" style="--d:620ms"><tspan class="mt-cap">Поступления за {month}</tspan><tspan class="mt-big" dx="10">{fmt2(total)}</tspan><tspan class="mt-unit" dx="5">млрд IDR</tspan></text>
+      <text class="mt-cap mt-t" x="0" y="12" style="--d:0ms">{en ? 'Receipts by project' : 'Поступления по проектам'}</text>
+      <text class="mt-cap mt-t" x={X2 + 60} y="12" style="--d:1000ms">{en ? 'Where the money went' : 'Куда ушли деньги'}</text>
+      <text class="mt-t" x={PX + NW / 2} y="12" text-anchor="middle" style="--d:620ms"><tspan class="mt-cap">{en ? `${month} receipts` : `Поступления за ${month}`}</tspan><tspan class="mt-big" dx="10">{fmt2(total)}</tspan><tspan class="mt-unit" dx="5">{BN}</tspan></text>
       <line class="mt-lead mt-t" x1={PX + NW / 2} x2={PX + NW / 2} y1="28" y2={f(top0 - 12)} style="--d:700ms"></line>
-      {left.map((t, i) => <path class="mt-in" d={t.d} pathLength="1" stroke={PROJ_COLORS[i]} stroke-width={f(t.h)} style={`--d:${i * 40}ms`}><title>{PROJ_NAMES[i]}: {fmt2(t.v)} млрд IDR, {share(t.v)} поступлений</title></path>)}
-      {right.map((t, i) => <path class="mt-out" d={t.d} pathLength="1" stroke={COST_COLORS[i]} stroke-width={f(t.h)} style={`--d:${outDelay(i)}ms;--t:${outDur(t.len)}ms`}><title>{COST_NAMES[i]}: {fmt2(t.v)} млрд IDR, {share(t.v)}</title></path>)}
+      {left.map((t, i) => <path class="mt-in" d={t.d} pathLength="1" stroke={PROJ_COLORS[i]} stroke-width={f(t.h)} style={`--d:${i * 40}ms`}><title>{PROJ_NAMES[i]}: {fmt2(t.v)} {BN}, {share(t.v)} {en ? 'of receipts' : 'поступлений'}</title></path>)}
+      {right.map((t, i) => <path class="mt-out" d={t.d} pathLength="1" stroke={COST_COLORS[i]} stroke-width={f(t.h)} style={`--d:${outDelay(i)}ms;--t:${outDur(t.len)}ms`}><title>{COST_NAMES[i]}: {fmt2(t.v)} {BN}, {share(t.v)}</title></path>)}
       <g class="mt-glints">
         {left.map((t) => <path class="mt-glint mt-glint--l" d={t.d} pathLength="1" stroke-width={f(t.h)} style={`--g:${(G / t.len).toFixed(3)}`}></path>)}
         {right.map((t) => <path class="mt-glint mt-glint--r" d={t.d} pathLength="1" stroke-width={f(t.h)} style={`--g:${(G / t.len).toFixed(3)}`}></path>)}
@@ -144,8 +153,8 @@ const vbottom = c.map((v, k) => {
 
   <div class="mt-b">
     <svg viewBox={`0 0 ${VW} ${VH}`} aria-hidden="true">
-      {vtop.map((t, i) => <path class="mt" d={t.d} fill={PROJ_COLORS[i]}><title>{PROJ_NAMES[i]}: {fmt2(t.v)} млрд IDR</title></path>)}
-      {vbottom.map((t, i) => <path class="mt" d={t.d} fill={COST_COLORS[i]}><title>{COST_NAMES[i]}: {fmt2(t.v)} млрд IDR, {share(t.v)}</title></path>)}
+      {vtop.map((t, i) => <path class="mt" d={t.d} fill={PROJ_COLORS[i]}><title>{PROJ_NAMES[i]}: {fmt2(t.v)} {BN}</title></path>)}
+      {vbottom.map((t, i) => <path class="mt" d={t.d} fill={COST_COLORS[i]}><title>{COST_NAMES[i]}: {fmt2(t.v)} {BN}, {share(t.v)}</title></path>)}
       <rect class="mt-vbar" x={f(VCX - (total * VK) / 2 - 6)} y={VPY} width={f(total * VK + 12)} height={NW} rx="1.5"></rect>
       {vtop.map((t, i) => (
         <Fragment>

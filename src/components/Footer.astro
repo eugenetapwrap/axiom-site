@@ -1,53 +1,56 @@
 ---
 import { site } from '../data/site';
-import { ketut, practices } from '../data/home';
+import { content } from '../data/content';
 import { t } from '../lib/typo';
+import { tr, root } from '../lib/i18n';
 
+const { ketut, practices } = content();
+const r = root();
 const year = new Date().getFullYear();
 const company = [
-  { href: '/#method', label: 'Методика' },
-  { href: '/#cases', label: 'Кейсы' },
-  { href: '/#team', label: 'Команда' },
-  { href: '/#faq', label: 'Вопросы' },
+  { href: `${r}#method`, label: tr('Методика') },
+  { href: `${r}#cases`, label: tr('Кейсы') },
+  { href: `${r}#team`, label: tr('Команда') },
+  { href: `${r}#faq`, label: tr('Вопросы') },
 ];
 ---
 
 <footer class="footer">
   <div class="container footer-grid">
     <div class="footer-brand">
-      <a class="footer-logo" href="/" aria-label="Axiom, на главную">
+      <a class="footer-logo" href={r} aria-label={tr('Axiom, на главную')}>
         <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
           <rect width="32" height="32" rx="6" fill="var(--btn-bg)"></rect>
           <path d="M9 24 16 8l7 16M11.8 18h8.4" fill="none" stroke="var(--btn-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
         <span>Axiom</span>
       </a>
-      <p class="caption">{t('Финансовый консалтинг для девелопмента и строительства. Юго-Восточная Азия и СНГ.')}</p>
+      <p class="caption">{t(tr('Финансовый консалтинг для девелопмента и строительства. Юго-Восточная Азия и СНГ.'))}</p>
     </div>
 
-    <nav aria-label="Направления">
-      <p class="footer-h">Направления</p>
+    <nav aria-label={tr('Направления')}>
+      <p class="footer-h">{tr('Направления')}</p>
       <ul>
-        {practices.map((p) => <li><a href={`/#${p.id}`}>{t(p.title)}</a></li>)}
+        {practices.map((p) => <li><a href={`${r}#${p.id}`}>{t(p.title)}</a></li>)}
       </ul>
     </nav>
 
-    <nav aria-label="Компания">
-      <p class="footer-h">Компания</p>
+    <nav aria-label={tr('Компания')}>
+      <p class="footer-h">{tr('Компания')}</p>
       <ul>
         {company.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
       </ul>
     </nav>
 
     <div>
-      <p class="footer-h">Контакты</p>
+      <p class="footer-h">{tr('Контакты')}</p>
       <ul>
         <li><a href={site.telegramUrl}>Telegram @{site.telegram}</a></li>
         <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
         {site.channelUrl && <li><a href={site.channelUrl}>Канал «{site.channelName}»</a></li>}
-        <li><a href={site.portalUrl}>Личный кабинет клиента</a></li>
+        <li><a href={site.portalUrl}>{tr('Личный кабинет клиента')}</a></li>
       </ul>
-      <figure class="ketut" aria-label="Кетут">
+      <figure class="ketut" aria-label={tr('Кетут')}>
         <p>— {t(ketut.q)}</p>
         <p>— {t(ketut.a)}</p>
       </figure>

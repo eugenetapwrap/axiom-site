@@ -2,8 +2,14 @@
 // Плавающая кнопка Telegram справа внизу. Появляется после первого экрана.
 // Карточка с быстрыми темами открывается только по клику на кнопку, сама не всплывает.
 import { site } from '../data/site';
+import { tr, isEn } from '../lib/i18n';
 
-const topics = [
+const topics = isEn() ? [
+  { label: 'Financial model', text: 'Hello! We need a financial model for a project.' },
+  { label: 'Model audit', text: 'Hello! I would like to send a financial model for review.' },
+  { label: 'Accounting', text: 'Hello! We are interested in management accounting and payment control.' },
+  { label: 'Investment analysis', text: 'Hello! I have an investment analysis task.' },
+] : [
   { label: 'Финмодель', text: 'Здравствуйте! Нужна финансовая модель проекта.' },
   { label: 'Аудит модели', text: 'Здравствуйте! Хочу отправить финмодель на аудит.' },
   { label: 'Учёт', text: 'Здравствуйте! Интересует управленческий учёт и контроль платежей.' },
@@ -13,18 +19,18 @@ const topics = [
 
 <div class="fc" data-fc hidden>
   <div class="fc-card ui-card" data-fc-card hidden>
-    <button class="fc-close" type="button" aria-label="Закрыть" data-fc-close>×</button>
-    <p class="fc-q">Какая у вас задача?</p>
+    <button class="fc-close" type="button" aria-label={tr('Закрыть')} data-fc-close>×</button>
+    <p class="fc-q">{tr('Какая у вас задача?')}</p>
     <div class="fc-topics">
       {topics.map((tp) => (
         <a href={`${site.telegramUrl}?text=${encodeURIComponent(tp.text)}`}>{tp.label}</a>
       ))}
     </div>
-    <a class="fc-plain" href={site.telegramUrl}>Написать без темы</a>
+    <a class="fc-plain" href={site.telegramUrl}>{tr('Написать без темы')}</a>
   </div>
   <button class="fc-btn" type="button" aria-expanded="false" data-fc-btn>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.2 2.9 11.4c-1 .4-1 1.6 0 1.9l4.6 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6L22.9 5.6c.3-1-.5-1.8-1.4-1.4Z" fill="currentColor"/></svg>
-    Написать в Telegram
+    {tr('Написать в Telegram')}
   </button>
 </div>
 

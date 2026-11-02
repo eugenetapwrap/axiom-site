@@ -12,6 +12,7 @@
 //   по ставке капитализации 10%: 1,15 млн NOI 2036 / 10% = 11,5 млн, минус 3% ≈ 11,15 млн.
 //   Проверка: в 2029 та же ставка даёт 1,0 / 10% = 10 млн, это цена из сценария «Продажа».
 
+import { dec } from './i18n';
 import { smoothPath } from './smooth';
 
 export const YEARS = [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035];
@@ -97,13 +98,14 @@ export function moic(cf: number[]) {
   return ret / inv;
 }
 
-const num = (v: number, d: number) => v.toFixed(d).replace('.', ',').replace('-', '−');
+const num = (v: number, d: number) => dec(v, d);
 
 export function kpis(cf: number[]) {
   const n = npv(cf);
   return {
     irr: `${num(irr(cf) * 100, 1)}%`,
     npv: `${num(n, 1)} млн`,
+    npvV: n,
     moic: `${num(moic(cf), 2)}×`,
     npvNeg: n < 0,
   };

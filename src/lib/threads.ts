@@ -1,6 +1,7 @@
 // Геометрия фирменного мотива «Нити» в первом экране.
 // Поступления проектов сходятся в один счёт и расходятся по статьям; месяц за месяцем портфель растёт.
 // Одна функция строит кадр и при сборке (январь), и в браузере (смена месяцев).
+import { dec } from './i18n';
 import { NODES, LINKS, SERIES } from './sankey';
 
 export const TG = {
@@ -68,4 +69,4 @@ export function frame(values: number[]): Frame {
   return { left, right, total, top };
 }
 
-export const fmt2 = (v: number) => v.toFixed(2).replace('.', ',');
+export const fmt2 = (v: number) => dec(v, 2);

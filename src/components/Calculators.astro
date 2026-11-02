@@ -9,9 +9,36 @@ import {
 } from '../lib/calc';
 import { tgLink } from '../data/site';
 import { t } from '../lib/typo';
+import { tr, isEn, DEC } from '../lib/i18n';
 
+const en = isEn();
 type Field = { k: string; label: string; unit: string; hint?: string };
-const villaMain: Field[] = [
+// Английские подписи полей (ветка intl), порядок и ключи те же
+const EN_F: Record<string, Field> = {
+  'villa:price': { k: 'price', label: 'Villa price', unit: 'USD' },
+  'villa:adr': { k: 'adr', label: 'Nightly rate', unit: 'USD', hint: 'average over the year' },
+  'villa:occ': { k: 'occ', label: 'Occupancy', unit: '%' },
+  'villa:mgmt': { k: 'mgmt', label: 'Management fee', unit: '%', hint: 'of revenue after platform fees' },
+  'villa:fixed': { k: 'fixed', label: 'Fixed costs', unit: 'USD a year', hint: 'staff, utilities, insurance' },
+  'villa:years': { k: 'years', label: 'Holding period', unit: 'years', hint: 'sold at the end' },
+  'villa:lease': { k: 'lease', label: 'Leasehold term', unit: 'years', hint: '0 if the land is freehold' },
+  'villa:growth': { k: 'growth', label: 'Villa price growth', unit: '% a year', hint: 'for the sale price' },
+  'villa:build': { k: 'build', label: 'Years to completion', unit: 'years', hint: 'if bought off-plan: no rent in these years' },
+  'villa:ota': { k: 'ota', label: 'Platform fees', unit: '%', hint: 'Airbnb, Booking and others' },
+  'villa:opex': { k: 'opex', label: 'Variable costs', unit: '%', hint: 'supplies, laundry, minor repairs' },
+  'villa:tax': { k: 'tax', label: 'Taxes', unit: '%', hint: 'of revenue' },
+  'villa:adrGrowth': { k: 'adrGrowth', label: 'Nightly rate growth', unit: '% a year', hint: 'fixed costs grow at the same rate' },
+  'villa:saleCost': { k: 'saleCost', label: 'Selling costs', unit: '%', hint: 'agent and transfer' },
+  'villa:rate': { k: 'rate', label: 'Discount rate for NPV', unit: '%', hint: 'the return you are targeting' },
+  'inst:price': { k: 'price', label: 'Property price', unit: 'USD' },
+  'inst:down': { k: 'down', label: 'Down payment', unit: '%' },
+  'inst:months': { k: 'months', label: 'Instalment term', unit: 'months' },
+  'inst:disc': { k: 'disc', label: 'Discount for full payment', unit: '%', hint: 'offered or requested' },
+  'inst:dev': { k: 'dev', label: 'Developer’s rate', unit: '% a year', hint: 'cost of loan or investor money' },
+  'inst:buy': { k: 'buy', label: 'Buyer’s rate', unit: '% a year', hint: 'what the money earns now, e.g. on deposit' },
+};
+const loc = (calc: string, list: Field[]) => (en ? list.map((x) => EN_F[`${calc}:${x.k}`]) : list);
+const villaMain0: Field[] = [
   { k: 'price', label: 'Цена виллы', unit: 'USD' },
   { k: 'adr', label: 'Цена ночи', unit: 'USD', hint: 'средняя за год' },
   { k: 'occ', label: 'Загрузка', unit: '%' },
@@ -21,7 +48,7 @@ const villaMain: Field[] = [
   { k: 'lease', label: 'Срок лизхолда', unit: 'лет', hint: '0, если земля в собственности' },
   { k: 'growth', label: 'Рост цены виллы', unit: '% в год', hint: 'для цены продажи' },
 ];
-const villaMore: Field[] = [
+const villaMore0: Field[] = [
   { k: 'build', label: 'Лет до сдачи', unit: 'лет', hint: 'если покупаете на стройке: аренды в эти годы нет' },
   { k: 'ota', label: 'Комиссии площадок', unit: '%', hint: 'Airbnb, Booking и другие' },
   { k: 'opex', label: 'Переменные расходы', unit: '%', hint: 'расходники, прачечная, мелкий ремонт' },
@@ -30,7 +57,7 @@ const villaMore: Field[] = [
   { k: 'saleCost', label: 'Расходы на продажу', unit: '%', hint: 'агент и оформление' },
   { k: 'rate', label: 'Ставка для NPV', unit: '%', hint: 'доходность, на которую вы ориентируетесь' },
 ];
-const instFields: Field[] = [
+const instFields0: Field[] = [
   { k: 'price', label: 'Цена объекта', unit: 'USD' },
   { k: 'down', label: 'Первый взнос', unit: '%' },
   { k: 'months', label: 'Срок рассрочки', unit: 'мес.' },
@@ -41,12 +68,41 @@ const instFields: Field[] = [
 
 // Вкладки: вилла и рассрочка. «Дубли и ошибки», «Рост стоимости» и «Оценку виллы» Евгений убрал 02.11.2026:
 // факторы роста не на чем основать, NOI у вилл никто не знает
+const villaMain = loc('villa', villaMain0);
+const villaMore = loc('villa', villaMore0);
+const instFields = loc('inst', instFields0);
 const TABS = [
-  { id: 'villa', label: 'Доходность виллы' },
-  { id: 'inst', label: 'Рассрочка или скидка' },
+  { id: 'villa', label: en ? 'Villa yield' : 'Доходность виллы' },
+  { id: 'inst', label: en ? 'Instalments or discount' : 'Рассрочка или скидка' },
 ];
+// Короткие подписи блока на двух языках
+const L = en ? {
+  h: 'Calculate it yourself', instQ: 'What discount for full payment works for both developer and buyer',
+  pay: 'Monthly payment', range: 'Discount that works for both sides', none: 'none', cash: 'Full payment with discount', yours: 'yours',
+  kBoth: 'Full payment works for both sides', kInst: 'Instalments suit one side better',
+  instTg: 'Hello! I would like to discuss instalment and discount terms.', instCta: 'Discuss the terms',
+  instNote: 'Rates are annual and divided by 12 in the calculation: 12% a year = 1% a month. Payments at the end of each month. Construction and currency risks are not included.',
+  villaQ: 'What a villa earns over the holding period: rent and sale', more: 'More parameters',
+  npvAt: 'NPV at', net1: 'Net yield in the first rental year',
+  lBuy: 'Purchase', lNet: 'Net rental income', lSale: 'Sale', lCum: 'Cumulative total', chart: 'Investor cash flow by year',
+  villaTg: 'Hello! I calculated a villa yield on your site and would like to discuss it.', villaCta: 'Discuss the calculation',
+  villaNote: 'An indicative calculation without debt or currency effects; purchase and sale prices in USD. Our project models are built month by month on your data.',
+  foot: 'Calculated in your browser; the numbers are not sent anywhere',
+} : {
+  h: 'Посчитайте сами', instQ: 'Какая скидка за полную оплату выгодна и девелоперу, и покупателю',
+  pay: 'Платёж в месяц', range: 'Скидка, выгодная обеим сторонам', none: 'нет', cash: 'Полная оплата со скидкой', yours: 'ваша',
+  kBoth: 'Полная оплата выгодна обеим сторонам', kInst: 'Одной из сторон выгоднее рассрочка',
+  instTg: 'Здравствуйте! Хочу обсудить условия рассрочки и скидки.', instCta: 'Обсудить условия',
+  instNote: 'Ставки годовые, в расчёте делим их на 12: 12% годовых = 1% в месяц. Платежи в конце каждого месяца. Риски стройки и курса валют не учитываются.',
+  villaQ: 'Сколько вилла принесёт за срок владения: аренда и продажа', more: 'Ещё параметры',
+  npvAt: 'NPV при', net1: 'Чистая доходность в первый год аренды',
+  lBuy: 'Покупка', lNet: 'Чистый доход от аренды', lSale: 'Продажа', lCum: 'Накопленный итог', chart: 'Кэшфлоу инвестора по годам',
+  villaTg: 'Здравствуйте! Посчитал доходность виллы на сайте, хочу обсудить расчёт.', villaCta: 'Обсудить расчёт',
+  villaNote: 'Ориентировочный расчёт без кредита и курсовых разниц, цены покупки и продажи в USD. Модель проекта мы строим по месяцам и по вашим данным.',
+  foot: 'Считает ваш браузер, цифры никуда не отправляются',
+};
 
-const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace('.', ','));
+const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace('.', DEC()));
 
 const vo = villa(VILLA_DEFAULT);
 const vc = villaChart(vo);
@@ -60,8 +116,8 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
 <div class="calc" data-calc>
   <!-- Заголовок и вкладки в одну строку (Евгений 02.11.2026). Порядок вкладок — его список калькуляторов -->
   <div class="calc-head">
-    <h2>Посчитайте сами</h2>
-    <div class="calc-tabs" role="tablist" aria-label="Калькуляторы">
+    <h2>{L.h}</h2>
+    <div class="calc-tabs" role="tablist" aria-label={tr('Калькуляторы')}>
       {TABS.map((tb, i) => (
         <button type="button" role="tab" id={`ct-${tb.id}`} aria-controls={`cp-${tb.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-ct={tb.id}>{tb.label}</button>
       ))}
@@ -71,7 +127,7 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
   <!-- 1. Рассрочка или скидка -->
   <div class="calc-panel ui-card" id="cp-inst" role="tabpanel" aria-labelledby="ct-inst" data-cp="inst" hidden>
     <form class="calc-form" data-form="inst" onsubmit="return false">
-      <p class="calc-q">{t('Какая скидка за полную оплату выгодна и девелоперу, и покупателю')}</p>
+      <p class="calc-q">{t(L.instQ)}</p>
       <div class="cf-grid">
         {instFields.map((f) => (
           <label class="cf">
@@ -85,27 +141,27 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
 
     <div class="calc-out">
       <dl class="kpis kpis--3">
-        <div><dt>Платёж в месяц</dt><dd data-i="pay">{usd(io.pay)}</dd></div>
-        <div><dt>Скидка, выгодная обеим сторонам</dt><dd data-i="range">{io.corridor ? `${group(io.evenBuy * 100, 1)}–${pct(io.evenDev)}` : 'нет'}</dd></div>
-        <div><dt>Полная оплата со скидкой</dt><dd data-i="cash">{usd(io.cash)}</dd></div>
+        <div><dt>{L.pay}</dt><dd data-i="pay">{usd(io.pay)}</dd></div>
+        <div><dt>{L.range}</dt><dd data-i="range">{io.corridor ? `${group(io.evenBuy * 100, 1)}–${pct(io.evenDev)}` : L.none}</dd></div>
+        <div><dt>{L.cash}</dt><dd data-i="cash">{usd(io.cash)}</dd></div>
       </dl>
 
       <div class="disc-scale" aria-hidden="true">
         <div class="ds-track">
           <span class="ds-zone" data-i-zone style={`left:${at(io.evenBuy)};width:calc(${at(io.evenDev)} - ${at(io.evenBuy)})`}></span>
-          <i class="ds-mark" data-i-disc style={`left:${at(INST_DEFAULT.disc / 100)}`}><b>ваша {pct(INST_DEFAULT.disc / 100)}</b></i>
+          <i class="ds-mark" data-i-disc style={`left:${at(INST_DEFAULT.disc / 100)}`}><b>{L.yours} {pct(INST_DEFAULT.disc / 100)}</b></i>
           <span class="ds-tick ds-tick--buy" data-i-buy style={`left:${at(io.evenBuy)}`}>{pct(io.evenBuy)}</span>
           <span class="ds-tick ds-tick--dev" data-i-dev style={`left:${at(io.evenDev)}`}>{pct(io.evenDev)}</span>
         </div>
         <div class="ds-axis"><span>0%</span><span data-i-max>{group(iMax * 100)}%</span></div>
-        <div class="ds-keys"><span class="k-both">Полная оплата выгодна обеим сторонам</span><span class="k-inst">Одной из сторон выгоднее рассрочка</span></div>
+        <div class="ds-keys"><span class="k-both">{L.kBoth}</span><span class="k-inst">{L.kInst}</span></div>
       </div>
 
       <p class="calc-sum" data-i="sum"></p>
 
       <div class="calc-cta">
-        <a class="btn btn-primary" data-tg="inst" href={tgLink('Здравствуйте! Хочу обсудить условия рассрочки и скидки.')}>Обсудить условия</a>
-        <p class="caption">{t('Ставки годовые, в расчёте делим их на 12: 12% годовых = 1% в месяц. Платежи в конце каждого месяца. Риски стройки и курса валют не учитываются.')}</p>
+        <a class="btn btn-primary" data-tg="inst" href={tgLink(L.instTg)}>{L.instCta}</a>
+        <p class="caption">{t(L.instNote)}</p>
       </div>
     </div>
   </div>
@@ -113,7 +169,7 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
   <!-- 2. Вилла -->
   <div class="calc-panel ui-card" id="cp-villa" role="tabpanel" aria-labelledby="ct-villa" data-cp="villa">
     <form class="calc-form" data-form="villa" onsubmit="return false">
-      <p class="calc-q">{t('Сколько вилла принесёт за срок владения: аренда и продажа')}</p>
+      <p class="calc-q">{t(L.villaQ)}</p>
       <div class="cf-grid">
         {villaMain.map((f) => (
           <label class="cf">
@@ -124,7 +180,7 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
         ))}
       </div>
       <details class="cf-more">
-        <summary>Ещё параметры</summary>
+        <summary>{L.more}</summary>
         <div class="cf-grid">
           {villaMore.map((f) => (
             <label class="cf">
@@ -140,33 +196,35 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
     <div class="calc-out">
       <dl class="kpis kpis--4">
         <div><dt>IRR</dt><dd data-v="irr">{pct(vo.irr)}</dd></div>
-        <div><dt>NPV при <span data-v="rate">{VILLA_DEFAULT.rate}</span>%</dt><dd data-v="npv" class={vo.npv < 0 ? 'is-neg' : undefined}>{usd(vo.npv)}</dd></div>
+        <div><dt>{L.npvAt} <span data-v="rate">{VILLA_DEFAULT.rate}</span>%</dt><dd data-v="npv" class={vo.npv < 0 ? 'is-neg' : undefined}>{usd(vo.npv)}</dd></div>
         <div><dt>MOIC</dt><dd data-v="moic">{group(vo.moic, 2)}×</dd></div>
-        <div><dt>Чистая доходность в первый год аренды</dt><dd data-v="net1">{pct(vo.net1)}</dd></div>
+        <div><dt>{L.net1}</dt><dd data-v="net1">{pct(vo.net1)}</dd></div>
       </dl>
       <p class="calc-verdict" data-v="verdict"></p>
 
       <div class="vc-legend" aria-hidden="true">
-        <span class="l-buy">Покупка</span><span class="l-net">Чистый доход от аренды</span><span class="l-sale">Продажа</span><span class="l-cum">Накопленный итог</span>
+        <span class="l-buy">{L.lBuy}</span><span class="l-net">{L.lNet}</span><span class="l-sale">{L.lSale}</span><span class="l-cum">{L.lCum}</span>
       </div>
       <div class="vc-box" data-vc-box>
-        <svg class="vc" viewBox={`0 0 ${vc.W} ${vc.H}`} role="img" aria-label="Кэшфлоу инвестора по годам" data-vc set:html={vc.svg}></svg>
+        <svg class="vc" viewBox={`0 0 ${vc.W} ${vc.H}`} role="img" aria-label={L.chart} data-vc set:html={vc.svg}></svg>
         <div class="vc-tip" data-vc-tip hidden></div>
       </div>
 
       <p class="calc-sum" data-v="sum">
-        За {vo.years} лет аренда принесёт {usd(vo.rent)} чистыми, продажа {usd(vo.sale)}. Из каждых 100 долларов выручки владельцу остаётся {group(vo.netShare * 100)}.
+        {en
+          ? `Over ${vo.years} years, rent brings ${usd(vo.rent)} net and the sale ${usd(vo.sale)}. Of every $100 of revenue, the owner keeps $${group(vo.netShare * 100)}.`
+          : `За ${vo.years} лет аренда принесёт ${usd(vo.rent)} чистыми, продажа ${usd(vo.sale)}. Из каждых 100 долларов выручки владельцу остаётся ${group(vo.netShare * 100)}.`}
       </p>
       <p class="calc-warn" data-v="lease" hidden></p>
 
       <div class="calc-cta">
-        <a class="btn btn-primary" data-tg="villa" href={tgLink('Здравствуйте! Посчитал доходность виллы на сайте, хочу обсудить расчёт.')}>Обсудить расчёт</a>
-        <p class="caption">{t('Ориентировочный расчёт без кредита и курсовых разниц, цены покупки и продажи в USD. Модель проекта мы строим по месяцам и по вашим данным.')}</p>
+        <a class="btn btn-primary" data-tg="villa" href={tgLink(L.villaTg)}>{L.villaCta}</a>
+        <p class="caption">{t(L.villaNote)}</p>
       </div>
     </div>
   </div>
 
-  <p class="caption calc-foot">Считает ваш браузер, цифры никуда не отправляются</p>
+  <p class="caption calc-foot">{L.foot}</p>
 </div>
 
 <script>
@@ -176,6 +234,10 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
   } from '../lib/calc';
   import { tgLink } from '../data/site';
   import { track } from '../lib/track';
+  import { DEC } from '../lib/i18n';
+
+  // Язык страницы: тексты выводов и сообщений в Telegram на нём же
+  const en = document.documentElement.lang === 'en';
 
   // Допустимые пределы: если ввели лишнее, считаем по границе и не ломаем график
   const LIM: Record<string, [number, number]> = {
@@ -185,8 +247,8 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
     spend: [0, 1e13],
   };
   const clamp = (k: string, v: number) => Math.min(LIM[k][1], Math.max(LIM[k][0], v));
-  const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace('.', ','));
-  const yWord = (y: number) => (y % 10 === 1 && y % 100 !== 11 ? 'год' : [2, 3, 4].includes(y % 10) && ![12, 13, 14].includes(y % 100) ? 'года' : 'лет');
+  const show = (v: number) => (Math.abs(v) >= 1000 ? group(v) : String(v).replace('.', DEC()));
+  const yWord = (y: number) => (en ? (y === 1 ? 'year' : 'years') : y % 10 === 1 && y % 100 !== 11 ? 'год' : [2, 3, 4].includes(y % 10) && ![12, 13, 14].includes(y % 100) ? 'года' : 'лет');
 
   function read<T extends Record<string, number>>(form: HTMLFormElement, base: T): T {
     const out = { ...base };
@@ -306,23 +368,41 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
       // Цена ночи, при которой IRR равен ставке: ориентир для переговоров и проверки допущений
       const be = gap < 2 ? villaAdrFor(vIn) : null;
       const beTxt = be === null ? '' : usd(Math.ceil(be));
-      $v('verdict').textContent = gap >= 2
-        ? `IRR ${pct(vo.irr)} выше вашей ставки ${rateTxt} с запасом.`
-        : gap >= 0
-          ? `IRR ${pct(vo.irr)} выше вашей ставки ${rateTxt}, но запас небольшой${be !== null ? `: при цене ночи ниже ${beTxt} доходность опустится ниже ставки` : ''}.`
-          : `${okIrr ? `IRR ${pct(vo.irr)} ниже вашей ставки ${rateTxt}.` : 'Вложенные деньги не возвращаются.'}`
-            + (be !== null ? ` Чтобы выйти на ставку при той же загрузке, нужна цена ночи от ${beTxt}.` : '');
-      $v('sum').textContent = `За ${y} ${yWord(y)} аренда принесёт ${usd(vo.rent)} чистыми, продажа ${usd(vo.sale)}.`
-        + (vo.netShare > 0 ? ` Из каждых 100 долларов выручки владельцу остаётся ${group(vo.netShare * 100)}.` : '');
+      $v('verdict').textContent = en
+        ? (gap >= 2
+          ? `IRR ${pct(vo.irr)} is comfortably above your rate of ${rateTxt}.`
+          : gap >= 0
+            ? `IRR ${pct(vo.irr)} is above your rate of ${rateTxt}, but the margin is thin${be !== null ? `: below ${beTxt} a night the return falls under your rate` : ''}.`
+            : `${okIrr ? `IRR ${pct(vo.irr)} is below your rate of ${rateTxt}.` : 'The money invested is not returned.'}`
+              + (be !== null ? ` To reach your rate at the same occupancy, the nightly rate needs to be at least ${beTxt}.` : ''))
+        : gap >= 2
+          ? `IRR ${pct(vo.irr)} выше вашей ставки ${rateTxt} с запасом.`
+          : gap >= 0
+            ? `IRR ${pct(vo.irr)} выше вашей ставки ${rateTxt}, но запас небольшой${be !== null ? `: при цене ночи ниже ${beTxt} доходность опустится ниже ставки` : ''}.`
+            : `${okIrr ? `IRR ${pct(vo.irr)} ниже вашей ставки ${rateTxt}.` : 'Вложенные деньги не возвращаются.'}`
+              + (be !== null ? ` Чтобы выйти на ставку при той же загрузке, нужна цена ночи от ${beTxt}.` : '');
+      $v('sum').textContent = en
+        ? `Over ${y} ${yWord(y)}, rent brings ${usd(vo.rent)} net and the sale ${usd(vo.sale)}.`
+          + (vo.netShare > 0 ? ` Of every $100 of revenue, the owner keeps $${group(vo.netShare * 100)}.` : '')
+        : `За ${y} ${yWord(y)} аренда принесёт ${usd(vo.rent)} чистыми, продажа ${usd(vo.sale)}.`
+          + (vo.netShare > 0 ? ` Из каждых 100 долларов выручки владельцу остаётся ${group(vo.netShare * 100)}.` : '');
       const warn = $v('lease');
       warn.hidden = !(vIn.lease > 0);
-      warn.textContent = vo.leaseEnd
-        ? `Лизхолд ${group(vIn.lease)} ${yWord(vIn.lease)} заканчивается${vo.leaseCut ? ' раньше конца срока владения' : ' к концу срока владения'}: продавать нечего, считаем только аренду за ${y} ${yWord(y)}.`
-        : vIn.lease > 0
-          ? `Лизхолд: к продаже остаётся ${group(vIn.lease - y)} ${yWord(vIn.lease - y)} из ${group(vIn.lease)}, цена продажи снижена пропорционально.`
-          : '';
+      warn.textContent = en
+        ? (vo.leaseEnd
+          ? `The ${group(vIn.lease)}-year leasehold ends ${vo.leaseCut ? 'before the end of the holding period' : 'at the end of the holding period'}: there is nothing to sell, so only ${y} ${yWord(y)} of rent are counted.`
+          : vIn.lease > 0
+            ? `Leasehold: ${group(vIn.lease - y)} of ${group(vIn.lease)} years remain at sale, the sale price is reduced pro rata.`
+            : '')
+        : vo.leaseEnd
+          ? `Лизхолд ${group(vIn.lease)} ${yWord(vIn.lease)} заканчивается${vo.leaseCut ? ' раньше конца срока владения' : ' к концу срока владения'}: продавать нечего, считаем только аренду за ${y} ${yWord(y)}.`
+          : vIn.lease > 0
+            ? `Лизхолд: к продаже остаётся ${group(vIn.lease - y)} ${yWord(vIn.lease - y)} из ${group(vIn.lease)}, цена продажи снижена пропорционально.`
+            : '';
       const a = root.querySelector<HTMLAnchorElement>('[data-tg="villa"]')!;
-      a.href = tgLink(`Здравствуйте! Посчитал виллу на сайте: цена ${usd(vIn.price)}, ночь ${usd(vIn.adr)}, загрузка ${group(vIn.occ)}%, УК ${group(vIn.mgmt)}%, постоянные расходы ${usd(vIn.fixed)} в год, ${y} ${yWord(y)}${vIn.lease > 0 ? `, лизхолд ${group(vIn.lease)} ${yWord(vIn.lease)}` : ''}. IRR ${$v('irr').textContent}, NPV ${usd(vo.npv)}. Хочу обсудить расчёт.`);
+      a.href = tgLink(en
+        ? `Hello! I calculated a villa on your site: price ${usd(vIn.price)}, ${usd(vIn.adr)} a night, ${group(vIn.occ)}% occupancy, management fee ${group(vIn.mgmt)}%, fixed costs ${usd(vIn.fixed)} a year, ${y} ${yWord(y)}${vIn.lease > 0 ? `, ${group(vIn.lease)}-year leasehold` : ''}. IRR ${$v('irr').textContent}, NPV ${usd(vo.npv)}. I would like to discuss it.`
+        : `Здравствуйте! Посчитал виллу на сайте: цена ${usd(vIn.price)}, ночь ${usd(vIn.adr)}, загрузка ${group(vIn.occ)}%, УК ${group(vIn.mgmt)}%, постоянные расходы ${usd(vIn.fixed)} в год, ${y} ${yWord(y)}${vIn.lease > 0 ? `, лизхолд ${group(vIn.lease)} ${yWord(vIn.lease)}` : ''}. IRR ${$v('irr').textContent}, NPV ${usd(vo.npv)}. Хочу обсудить расчёт.`);
       drawVilla();
     }
 
@@ -357,7 +437,7 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
       const o = installment(v);
       const d = v.disc / 100;
       $i('pay').textContent = usd(o.pay);
-      $i('range').textContent = o.corridor ? `${group(o.evenBuy * 100, 1)}–${pct(o.evenDev)}` : 'нет';
+      $i('range').textContent = o.corridor ? `${group(o.evenBuy * 100, 1)}–${pct(o.evenDev)}` : (en ? 'none' : 'нет');
       $i('cash').textContent = usd(o.cash);
       // Шкала: коридор между скидками, равными рассрочке для покупателя и для девелопера
       const max = Math.max(0.1, Math.ceil((Math.max(o.evenDev, o.evenBuy, d) * 100 + 1) / 5) * 0.05);
@@ -368,7 +448,7 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
       zone.style.width = o.corridor ? `calc(${at(o.evenDev)} - ${at(o.evenBuy)})` : '0';
       const ds = root.querySelector<HTMLElement>('[data-i-disc]')!;
       ds.style.left = at(d);
-      ds.querySelector('b')!.textContent = `ваша ${pct(d)}`;
+      ds.querySelector('b')!.textContent = `${en ? 'yours' : 'ваша'} ${pct(d)}`;
       const tb = root.querySelector<HTMLElement>('[data-i-buy]')!;
       const td = root.querySelector<HTMLElement>('[data-i-dev]')!;
       tb.style.left = at(o.evenBuy);
@@ -378,15 +458,24 @@ const at = (v: number) => `${((Math.max(0, v) / iMax) * 100).toFixed(2)}%`;
       // Если ставка покупателя выше ставки девелопера, метки меняются местами
       tb.classList.toggle('is-right', !o.corridor);
       td.classList.toggle('is-left', !o.corridor);
-      $i('sum').textContent = !o.corridor
+      $i('sum').textContent = en
+        ? (!o.corridor
+          ? 'There is no corridor: the buyer’s money costs more than the developer’s. Any discount that suits the buyer does not suit the developer; both sides are better off with instalments.'
+          : d < o.evenBuy
+            ? `A ${pct(d)} discount is below ${pct(o.evenBuy)}: the buyer is better off with instalments, as the money already earns ${group(v.buy)}% a year. The buyer will choose full payment at a discount of ${pct(o.evenBuy)} or more.`
+            : d > o.evenDev
+              ? `A ${pct(d)} discount is above ${pct(o.evenDev)}: the developer gives away more than the money is worth to them. Instalments or a discount of up to ${pct(o.evenDev)} work better for the developer.`
+              : `A ${pct(d)} discount is within the corridor from ${pct(o.evenBuy)} to ${pct(o.evenDev)}: full payment works for both sides. In today’s money the developer gains ${usd(o.gainDev)}, the buyer ${usd(o.gainBuy)}.`)
+        : !o.corridor
         ? `Коридора нет: деньги покупателя стоят дороже, чем деньги девелопера. Любая скидка, выгодная покупателю, девелоперу невыгодна, обеим сторонам выгоднее рассрочка.`
         : d < o.evenBuy
           ? `Скидка ${pct(d)} меньше ${pct(o.evenBuy)}: покупателю выгоднее рассрочка, его деньги и так приносят ${group(v.buy)}% годовых. Полную оплату он выберет при скидке от ${pct(o.evenBuy)}.`
           : d > o.evenDev
             ? `Скидка ${pct(d)} больше ${pct(o.evenDev)}: девелопер отдаёт больше, чем для него стоят эти деньги. Ему выгоднее рассрочка или скидка до ${pct(o.evenDev)}.`
             : `Скидка ${pct(d)} в коридоре от ${pct(o.evenBuy)} до ${pct(o.evenDev)}: полная оплата выгодна обеим сторонам. В сегодняшних деньгах девелопер выигрывает ${usd(o.gainDev)}, покупатель ${usd(o.gainBuy)}.`;
-      root.querySelector<HTMLAnchorElement>('[data-tg="inst"]')!.href = tgLink(
-        `Здравствуйте! Считаю рассрочку: цена ${usd(v.price)}, взнос ${group(v.down)}%, ${o.months} мес., ставка девелопера ${group(v.dev)}%, покупателя ${group(v.buy)}%. Скидка ${pct(d)}, коридор ${o.corridor ? `${pct(o.evenBuy)}–${pct(o.evenDev)}` : 'нет'}. Хочу обсудить условия.`,
+      root.querySelector<HTMLAnchorElement>('[data-tg="inst"]')!.href = tgLink(en
+        ? `Hello! I am calculating an instalment plan: price ${usd(v.price)}, ${group(v.down)}% down, ${o.months} months, developer’s rate ${group(v.dev)}%, buyer’s ${group(v.buy)}%. Discount ${pct(d)}, corridor ${o.corridor ? `${pct(o.evenBuy)}–${pct(o.evenDev)}` : 'none'}. I would like to discuss the terms.`
+        : `Здравствуйте! Считаю рассрочку: цена ${usd(v.price)}, взнос ${group(v.down)}%, ${o.months} мес., ставка девелопера ${group(v.dev)}%, покупателя ${group(v.buy)}%. Скидка ${pct(d)}, коридор ${o.corridor ? `${pct(o.evenBuy)}–${pct(o.evenDev)}` : 'нет'}. Хочу обсудить условия.`,
       );
     }
     iForm.addEventListener('input', renderInst);

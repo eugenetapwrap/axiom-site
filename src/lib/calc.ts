@@ -3,14 +3,15 @@
 // Показатели не вписываются руками: IRR, NPV и MOIC выводятся из потоков.
 
 import { npv, irr } from './finmodel';
+import { DEC, THOU, isEn } from './i18n';
 
 // ---------- Форматирование ----------
 const NB = ' '; // узкий неразрывный пробел в разрядах
 export const group = (v: number, d = 0) => {
   const s = Math.abs(v).toFixed(d);
   const [a, b] = s.split('.');
-  const g = a.replace(/\B(?=(\d{3})+(?!\d))/g, NB);
-  return (v < 0 && Number(s) !== 0 ? '−' : '') + (b ? `${g},${b}` : g);
+  const g = a.replace(/\B(?=(\d{3})+(?!\d))/g, isEn() ? THOU() : NB);
+  return (v < 0 && Number(s) !== 0 ? '−' : '') + (b ? `${g}${DEC()}${b}` : g);
 };
 export const usd = (v: number) => `${v < 0 ? '−' : ''}$${group(Math.abs(v))}`;
 export const pct = (v: number, d = 1) => `${group(v * 100, d)}%`;
@@ -197,21 +198,21 @@ export function villaChart(o: VillaOut, W = VC.W, H = VC.H) {
   const lab = (x: number, yy: number, text: string, cls: string, anchor = 'middle') =>
     `<text class="vc-lab ${cls}" x="${f(x)}" y="${f(yy)}" text-anchor="${anchor}">${text}</text>`;
   const first = rows[0];
-  if (first.cf < 0) s += lab(cx(0) + bw / 2 + 6, (y0 + y(first.cf)) / 2 + 4, `покупка ${usdK(first.cf)}`, 'vc-lab--buy', 'start');
+  if (first.cf < 0) s += lab(cx(0) + bw / 2 + 6, (y0 + y(first.cf)) / 2 + 4, `${isEn() ? 'purchase' : 'покупка'} ${usdK(first.cf)}`, 'vc-lab--buy', 'start');
   const rentRows = rows.filter((r, i) => i > 0 && i < n - 1 && r.net > 0);
   if (rentRows.length >= 3) {
     const avg = rentRows.reduce((a, r) => a + r.net, 0) / rentRows.length;
     const i0 = rows.indexOf(rentRows[0]);
     const i1 = rows.indexOf(rentRows[rentRows.length - 1]);
     const topNet = Math.max(...rentRows.map((r) => r.net));
-    s += lab((cx(i0) + cx(i1)) / 2, y(topNet) - 8, `аренда ≈ ${usdK(avg)} в год`, 'vc-lab--mute');
+    s += lab((cx(i0) + cx(i1)) / 2, y(topNet) - 8, isEn() ? `rent ≈ ${usdK(avg)} a year` : `аренда ≈ ${usdK(avg)} в год`, 'vc-lab--mute');
   }
   const end = rows[n - 1];
   if (end.sale > 0) {
     const topEnd = Math.max(0, end.net) + end.sale;
-    s += lab(cx(n - 1) + bw / 2, y(topEnd) - 6, `продажа +${usdK(end.sale)}`, 'vc-lab--sale', 'end');
+    s += lab(cx(n - 1) + bw / 2, y(topEnd) - 6, `${isEn() ? 'sale' : 'продажа'} +${usdK(end.sale)}`, 'vc-lab--sale', 'end');
   }
-  s += lab(cx(n - 1) - bw / 2 - 6, y(end.cum) + 4, `итог ${end.cum > 0 ? '+' : ''}${usdK(end.cum)}`, end.cum < 0 ? 'vc-lab--neg' : 'vc-lab--end', 'end');
+  s += lab(cx(n - 1) - bw / 2 - 6, y(end.cum) + 4, `${isEn() ? 'total' : 'итог'} ${end.cum > 0 ? '+' : ''}${usdK(end.cum)}`, end.cum < 0 ? 'vc-lab--neg' : 'vc-lab--end', 'end');
   // Невидимые зоны наведения шире столбика
   rows.forEach((_, i) => {
     s += `<rect class="vc-hit" data-vc-i="${i}" x="${f(L + slot * i)}" y="${T}" width="${f(slot)}" height="${ph}"/>`;
@@ -221,13 +222,16 @@ export function villaChart(o: VillaOut, W = VC.W, H = VC.H) {
 
 // Подсказка по году для наведения
 export function villaTip(r: VillaRow) {
-  if (r.year === 0) return `<b>Покупка</b><span>Вложено</span><em>${usd(r.cf)}</em><span>Накопленный итог</span><em>${usd(r.cum)}</em>`;
-  if (r.rev === 0 && r.net === 0 && r.sale === 0) return `<b>Год ${r.year}</b><span>Стройка, аренды нет</span><em></em><span>Накопленный итог</span><em>${usd(r.cum)}</em>`;
-  return `<b>Год ${r.year}</b>`
-    + `<span>Выручка</span><em>${usd(r.rev)}</em>`
-    + `<span>Чистый доход</span><em>${usd(r.net)}</em>`
-    + (r.sale > 0 ? `<span>Продажа</span><em>${usd(r.sale)}</em>` : '')
-    + `<span>Накопленный итог</span><em>${usd(r.cum)}</em>`;
+  const w = isEn()
+    ? { buy: 'Purchase', inv: 'Invested', cum: 'Cumulative total', year: 'Year', build: 'Construction, no rent', rev: 'Revenue', net: 'Net income', sale: 'Sale' }
+    : { buy: 'Покупка', inv: 'Вложено', cum: 'Накопленный итог', year: 'Год', build: 'Стройка, аренды нет', rev: 'Выручка', net: 'Чистый доход', sale: 'Продажа' };
+  if (r.year === 0) return `<b>${w.buy}</b><span>${w.inv}</span><em>${usd(r.cf)}</em><span>${w.cum}</span><em>${usd(r.cum)}</em>`;
+  if (r.rev === 0 && r.net === 0 && r.sale === 0) return `<b>${w.year} ${r.year}</b><span>${w.build}</span><em></em><span>${w.cum}</span><em>${usd(r.cum)}</em>`;
+  return `<b>${w.year} ${r.year}</b>`
+    + `<span>${w.rev}</span><em>${usd(r.rev)}</em>`
+    + `<span>${w.net}</span><em>${usd(r.net)}</em>`
+    + (r.sale > 0 ? `<span>${w.sale}</span><em>${usd(r.sale)}</em>` : '')
+    + `<span>${w.cum}</span><em>${usd(r.cum)}</em>`;
 }
 
 // Таблица кэшфлоу по годам (для чтения без графика)
@@ -305,6 +309,8 @@ export const idr = (v: number) => {
 
 // Разбор числа из поля ввода: пробелы в разрядах, запятая как десятичный знак
 export const parseNum = (s: string) => {
-  const v = Number(s.replace(/[\s  $%]/g, '').replace(',', '.'));
+  const t = s.replace(/[\s  $%]/g, '');
+  // По-английски запятая разделяет тысячи, по-русски это десятичная запятая
+  const v = Number(isEn() ? t.replace(/,/g, '') : t.replace(',', '.'));
   return Number.isFinite(v) ? v : NaN;
 };

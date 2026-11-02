@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
+import { lang, isEn, tr } from '../lib/i18n';
 
 interface Props {
   title: string;
@@ -10,7 +11,11 @@ interface Props {
   jsonLd?: object[];
 }
 
-const { title, description = site.description, jsonLd = [] } = Astro.props;
+const en = isEn();
+const descEn = 'Financial consulting for real estate development and construction: financial models, model audit, management accounting and payment control. Southeast Asia and the CIS.';
+const { title, description = en ? descEn : site.description, jsonLd = [] } = Astro.props;
+// Обе языковые версии главной ссылаются друг на друга (ветка intl)
+const alt = { ru: new URL('/', Astro.site), en: new URL('/en/', Astro.site) };
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
 const org = {
@@ -19,7 +24,7 @@ const org = {
   name: site.name,
   legalName: site.legalName,
   url: Astro.site?.toString(),
-  description: site.description,
+  description: en ? descEn : site.description,
   email: site.email,
   areaServed: ['Indonesia', 'Thailand', 'United Arab Emirates', 'Uzbekistan', 'Southeast Asia', 'CIS'],
   address: { '@type': 'PostalAddress', addressRegion: 'Bali', addressCountry: 'ID' },
@@ -28,19 +33,22 @@ const org = {
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang={lang()}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="ru" href={alt.ru} />
+    <link rel="alternate" hreflang="en" href={alt.en} />
+    <link rel="alternate" hreflang="x-default" href={alt.en} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:locale" content={en ? 'en_US' : 'ru_RU'} />
     <meta name="theme-color" content="#f5f3ec" />
     <script is:inline>
       // Палитра для сравнения ставится до отрисовки, чтобы не мигали цвета (?palette=clay тоже работает)
@@ -61,7 +69,7 @@ const org = {
     {jsonLd.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
   </head>
   <body>
-    <a class="visually-hidden" href="#main">Перейти к содержанию</a>
+    <a class="visually-hidden" href="#main">{tr('Перейти к содержанию')}</a>
     <Header />
     <main id="main">
       <slot />

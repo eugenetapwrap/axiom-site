@@ -1,35 +1,45 @@
 ---
 import { site } from '../data/site';
 import PaletteBar from './PaletteBar.astro';
+import { tr, root, lang } from '../lib/i18n';
 
+const r = root();
 const nav = [
-  { href: '/#practices', label: 'Услуги' },
-  { href: '/#method', label: 'Методика' },
-  { href: '/#calc', label: 'Калькуляторы' },
-  { href: '/#cases', label: 'Кейсы' },
-  { href: '/#team', label: 'Команда' },
-  { href: '/#faq', label: 'Вопросы' },
+  { href: `${r}#practices`, label: tr('Услуги') },
+  { href: `${r}#method`, label: tr('Методика') },
+  { href: `${r}#calc`, label: tr('Калькуляторы') },
+  { href: `${r}#cases`, label: tr('Кейсы') },
+  { href: `${r}#team`, label: tr('Команда') },
+  { href: `${r}#faq`, label: tr('Вопросы') },
+];
+// Переключатель языка (ветка intl): ссылка на ту же главную на другом языке
+const langs = [
+  { code: 'ru', label: 'RU', href: '/' },
+  { code: 'en', label: 'EN', href: '/en/' },
 ];
 ---
 
 <header class="header">
   <PaletteBar />
   <div class="container header-inner">
-    <a class="logo" href="/" aria-label="Axiom, на главную">
+    <a class="logo" href={r} aria-label={tr('Axiom, на главную')}>
       <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
         <rect width="32" height="32" rx="6" fill="var(--btn-bg)"></rect>
         <path d="M9 24 16 8l7 16M11.8 18h8.4" fill="none" stroke="var(--btn-ink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
       </svg>
       <span>Axiom</span>
     </a>
-    <nav class="nav" aria-label="Основное меню">
+    <nav class="nav" aria-label={tr('Основное меню')}>
       {nav.map((item) => <a href={item.href}>{item.label}</a>)}
     </nav>
-    <a class="header-login" href={site.portalUrl} aria-label="Личный кабинет клиента" title="Личный кабинет клиента">
+    <nav class="lang" aria-label={tr('Язык сайта')}>
+      {langs.map((l) => <a href={l.href} hreflang={l.code} lang={l.code} aria-current={l.code === lang() ? 'true' : undefined}>{l.label}</a>)}
+    </nav>
+    <a class="header-login" href={site.portalUrl} aria-label={tr('Личный кабинет клиента')} title={tr('Личный кабинет клиента')}>
       <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.8 16.5c.9-2.9 3.3-4.5 6.2-4.5s5.3 1.6 6.2 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     </a>
     <!-- Ветка intl: кнопка ведёт к выбору канала (Telegram, почта, форма), Telegram остаётся в плавающей кнопке -->
-    <a class="btn btn-primary header-cta" href="/#contact" data-cta="header_discuss">Обсудить проект</a>
+    <a class="btn btn-primary header-cta" href={`${r}#contact`} data-cta="header_discuss">{tr('Обсудить проект')}</a>
   </div>
 </header>
 
@@ -66,7 +76,9 @@ const nav = [
   }
   .nav a { color: var(--ink-2); text-decoration: none; }
   .nav a:hover { color: var(--ink); }
-  .header-cta { min-height: 40px; padding: 8px 16px; font-size: 15px; }
+  .header-cta { min-height: 40px; padding: 8px 16px; font-size: 15px; white-space: nowrap; }
+  .logo, .logo svg, .header-login { flex: none; }
+  @media (max-width: 1279px) { .nav { gap: var(--s2); } }
   .header-login {
     display: inline-grid;
     place-items: center;
@@ -85,14 +97,25 @@ const nav = [
   .header-login:hover { border-color: var(--accent); color: var(--accent); }
   .header-login svg { width: 18px; height: 18px; color: var(--accent); }
   .nav { margin-right: var(--s1); }
+  /* Языки: две короткие ссылки, текущая темнее и подчёркнута */
+  .lang { display: flex; gap: 2px; font-size: 14px; font-weight: 600; }
+  .lang a { padding: 6px 6px; color: var(--ink-3); text-decoration: none; border-radius: 4px; }
+  .lang a:hover { color: var(--ink); }
+  .lang a[aria-current='true'] { color: var(--ink); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px; }
 
-  @media (max-width: 899px) {
+  /* Меню из шести пунктов и языки помещаются с 1100 px; уже — логотип, языки, вход и кнопка */
+  @media (max-width: 1099px) {
     .nav { display: none; }
-    .header-login { margin-left: auto; }
+    .lang { margin-left: auto; }
   }
   @media (max-width: 519px) {
     .header-inner { gap: var(--s1); }
     .logo { font-size: 18px; gap: 8px; }
     .header-cta { padding: 8px 12px; font-size: 14px; white-space: nowrap; }
+    .logo, .logo svg { flex: none; }
+  }
+  /* Узкий телефон: вход для клиентов остаётся в подвале, в шапке логотип, языки и кнопка */
+  @media (max-width: 419px) {
+    .header-login { display: none; }
   }
 </style>

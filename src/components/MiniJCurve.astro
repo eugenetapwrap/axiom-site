@@ -7,6 +7,7 @@
 // Бюджет 6,6 млн USD = сумма затрат сценария (1,6 + 2,8 + 2,2), разбивка по статьям демонстрационная:
 // стройка 3,6 млн ≈ 1 150 USD/м², земля 1,2 млн, мебель и оснащение 0,4 млн (как в finmodel.ts).
 import { SCENARIOS, YEARS, kpis } from '../lib/finmodel';
+import { tr, isEn, dec } from '../lib/i18n';
 
 const sc = SCENARIOS.find((s) => s.name === 'Смешанный')!;
 const cf = sc.cf;
@@ -14,7 +15,10 @@ const k = kpis(cf);
 const r2 = (v: number) => Math.round(v * 100) / 100;
 let c = 0;
 const cum = cf.map((v) => (c = r2(c + v)));
-const fmt = (v: number) => v.toFixed(1).replace('.', ',').replace('-', '−');
+const en = isEn();
+const fmt = (v: number) => dec(v, 1);
+// Суммы в млн USD: «1,6 млн USD» по-русски, «$1.6M» по-английски
+const mln = (v: number) => (en ? `${v < 0 ? '−' : ''}$${fmt(Math.abs(v))}M` : `${fmt(v)} млн USD`);
 const sign = (v: number) => (v > 0 ? `+${fmt(v)}` : fmt(v));
 const nb = (s: string) => s.replace(/ /g, ' ');
 
@@ -29,10 +33,10 @@ const rentAvg = rent.reduce((s, v) => s + v, 0) / rent.length;
 const metrics = [
   { t: 'IRR', v: k.irr },
   { t: 'MOIC', v: k.moic },
-  { t: 'NPV при 12%', v: nb(`${k.npv} USD`) },
-  { t: 'Чистая прибыль', v: nb(`${fmt(profit)} млн USD`) },
-  { t: 'Пик вложений', v: nb(`${fmt(peak)} млн USD`) },
-  { t: 'Окупаемость', v: nb(`${YEARS[payIdx]} год`) },
+  { t: en ? 'NPV at 12%' : 'NPV при 12%', v: nb(mln(k.npvV)) },
+  { t: en ? 'Net profit' : 'Чистая прибыль', v: nb(mln(profit)) },
+  { t: en ? 'Peak investment' : 'Пик вложений', v: nb(mln(peak)) },
+  { t: en ? 'Payback' : 'Окупаемость', v: nb(en ? `${YEARS[payIdx]}` : `${YEARS[payIdx]} год`) },
 ];
 
 // Геометрия в пикселях колонки: подписи остаются 11 px
@@ -56,7 +60,7 @@ const bars = cf.map((v, i) => ({
   y: v < 0 ? y0 : y(v),
   h: Math.abs(y(v) - y0),
   cls: v < 0 ? 'neg' : i === last ? 'exit' : 'pos',
-  title: `${YEARS[i]}: ${sign(v)} млн USD, накопленный итог ${fmt(cum[i])}`,
+  title: en ? `${YEARS[i]}: ${sign(v)} USD M, cumulative ${fmt(cum[i])}` : `${YEARS[i]}: ${sign(v)} млн USD, накопленный итог ${fmt(cum[i])}`,
 }));
 const rentMid = (x(3) + x(last - 1)) / 2;
 const rentTop = Math.min(...rent.map((v) => y(v)));
@@ -83,35 +87,37 @@ const levels = [...new Set(budget.map((b) => b.v))].sort((a, b) => b - a);
 const tone = (v: number) => TONES[Math.min(levels.indexOf(v), TONES.length - 1)];
 ---
 
-<figure class="mini" aria-label={`Пример дашборда по модели: IRR ${k.irr}, MOIC ${k.moic}, NPV при 12% ${k.npv} USD, чистая прибыль ${fmt(profit)} млн USD, пик вложений ${fmt(peak)} млн USD в ${YEARS[trough]}, окупаемость в ${YEARS[payIdx]}. Бюджет ${fmt(total)} млн USD, больше всего строительство`}>
+<figure class="mini" aria-label={en
+  ? `Model dashboard example: IRR ${k.irr}, MOIC ${k.moic}, NPV at 12% ${mln(k.npvV)}, net profit ${mln(profit)}, peak investment ${mln(peak)} in ${YEARS[trough]}, payback in ${YEARS[payIdx]}. Budget ${mln(total)}, construction is the largest item`
+  : `Пример дашборда по модели: IRR ${k.irr}, MOIC ${k.moic}, NPV при 12% ${k.npv} USD, чистая прибыль ${fmt(profit)} млн USD, пик вложений ${fmt(peak)} млн USD в ${YEARS[trough]}, окупаемость в ${YEARS[payIdx]}. Бюджет ${fmt(total)} млн USD, больше всего строительство`}>
   <div class="mj-a">
-    <p class="mini-head">Демо-проект: 48 апартаментов, 3 120 м²</p>
+    <p class="mini-head">{en ? 'Demo project: 48 apartments, 3,120 m²' : 'Демо-проект: 48 апартаментов, 3 120 м²'}</p>
     <dl class="mini-kpis">
       {metrics.map((m) => <div><dt>{m.t}</dt><dd>{m.v}</dd></div>)}
     </dl>
   </div>
   <div class="mj-b">
-    <p class="mini-sub">Накопленный Cash Flow, млн USD</p>
+    <p class="mini-sub">{en ? 'Cumulative cash flow, USD M' : 'Накопленный Cash Flow, млн USD'}</p>
     <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
       <line class="mj-zero" x1={L} x2={W - R} y1={f(y0)} y2={f(y0)}></line>
       {bars.map((b) => <rect class={`mj-${b.cls}`} x={f(b.x)} y={f(b.y)} width={f(bw)} height={f(Math.max(b.h, 0.5))} rx="1.5"><title>{b.title}</title></rect>)}
       <polyline class="mj-line" points={pts}></polyline>
       {cum.map((v, i) => <circle class={`mj-dot${i === last ? ' mj-dot--end' : ''}`} cx={f(x(i))} cy={f(y(v))} r={i === last ? 3.5 : 2.5}></circle>)}
       <!-- Ключевые точки: пик вложений, аренда, продажа, итог -->
-      <text class="mj-lab mj-lab--neg" x={f(x(trough))} y={f(y(cum[trough]) + 17)} text-anchor="middle">{fmt(cum[trough])} пик вложений</text>
-      <text class="mj-lab mj-lab--mute" x={f(rentMid)} y={f(rentTop - 8)} text-anchor="middle">аренда ≈ {fmt(rentAvg)} в год</text>
+      <text class="mj-lab mj-lab--neg" x={f(x(trough))} y={f(y(cum[trough]) + 17)} text-anchor="middle">{fmt(cum[trough])} {en ? 'peak investment' : 'пик вложений'}</text>
+      <text class="mj-lab mj-lab--mute" x={f(rentMid)} y={f(rentTop - 8)} text-anchor="middle">{en ? `rent ≈ ${fmt(rentAvg)} a year` : `аренда ≈ ${fmt(rentAvg)} в год`}</text>
       <text class="mj-lab" x={f(x(last))} y={f(y(cf[last]) - 7)} text-anchor="middle">{sign(cf[last])}</text>
-      <text class="mj-lab mj-lab--end" x={f(x(last) - bw / 2 - 6)} y={f(y(cum[last]) + 4)} text-anchor="end">итог {sign(cum[last])}</text>
+      <text class="mj-lab mj-lab--end" x={f(x(last) - bw / 2 - 6)} y={f(y(cum[last]) + 4)} text-anchor="end">{en ? 'total' : 'итог'} {sign(cum[last])}</text>
       <text class="mj-yr" x={f(x(0))} y={H - 4} text-anchor="middle">{YEARS[0]}</text>
       <text class="mj-yr" x={f(x(last))} y={H - 4} text-anchor="middle">{YEARS[last]}</text>
     </svg>
   </div>
   <div class="mj-c">
-    <p class="mini-sub">Структура бюджета, {fmt(total)} млн USD</p>
+    <p class="mini-sub">{en ? `Budget breakdown, ${mln(total)}` : `Структура бюджета, ${fmt(total)} млн USD`}</p>
     <ul class="mh">
       {budget.map((b) => (
-        <li title={`${b.name}: ${fmt(b.v)} млн USD`}>
-          <span class="mh-name">{b.name}</span>
+        <li title={`${tr(b.name)}: ${mln(b.v)}`}>
+          <span class="mh-name">{tr(b.name)}</span>
           <b>{pctOf(b.v)}</b>
           <span class="mh-track"><i style={`width:${((b.v / maxB) * 100).toFixed(1)}%;background:${tone(b.v)}`}></i></span>
         </li>

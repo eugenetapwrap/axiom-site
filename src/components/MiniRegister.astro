@@ -3,18 +3,22 @@
 // Пример результата аудита: фрагмент реестра замечаний и пересчёт IRR. Демо-данные,
 // не из проектов клиентов (отчёты аудита конфиденциальны). Влияние замечаний на IRR складываем приближённо:
 // 14,2% − 0,9 − 0,4 − 0,3 − 0,2 − 0 = 12,4%.
-const rows = [
+import { tr, isEn, dec } from '../lib/i18n';
+const en = isEn();
+const rows0 = [
   { lvl: 'Критичное', cls: 'hi', sheet: 'График', text: 'Стройка 18 месяцев, а по договору генподряда 24', impact: '−0,9%' },
   { lvl: 'Существенное', cls: 'mid', sheet: 'Продажи', text: 'Темп продаж выше, чем у соседних проектов', impact: '−0,4%' },
   { lvl: 'Существенное', cls: 'mid', sheet: 'Затраты', text: 'Нет резерва на непредвиденные расходы', impact: '−0,3%' },
   { lvl: 'Существенное', cls: 'mid', sheet: 'Финансирование', text: 'Проценты по кредиту начинаются с ввода, а не с первой выдачи', impact: '−0,2%' },
   { lvl: 'Незначительное', cls: 'lo', sheet: 'Ввод', text: 'Курс валюты введён числом, а не ссылкой', impact: '0' },
 ];
+// Подписи и тексты на языке страницы; влияние на IRR в формате языка: −0,9% / −0.9%
+const rows = rows0.map((r) => ({ ...r, lvl: tr(r.lvl), sheet: tr(r.sheet), text: tr(r.text), impact: r.impact === '0' ? '0' : r.impact.replace(',', en ? '.' : ',') }));
 ---
 
-<figure class="mini" aria-label="Пример реестра замечаний аудита: пять замечаний, IRR после пересчёта 12,4% вместо 14,2%. Демо-данные">
+<figure class="mini" aria-label={en ? 'Audit Issues Log example: five issues, IRR after recalculation 12.4% instead of 14.2%. Demo data' : 'Пример реестра замечаний аудита: пять замечаний, IRR после пересчёта 12,4% вместо 14,2%. Демо-данные'}>
   <div class="mr-a">
-  <p class="mini-head">Реестр замечаний, фрагмент</p>
+  <p class="mini-head">{tr('Реестр замечаний, фрагмент')}</p>
   <ul class="mr">
     {rows.map((r) => (
       <li>
@@ -26,9 +30,9 @@ const rows = [
   </ul>
   </div>
   <dl class="mini-kpis">
-    <div><dt>IRR в модели</dt><dd>14,2%</dd></div>
-    <div><dt>После пересчёта</dt><dd class="mr-down">12,4%</dd></div>
-    <div><dt>Замечаний</dt><dd>{rows.length}</dd></div>
+    <div><dt>{tr('IRR в модели')}</dt><dd>{dec(14.2, 1)}%</dd></div>
+    <div><dt>{tr('После пересчёта')}</dt><dd class="mr-down">{dec(12.4, 1)}%</dd></div>
+    <div><dt>{tr('Замечаний')}</dt><dd>{rows.length}</dd></div>
   </dl>
 </figure>
 
