@@ -9,11 +9,15 @@ interface Props {
   title: string;
   description?: string;
   jsonLd?: object[];
+  // Страницы без второго языка (учёт, ветка accounting) не ставят hreflang на главные
+  alternates?: boolean;
+  // Шапка: куда ведёт кнопка и переключатель языка. По умолчанию как на главной
+  header?: { cta?: string; ru?: string; en?: string };
 }
 
 const en = isEn();
 const descEn = 'Financial consulting for real estate development and construction: financial models, model audit, management accounting and payment control. Southeast Asia and the CIS.';
-const { title, description = en ? descEn : site.description, jsonLd = [] } = Astro.props;
+const { title, description = en ? descEn : site.description, jsonLd = [], alternates = true, header = {} } = Astro.props;
 // Обе языковые версии главной ссылаются друг на друга (ветка intl)
 const alt = { ru: new URL('/', Astro.site), en: new URL('/en/', Astro.site) };
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -40,9 +44,9 @@ const org = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="ru" href={alt.ru} />
-    <link rel="alternate" hreflang="en" href={alt.en} />
-    <link rel="alternate" hreflang="x-default" href={alt.en} />
+    {alternates && <link rel="alternate" hreflang="ru" href={alt.ru} />}
+    {alternates && <link rel="alternate" hreflang="en" href={alt.en} />}
+    {alternates && <link rel="alternate" hreflang="x-default" href={alt.en} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -70,7 +74,7 @@ const org = {
   </head>
   <body>
     <a class="visually-hidden" href="#main">{tr('Перейти к содержанию')}</a>
-    <Header />
+    <Header {...header} />
     <main id="main">
       <slot />
     </main>

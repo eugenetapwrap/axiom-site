@@ -1,0 +1,679 @@
+---
+// Страница услуги «Управленческий учёт» (ветка accounting, 03.11.2026). Собрана по промту, который утвердил Евгений:
+// https://claude.ai/artifact/4KfiXXP5VNSn1xHGCvypBj. Тексты и скрины в src/data/accounting.ts.
+// Пока только русская версия: английскую пишем после того, как Евгений утвердит русскую (промт, раздел 6).
+// Шапка, подвал, кнопки, кейсы, вопросы и контакты повторяют главную (HomePage.astro), главную этот файл не меняет.
+import Base from '../layouts/Base.astro';
+import AccShot from './AccShot.astro';
+import AccLightbox from './AccLightbox.astro';
+import FinalThreads from './FinalThreads.astro';
+import { site, tgLink } from '../data/site';
+import { content } from '../data/content';
+import { page, hero, problems, flow, reports, roles, cases, rollout, included, faq, contact } from '../data/accounting';
+import { t } from '../lib/typo';
+import { group } from '../lib/calc';
+
+const { finalCta, requestForm } = content();
+const SERVICE = requestForm.services[1]; // «Управленческий учёт»
+const tg = tgLink(contact.topic);
+
+// Дни этапов внедрения: 1–5, 6–13, 14–21, 22–25, 26–30
+let day = 0;
+const stages = rollout.stages.map((s) => {
+  const from = day + 1;
+  day += s.days;
+  return { ...s, range: `${from}–${day}` };
+});
+const dayWord = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? 'день' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'дня' : 'дней');
+
+const ld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Управленческий учёт и контроль платежей',
+    serviceType: 'Management accounting system',
+    description: page.description,
+    provider: { '@type': 'ProfessionalService', name: site.name, url: 'https://axiomco.io/' },
+    areaServed: ['Indonesia', 'Thailand', 'United Arab Emirates', 'Uzbekistan', 'Southeast Asia', 'CIS'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Axiom', item: 'https://axiomco.io/' },
+      { '@type': 'ListItem', position: 2, name: hero.eyebrow, item: 'https://axiomco.io/accounting/' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+
+<Base title={page.title} description={page.description} jsonLd={ld} alternates={false} header={{ cta: '#contact', ru: '/accounting/', en: '/en/' }}>
+  <!-- Первый экран: заголовок, строка, три цифры с главной и кнопка. Под ними обзор финансов из портала -->
+  <section class="hero">
+    <div class="container">
+      <nav class="crumbs" aria-label="Навигация">
+        <a href="/#practices">Услуги</a><span aria-hidden="true">/</span><span aria-current="page">{hero.eyebrow}</span>
+      </nav>
+      <div class="hero-top">
+        <div class="hero-text">
+          <h1>{t(hero.title)}</h1>
+          <p class="hero-lead">{t(hero.lead)}</p>
+        </div>
+        <div class="hero-side">
+          <dl class="hero-stats">
+            {hero.stats.map((s) => <div><dt>{s.value}</dt><dd>{t(s.text)}</dd></div>)}
+          </dl>
+          <div class="hero-btns">
+            <a class="btn btn-primary" href={tg} data-cta="acc_hero_discuss">{hero.cta}</a>
+            <a class="link-down" href="#flow" data-cta="acc_hero_flow">{hero.more}</a>
+          </div>
+        </div>
+      </div>
+      <AccShot shot={hero.shot} eager size="92vw" class="hero-shot" />
+    </div>
+  </section>
+
+  <!-- Что закрывает система: шесть задач со слайда 3, сетка 3 × 2, без скринов -->
+  <section class="section section--white" aria-labelledby="pb-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">{problems.eyebrow}</p>
+        <h2 id="pb-title">{t(problems.title)}</h2>
+      </div>
+      <ul class="pb" data-reveal style="--d: 100ms">
+        {problems.items.map((p) => <li><h3>{t(p.title)}</h3><p>{t(p.text)}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Путь платежа. Компьютер (от 1100 px): шаги слева, справа закреплённый скрин активного шага,
+       смена прозрачностью за 200 мс. Телефон и планшет: скрин под своим шагом -->
+  <section class="section section--alt" id="flow" aria-labelledby="flow-title">
+    <div class="container">
+      <div class="section-head section-head--row" data-reveal>
+        <div>
+          <p class="eyebrow">{flow.eyebrow}</p>
+          <h2 id="flow-title">{t(flow.title)}</h2>
+        </div>
+        <p class="caption">{t(flow.note)}</p>
+      </div>
+      <div class="flow">
+        <ol class="steps">
+          {flow.steps.map((s, i) => (
+            <li class={`step${i === 0 ? ' is-on' : ''}`} data-step={i}>
+              <span class="step-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{t(s.title)}</h3>
+              <p>{t(s.text)}</p>
+              <AccShot shot={s.shot} size="55vw" class="step-fig" />
+            </li>
+          ))}
+        </ol>
+        <div class="stage-col">
+          <div class="stage">
+            {flow.steps.map((s, i) => <AccShot shot={s.shot} size="55vw" class={`stage-fig${i === 0 ? ' is-on' : ''}`} />)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Отчёты: вкладки в стиле переключателя «Основная / Расширенная» на главной, скрин на всю ширину сетки.
+       На телефоне вкладки прокручиваются вбок -->
+  <section class="section" id="reports" aria-labelledby="rep-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">{reports.eyebrow}</p>
+        <h2 id="rep-title">{t(reports.title)}</h2>
+      </div>
+      <div class="rep" data-tabs>
+        <div class="rep-scroll">
+          <div class="rep-tabs" role="tablist" aria-label="Отчёты">
+            {reports.tabs.map((r, i) => (
+              <button type="button" role="tab" id={`rep-t-${r.id}`} aria-controls={`rep-p-${r.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-tab={i}>{r.label}</button>
+            ))}
+          </div>
+        </div>
+        {reports.tabs.map((r, i) => (
+          <div class="rep-panel" role="tabpanel" id={`rep-p-${r.id}`} aria-labelledby={`rep-t-${r.id}`} data-panel={i} hidden={i !== 0}>
+            <p class="rep-text">{t(r.text)}</p>
+            <AccShot shot={r.shot} size="92vw" legend={false} />
+          </div>
+        ))}
+      </div>
+      <div class="rep-cta">
+        <a class="btn btn-soft" href={tg} data-cta="acc_reports_discuss">{reports.cta}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Кто что видит: роль и что она получает, без скринов -->
+  <section class="section section--white" aria-labelledby="roles-title">
+    <div class="container roles-wrap">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">{roles.eyebrow}</p>
+        <h2 id="roles-title">{t(roles.title)}</h2>
+      </div>
+      <dl class="roles" data-reveal style="--d: 100ms">
+        {roles.items.map((r) => <div><dt>{t(r.role)}</dt><dd>{t(r.text)}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <!-- Два кейса в том же виде, что на главной -->
+  <section class="section section--alt" aria-labelledby="cases-title">
+    <div class="container">
+      <div class="section-head section-head--row" data-reveal>
+        <div>
+          <p class="eyebrow">{cases.eyebrow}</p>
+          <h2 id="cases-title">{t(cases.title)}</h2>
+        </div>
+        <p class="caption">{cases.note}</p>
+      </div>
+      <div class="cases">
+        {cases.items.map((c, i) => (
+          <article class="case ui-card" data-reveal style={`--d: ${i * 100}ms`}>
+            <div class="case-visual" aria-hidden="true">
+              <span class="case-tag">{c.tag}</span>
+              {i === 0 && (
+                <div class="cv-card">
+                  <p><span>{t('Заявка № 63')}</span><b>{group(1080000)} IDR</b></p>
+                  <p class="cv-dup"><span>{t('Заявка № 75')}</span><b>{group(1080000)} IDR</b><em>дубль</em></p>
+                </div>
+              )}
+              {i === 1 && (
+                <div class="cv-card cv-bars">
+                  <p><span>Норма</span><i style="--w:62%"></i></p>
+                  <p class="cv-over"><span>Факт</span><i style="--w:88%"></i></p>
+                </div>
+              )}
+            </div>
+            <div class="case-body">
+              <h3>{t(c.problem)}</h3>
+              <dl class="case-dl">
+                <dt>Решение</dt>
+                <dd>{t(c.action)}</dd>
+                <dt>Результат</dt>
+                <dd class="case-result">{t(c.result)}</dd>
+              </dl>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Внедрение за 30 дней: этапы на шкале, ширина этапа пропорциональна числу дней (5 + 8 + 8 + 4 + 5) -->
+  <section class="section" aria-labelledby="ro-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">{rollout.eyebrow}</p>
+        <h2 id="ro-title">{t(rollout.title)}</h2>
+      </div>
+      <ol class="ro" data-reveal style={`--d: 100ms; --cols: ${stages.map((s) => `${s.days}fr`).join(' ')}`}>
+        {stages.map((s, i) => (
+          <li style={`--c: var(--th-${i + 1})`}>
+            <span class="ro-days">{t(`Дни ${s.range}`)}<span class="ro-len">{t(`, ${s.days} ${dayWord(s.days)}`)}</span></span>
+            <i class="ro-bar" aria-hidden="true"></i>
+            <b class="ro-name">{t(s.name)}</b>
+            <span class="ro-text">{t(s.text)}</span>
+          </li>
+        ))}
+      </ol>
+      <p class="ro-after" data-reveal>{t(rollout.after)}</p>
+    </div>
+  </section>
+
+  <!-- Что входит: состав решения со слайда 20 и стек -->
+  <section class="section section--white" aria-labelledby="inc-title">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">{included.eyebrow}</p>
+        <h2 id="inc-title">{t(included.title)}</h2>
+      </div>
+      <div class="inc" data-reveal style="--d: 100ms">
+        <ul class="dots inc-list">
+          {included.items.map((x) => <li>{t(x)}</li>)}
+        </ul>
+        <div class="inc-stack">
+          <p class="inc-h">{included.stackTitle}</p>
+          <ul class="inc-chips">
+            {included.stack.map((x) => <li>{x}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Вопросы: как на главной, список слева, ответ справа. На телефоне ответ под вопросом -->
+  <section class="section" id="faq">
+    <div class="container faq-wrap" data-faq>
+      <div class="faq-side">
+        <h2>Вопросы о внедрении</h2>
+        <div class="faq-list" role="tablist" aria-orientation="vertical" aria-label="Вопросы о внедрении">
+          {faq.map((f, i) => (
+            <button type="button" role="tab" id={`faq-q-${i}`} aria-controls={`faq-a-${i}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-faq-q={i}>{t(f.q)}</button>
+          ))}
+        </div>
+        <p class="muted faq-more">Не нашли ответ? <a href={tg}>Напишите в Telegram</a></p>
+      </div>
+      <div class="faq-answers">
+        {faq.map((f, i) => (
+          <div class="faq-answer" role="tabpanel" id={`faq-a-${i}`} aria-labelledby={`faq-q-${i}`} data-faq-a={i} hidden={i !== 0}>
+            <p class="faq-answer-q">{t(f.q)}</p>
+            <p>{t(f.a)}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Контакты: тот же блок, что на главной. В форме заранее выбрана услуга «Управленческий учёт» -->
+  <section class="section section--dark final" id="contact">
+    <div class="final-top">
+      <FinalThreads />
+      <div class="container final-inner" data-reveal>
+        <p class="eyebrow">Контакты</p>
+        <h2>{contact.title}</h2>
+        <p class="final-text">{t(finalCta.text)}</p>
+        <div class="btn-row final-btns">
+          <a class="btn btn-light" href={tg} data-cta="acc_final_telegram">Написать в Telegram @{site.telegram}</a>
+          <a class="btn btn-ghost-light" href={`mailto:${site.email}`} data-cta="acc_final_email">{site.email}</a>
+          <button type="button" class="btn btn-ghost-light req-open" aria-expanded="false" aria-controls="req" data-req-open>{requestForm.open}</button>
+        </div>
+      </div>
+    </div>
+    <div class="container final-req">
+      <form class="req" id="req" hidden data-req data-email={site.email} data-greet={requestForm.greet} data-subject={requestForm.subject}>
+        <p class="req-title">{requestForm.title}</p>
+        <div class="req-grid">
+          <label><span>{requestForm.name}</span><input name="name" autocomplete="name" required /></label>
+          <label><span>{requestForm.company}</span><input name="company" autocomplete="organization" /></label>
+          <label><span>{requestForm.service}</span><select name="service"><option value="">{requestForm.choose}</option>{requestForm.services.map((o) => <option selected={o === SERVICE}>{o}</option>)}</select></label>
+          <label><span>{requestForm.country}</span><select name="country"><option value="">{requestForm.choose}</option>{requestForm.countries.map((o) => <option>{o}</option>)}</select></label>
+          <label><span>{requestForm.stage}</span><select name="stage"><option value="">{requestForm.choose}</option>{requestForm.stages.map((o) => <option>{o}</option>)}</select></label>
+          <label class="req-wide"><span>{requestForm.task}</span><textarea name="task" rows="3" placeholder={requestForm.taskHint}></textarea></label>
+        </div>
+        <fieldset class="req-ch">
+          <legend>{requestForm.channel}</legend>
+          <label><input type="radio" name="channel" value="telegram" checked /> Telegram</label>
+          <label><input type="radio" name="channel" value="email" /> {site.email}</label>
+        </fieldset>
+        <div class="req-foot">
+          <button class="btn btn-light" type="submit">{requestForm.submit}</button>
+          <p>{t(requestForm.note)}</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <AccLightbox />
+</Base>
+
+<script>
+  import { track } from '../lib/track';
+  import { tgLink } from '../data/site';
+
+  // Высота шапки (с панелью палитр) для закреплённого скрина
+  const hdr = document.querySelector<HTMLElement>('.header');
+  const setHdr = () => { if (hdr) document.documentElement.style.setProperty('--hdr', `${hdr.offsetHeight}px`); };
+  setHdr();
+  window.addEventListener('resize', setHdr);
+
+  // Путь платежа: активный шаг тот, что пересекает середину экрана. Его скрин справа виден, остальные прозрачны
+  const steps = [...document.querySelectorAll<HTMLElement>('[data-step]')];
+  const figs = [...document.querySelectorAll<HTMLElement>('.stage-fig')];
+  const seen = new Set<number>();
+  const setStep = (i: number) => {
+    steps.forEach((s, k) => s.classList.toggle('is-on', k === i));
+    figs.forEach((f, k) => f.classList.toggle('is-on', k === i));
+    if (!seen.has(i)) {
+      seen.add(i);
+      track('accounting_step_view', { step: i + 1 });
+    }
+  };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) setStep(Number((e.target as HTMLElement).dataset.step)); });
+    }, { rootMargin: '-50% 0px -50% 0px' });
+    steps.forEach((s) => io.observe(s));
+  }
+  // На компьютере нажатие на шаг прокручивает к нему, и справа появляется его скрин
+  const wide = window.matchMedia('(min-width: 1100px)');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  steps.forEach((s) => {
+    s.addEventListener('click', (e) => {
+      if (!wide.matches || (e.target as HTMLElement).closest('a, button')) return;
+      s.scrollIntoView({ block: 'center', behavior: reduce.matches ? 'auto' : 'smooth' });
+    });
+  });
+
+  // Вкладки отчётов: стрелки влево и вправо переключают вкладку
+  document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-tab]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-panel]')];
+    const show = (i: number, focus = false) => {
+      tabs.forEach((b, k) => {
+        b.setAttribute('aria-selected', String(k === i));
+        b.tabIndex = k === i ? 0 : -1;
+      });
+      panels.forEach((p, k) => { p.hidden = k !== i; });
+      tabs[i].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      if (focus) tabs[i].focus();
+    };
+    tabs.forEach((b, i) => {
+      b.addEventListener('click', () => show(i));
+      b.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        show((i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length, true);
+      });
+    });
+  });
+
+  // Вопросы: как на главной
+  document.querySelectorAll<HTMLElement>('[data-faq]').forEach((root) => {
+    const qs = [...root.querySelectorAll<HTMLButtonElement>('[data-faq-q]')];
+    const as = [...root.querySelectorAll<HTMLElement>('[data-faq-a]')];
+    const box = root.querySelector<HTMLElement>('.faq-answers')!;
+    const narrow = window.matchMedia('(max-width: 899px)');
+    let cur = 0;
+    const place = () => {
+      if (narrow.matches) qs[cur].after(as[cur]);
+      else as.forEach((a) => box.append(a));
+    };
+    const show = (i: number) => {
+      cur = i;
+      qs.forEach((q, k) => {
+        q.setAttribute('aria-selected', String(k === i));
+        q.tabIndex = k === i ? 0 : -1;
+      });
+      as.forEach((a, k) => { a.hidden = k !== i; });
+      place();
+    };
+    qs.forEach((q, i) => {
+      q.addEventListener('click', () => show(i));
+      q.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+        e.preventDefault();
+        const n = (i + (e.key === 'ArrowDown' ? 1 : qs.length - 1)) % qs.length;
+        qs[n].focus();
+        show(n);
+      });
+    });
+    narrow.addEventListener('change', place);
+    place();
+  });
+
+  // Форма запроса: как на главной, собирает сообщение и открывает Telegram или почту
+  const req = document.querySelector<HTMLFormElement>('[data-req]');
+  const reqBtn = document.querySelector<HTMLButtonElement>('[data-req-open]');
+  reqBtn?.addEventListener('click', () => {
+    if (!req) return;
+    req.hidden = !req.hidden;
+    reqBtn.setAttribute('aria-expanded', String(!req.hidden));
+    if (!req.hidden) {
+      track('request_open', { service: (req.elements.namedItem('service') as HTMLSelectElement).value });
+      req.querySelector<HTMLInputElement>('input')?.focus({ preventScroll: true });
+    }
+  });
+  req?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const lines = [req.dataset.greet!, ''];
+    req.querySelectorAll<HTMLElement>('.req-grid label').forEach((l) => {
+      const f = l.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea')!;
+      const v = f.value.trim();
+      if (v) lines.push(`${l.querySelector('span')!.textContent}: ${v}`);
+    });
+    const text = lines.join('\n');
+    const ch = (req.elements.namedItem('channel') as RadioNodeList).value;
+    track('lead', { channel: ch, service: (req.elements.namedItem('service') as HTMLSelectElement).value });
+    if (ch === 'email') location.href = `mailto:${req.dataset.email}?subject=${encodeURIComponent(req.dataset.subject!)}&body=${encodeURIComponent(text)}`;
+    else window.open(tgLink(text), '_blank', 'noopener');
+  });
+
+  // События кнопок для аналитики
+  document.querySelectorAll<HTMLElement>('[data-cta]').forEach((a) => {
+    a.addEventListener('click', () => track('cta_click', { id: a.dataset.cta! }));
+  });
+</script>
+
+<style>
+  /* Первый экран: как на главной, заголовок слева, цифры и кнопка справа. Скрин во всю ширину сетки ниже */
+  .hero { padding: var(--s4) 0 var(--s6); background-color: var(--bg); }
+  .crumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: var(--s3); font-size: 15px; color: var(--ink-3); }
+  .crumbs a { color: var(--accent); text-decoration: none; }
+  .crumbs a:hover { text-decoration: underline; }
+  .hero-top { --hfs: clamp(32px, 3.6vw, 56px); display: grid; gap: var(--s4); }
+  .hero h1 { font-size: var(--hfs); line-height: 1.06; max-width: 13em; }
+  .hero-lead { margin-top: var(--s3); font-size: clamp(18px, 1.5vw, 21px); line-height: 1.45; color: var(--ink-2); }
+  .hero-side { display: grid; gap: var(--s4); align-content: start; }
+  @media (min-width: 1200px) {
+    .hero-top { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); column-gap: var(--s6); }
+    .hero-side { align-content: space-between; padding-top: calc(var(--hfs) * 0.166); }
+  }
+  .hero-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); margin: 0; }
+  .hero-stats div { padding-top: 14px; border-top: 3px solid var(--th-1); }
+  .hero-stats div:nth-child(2) { border-top-color: var(--th-2); }
+  .hero-stats div:nth-child(3) { border-top-color: var(--th-3); }
+  .hero-stats dt { font-family: var(--font-display); font-size: clamp(26px, 2.5vw, 40px); font-weight: 600; line-height: 1.05; letter-spacing: -0.03em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .hero-stats dd { margin: 8px 0 0; font-size: 14px; line-height: 1.35; color: var(--ink-2); }
+  @media (max-width: 520px) {
+    .hero-stats { grid-template-columns: 1fr; gap: 0; }
+    .hero-stats div { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: var(--s2); align-items: baseline; padding: 10px 0; border-top-width: 2px; }
+    .hero-stats dd { margin: 0; }
+  }
+  .hero-btns { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s4); }
+  .link-down { font-weight: 600; text-decoration: none; }
+  .link-down::after { content: ' ↓'; }
+  .link-down:hover { text-decoration: underline; }
+  .hero :global(.hero-shot) { margin-top: var(--s5); }
+  @media (max-width: 719px) { .hero :global(.hero-shot) { margin-top: var(--s4); } }
+
+  /* Задачи: сетка 3 × 2 через тонкие линии, как методика на главной */
+  .pb { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
+  .pb li { padding: var(--s3) 0; border-bottom: 1px solid var(--line); }
+  .pb h3 { font-size: 20px; line-height: 1.3; }
+  .pb p { margin-top: 8px; font-size: 16px; line-height: 1.45; color: var(--ink-2); }
+  @media (min-width: 760px) {
+    .pb { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--s5); }
+  }
+  @media (min-width: 1100px) {
+    .pb { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 0; }
+    .pb li { padding: var(--s4) var(--s4) var(--s4) 0; }
+    .pb li:not(:nth-child(3n + 1)) { padding-left: var(--s4); border-left: 1px solid var(--line); }
+  }
+
+  /* Путь платежа */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s5); }
+  .step-num { display: block; margin-bottom: 10px; font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .step h3 { font-family: var(--font-display); font-size: clamp(22px, 2vw, 28px); font-weight: 600; line-height: 1.2; letter-spacing: -0.02em; }
+  .step p { margin-top: 10px; font-size: 17px; line-height: 1.5; color: var(--ink-2); max-width: 30em; }
+  .step :global(.step-fig) { margin-top: var(--s3); }
+  .stage-col { display: none; }
+
+  @media (min-width: 1100px) {
+    .flow { display: grid; grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr); column-gap: var(--s6); }
+    .steps { gap: 0; }
+    /* Шаги без зазоров: середину экрана всегда пересекает какой-то шаг */
+    .step { min-height: 52vh; padding: var(--s3) 0 var(--s3) var(--s3); border-left: 2px solid var(--line); cursor: pointer; transition: border-color .2s ease; }
+    .step:last-child { min-height: 0; padding-bottom: 42vh; }
+    .step-num { color: var(--ink-3); transition: color .2s ease; }
+    .step h3 { color: var(--ink-2); transition: color .2s ease; }
+    .step p { color: var(--ink-3); transition: color .2s ease; }
+    .step.is-on { border-left-color: var(--accent); }
+    .step.is-on .step-num { color: var(--accent); }
+    .step.is-on h3 { color: var(--ink); }
+    .step.is-on p { color: var(--ink-2); }
+    .step :global(.step-fig) { display: none; }
+    .stage-col { display: block; }
+    .stage { position: sticky; top: calc(var(--hdr, 108px) + var(--s3)); display: grid; height: calc(100vh - var(--hdr, 108px) - var(--s5)); }
+    /* Скрин вписан в высоту окна: под ним место для трёх подписей */
+    .stage :global(.stage-fig) { grid-area: 1 / 1; container-type: size; height: 100%; opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility .2s ease; }
+    .stage :global(.stage-fig.is-on) { opacity: 1; visibility: visible; }
+    .stage :global(.stage-fig .shot-frame) { width: min(100cqw, calc((100cqh - 31px - 116px) * var(--ar))); }
+  }
+
+  /* Отчёты: вкладки-переключатель, как «Основная / Расширенная» на главной */
+  .rep-scroll { overflow-x: auto; scrollbar-width: none; margin: 0 calc(-1 * var(--gutter)) var(--s3); padding: 2px var(--gutter); }
+  .rep-scroll::-webkit-scrollbar { display: none; }
+  .rep-tabs { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+  .rep-tabs button { flex: none; padding: 8px 16px; border: 0; border-radius: 999px; background: none; font: 500 15px/1.2 var(--font); color: var(--ink-2); white-space: nowrap; cursor: pointer; }
+  .rep-tabs button:hover { color: var(--ink); }
+  .rep-tabs button[aria-selected='true'] { background: var(--ink); color: var(--surface); }
+  .rep-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .rep-panel[hidden] { display: none; }
+  .rep-text { margin-bottom: var(--s2); font-size: 17px; line-height: 1.5; color: var(--ink-2); max-width: 44em; }
+  /* Высота скрина не больше окна: P&L высокий, его ширина уменьшается */
+  .rep-panel :global(.shot-frame) { width: min(100%, calc((min(76vh, 760px) - 31px) * var(--ar))); }
+  @media (max-width: 699px) { .rep-panel :global(.shot-frame) { width: 100%; } }
+  .rep-cta { margin-top: var(--s4); }
+
+  /* Роли: строка «роль — что видит» */
+  .roles { display: grid; margin: 0; border-top: 1px solid var(--line); }
+  .roles > div { display: grid; gap: 4px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .roles dt { font-weight: 600; font-size: 18px; line-height: 1.35; }
+  .roles dd { font-size: 17px; line-height: 1.5; color: var(--ink-2); }
+  @media (min-width: 900px) {
+    .roles > div { grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr); column-gap: var(--s5); padding: 20px 0; }
+  }
+
+  /* Кейсы: те же карточки, что на главной (HomePage.astro) */
+  .cases { display: grid; gap: var(--s3); }
+  @media (min-width: 760px) { .cases { grid-template-columns: repeat(2, 1fr); } }
+  .case { display: flex; flex-direction: column; padding: 8px; }
+  .case-visual {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 180px;
+    padding: 48px var(--s3) var(--s3);
+    border-radius: 6px;
+    background: var(--deep);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+  .case-tag { position: absolute; top: 14px; left: 16px; color: var(--gold-on-deep); font-size: 13px; font-weight: 600; }
+  .cv-card { width: 100%; max-width: 280px; padding: 12px 14px; border-radius: 8px; background: var(--surface); font-size: 13px; display: grid; gap: 8px; }
+  .cv-card p { display: flex; align-items: center; justify-content: space-between; gap: 8px; max-width: none; }
+  .cv-card span { color: var(--ink-3); }
+  .cv-card p span, .cv-card p b { white-space: nowrap; }
+  .cv-dup { padding: 4px 6px; margin: 0 -6px; border-radius: 6px; background: var(--risk-soft); }
+  .cv-dup em { font-style: normal; font-weight: 700; color: var(--risk); }
+  .cv-bars p { display: grid; grid-template-columns: 52px 1fr; }
+  .cv-bars i { display: block; height: 10px; width: var(--w); border-radius: 5px; background: var(--accent-2); }
+  .cv-over i { background: var(--risk); }
+  .case-body { padding: var(--s3) var(--s2) var(--s2); }
+  .case-body h3 { font-size: 21px; }
+  .case-dl { display: grid; gap: 2px; margin-top: var(--s2); font-size: 16px; }
+  .case-dl dt { color: var(--ink-3); font-size: 13px; margin-top: var(--s1); }
+  .case-result { font-weight: 700; color: var(--accent); }
+
+  /* Внедрение: на компьютере шкала из пяти отрезков, ширина по числу дней. На телефоне список с цветной линией */
+  .ro { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s3); }
+  .ro li { display: grid; gap: 4px; padding-left: 16px; border-left: 3px solid var(--c); }
+  .ro-days { font-size: 14px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .ro-bar { display: none; }
+  .ro-name { font-size: 18px; font-weight: 600; line-height: 1.3; }
+  .ro-text { font-size: 16px; line-height: 1.45; color: var(--ink-2); }
+  @media (min-width: 900px) {
+    .ro { grid-template-columns: var(--cols); gap: 0; }
+    .ro li { align-content: start; gap: 0; padding: 0 var(--s2) 0 0; border-left: 0; }
+    .ro-len { display: none; }
+    .ro-bar { display: block; height: 8px; margin: 10px 3px var(--s2) 0; border-radius: 2px; background: var(--c); }
+    .ro-text { margin-top: 6px; font-size: 15px; }
+  }
+  .ro-after { margin-top: var(--s4); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: 17px; color: var(--ink-2); max-width: none; }
+
+  /* Что входит: список в две колонки, справа стек */
+  .inc { display: grid; gap: var(--s4); }
+  .inc-list { gap: 12px; font-size: 17px; line-height: 1.45; }
+  .inc-stack { align-self: start; padding: var(--s3); border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+  .inc-h { font-size: 14px; font-weight: 600; color: var(--ink-3); }
+  .inc-chips { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .inc-chips li { padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); font-size: 15px; font-weight: 500; }
+  @media (min-width: 1100px) {
+    .inc { grid-template-columns: minmax(0, 2fr) minmax(0, 0.9fr); column-gap: var(--s6); }
+    .inc-list { display: block; columns: 2; column-gap: var(--s5); }
+    .inc-list li { break-inside: avoid; margin-bottom: 12px; }
+  }
+
+  /* Вопросы: как на главной */
+  .faq-wrap { display: grid; gap: var(--s4); }
+  @media (min-width: 900px) { .faq-wrap { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); column-gap: var(--s6); align-items: start; } }
+  .faq-list { display: grid; margin-top: var(--s3); border-top: 1px solid var(--line); }
+  .faq-list button {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s2);
+    padding: 14px 0;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: none;
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 17px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+  }
+  .faq-list button::after { content: '→'; color: var(--ink-3); }
+  .faq-list button:hover { color: var(--ink); }
+  .faq-list button[aria-selected='true'] { color: var(--ink); font-weight: 600; }
+  .faq-list button[aria-selected='true']::after { color: var(--accent); }
+  .faq-list button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .faq-more { margin-top: var(--s3); }
+  .faq-answer { padding: var(--s4); border-radius: 10px; background: var(--surface); border: 1px solid var(--line); }
+  .faq-answer[hidden] { display: none; }
+  .faq-answer-q { font-family: var(--font-display); font-size: 22px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; margin-bottom: var(--s2); }
+  .faq-answer p:last-child { font-size: 17px; line-height: 1.6; color: var(--ink-2); }
+  @media (min-width: 900px) { .faq-answers { position: sticky; top: calc(var(--hdr, 108px) + var(--s3)); } }
+  @media (max-width: 899px) {
+    .faq-list .faq-answer { margin: 4px 0 12px; padding: var(--s3); }
+    .faq-list .faq-answer-q { display: none; }
+    .faq-answers:empty { display: none; }
+  }
+
+  /* Контакты: как на главной */
+  .final { position: relative; overflow: hidden; padding: 0; }
+  .final-top { position: relative; padding: var(--s7) 0; }
+  @media (max-width: 719px) { .final-top { padding: var(--s6) 0; } }
+  .final-inner { position: relative; text-align: center; display: grid; justify-items: center; }
+  .final-text { margin: var(--s3) 0 var(--s4); max-width: 34em; color: var(--on-deep-2); }
+  .final-btns { justify-content: center; }
+  .final-req { display: flex; justify-content: center; }
+  .req { position: relative; width: 100%; max-width: 760px; margin: calc(var(--s4) - var(--s7)) 0 var(--s7); padding: var(--s4); border-radius: 12px; background: var(--deep-2); border: 1px solid rgba(255, 255, 255, 0.12); text-align: left; }
+  @media (max-width: 719px) { .req { margin: calc(var(--s3) - var(--s6)) 0 var(--s6); padding: var(--s3) 18px; } }
+  .req[hidden] { display: none; }
+  .req-title { font-family: var(--font-display); font-size: 21px; font-weight: 600; margin-bottom: var(--s3); }
+  .req-grid { display: grid; gap: var(--s2); }
+  @media (min-width: 640px) { .req-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .req-wide { grid-column: 1 / -1; } }
+  .req label, .req legend { display: grid; gap: 6px; font-size: 13px; color: var(--on-deep-2); }
+  .req input:not([type='radio']), .req select, .req textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--on-deep);
+    font: 400 16px/1.4 var(--font);
+  }
+  .req select option { color: #111; }
+  .req textarea { resize: vertical; min-height: 84px; }
+  .req textarea::placeholder { color: color-mix(in srgb, var(--on-deep-2) 70%, transparent); }
+  .req input:focus-visible, .req select:focus-visible, .req textarea:focus-visible { outline: 2px solid var(--gold-on-deep); outline-offset: 1px; }
+  .req-ch { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; margin: var(--s3) 0 0; padding: 0; border: 0; }
+  .req-ch legend { float: left; margin-right: 8px; }
+  @media (max-width: 639px) { .req-ch legend { float: none; width: 100%; margin: 0 0 2px; } }
+  .req-ch label { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; color: var(--on-deep); cursor: pointer; }
+  .req-ch input { accent-color: var(--gold-on-deep); width: 16px; height: 16px; }
+  .req-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s3); margin-top: var(--s3); }
+  .req-foot p { flex: 1 1 260px; font-size: 13px; line-height: 1.45; color: var(--on-deep-2); }
+  .req-open[aria-expanded='true'] { background: rgba(255, 255, 255, 0.16); }
+  .req-open::after { content: ' ↓'; }
+  .req-open[aria-expanded='true']::after { content: ' ↑'; }
+</style>

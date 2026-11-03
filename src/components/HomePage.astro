@@ -127,6 +127,8 @@ const faqLd = {
           </div>
           <div class="pr-cta">
             <a class="btn btn-soft" href={tgLink(p.topic)}>{p.cta}</a>
+            {/* Ветка accounting: у учёта своя страница. Пока только русская, английской ссылки нет */}
+            {p.id === 'accounting' && !en && <a class="link-arrow pr-page" href="/accounting/" data-cta="practice_accounting_page">Подробнее</a>}
           </div>
           <div class="pr-ex">
             {p.id === 'models' && <MiniJCurve />}
@@ -549,7 +551,8 @@ const faqLd = {
   @media (max-width: 600px) { .practice { padding: var(--s3) 18px; } }
   .pr-main { grid-area: main; }
   .pr-list { grid-area: list; }
-  .pr-cta { grid-area: cta; align-self: end; }
+  .pr-cta { grid-area: cta; align-self: end; display: flex; flex-wrap: wrap; align-items: center; gap: 12px var(--s3); }
+  .pr-page { font-size: 17px; }
   .pr-ex { grid-area: ex; container-type: inline-size; display: grid; min-width: 0; }
   /* Номер мелко слева в строке названия (Евгений 02.11.2026): карточка ниже, название выше */
   .pr-title { display: flex; align-items: baseline; gap: 14px; }

@@ -1,0 +1,104 @@
+---
+// Скрин системы для страницы учёта (ветка accounting, 03.11.2026). Правила из промта, раздел 5:
+// рамка 1 px, скругление 8 px, сверху тонкая строка с адресом или программой, без теней и макетов ноутбука.
+// Отметки — номера в кружках цвета акцента, подписи под скрином. По нажатию скрин открывается целиком (AccLightbox).
+// На телефоне (до 700 px) показываем фрагмент crop: широкий скрин целиком там не читается.
+import type { Shot } from '../data/accounting';
+import { src, srcset } from '../data/accounting';
+import { t } from '../lib/typo';
+
+interface Props {
+  shot: Shot;
+  // Ширина скрина на компьютере для sizes, например '55vw'
+  size?: string;
+  eager?: boolean;
+  legend?: boolean;
+  class?: string;
+}
+const { shot: s, size = '90vw', eager = false, legend = true, class: cls = '' } = Astro.props;
+const ar = s.w / s.h;
+const c = s.crop;
+// Пропорции фрагмента: ширина и высота фрагмента в пикселях исходника
+const car = c ? (ar * c[2]) / c[3] : ar;
+const cropVars = c ? `--cx:${c[0]};--cy:${c[1]};--cw:${c[2]};--ch:${c[3]};--car:${car.toFixed(4)}` : '';
+const sizes = `${c ? `(max-width: 699px) calc((100vw - 32px) * ${(100 / c[2]).toFixed(3)}), ` : ''}(max-width: 1099px) 100vw, ${size}`;
+const mark = (m: NonNullable<Shot['marks']>[number]) =>
+  `--x:${m.x}%;--y:${m.y}%` + (m.mx != null ? `;--mx:${m.mx}%` : '') + (m.my != null ? `;--my:${m.my}%` : '');
+---
+
+<figure class={`shot ${cls}`} style={`--ar:${ar.toFixed(4)}`} data-shot={s.name}>
+  <div class="shot-frame">
+    <p class="shot-bar" aria-hidden="true"><span>{s.where}</span></p>
+    <button type="button" class="shot-zoom" data-zoom={src(s, s.full)} data-zoom-w={Math.round(s.full)} data-zoom-h={Math.round(s.full / ar)} data-zoom-alt={s.alt} data-zoom-name={s.name}>
+      <span class={`shot-win${c ? ' shot-win--crop' : ''}`} style={cropVars}>
+        <span class="shot-img">
+          <img src={src(s, s.w)} srcset={srcset(s)} sizes={sizes} width={s.w} height={s.h} alt={s.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : undefined} />
+          {s.marks?.map((m, i) => <span class="shot-mark" style={mark(m)} aria-hidden="true">{i + 1}</span>)}
+        </span>
+      </span>
+      <span class="shot-hint" aria-hidden="true">
+        <svg viewBox="0 0 16 16"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="visually-hidden">Открыть скрин целиком</span>
+    </button>
+  </div>
+  {legend && s.marks && (
+    <ol class="shot-legend">
+      {s.marks.map((m) => <li>{t(m.text)}</li>)}
+    </ol>
+  )}
+</figure>
+
+<style>
+  .shot { --bar: 30px; min-width: 0; }
+  .shot-frame { overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  /* Строка над скрином: адрес портала или программа. Без точек окна и прочего декора */
+  .shot-bar { display: flex; align-items: center; height: var(--bar); max-width: none; padding: 0 12px; border-bottom: 1px solid var(--line); background: var(--bg); font-size: 12px; line-height: 1; color: var(--ink-3); }
+  .shot-bar span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .shot-zoom { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+  .shot-zoom:focus-visible { outline-offset: -3px; }
+  .shot-win { display: block; }
+  .shot-img { position: relative; display: block; }
+  .shot-img img { display: block; width: 100%; height: auto; }
+  /* Отметка: кружок с номером, центр в точке (x, y). Светлое кольцо отделяет её от интерфейса */
+  .shot-mark {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font: 600 13px/1 var(--font);
+    font-variant-numeric: tabular-nums;
+    box-shadow: 0 0 0 3px var(--surface);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  /* Значок «открыть целиком»: заметен при наведении, на телефоне виден всегда */
+  .shot-hint { position: absolute; right: 10px; bottom: 10px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 6px; background: var(--ink); color: var(--surface); opacity: 0; transition: opacity .2s ease; }
+  .shot-hint svg { width: 16px; height: 16px; }
+  .shot-zoom:hover .shot-hint, .shot-zoom:focus-visible .shot-hint { opacity: 0.85; }
+  @media (hover: none) { .shot-hint { opacity: 0.75; } }
+
+  /* Подписи к отметкам: номер в таком же кружке, текст рядом */
+  .shot-legend { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; counter-reset: m; font-size: 15px; line-height: 1.4; color: var(--ink-2); }
+  .shot-legend li { counter-increment: m; display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; align-items: start; }
+  .shot-legend li::before { content: counter(m); display: grid; place-items: center; width: 22px; height: 22px; margin-top: -1px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font: 600 12px/1 var(--font); }
+
+  /* Телефон: окно с фрагментом скрина. Картинка увеличена так, чтобы фрагмент занял всю ширину */
+  @media (max-width: 699px) {
+    .shot-win--crop { position: relative; overflow: hidden; aspect-ratio: var(--car); }
+    .shot-win--crop .shot-img {
+      position: absolute;
+      width: calc(100% * 100 / var(--cw));
+      left: calc(-100% * var(--cx) / var(--cw));
+      top: calc(-100% * var(--cy) / var(--ch));
+    }
+    .shot-win--crop .shot-mark { left: var(--mx, var(--x)); top: var(--my, var(--y)); }
+    .shot-legend { font-size: 14px; }
+  }
+</style>

@@ -1,0 +1,71 @@
+---
+// Скрин целиком поверх страницы (промт, раздел 5): закрывается по Esc, крестику или нажатию мимо скрина.
+// Одно окно на страницу, открывают его кнопки с data-zoom (AccShot). На телефоне скрин можно увеличить пальцами
+---
+
+<dialog class="lb" data-lb aria-label="Скрин целиком">
+  <button type="button" class="lb-close" data-lb-close aria-label="Закрыть">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+  <figure class="lb-fig">
+    <img class="lb-img" alt="" data-lb-img />
+    <figcaption class="lb-cap" data-lb-cap></figcaption>
+  </figure>
+</dialog>
+
+<script>
+  import { track } from '../lib/track';
+
+  const dlg = document.querySelector<HTMLDialogElement>('[data-lb]');
+  const img = dlg?.querySelector<HTMLImageElement>('[data-lb-img]');
+  const cap = dlg?.querySelector<HTMLElement>('[data-lb-cap]');
+  let back: HTMLElement | null = null;
+  if (dlg && img && cap && typeof dlg.showModal === 'function') {
+    document.querySelectorAll<HTMLButtonElement>('[data-zoom]').forEach((b) => {
+      b.addEventListener('click', () => {
+        const d = b.dataset;
+        img.src = d.zoom!;
+        img.width = Number(d.zoomW);
+        img.height = Number(d.zoomH);
+        img.alt = d.zoomAlt ?? '';
+        cap.textContent = d.zoomAlt ?? '';
+        back = b;
+        dlg.showModal();
+        track('accounting_screen_zoom', { screen: d.zoomName ?? '' });
+      });
+    });
+    // Нажатие мимо скрина закрывает окно; по самому скрину — нет, чтобы его можно было рассматривать
+    dlg.addEventListener('click', (e) => { if (e.target !== img) dlg.close(); });
+    dlg.addEventListener('close', () => {
+      img.removeAttribute('src');
+      back?.focus({ preventScroll: true });
+    });
+  }
+</script>
+
+<style>
+  .lb {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 56px 24px 24px;
+    border: 0;
+    background: rgba(12, 16, 15, 0.96);
+    color: #f2f1ec;
+  }
+  .lb::backdrop { background: transparent; }
+  .lb[open] { display: grid; place-items: center; }
+  .lb-fig { display: grid; justify-items: center; gap: 12px; max-width: 100%; max-height: 100%; }
+  .lb-img { display: block; width: auto; max-width: 100%; height: auto; max-height: calc(100dvh - 130px); border-radius: 6px; background: #fff; object-fit: contain; }
+  .lb-cap { max-width: 60em; font-size: 14px; line-height: 1.4; color: #c9c7bf; text-align: center; }
+  .lb-close { position: fixed; top: 12px; right: 12px; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; background: rgba(255, 255, 255, 0.08); color: #f2f1ec; cursor: pointer; }
+  .lb-close:hover { background: rgba(255, 255, 255, 0.16); }
+  .lb-close svg { width: 18px; height: 18px; }
+  :global(html:has(.lb[open])) { overflow: hidden; }
+  @media (max-width: 699px) {
+    .lb { padding: 60px 8px 16px; }
+    .lb-cap { font-size: 13px; }
+  }
+</style>
