@@ -51,3 +51,9 @@ Axiom Consulting, a finance consultancy based in Bali (financial models, model a
 - Conversion from free (40 docs) to paid; churn.
 - Whether the 10 warm contacts will pay.
 - Note: some draft texts in the product docs still say "30 documents free"; the founder's current number is 40.
+
+## Founder's addition (emphasis)
+
+- The bot checks the content inside each document: it reconciles what is written (line items, quantities, prices) against the stated total and flags mismatches.
+- It reads handwritten documents in any format and language.
+- It shows that a payment was already submitted: by identical file (hash) and also when the same receipt was re-photographed or sent as a screenshot (matching amount, date, number, counterparty).
