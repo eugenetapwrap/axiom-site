@@ -1,0 +1,13 @@
+{
+  "id": "P005",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I make about a thousand dollars a month, and $19 to $45 every month is real money when my clients pay me a flat fee no matter how many receipts they send. I might play with the 40 free documents, but I'd go back to chasing receipts by hand before I'd start paying.",
+  "objection": "My clients won't want a bot sitting in their group chats reading everything their staff post. If I can't put it in the group, I'm just forwarding receipts to it myself, and that's barely less work than typing them into my sheet.",
+  "would_change_my_mind": "A plan around $5 a month for a solo bookkeeper with a few clients, plus proof that clients are fine with the bot in their chats, like a short message I could send them explaining what it sees and keeps.",
+  "price_too_cheap": 1,
+  "price_cheap": 4,
+  "price_expensive": 10,
+  "price_too_expensive": 19
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P007",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My clients already send me their nota on WhatsApp, and I'm not going to ask villa staff and café cashiers to move to a Telegram group just for me. The month-end pile is annoying, but my routine works and it costs me nothing.",
+  "objection": "It's Telegram and my clients live on WhatsApp, so I'd be the one forwarding everything by hand anyway. And at 5 to 40 clients the documents add up fast, so $19 quickly becomes $45 a month, which is real money from my income.",
+  "would_change_my_mind": "If it worked inside WhatsApp, where my clients already send receipts, I'd try the 40 free documents on my messiest client.",
+  "price_too_cheap": 2,
+  "price_cheap": 7,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

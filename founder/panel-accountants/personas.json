@@ -1,0 +1,222 @@
+[
+ {
+  "id": "P001",
+  "name": "Nadia",
+  "age": 36,
+  "segment": "Freelance bookkeeper (works alone)",
+  "income": 25000,
+  "behaviour": "Drowning at month end",
+  "behaviour_how": "Clients send receipts late, in WhatsApp and Telegram, half missing; you spend days chasing and retyping.",
+  "objection": "My clients will not want a bot in their group chats",
+  "habit": "you enter documents into Jurnal or Accurate for tax reporting"
+ },
+ {
+  "id": "P002",
+  "name": "Arjun",
+  "age": 45,
+  "segment": "Small accounting firm (2–8 staff)",
+  "income": 94000,
+  "behaviour": "Cautious about client data",
+  "behaviour_how": "Client data confidentiality and Indonesian data rules (UU PDP) matter; you avoid unknown apps.",
+  "objection": "It does not export to Jurnal or Accurate and has no invoice number, VAT (PPN) or NPWP fields",
+  "habit": "clients send a bag of crumpled nota at the end of the month"
+ },
+ {
+  "id": "P003",
+  "name": "Diego",
+  "age": 25,
+  "segment": "Company-registration / PT PMA service that also does monthly bookkeeping",
+  "income": 47000,
+  "behaviour": "Cautious about client data",
+  "behaviour_how": "Client data confidentiality and Indonesian data rules (UU PDP) matter; you avoid unknown apps.",
+  "objection": "One account handles only 5 groups and one sheet; I have 20 clients and need them separated",
+  "habit": "clients send a bag of crumpled nota at the end of the month"
+ },
+ {
+  "id": "P004",
+  "name": "Gabriel",
+  "age": 54,
+  "segment": "Freelance bookkeeper (works alone)",
+  "income": 11000,
+  "behaviour": "Would resell a tool",
+  "behaviour_how": "You like adding a paid service on top of bookkeeping and keeping a margin.",
+  "objection": "I already have a WhatsApp routine that works",
+  "habit": "you get new clients by referral from company-registration agents"
+ },
+ {
+  "id": "P005",
+  "name": "Rhys",
+  "age": 28,
+  "segment": "Freelance bookkeeper (works alone)",
+  "income": 13000,
+  "behaviour": "Price-sensitive freelancer",
+  "behaviour_how": "Every subscription comes out of a small monthly income.",
+  "objection": "My clients will not want a bot in their group chats",
+  "habit": "you charge a fixed monthly fee per client"
+ },
+ {
+  "id": "P006",
+  "name": "Ada",
+  "age": 48,
+  "segment": "Small accounting firm (2–8 staff)",
+  "income": 72000,
+  "behaviour": "Bills clients by the hour",
+  "behaviour_how": "Saving time only matters if you can take more clients or charge for the service.",
+  "objection": "If recognition is wrong, I am responsible for the books",
+  "habit": "you have a separate WhatsApp or Telegram chat with each client for documents"
+ },
+ {
+  "id": "P007",
+  "name": "Mira",
+  "age": 28,
+  "segment": "Small accounting firm (2–8 staff)",
+  "income": 99000,
+  "behaviour": "Price-sensitive freelancer",
+  "behaviour_how": "Every subscription comes out of a small monthly income.",
+  "objection": "I already have a WhatsApp routine that works",
+  "habit": "clients send a bag of crumpled nota at the end of the month"
+ },
+ {
+  "id": "P008",
+  "name": "Rosa",
+  "age": 53,
+  "segment": "Freelance bookkeeper (works alone)",
+  "income": 22000,
+  "behaviour": "Runs on Jurnal / Accurate",
+  "behaviour_how": "Everything must end up in the accounting system; any tool that does not export there is extra work.",
+  "objection": "Who pays, me or the client? I cannot add $19 per client to my fee",
+  "habit": "clients send a bag of crumpled nota at the end of the month"
+ },
+ {
+  "id": "P009",
+  "name": "Farah",
+  "age": 29,
+  "segment": "Small accounting firm (2–8 staff)",
+  "income": 39000,
+  "behaviour": "Bills clients by the hour",
+  "behaviour_how": "Saving time only matters if you can take more clients or charge for the service.",
+  "objection": "I already have a WhatsApp routine that works",
+  "habit": "clients send a bag of crumpled nota at the end of the month"
+ },
+ {
+  "id": "P010",
+  "name": "June",
+  "age": 32,
+  "segment": "Small accounting firm (2–8 staff)",
+  "income": 109000,
+  "behaviour": "Drowning at month end",
+  "behaviour_how": "Clients send receipts late, in WhatsApp and Telegram, half missing; you spend days chasing and retyping.",
+  "objection": "I already have a WhatsApp routine that works",
+  "habit": "you enter documents into Jurnal or Accurate for tax reporting"
+ },
+ {
+  "id": "P011",
+  "name": "Andre",
+  "age": 35,
+  "segment": "Company-registration / PT PMA service that also does monthly bookkeeping",
+  "income": 78000,
+  "behaviour": "Would resell a tool",
+  "behaviour_how": "You like adding a paid service on top of bookkeeping and keeping a margin.",
+  "objection": "One account handles only 5 groups and one sheet; I have 20 clients and need them separated",
+  "habit": "you enter documents into Jurnal or Accurate for tax reporting"
+ },
+ {
+  "id": "P012",
+  "name": "Alma",
+  "age": 31,
+  "segment": "Freelance bookkeeper (works alone)",
+  "income": 29000,
+  "behaviour": "Runs on Jurnal / Accurate",
+  "behaviour_how": "Everything must end up in the accounting system; any tool that does not export there is extra work.",
+  "objection": "My clients will not want a bot in their group chats",
+  "habit": "clients send a bag of crumpled nota at the end of the month"
+ },
+ {
+  "id": "P013",
+  "name": "Liam",
+  "age": 49,
+  "segment": "Freelance bookkeeper (works alone)",
+  "income": 26000,
+  "behaviour": "Runs on Jurnal / Accurate",
+  "behaviour_how": "Everything must end up in the accounting system; any tool that does not export there is extra work.",
+  "objection": "Who pays, me or the client? I cannot add $19 per client to my fee",
+  "habit": "you charge a fixed monthly fee per client"
+ },
+ {
+  "id": "P014",
+  "name": "Ivy",
+  "age": 28,
+  "segment": "Company-registration / PT PMA service that also does monthly bookkeeping",
+  "income": 73000,
+  "behaviour": "Drowning at month end",
+  "behaviour_how": "Clients send receipts late, in WhatsApp and Telegram, half missing; you spend days chasing and retyping.",
+  "objection": "My clients will not want a bot in their group chats",
+  "habit": "you have a separate WhatsApp or Telegram chat with each client for documents"
+ },
+ {
+  "id": "P015",
+  "name": "Lena",
+  "age": 29,
+  "segment": "Company-registration / PT PMA service that also does monthly bookkeeping",
+  "income": 141000,
+  "behaviour": "Would resell a tool",
+  "behaviour_how": "You like adding a paid service on top of bookkeeping and keeping a margin.",
+  "objection": "One account handles only 5 groups and one sheet; I have 20 clients and need them separated",
+  "habit": "you enter documents into Jurnal or Accurate for tax reporting"
+ },
+ {
+  "id": "P016",
+  "name": "Anya",
+  "age": 27,
+  "segment": "Freelance bookkeeper (works alone)",
+  "income": 29000,
+  "behaviour": "Drowning at month end",
+  "behaviour_how": "Clients send receipts late, in WhatsApp and Telegram, half missing; you spend days chasing and retyping.",
+  "objection": "I already have a WhatsApp routine that works",
+  "habit": "you enter documents into Jurnal or Accurate for tax reporting"
+ },
+ {
+  "id": "P017",
+  "name": "Sara",
+  "age": 48,
+  "segment": "Freelance bookkeeper (works alone)",
+  "income": 12000,
+  "behaviour": "Bills clients by the hour",
+  "behaviour_how": "Saving time only matters if you can take more clients or charge for the service.",
+  "objection": "Who pays, me or the client? I cannot add $19 per client to my fee",
+  "habit": "you have a separate WhatsApp or Telegram chat with each client for documents"
+ },
+ {
+  "id": "P018",
+  "name": "Idris",
+  "age": 26,
+  "segment": "Small accounting firm (2–8 staff)",
+  "income": 111000,
+  "behaviour": "Runs on Jurnal / Accurate",
+  "behaviour_how": "Everything must end up in the accounting system; any tool that does not export there is extra work.",
+  "objection": "It does not export to Jurnal or Accurate and has no invoice number, VAT (PPN) or NPWP fields",
+  "habit": "you get new clients by referral from company-registration agents"
+ },
+ {
+  "id": "P019",
+  "name": "Ethan",
+  "age": 49,
+  "segment": "Freelance bookkeeper (works alone)",
+  "income": 17000,
+  "behaviour": "Cautious about client data",
+  "behaviour_how": "Client data confidentiality and Indonesian data rules (UU PDP) matter; you avoid unknown apps.",
+  "objection": "If recognition is wrong, I am responsible for the books",
+  "habit": "clients send a bag of crumpled nota at the end of the month"
+ },
+ {
+  "id": "P020",
+  "name": "Nia",
+  "age": 29,
+  "segment": "Small accounting firm (2–8 staff)",
+  "income": 115000,
+  "behaviour": "Drowning at month end",
+  "behaviour_how": "Clients send receipts late, in WhatsApp and Telegram, half missing; you spend days chasing and retyping.",
+  "objection": "One account handles only 5 groups and one sheet; I have 20 clients and need them separated",
+  "habit": "you charge a fixed monthly fee per client"
+ }
+]

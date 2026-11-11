@@ -1,0 +1,13 @@
+{
+  "id": "P018",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "convenience",
+  "reason": "Everything I do ends up in Jurnal or Accurate, and a Google Sheet with no invoice number, PPN or NPWP columns just means I re-key it all anyway. Collecting receipts is only half the pain; getting them into the books is the other half, and this does not touch it.",
+  "objection": "No export to Jurnal or Accurate and no tax fields, so it adds a step instead of removing one. Also 5 groups per account is too few when I have more clients than that.",
+  "would_change_my_mind": "A direct import file for Jurnal or Accurate with invoice number, PPN and NPWP fields filled in.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}
