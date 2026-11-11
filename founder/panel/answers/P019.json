@@ -1,0 +1,13 @@
+{
+  "id": "P019",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I already got burned by inflated and double-claimed receipts, and checking 2-4 groups by hand every day eats my evenings. If the free 40 catches even one duplicate from my old chat history, $19 or $45 a month is cheaper than one bad claim, so I'd pay for a month and see.",
+  "objection": "After the free part my site guys will probably go back to sending blurry photos and half the receipts in Bahasa or handwritten, and I'm not sure the bot keeps up. If I end up re-checking everything anyway, it's just another subscription I forget to cancel.",
+  "would_change_my_mind": "If in the free trial it misses a re-sent receipt or gets handwritten nota totals wrong, I'm out.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 50,
+  "price_too_expensive": 120
+}

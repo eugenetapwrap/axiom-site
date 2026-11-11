@@ -1,0 +1,13 @@
+{
+  "id": "P100",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I already scroll the group chat at night and my admin sorts the receipts when she gets to it. Paying $19 every month for a bot to do what she already does doesn't feel needed for a café.",
+  "objection": "$19 a month for something my admin already does. And a café makes a lot of small receipts, so 100 documents might run out and push me to $45.",
+  "would_change_my_mind": "If the free 40 documents caught a duplicate or a padded receipt my admin missed, I would see it pays for itself and sign up.",
+  "price_too_cheap": 2,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 30
+}

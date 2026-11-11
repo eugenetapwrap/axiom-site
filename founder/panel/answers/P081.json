@@ -1,0 +1,13 @@
+{
+  "id": "P081",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "It wants to sit in my staff work chat and sign in to my Google account. Those are the two things I don't hand to a bot I've never heard of. The handwritten nota part does sound useful, but not useful enough to give a tiny unknown company that kind of access.",
+  "objection": "Who is behind this, what do they do with my chats and receipts, and will it still exist next year? If they shut down or get breached, my supplier prices and staff spending are out there.",
+  "would_change_my_mind": "A version that only gets the receipts I forward to it privately, with access to one sheet only and not my whole Google account, plus a real company and people I can check, ideally one or two villa operators in Bali I know who already use it.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

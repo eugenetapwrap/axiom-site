@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd probably throw my old chat in for the 40 free documents just to see, but $19 every month for something my Excel sheet and the bank screenshots already half do is hard for me to justify. My crews send maybe a few dozen receipts a week, so I'd blow past 100 and be looking at $45, and that's real money.",
+  "objection": "It's another subscription on top of everything, and the price climbs with how many receipts my guys send, which I can't control. Zoho or a sheet I fill on Sunday night is free, even if it's annoying.",
+  "would_change_my_mind": "If the free trial actually caught a duplicate payment or a padded nota that cost me more than a few months of the fee, I'd pay, especially if there was a cheaper plan around $10.",
+  "price_too_cheap": 2,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 30
+}

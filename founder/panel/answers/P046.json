@@ -1,0 +1,13 @@
+{
+  "id": "P046",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "My admin's spreadsheet is always a week or two behind and I'm running sites from abroad, so I'd throw the free 40 at the old chat archive and see what it catches. If it holds up, $45 a month is nothing next to one double-paid supplier invoice.",
+  "objection": "Will it really catch the same nota photographed twice by two different guys, or a supplier invoice plus the transfer screenshot for it, or is it just a receipt-to-table bot that my admin still has to check line by line? Handwritten Indonesian nota from building material shops are messy.",
+  "would_change_my_mind": "If on the archive test it misses duplicates I already know are in there, or mangles the handwritten nota, I'm out.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 90,
+  "price_too_expensive": 200
+}

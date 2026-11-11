@@ -1,0 +1,13 @@
+{
+  "id": "P038",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I already have to show my partner the monthly spend and right now that means scrolling Telegram groups and guessing. If the free 40 documents turn my old site receipts into a clean sheet and a Monday report I can just forward, $19 or $45 a month is nothing next to one material order.",
+  "objection": "A duplicate or a padded receipt is my foreman's problem, not something a bot fixes. And handwritten nota from building-supply shops are messy; if it misreads the totals I end up checking everything anyway and it is just another sheet nobody trusts.",
+  "would_change_my_mind": "If on the free trial it misreads more than a couple of handwritten supplier nota or my partner says the report is useless, I cancel.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 79,
+  "price_too_expensive": 150
+}

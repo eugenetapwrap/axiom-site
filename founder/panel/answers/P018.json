@@ -1,0 +1,13 @@
+{
+  "id": "P018",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "Half of what I spend on the scooters is cash to mechanics who hand me a scribbled nota or nothing at all, so a bot that reads receipts only covers part of it. I already go through every receipt myself since I caught someone padding them, and when I find a fake the fix is a talk with that person, not a spreadsheet.",
+  "objection": "The cheating I've seen is an inflated price on a real receipt or a repair that never happened. Software can catch the same photo sent twice, but it can't tell me the mechanic charged double for a brake pad.",
+  "would_change_my_mind": "If it flagged prices that look too high for the same part or repair against what I have paid before, and showed me which staff member each claim came from, I would pay for that.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 25,
+  "price_too_expensive": 45
+}

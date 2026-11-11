@@ -1,0 +1,13 @@
+{
+  "id": "P032",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I'm abroad half the year and only find out something's off when I scroll back through weeks of Telegram receipts, so catching duplicates and getting a Monday report is worth it. At $45 a month it costs less than one padded receipt, and the free 40 documents let me check it on my real mess first.",
+  "objection": "Will a small bot still be around in a year, and can it actually read my guys' blurry handwritten nota from site? If it dies, at least the sheet and files stay in my own Drive, which is the only reason I'd risk it.",
+  "would_change_my_mind": "If the free trial misreads the handwritten site nota or misses duplicates I already know about, I'm out.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 79,
+  "price_too_expensive": 150
+}

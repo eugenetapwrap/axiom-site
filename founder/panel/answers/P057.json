@@ -1,0 +1,13 @@
+{
+  "id": "P057",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I already pay an admin who types receipts into Excel every week. It's slow and always behind, but it works well enough, and I'm not paying another monthly fee for a bot to do part of the same job.",
+  "objection": "$19 a month for something my admin already does. It doesn't fix the real problem anyway, which is that half the receipts never get sent to the chat in the first place.",
+  "would_change_my_mind": "If my accountant said they'd take the Google Sheet as-is and it cut their month-end chasing, or if it freed up enough of my admin's hours that I could see the savings myself.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}
