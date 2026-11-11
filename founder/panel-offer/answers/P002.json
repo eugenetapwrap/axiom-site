@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper already runs everything through Zoho and it works well enough, so I'm not adding a second tool and a bot in the site chats just to fill a sheet. I might upload an old export for the free check out of curiosity, but I wouldn't pay for this in a normal month.",
+  "objection": "My real problem is documents that never get sent at all, and a bot that only reads what lands in the chat doesn't fix that. It just duplicates what Zoho already does for me.",
+  "would_change_my_mind": "If the free check on my contractor's chat turned up real duplicate or padded invoices that my bookkeeper missed, I'd pay just for the watchdog on the build.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

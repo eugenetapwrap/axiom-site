@@ -1,0 +1,13 @@
+{
+  "id": "P014",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "$19 is nothing to me, but I only look at the receipts when something feels off, and right now nothing does. I might throw the free export at the bot out of curiosity, but I'm not paying a monthly fee to watch chats I already half-trust.",
+  "objection": "I can get most of this from Excel or have someone build a bot. And putting a stranger's bot into the group with my builder and site manager feels like announcing that I don't trust them.",
+  "would_change_my_mind": "If the free check found real duplicate or padded receipts in my build chat, I'd pay the same day.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

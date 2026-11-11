@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My admin already types the receipts into Excel every week. It's late, but it gets done, and I'm not paying a subscription for a bot to do her job. I might upload one chat export for the free check if I have a slow evening, but that isn't me buying anything.",
+  "objection": "Is this really better than what my admin does, or am I paying $19 a month for a second spreadsheet that she then has to check and fix? And I don't love putting my site groups and supplier invoices through a bot I've never heard of.",
+  "would_change_my_mind": "If the free check on one of my site groups turned up real money, like duplicate receipts or padded invoices that my admin missed, I'd pay the $19 without thinking about it.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 39,
+  "price_too_expensive": 75
+}

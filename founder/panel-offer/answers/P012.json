@@ -1,0 +1,13 @@
+{
+  "id": "P012",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason": "I'd upload a chat export for the free check, but I won't pay yet. Pulling receipts into a Google Sheet is something I can wire up myself in n8n with ChatGPT over a weekend, so the $19 only makes sense if the duplicate catching actually works.",
+  "reason_code": "quality",
+  "objection": "Will it really spot the same contractor invoice sent twice, once as a photo and once as a transfer screenshot, or is it just a receipt-to-table bot with a nice landing page? 'Encrypted fingerprints' doesn't tell me how good the matching is.",
+  "would_change_my_mind": "The free check on my own villa group finding a real duplicate or a padded invoice that I had missed. If it pays for itself on the first report, I'd sign up.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 39,
+  "price_too_expensive": 79
+}
