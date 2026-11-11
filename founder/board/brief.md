@@ -15,5 +15,5 @@ The full product description written by the founder is in `founder/board/product
 - **Free trial:** onboarding 1 minute; 40 free documents — up to 20 via one archive upload (ZIP / chat export, capped at 20), the other 20 by forwarding or in groups. Founder estimates about 5 days for a normal user to use them.
 - **Virality:** visually strong weekly/monthly report cards designed to be forwarded; links to Nota in every touch point (report caption, sheet header, share button, group greeting).
 - **Launch plan:** give 10, 20 or 30 free permanent accesses to friends to test; the founder has direct access to about 10 people who actually need it and will ask them to tell friends; then automated posting on Threads.
-- **Revenue goal stated in conversation:** about $10,000/month within the first 3 months. (The written description states a different goal: 50 clients in month 1, 100 in month 2, 1,000 paying in 12 months, average ~$30 → ~$30k MRR. Both are the founder's; they do not match.)
+- **Revenue goal (confirmed by founder after round 2):** 50 clients in month 1, 100 in month 2, 1,000 paying in 12 months (~$30k MRR). The earlier "$10,000/month in 3 months" is withdrawn.
 - **Budget:** not stated in money. The description says financing format is undecided (bootstrap from consulting, angel, or strategic partner) and a $300–500 ad test after payments launch.
