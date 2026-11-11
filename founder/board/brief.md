@@ -57,3 +57,13 @@ Axiom Consulting, a finance consultancy based in Bali (financial models, model a
 - The bot checks the content inside each document: it reconciles what is written (line items, quantities, prices) against the stated total and flags mismatches.
 - It reads handwritten documents in any format and language.
 - It shows that a payment was already submitted: by identical file (hash) and also when the same receipt was re-photographed or sent as a screenshot (matching amount, date, number, counterparty).
+
+## Founder's answers to open questions (added after the first board meeting)
+
+- **Volume vs the 100-document plan.** Founder's own reference: building 3 villas over 8 months produced about 300 payments in total (~37 a month). Founder believes 100 documents a month is enough for a small business. Larger packages are open for consideration.
+- **Proof that duplicates matter in money.** The same flow, inside Axiom's larger management-accounting system, found a hole of about IDR 1 billion at a development company. Founder says the team knows the schemes (procurement staff resubmitting duplicate invoices, etc.) and that these facts are confirmed with data.
+- **Cost per document.** Measured: about $0.01–0.02 per document (founder: "from 1 to 2 cents"). Exact-duplicate files are caught by hash in code and cost nothing to process.
+- **Copying is harder than it looks (founder's claim, not yet independently verified).** Recognition modules combine hashes, LLMs and other hashing methods; built and tested over a long period.
+- **Virality assets.** Weekly/monthly report cards are designed to be visually strong and shareable; links to Nota are placed wherever possible (report caption, sheet header, share button).
+- **Free trial mechanics.** Onboarding takes 1 minute. 40 free documents: up to 20 can be run at once via an archive upload (ZIP / chat export, capped at 20 so the whole history is not processed for free), the other 20 by forwarding to the bot or in groups. Founder estimates a normal user takes about 5 days to use the 40.
+- Free trial is 40 documents (texts still saying 30 are outdated).
