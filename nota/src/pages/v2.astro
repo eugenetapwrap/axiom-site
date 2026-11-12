@@ -5,12 +5,9 @@ import Base from '../layouts/Base.astro';
 import Logo from '../components/Logo.astro';
 import Icon from '../components/Icon.astro';
 import MiniReport from '../components/MiniReport.astro';
-import HeroDoc from '../components/HeroDoc.astro';
-import SheetDemo from '../components/SheetDemo.astro';
 import ScreenSlot from '../components/ScreenSlot.astro';
-import BotChat from '../components/BotChat.astro';
 import {
-  botLink, trust, steps, send, group, features, analytics, reports, segments, data, compare, footer,
+  botLink, trust, group, features, analytics, reports, segments, data, compare, footer,
 } from '../data/content';
 import {
   meta, cta, nav, hero, result, analyticsTitle, daily, featuresTitle, pricing, faq, final,
@@ -44,7 +41,10 @@ import {
           </div>
           <p class="cta-note">{hero.note}</p>
         </div>
-        <BotChat />
+        <figure class="hero-report">
+          <img src={hero.report.file} alt="Отчёт Nota по архиву: обработано 128,40 млн, 64 платежа, дубли, что проверить, категории, поставщики, крупнейшие платежи" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
+          <figcaption>{hero.report.caption}</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -53,25 +53,16 @@ import {
       <ul class="wrap">{trust.map((t) => <li><Icon name="check" size={22} />{t}</li>)}</ul>
     </div>
 
-    <!-- 03 Что придёт через 20 минут (бывший блок проверки архива) -->
+    <!-- 03 Что придёт через 20 минут -->
     <section class="section" id="result">
       <div class="wrap">
-        <h2 style="margin-bottom: 40px">{result.title}</h2>
-        <div class="split result-split">
-          <HeroDoc caption={result.caption} rows={result.rows} />
-          <div>
-            <ul class="result-list">
-              {result.items.map((r) => (
-                <li><div class="card-icon"><Icon name={r.icon} /></div><div><h3>{r.title}</h3><p>{r.text}</p></div></li>
-              ))}
-            </ul>
-            <div class="howto2">
-              <b>Как прислать документы за прошлый месяц</b>
-              {result.howto.map((h) => <p><span>{h.k}</span>{h.t}</p>)}
-            </div>
-            <a class="btn" href={botLink('land2_result')}>{cta}</a>
-          </div>
+        <h2 style="margin-bottom: 32px">{result.title}</h2>
+        <div class="grid" style="--min: 280px">
+          {result.items.map((r) => (
+            <div class="card card--row"><div class="card-icon"><Icon name={r.icon} /></div><div><h3>{r.title}</h3><p>{r.text}</p></div></div>
+          ))}
         </div>
+        <div class="cta-row" style="margin-top: 32px"><a class="btn" href={botLink('land2_result')}>{cta}</a></div>
       </div>
     </section>
 
@@ -128,12 +119,11 @@ import {
         <h2>{daily.title}</h2>
         <p class="lead">{daily.lead}</p>
         <div class="grid" style="--min: 240px">
-          {send.items.map((c) => (
-            <div class="card send-card">
-              {c.tag && <span class="tag">{c.tag}</span>}
-              <div class="card-icon"><Icon name={c.icon} /></div>
-              <h3>{c.title}</h3>
+          {daily.items.map((c) => (
+            <div class="card send-card send-card--row">
+              <div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div>
               <p>{c.text}</p>
+              {c.tag && <span class:list={['tag', c.tone && `tag--${c.tone}`]}>{c.tag}</span>}
             </div>
           ))}
         </div>
@@ -153,7 +143,7 @@ import {
       </div>
     </section>
 
-    <!-- 06 Что Nota делает с каждым документом + пример чат → таблица -->
+    <!-- 06 Что Nota делает с каждым документом -->
     <section class="section section--line">
       <div class="wrap">
         <h2 style="margin-bottom: 40px">{featuresTitle}</h2>
@@ -162,7 +152,6 @@ import {
             <div class="card"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3><p>{c.text}</p></div>
           ))}
         </div>
-        <SheetDemo caption={steps.demoCaption} />
       </div>
     </section>
 
