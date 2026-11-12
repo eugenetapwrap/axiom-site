@@ -65,7 +65,7 @@ h2 { font-size: clamp(30px, 3.6vw, 44px); line-height: 1.12; font-weight: 700; l
 .btn:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid var(--slate); outline-offset: 3px; }
 
 /* Шапка */
-.header { position: sticky; top: 0; z-index: 10; background: rgba(251, 252, 250, .94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: rgba(251, 252, 250, .94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .header .wrap { display: flex; align-items: center; gap: 28px; min-height: 68px; }
 .header nav { display: flex; gap: 24px; flex: 1; }
 .header nav a { color: var(--ink); text-decoration: none; font-size: 16px; }
