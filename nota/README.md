@@ -36,12 +36,12 @@ Vercel (или Cloudflare Pages):
 
 ## Скриншоты таблицы и аналитики
 
-Положите в `public/screens/` PNG с этими именами и пересоберите сайт (`npm run build`). Вместо заглушек появятся картинки.
+Лежат в `public/screens/`, показываются во вкладках блока «Таблица и аналитика». Тестовые данные.
 
-| Файл | Что на нём |
+| Файл | Лист |
 |---|---|
-| `table.png` | Лист Expenses с дашбордом сверху, на демо-данных |
-| `cash-flow.png` | Лист Monthly Cash Flow (бывший Expense Flow) |
-| `insights.png` | Лист Insights |
+| `payments.webp` | Payments |
+| `monthly-spend.webp` | Monthly spend |
+| `insights.webp` | Insights |
 
-Ширина — около 2400 px (чтобы было чётко на ретине). Без личных данных: только демо.
+Чтобы заменить, положите файл с тем же именем и поправьте размеры `w` и `h` в `src/data/content.ts` (блок `analytics`). Если файла нет, на его месте будет заглушка.

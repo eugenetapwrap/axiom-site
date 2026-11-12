@@ -1,21 +1,21 @@
 ---
 // Рамка «Google-таблица» под скриншот листа.
-// Положите PNG в nota/public/screens/ (например, cash-flow.png) и пересоберите сайт:
-// вместо заглушки появится картинка. Рекомендуемый размер — 2400 px по ширине.
+// Картинки лежат в nota/public/screens/. Если файла нет, показывается заглушка.
 import fs from 'node:fs';
 import path from 'node:path';
 
 interface Props {
-  file: string;   // путь от public, например /screens/cash-flow.png
+  file: string;   // путь от public, например /screens/insights.webp
   tab: string;    // активный лист
   tabs: string[]; // все листы внизу рамки
   alt: string;
-  big?: boolean;
+  w?: number;
+  h?: number;
 }
-const { file, tab, tabs, alt, big } = Astro.props;
+const { file, tab, tabs, alt, w, h } = Astro.props;
 const exists = fs.existsSync(path.join(process.cwd(), 'public', file));
 ---
-<div class:list={['shot', { 'shot--big': big }]}>
+<div class="shot">
   <div class="shot-bar" aria-hidden="true">
     <span class="shot-doc"></span>
     <span class="shot-name">Nota · Google Таблицы</span>
@@ -23,7 +23,9 @@ const exists = fs.existsSync(path.join(process.cwd(), 'public', file));
   </div>
   <div class="shot-body">
     {exists ? (
-      <img src={file} alt={alt} loading="lazy" decoding="async" />
+      <a href={file} target="_blank" rel="noopener" title="Открыть в полном размере">
+        <img src={file} alt={alt} width={w} height={h} loading="lazy" decoding="async" />
+      </a>
     ) : (
       <div class="shot-empty" role="img" aria-label={`Здесь будет скриншот листа ${tab}`}>
         <span>Скриншот листа «{tab}»</span>

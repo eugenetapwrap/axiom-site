@@ -109,19 +109,49 @@ import {
       </div>
     </section>
 
-    <!-- 06 Таблица и аналитика: места под скриншоты -->
+    <!-- 06 Таблица и аналитика: Payments, Monthly spend, Insights -->
     <section class="section section--paper" id="analytics">
       <div class="wrap">
         <h2>{analytics.title}</h2>
         <p class="lead">{analytics.lead}</p>
-        <div class="an-grid">
+        <div class="an" data-an>
+          <div class="an-pick" role="tablist" aria-label="Листы таблицы">
+            {analytics.screens.map((sc, i) => (
+              <button type="button" role="tab" class="an-btn" id={`an-tab-${sc.id}`} aria-controls={`an-panel-${sc.id}`} aria-selected={i === 0 ? 'true' : 'false'}>
+                <small>{sc.tab}</small><b>{sc.label}</b><span>{sc.short}</span>
+              </button>
+            ))}
+          </div>
           {analytics.screens.map((sc, i) => (
-            <div class:list={['an-item', { 'an-item--big': i === 0 }]}>
-              <ScreenSlot file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={`${sc.title}: пример на демо-данных`} big={i === 0} />
-              <div class="an-text"><h3>{sc.title}</h3><p>{sc.text}</p></div>
+            <div class:list={['an-panel', { on: i === 0 }]} role="tabpanel" id={`an-panel-${sc.id}`} aria-labelledby={`an-tab-${sc.id}`}>
+              <ScreenSlot file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={`Лист ${sc.tab} на тестовых данных`} w={sc.w} h={sc.h} />
+              <p class="shot-hint">Нажмите на таблицу, чтобы открыть её крупно.</p>
+              <ul class="an-points">{sc.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
             </div>
           ))}
         </div>
+        <script is:inline>
+          (function () {
+            var root = document.querySelector('[data-an]');
+            if (!root) return;
+            root.classList.add('js');
+            var tabs = root.querySelectorAll('[role="tab"]');
+            var panels = root.querySelectorAll('[role="tabpanel"]');
+            function show(i) {
+              tabs.forEach(function (t, k) { t.setAttribute('aria-selected', k === i ? 'true' : 'false'); t.tabIndex = k === i ? 0 : -1; });
+              panels.forEach(function (p, k) { p.classList.toggle('on', k === i); });
+            }
+            tabs.forEach(function (t, i) {
+              t.addEventListener('click', function () { show(i); });
+              t.addEventListener('keydown', function (e) {
+                if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+                var n = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+                show(n); tabs[n].focus();
+              });
+            });
+            show(0);
+          })();
+        </script>
         <p class="note">{analytics.note}</p>
       </div>
     </section>
