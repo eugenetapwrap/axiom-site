@@ -1,0 +1,13 @@
+{
+  "id": "P007",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "My bookkeeper already collects everything once a month and I almost never look at receipts myself, so this solves a problem I mostly handed off already. I might let it run on the free 40, but I doubt I'd start paying for it.",
+  "objection": "After the free part, my staff will go back to just dropping screenshots in the group and nobody will check the sheet, so I'd be paying $19 a month for something we stop using.",
+  "would_change_my_mind": "If my bookkeeper said it cuts her monthly fee or her hours, and she'd actually work from the Google Sheet instead of the chat.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 25,
+  "price_too_expensive": 45
+}

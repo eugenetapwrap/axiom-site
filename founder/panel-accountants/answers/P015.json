@@ -1,0 +1,13 @@
+{
+  "id": "P015",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "convenience",
+  "reason": "I have 20 clients, and five groups dumped into one sheet means juggling four Google accounts and splitting the data back out by hand before I can resell it as a service. With no Jurnal or Accurate export I still retype everything, so I'd try the 40 free documents and stop there.",
+  "objection": "It isn't built for a firm. I need each client in its own sheet under one login, and an export into Jurnal/Accurate, or there's nothing I can mark up and sell to my clients.",
+  "would_change_my_mind": "A firm or reseller plan: unlimited client groups under one account, a separate sheet per client, and a direct Jurnal/Accurate import file, priced so I can keep a margin.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 150
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P024",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "My admin is always a week behind on the receipt spreadsheet, and the receipts are already sitting in our Telegram groups, so $19 or $45 a month is nothing next to her hours. I'd burn the free 40 on our old chat history first, and I'd only pay if it gets the faded and handwritten nota right.",
+  "objection": "It will misread faded or handwritten Indonesian nota and bank screenshots, and then my admin has to check every row anyway, so I'm paying for a second job, not saving one.",
+  "would_change_my_mind": "If the free trial on our own old receipts comes back with more than a few wrong amounts or missed duplicates, I won't pay.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 120
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P022",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'm not adding a bot to my work group where my guys talk about suppliers and money, and I'm not signing in with Google to something I've never heard of. I check the chat myself at night and dump things into Excel when I need to, and that costs me nothing.",
+  "objection": "A random Telegram bot reading every message in my work chat and getting into my Google Drive. Who's behind it, where does my data go, and what happens if it gets hacked or the bot disappears?",
+  "would_change_my_mind": "Another contractor I know in Bali using it for a few months and showing me it actually catches double receipts, plus a clear statement that it only touches documents and one sheet, not my whole Drive or the chat text.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

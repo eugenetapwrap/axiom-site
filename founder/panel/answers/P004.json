@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I can wire up n8n with a ChatGPT vision node to dump receipts into a Google Sheet over a weekend, and my volume of nota isn't big enough to pay $19 a month forever for something I could own. I'd try the 40 free ones out of curiosity, but I wouldn't pay.",
+  "objection": "It's a wrapper around stuff I can build myself for a few dollars of API calls, and I'm not convinced it reads my staff's messy handwritten Indonesian nota any better than ChatGPT does.",
+  "would_change_my_mind": "If the free trial showed it really nails the handwritten nota and catches duplicates my own bot would miss, and the price was closer to $5-10 a month for my volume.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

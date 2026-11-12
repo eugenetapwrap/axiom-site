@@ -1,0 +1,13 @@
+{
+  "id": "P078",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'm not putting a bot in my crew's work chat and handing it a Google sign-in. Even setting that aside, half my site receipts are faded or handwritten nota, and I'd bet I end up checking every row myself anyway.",
+  "objection": "A bot reading every message in my work group and getting into my Google account. Then it misreads a smudged Indonesian nota, and I'm the one cleaning up the sheet before the accountant sees it.",
+  "would_change_my_mind": "Let me forward receipts privately with no Google login, just a file it sends back. And show me it reading a stack of my own faded handwritten notas correctly before I pay anything.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

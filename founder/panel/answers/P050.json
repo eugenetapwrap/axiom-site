@@ -1,0 +1,13 @@
+{
+  "id": "P050",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I'd add it to the chat and burn through the 40 free documents, but my admin already does the spreadsheet every week, late or not, and I don't see us changing that routine for a bot. When the free part runs out I'd probably just let it go.",
+  "objection": "We try things like this, use them for two weeks, then the staff send nota the old way and the admin goes back to typing. Then I'm paying $19 a month for something nobody touches.",
+  "would_change_my_mind": "If during the free part it actually read my staff's handwritten Indonesian nota correctly and caught a duplicate or an overcharge my admin missed, so I could see it pays for itself.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

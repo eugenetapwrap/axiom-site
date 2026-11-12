@@ -1,0 +1,13 @@
+{
+  "id": "P093",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "My admin already logs the transfers and I check the receipts myself since I got burned. I might run the free 40 documents, but I won't pay $19 a month for something that's already being done unless it catches something we missed.",
+  "objection": "The receipts that burned me were inflated, not duplicated. A contractor writing a higher number on a real nota still adds up, so a bot checking totals and duplicates wouldn't have caught it. And I don't love putting all my business documents through a bot I don't know.",
+  "would_change_my_mind": "If the free trial on my old chat history turned up a duplicate or a padded receipt that my admin and I missed, I'd pay for it that week.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

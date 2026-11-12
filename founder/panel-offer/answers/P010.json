@@ -1,0 +1,13 @@
+{
+  "id": "P010",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I've already caught someone padding receipts, and my admin checking the admin's own work isn't a control. I'd run the free check on the scooter-parts chat first, and if it turns up even one double-claimed repair, $19 a month is nothing next to that.",
+  "objection": "Half my spend is cash to mechanics with scribbled nota or no paper at all, so I doubt it catches the real leaks. It also means a stranger's bot sitting in my work chats.",
+  "would_change_my_mind": "If the free check on my old chat finds nothing my admin hadn't already caught, or it can't read the handwritten mechanic nota, I'm not paying.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 45,
+  "price_too_expensive": 100
+}

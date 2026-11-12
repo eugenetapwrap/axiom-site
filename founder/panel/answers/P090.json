@@ -1,0 +1,13 @@
+{
+  "id": "P090",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My admin already types the receipts into Excel. Yes, it's always behind, but it costs me nothing extra, and $19 a month is real money when I take home about $3,000. I might throw the free 40 at it out of curiosity, but I wouldn't pay for it this month.",
+  "objection": "I already pay someone to do this, and there are free tools like Zoho or KasKecil, or a bot my nephew could build. Why pay a monthly fee for something my admin does anyway, and will it really read messy handwritten nota from my suppliers?",
+  "would_change_my_mind": "If the free trial on my old chat history caught duplicates or missing money my admin missed, enough to cover a year of the fee, I would pay.",
+  "price_too_cheap": 2,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 30
+}

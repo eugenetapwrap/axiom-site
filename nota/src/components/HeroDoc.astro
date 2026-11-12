@@ -1,0 +1,44 @@
+---
+// Первый экран: рукописная накладная от прораба → строка, которую записала Nota.
+// Демо-данные. Позже можно заменить на реальное фото накладной и скриншот строки.
+interface Props { caption: string; rows?: [string, string, string?][] }
+const { caption, rows } = Astro.props;
+
+const row: [string, string, string?][] = rows ?? [
+  ['Дата', '28 окт 2026'],
+  ['Поставщик', 'Toko Bangunan Sumber Rejeki'],
+  ['Сумма', '2 990 000', 'num'],
+  ['Категория', 'Материалы'],
+  ['Проверка', '✓ позиции сходятся с итогом', 'ok'],
+  ['Оригинал', '1043.jpg в папке Drive', 'link'],
+];
+---
+<figure class="doc-stage">
+  <div class="invoice" aria-hidden="true"><div class="inv-in">
+    <div class="inv-head">
+      <div><b>TOKO BANGUNAN SUMBER REJEKI</b><small>Jl. Uluwatu 88, Jimbaran · Telp 0361 70 21 14</small></div>
+      <strong>NOTA</strong>
+    </div>
+    <div class="inv-lines hw">
+      <span>No. 0412</span><span class="span2">Tgl 28 - 10 - 26</span>
+      <span class="all">Kepada: Pak Made</span>
+      <span>40 sak Semen Gresik</span><span>@ 62.000</span><span class="r">2.480.000</span>
+      <span>6 btg Besi 10 mm</span><span>@ 85.000</span><span class="r">510.000</span>
+      <span class="all"></span>
+      <span></span><span>Jumlah Rp</span><span class="r total">2.990.000</span>
+      <span class="all"></span>
+      <span></span><span class="span2 sign">Hormat kami, <em>Wayan</em></span>
+    </div>
+  </div></div>
+
+  <div class="row-card">
+    <div class="rc-head"><b>Строка 1043</b><span>Google-таблица</span></div>
+    <dl>
+      {row.map(([k, v, kind]) => (
+        <div><dt>{k}</dt><dd class={kind}>{v}</dd></div>
+      ))}
+    </dl>
+  </div>
+
+  <figcaption>{caption}</figcaption>
+</figure>

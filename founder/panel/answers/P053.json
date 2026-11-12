@@ -1,0 +1,13 @@
+{
+  "id": "P053",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'm not adding a bot to our work chats and signing it in with my Google account. My guys talk about suppliers, cash and clients in those groups, and I don't know who's behind this thing. Even if I tried the free 40, I doubt my crew would stick with it once it's paid.",
+  "objection": "A stranger's bot reading every message in my work groups and getting into my Google Drive. Where does that data go, who can see it, and what happens when they shut down or get hacked?",
+  "would_change_my_mind": "If it only got access to the one sheet and folder it creates, not my whole Google account, and only read messages that are receipts, with a clear privacy policy and a real company I can check behind it.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

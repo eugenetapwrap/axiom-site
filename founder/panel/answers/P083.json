@@ -1,0 +1,13 @@
+{
+  "id": "P083",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The missing-receipts mess at month end is real and my admin is always behind, but I'm not putting an unknown bot into my work groups and signing it into my Google account. Our chats have supplier prices, client addresses and payment screenshots in them.",
+  "objection": "Who is behind this bot, where does what it reads in my chats end up, and what can it touch once I sign in with Google? If they only ask for one sheet and one folder, I want to see that, not just be told it.",
+  "would_change_my_mind": "Another contractor I know using it for a few months, plus Google permissions that are clearly limited to only the sheet and folder it creates. Then I'd try the free 40 on one site group.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

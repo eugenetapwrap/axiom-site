@@ -1,0 +1,13 @@
+{
+  "id": "P020",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I'd probably throw one messy client at the free 40 documents to see if it really reads the Indonesian nota, but I won't pay for something capped at 5 groups when I have 20 clients. Juggling four Google accounts and four subscriptions just to keep clients separate is more admin, not less.",
+  "objection": "It's built for one business owner, not a firm. I need 20 clients cleanly separated, each in its own sheet I can hand over, and no export to Jurnal or Accurate means I'm still copying rows at month end.",
+  "would_change_my_mind": "An accountant plan: unlimited client groups under one login, a separate sheet per client, and pricing per client that I can pass into my monthly fee.",
+  "price_too_cheap": 5,
+  "price_cheap": 30,
+  "price_expensive": 120,
+  "price_too_expensive": 250
+}

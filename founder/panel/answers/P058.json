@@ -1,0 +1,13 @@
+{
+  "id": "P058",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper already collects the nota every month and I almost never look at receipts myself, so this solves a problem I've handed off to someone else. I'm not putting a new bot into my site group because an ad told me to.",
+  "objection": "Will this little bot still be around next year? I don't want my site expenses sitting in some tool that disappears, and then my bookkeeper has to rebuild everything.",
+  "would_change_my_mind": "If my bookkeeper said she wanted it and it saved her hours. Or if it caught a real duplicate or padded nota from the supply shop that cost me money.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 120
+}

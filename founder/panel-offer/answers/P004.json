@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd probably run the free check on our Telegram export out of curiosity, but paying every month for something I could wire up myself with n8n, ChatGPT and a Google Sheet in a weekend doesn't sit right. My shop's spending isn't big enough for a few duplicate nota to hurt much.",
+  "objection": "I already have free options: Excel, KasKecil, or a bot I could build. Why pay $19 a month forever for an OCR-to-spreadsheet pipe?",
+  "would_change_my_mind": "If the free check found real money lost, like duplicate or padded nota from the building-supply shop worth more than a year of the subscription, and it read my staff's handwritten Indonesian nota properly where my own ChatGPT attempts fail.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 25
+}

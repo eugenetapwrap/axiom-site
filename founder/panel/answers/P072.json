@@ -1,0 +1,13 @@
+{
+  "id": "P072",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'm not putting a bot into my staff group chats and signing it into my Google account just to sort receipts. I only look at the money when something feels off, and when it does I scroll the group myself.",
+  "objection": "A bot I don't know reads every message in my work chats and gets into my Google Drive. Who's behind it, where does that data go, and what happens if it leaks?",
+  "would_change_my_mind": "If it only got access to its own single sheet instead of my whole Google account, read only receipts I forward to it myself, and another café owner I know said they'd used it for months without trouble.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 30,
+  "price_too_expensive": 60
+}

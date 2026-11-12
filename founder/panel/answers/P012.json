@@ -1,0 +1,13 @@
+{
+  "id": "P012",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I'd burn the 40 free documents on my old chat archive just to see if it flags the re-photographed transfers, but I could wire up n8n plus ChatGPT to dump receipts into a Sheet in an afternoon. Unless the duplicate catching is clearly better than what I'd build, I'm not paying monthly for a receipt-to-table bot.",
+  "objection": "Will it actually catch the same bank-transfer screenshot sent twice by two different people, or a nota photographed again at a different angle? If it misses those, it's just OCR into a spreadsheet and I can do that myself.",
+  "would_change_my_mind": "The free trial on my real chat history catching duplicates I had missed, with a few false alarms at most.",
+  "price_too_cheap": 3,
+  "price_cheap": 9,
+  "price_expensive": 29,
+  "price_too_expensive": 50
+}

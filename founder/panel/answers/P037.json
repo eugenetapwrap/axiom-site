@@ -1,0 +1,13 @@
+{
+  "id": "P037",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd try the 40 free documents on the build chat, but I'm one investor with one project, not a company with staff, and I'm not adding another monthly subscription for something Excel and my screenshots already cover. Once the free ones run out I'd let it go.",
+  "objection": "It's $19 a month forever for a job I can do on a Sunday with a spreadsheet, or have someone knock together a bot for free. And I'm not sure I want a third-party bot reading the contractor chat and my bank transfers.",
+  "would_change_my_mind": "If it caught a real duplicate or overcharge from the contractor during the free trial, enough to pay for a year on its own, or if there were a one-off price per project instead of a monthly fee.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 25
+}

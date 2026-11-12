@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I have 20 clients and the cap is 5 groups per account, so I'd be juggling four Google logins just to keep clients apart. On top of that, I'm not putting client receipts through a Telegram bot I've never heard of until I know where the data goes and that it's UU PDP-compliant.",
+  "objection": "The 5-group limit doesn't fit how an accounting practice works. I'd also be sending my clients' financial documents to some unknown third party, and nothing here tells me how it handles personal data under UU PDP.",
+  "would_change_my_mind": "An accountant plan with unlimited client groups, each one in its own sheet, plus a clear written data-processing statement covering UU PDP (who sees the images, where they're stored, deletion on request).",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 120
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P019",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I don't put my clients' receipts into an unknown Telegram bot. If it reads a crumpled nota wrong I still have to check every row myself, and the books are my responsibility, so I am not saving much time for the risk.",
+  "objection": "Who is behind this bot and where do my clients' documents go? Under UU PDP I am the one in trouble if client data leaks, and I have never heard of this app.",
+  "would_change_my_mind": "A bookkeeper I know in Bali using it for months without problems, plus a clear statement of who runs it and that the bot keeps no copies outside my own Google Drive.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

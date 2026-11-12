@@ -1,0 +1,13 @@
+{
+  "id": "P039",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Every month end my accountant chases me for receipts that are buried in Telegram groups, and $19 is nothing next to that headache. I'd run the free 40 on my old chat history first, and only pay if it gets most of the rows right without me babysitting it.",
+  "objection": "The staff send faded thermal receipts and handwritten nota from local warungs and suppliers. If the bot misreads amounts and I still have to check every row by hand, I've just moved the mess from Telegram into a spreadsheet.",
+  "would_change_my_mind": "If the free trial on my own old receipts comes back with a lot of wrong totals or missed handwritten nota, I won't pay.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 50,
+  "price_too_expensive": 100
+}

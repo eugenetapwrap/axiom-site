@@ -1,0 +1,13 @@
+{
+  "id": "P080",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Half of what I spend is cash to mechanics with no receipt at all, and my admin already types the rest into Excel. Maybe I try the free 40, but I don't see my guys changing how they send things long enough for me to start paying.",
+  "objection": "After the free part we stop using it. The mechanics won't photograph anything, the cash payments have no paper, so the sheet will be just as incomplete as my admin's Excel, only now I pay $19 for it.",
+  "would_change_my_mind": "If it could log a cash payment from a quick voice note or text message in the group, so the mechanic payments get recorded too, and the first month was free instead of 40 documents.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd upload one group export for the free check out of curiosity, and if it finds a duplicate I'd be annoyed with my crew, but I'm not paying $19 a month every month when Excel and my own eyes on the screenshots cost nothing. After the 40 free documents I'd most likely just stop.",
+  "objection": "It's another subscription for something I feel I can already do for free in Excel or with a simple bot, and I'm not convinced it would catch enough each month to pay for itself.",
+  "would_change_my_mind": "If the free check actually found real money lost in my group, more than a few months of the fee, I'd pay for at least one month to see if it keeps catching things.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

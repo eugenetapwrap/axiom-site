@@ -1,0 +1,21 @@
+{
+  "business": "Nota (@NotaGetBot), Telegram bot for expense control",
+  "unit": "paying client-month (one active subscription for one month)",
+  "price": 30.0,
+  "variable": [
+    {"label": "AI recognition, ~150 docs per client-month at $0.015 (estimate)", "cost": 2.25},
+    {"label": "Payment processing ~3% of $30 (Bank of Georgia estimate)", "cost": 0.90},
+    {"label": "Acquisition: $10 per install / 10% install-to-paid = $100 per paying client, spread over an assumed 12-month lifetime (estimate)", "cost": 8.33},
+    {"label": "Free trial AI: up to 140 docs per install x $0.015 = $2.10, / 10% conversion, over 12 months (estimate)", "cost": 1.75}
+  ],
+  "fixed_monthly": [
+    {"label": "Developer (support included), midpoint of $500-700", "cost": 600},
+    {"label": "Hosting", "cost": 100},
+    {"label": "Server, midpoint of $30-50", "cost": 40}
+  ],
+  "startup": [],
+  "days_per_month": 1,
+  "capacity_per_day": 100000,
+  "plan_per_day": 1000,
+  "ramp_per_day": [50, 100, 190, 280, 370, 460, 550, 640, 730, 820, 910, 1000]
+}

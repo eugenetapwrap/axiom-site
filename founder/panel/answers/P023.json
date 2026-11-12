@@ -1,0 +1,13 @@
+{
+  "id": "P023",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper already runs everything through Jurnal and the monthly numbers I share with my partner come out of that. Adding a bot that writes to a separate Google Sheet gives me two sources of truth to reconcile from abroad, not fewer problems.",
+  "objection": "On faded thermal receipts and handwritten Indonesian nota the reading will be wrong now and then, and I'm thousands of kilometres away, so I can't check the paper. I'd end up fixing rows myself or trusting numbers I can't verify.",
+  "would_change_my_mind": "If it pushed straight into Jurnal (or whatever my bookkeeper uses) and flagged the receipts it wasn't sure about instead of guessing, and the free 40 documents showed it handling our real handwritten nota correctly.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

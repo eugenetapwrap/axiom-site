@@ -1,0 +1,13 @@
+{
+  "id": "P015",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "My admin is always weeks behind on the supply-shop nota and I lose track of what the guys actually spent on site. The free 40 docs costs me nothing to test on old chat history, and if it reads the handwritten nota properly, $45 a month is nothing next to one double-paid material run.",
+  "objection": "Handwritten nota from the building-supply shop are messy, half Bahasa, half abbreviations, sometimes smudged. I don't believe it will read them right or really catch the same nota photographed twice by two different workers until I see it do it on my own receipts.",
+  "would_change_my_mind": "If the free trial misreads the handwritten nota or misses a duplicate I plant on purpose, I'm out.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 150
+}

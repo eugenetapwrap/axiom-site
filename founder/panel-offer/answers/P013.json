@@ -1,0 +1,13 @@
+{
+  "id": "P013",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper already collects everything from the groups every month and I don't touch receipts myself. I might let her run the free check out of curiosity, but I'm not paying for another tool unless she tells me it saves her real hours.",
+  "objection": "Half our nota from material shops are handwritten or faded thermal paper in Indonesian. If the bot misreads them, someone still has to check every row, so it's just one more thing to fix on top of what my bookkeeper already does.",
+  "would_change_my_mind": "If the free check on my site groups actually found duplicate or re-sent receipts, real money my staff claimed twice, I would pay for it as a control on the spot.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

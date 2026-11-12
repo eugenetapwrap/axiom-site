@@ -1,0 +1,13 @@
+{
+  "id": "P086",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I'd probably throw it in one group and let it chew through the free 40, but then I'd stop. We run on screenshots and chat, I only dig into receipts when something smells wrong, and I don't see myself opening a Google Sheet every Monday.",
+  "objection": "After the free part nobody, me included, will actually look at the sheet or the report, so I'd be paying every month for a habit we never had.",
+  "would_change_my_mind": "If during the free documents it caught a real duplicate or a padded contractor invoice that I would have missed and paid, I'd pay without thinking.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 100
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P027",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I've already caught someone double-claiming, and from abroad I can't eyeball every receipt in the site group, so something that flags re-sent or re-photographed receipts is worth the money. I'd run my old chat archive through the free 40 first, and if it catches anything my admin missed, $19 or $45 is nothing next to one padded material receipt.",
+  "objection": "Duplicates are only half my problem. An inflated receipt or a fake nota from a building-supply shop is still a real document, so I doubt the bot catches the kind of fiddling that actually cost me. My admin already types these up, so this may just be paying twice.",
+  "would_change_my_mind": "If the free trial on my old chat history doesn't turn up a single duplicate or mismatch my admin missed, I'd cancel.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 50,
+  "price_too_expensive": 120
+}
