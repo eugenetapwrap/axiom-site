@@ -159,21 +159,35 @@ import {
     <!-- 07 Сравнение: привычка «админ с Excel» -->
     <section class="section">
       <div class="wrap">
-        <h2>{compare.title}</h2>
-        <p class="lead">{compare.lead}</p>
-        <div class="vs">
-          {compare.options.map((o) => (
-            <div class:list={['vs-card', { 'vs-card--nota': o.nota }]}>
-              <h3 class="vs-name">{o.nota ? <Logo height={26} color="#F2F0EA" /> : o.name}</h3>
-              <div class="vs-when"><small>Накладная в учёте</small><b>{o.when}</b><span>{o.whenNote}</span></div>
-              <ul>
-                {o.cells.map(([m, t], i) => (
-                  <li class={`m-${m}`}>
+        <h2 class="cmp-title">{compare.title}</h2>
+        <div class="cmp" role="table" aria-label="Сравнение: Nota, админ с Excel, приложение для расходов">
+          <div class="cmp-row cmp-head" role="row">
+            <div class="cmp-q" role="columnheader"><span class="sr-only">Вопрос</span></div>
+            {compare.options.map((o) => (
+              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="columnheader">{o.nota ? <Logo height={24} /> : o.name}</div>
+            ))}
+          </div>
+          <div class="cmp-row cmp-when" role="row">
+            <div class="cmp-q" role="rowheader">{compare.whenLabel}</div>
+            {compare.options.map((o) => (
+              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="cell">
+                <span class="cmp-who">{o.short ?? o.name}</span><b>{o.when}</b><small>{o.whenNote}</small>
+              </div>
+            ))}
+          </div>
+          {compare.rows.map((q, i) => (
+            <div class="cmp-row" role="row">
+              <div class="cmp-q" role="rowheader">{q}</div>
+              {compare.options.map((o) => {
+                const [m, t] = o.cells[i];
+                return (
+                  <div class:list={['cmp-c', `m-${m}`, { 'cmp-c--nota': o.nota }]} role="cell">
                     <span class="vs-mark"><Icon name={m === 'yes' ? 'check' : m === 'no' ? 'x' : 'minus'} size={16} /></span>
-                    <div><small>{compare.rows[i]}</small>{t}</div>
-                  </li>
-                ))}
-              </ul>
+                    <span class="cmp-who">{o.short ?? o.name}</span>
+                    <span class="cmp-t">{t}</span>
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
