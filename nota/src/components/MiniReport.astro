@@ -1,0 +1,56 @@
+---
+// Упрощённая карточка отчёта (демо-данные). Заменить на PNG-экспорт карточки с холста, когда будут финальные.
+import Logo from './Logo.astro';
+
+interface Mark { n: string; label: string; alert?: boolean }
+interface Props {
+  title: string;
+  period: string;
+  total: string;
+  sub: string;
+  marks: Mark[];
+  bars?: number[];
+  cats?: [string, string, number][];
+  review?: [string, string, string][];
+}
+const { title, period, total, sub, marks, bars, cats, review } = Astro.props;
+const max = bars ? Math.max(...bars) : 1;
+---
+<figure class="mini">
+  <div class="mini-head"><Logo height={16} /><span>{title}</span></div>
+  <div class="mini-period">{period}</div>
+  <div class="mini-total"><span class="mini-sum">{total}<small> млн</small></span><span class="mini-sub">{sub}</span></div>
+  <div class="mini-marks">
+    {marks.map((m) => (
+      <div class="mini-mark"><b class:list={{ alert: m.alert }}>{m.n}</b><span>{m.label}</span></div>
+    ))}
+  </div>
+  {bars && (
+    <>
+      <div class="mini-label">По дням</div>
+      <div class="mini-bars">{bars.map((v) => <i style={`height:${Math.round((64 * v) / max)}px`} class:list={{ top: v === max }} />)}</div>
+    </>
+  )}
+  {cats && (
+    <>
+      <div class="mini-label">Категории</div>
+      {cats.map(([n, v, p]) => (
+        <div class="mini-cat">
+          <div><span>{n}</span><span>{v}</span></div>
+          <div class="mini-track"><i style={`width:${p}%`} class:list={{ alert: n === 'Без категории' }} /></div>
+        </div>
+      ))}
+    </>
+  )}
+  {review && (
+    <>
+      <div class="mini-label">Стоит проверить</div>
+      <div class="mini-review">
+        {review.map(([a, w, r]) => (
+          <div><b>{a}</b><span>{w}</span><em>{r}</em></div>
+        ))}
+      </div>
+    </>
+  )}
+  <figcaption class="sr-only">Пример карточки отчёта Nota на демо-данных</figcaption>
+</figure>
