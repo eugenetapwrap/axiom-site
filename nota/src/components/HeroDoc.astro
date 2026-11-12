@@ -1,10 +1,10 @@
 ---
 // Первый экран: рукописная накладная от прораба → строка, которую записала Nota.
 // Демо-данные. Позже можно заменить на реальное фото накладной и скриншот строки.
-interface Props { caption: string }
-const { caption } = Astro.props;
+interface Props { caption: string; rows?: [string, string, string?][] }
+const { caption, rows } = Astro.props;
 
-const row: [string, string, string?][] = [
+const row: [string, string, string?][] = rows ?? [
   ['Дата', '28 окт 2026'],
   ['Поставщик', 'Toko Bangunan Sumber Rejeki'],
   ['Сумма', '2 990 000', 'num'],
