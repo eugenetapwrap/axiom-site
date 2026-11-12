@@ -5,8 +5,9 @@ import Icon from '../components/Icon.astro';
 import MiniReport from '../components/MiniReport.astro';
 import HeroDoc from '../components/HeroDoc.astro';
 import SheetDemo from '../components/SheetDemo.astro';
+import ScreenSlot from '../components/ScreenSlot.astro';
 import {
-  botLink, cta, ctaNote, nav, hero, trust, problem, steps, offer, features, group,
+  botLink, cta, ctaNote, nav, hero, trust, problem, steps, send, group, offer, features, analytics,
   reports, segments, data, compare, pricing, faq, final, footer,
 } from '../data/content';
 ---
@@ -65,8 +66,39 @@ import {
       </div>
     </section>
 
-    <!-- 04 Возможности: не просто «чек в таблицу» -->
-    <section class="section">
+    <!-- 04 Способы отправки: группа по желанию -->
+    <section class="section" id="send">
+      <div class="wrap">
+        <h2>{send.title}</h2>
+        <p class="lead">{send.lead}</p>
+        <div class="grid" style="--min: 240px">
+          {send.items.map((c) => (
+            <div class="card send-card">
+              {c.tag && <span class="tag">{c.tag}</span>}
+              <div class="card-icon"><Icon name={c.icon} /></div>
+              <h3>{c.title}</h3>
+              <p>{c.text}</p>
+            </div>
+          ))}
+        </div>
+        <div class="group-box split">
+          <div>
+            <h3 class="h3-lg">{group.title}</h3>
+            <ul class="check">{group.items.map((t) => <li><Icon name="check" size={22} />{t}</li>)}</ul>
+          </div>
+          <div class="chat-demo" aria-hidden="true">
+            <div class="msg">
+              <div class="msg-card"><div class="msg-author">Прораб</div><div class="doc-mini doc-mini--paper"><b>TOKO KERAMIK JAYA</b><span class="hw">Keramik 60×60, 12 dus</span><span class="hw big">Rp 3.360.000</span></div><div class="msg-text">Плитка на второй этаж <time>11:05</time></div></div>
+              <span class="reaction"><Icon name="pen" size={14} />1</span>
+            </div>
+            <div class="msg-dm"><b>Nota · только вам в личку</b><p>Этот чек уже записан 3 окт, строка 14. В итог не добавляю, отметила как дубль.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 Возможности: не просто «чек в таблицу» -->
+    <section class="section section--line">
       <div class="wrap">
         <h2 style="margin-bottom: 40px">{features.title}</h2>
         <div class="grid" style="--min: 320px">
@@ -77,24 +109,48 @@ import {
       </div>
     </section>
 
-    <!-- 05 Сравнение: привычка «админ с Excel» -->
-    <section class="section section--line">
+    <!-- 06 Таблица и аналитика: места под скриншоты -->
+    <section class="section section--paper" id="analytics">
       <div class="wrap">
-        <h2 style="margin-bottom: 40px">{compare.title}</h2>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th scope="col"><span class="sr-only">Параметр</span></th>{compare.cols.map((c, i) => <th scope="col" class:list={{ 'col-nota': i === 0 }}>{c}</th>)}</tr></thead>
-            <tbody>
-              {compare.rows.map((r) => (
-                <tr><th scope="row">{r[0]}</th><td class="col-nota">{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>
-              ))}
-            </tbody>
-          </table>
+        <h2>{analytics.title}</h2>
+        <p class="lead">{analytics.lead}</p>
+        <div class="an-grid">
+          {analytics.screens.map((sc, i) => (
+            <div class:list={['an-item', { 'an-item--big': i === 0 }]}>
+              <ScreenSlot file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={`${sc.title}: пример на демо-данных`} big={i === 0} />
+              <div class="an-text"><h3>{sc.title}</h3><p>{sc.text}</p></div>
+            </div>
+          ))}
+        </div>
+        <p class="note">{analytics.note}</p>
+      </div>
+    </section>
+
+    <!-- 07 Сравнение: привычка «админ с Excel» -->
+    <section class="section">
+      <div class="wrap">
+        <h2>{compare.title}</h2>
+        <p class="lead">{compare.lead}</p>
+        <div class="vs">
+          {compare.options.map((o) => (
+            <div class:list={['vs-card', { 'vs-card--nota': o.nota }]}>
+              <h3 class="vs-name">{o.nota ? <Logo height={26} color="#F2F0EA" /> : o.name}</h3>
+              <div class="vs-when"><small>Накладная в учёте</small><b>{o.when}</b><span>{o.whenNote}</span></div>
+              <ul>
+                {o.cells.map(([m, t], i) => (
+                  <li class={`m-${m}`}>
+                    <span class="vs-mark"><Icon name={m === 'yes' ? 'check' : m === 'no' ? 'x' : 'minus'} size={16} /></span>
+                    <div><small>{compare.rows[i]}</small>{t}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
     </section>
 
-    <!-- 06 Бесплатная проверка чата -->
+    <!-- 08 Бесплатная проверка архива -->
     <section class="section section--paper" id="report">
       <div class="wrap">
         <div class="offer split">
@@ -109,37 +165,18 @@ import {
           />
           <div>
             <h2>{offer.title}</h2>
-            <p class="lead" style="margin-bottom: 24px">{offer.lead}</p>
-            <ul class="check">{offer.items.map((t) => <li><Icon name="check" size={22} />{t}</li>)}</ul>
+            <p class="lead" style="margin-bottom: 0">{offer.lead}</p>
             <div class="chips">{offer.chips.map((c) => <span>{c}</span>)}</div>
             <p class="proof">{offer.proof}</p>
-            <p class="howto"><b>Как выгрузить:</b> {offer.howto}</p>
-            <a class="btn" href={botLink('land_offer')}>{cta}</a>
+            <p class="howto"><b>Как выгрузить документы из чата:</b> {offer.howto}</p>
+            <a class="btn" href={botLink('land_offer')}>{offer.cta}</a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 07 Nota в группе: страх за рабочий чат -->
+    <!-- 09 Отчёты -->
     <section class="section">
-      <div class="wrap split">
-        <div>
-          <h2 style="margin-bottom: 24px">{group.title}</h2>
-          <ul class="check" style="margin-bottom: 24px">{group.items.map((t) => <li><Icon name="check" size={22} />{t}</li>)}</ul>
-          <p class="muted" style="font-size: 18px">{group.note}</p>
-        </div>
-        <div class="chat-demo" aria-hidden="true">
-          <div class="msg">
-            <div class="msg-card"><div class="msg-author">Прораб</div><div class="msg-photo"><Icon name="receipt" size={30} />фото чека</div><div class="msg-text">Плитка, 12 коробок</div></div>
-            <span class="reaction"><Icon name="pen" size={14} />1</span>
-          </div>
-          <div class="msg-dm"><b>Nota · в личку владельцу</b><p>Этот чек уже записан 3 окт, строка 14. В итог не добавляю, отметила как дубль.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 08 Отчёты -->
-    <section class="section section--paper">
       <div class="wrap">
         <h2>{reports.title}</h2>
         <p class="lead">{reports.lead}</p>
@@ -160,8 +197,8 @@ import {
       </div>
     </section>
 
-    <!-- 09 Для кого -->
-    <section class="section">
+    <!-- 10 Для кого -->
+    <section class="section section--line">
       <div class="wrap">
         <h2 style="margin-bottom: 40px">{segments.title}</h2>
         <div class="grid" style="--min: 250px">{segments.items.map((c) => <div class="card"><h3>{c.title}</h3><p>{c.text}</p></div>)}</div>
@@ -169,7 +206,7 @@ import {
       </div>
     </section>
 
-    <!-- 10 Данные и доступ к Google -->
+    <!-- 11 Данные и доступ к Google -->
     <section class="section section--dark">
       <div class="wrap">
         <h2>{data.title}</h2>
@@ -182,7 +219,7 @@ import {
       </div>
     </section>
 
-    <!-- 11 Цены -->
+    <!-- 12 Цены -->
     <section class="section section--paper" id="price">
       <div class="wrap">
         <h2>{pricing.title}</h2>
@@ -203,7 +240,7 @@ import {
       </div>
     </section>
 
-    <!-- 12 Вопросы -->
+    <!-- 13 Вопросы -->
     <section class="section" id="faq">
       <div class="wrap">
         <h2 style="margin-bottom: 24px">Вопросы</h2>
@@ -211,7 +248,7 @@ import {
       </div>
     </section>
 
-    <!-- 13 Финал -->
+    <!-- 14 Финал -->
     <section class="section--dark final">
       <div class="wrap">
         <h2>{final.title}</h2>

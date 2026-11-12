@@ -1,0 +1,37 @@
+---
+// Рамка «Google-таблица» под скриншот листа.
+// Положите PNG в nota/public/screens/ (например, cash-flow.png) и пересоберите сайт:
+// вместо заглушки появится картинка. Рекомендуемый размер — 2400 px по ширине.
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  file: string;   // путь от public, например /screens/cash-flow.png
+  tab: string;    // активный лист
+  tabs: string[]; // все листы внизу рамки
+  alt: string;
+  big?: boolean;
+}
+const { file, tab, tabs, alt, big } = Astro.props;
+const exists = fs.existsSync(path.join(process.cwd(), 'public', file));
+---
+<div class:list={['shot', { 'shot--big': big }]}>
+  <div class="shot-bar" aria-hidden="true">
+    <span class="shot-doc"></span>
+    <span class="shot-name">Nota · Google Таблицы</span>
+    <span class="shot-dots"><i></i><i></i><i></i></span>
+  </div>
+  <div class="shot-body">
+    {exists ? (
+      <img src={file} alt={alt} loading="lazy" decoding="async" />
+    ) : (
+      <div class="shot-empty" role="img" aria-label={`Здесь будет скриншот листа ${tab}`}>
+        <span>Скриншот листа «{tab}»</span>
+        <small>{`public${file}`}</small>
+      </div>
+    )}
+  </div>
+  <div class="shot-tabs" aria-hidden="true">
+    {tabs.map((t) => <span class:list={{ on: t === tab }}>{t}</span>)}
+  </div>
+</div>
