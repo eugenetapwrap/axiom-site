@@ -1,0 +1,65 @@
+---
+// «Как работает»: два сообщения в рабочем чате → строки в Google-таблице.
+// Накладная и перевод за одну воду — один платёж: второй документ отмечен как дубль.
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+
+interface Props { caption: string }
+const { caption } = Astro.props;
+
+type Row = { id: string; date: string; who: string; cat: string; sum: string; check: string; note?: string; flag?: 'dbl' | 'rev' };
+const rows: Row[] = [
+  { id: '1041', date: '28.10', who: 'UD Sumber Air Jimbaran', cat: 'Вода', sum: '4 250 000', check: 'OK' },
+  { id: '1042', date: '28.10', who: 'Mitra10 Jimbaran', cat: 'Материалы', sum: '3 180 000', check: 'OK' },
+  { id: '1043', date: '28.10', who: 'Toko Bangunan Sumber Rejeki', cat: 'Материалы', sum: '2 990 000', check: 'OK' },
+  { id: '1044', date: '29.10', who: 'UD Sumber Air Jimbaran', cat: 'Вода', sum: '4 250 000', check: 'Дубль', note: '→ строка 1041', flag: 'dbl' },
+  { id: '1045', date: '30.10', who: 'CV Bangun Bali', cat: 'Подрядчики', sum: '2 450 000', check: 'Проверить', note: 'позиции ≠ итог', flag: 'rev' },
+];
+---
+<figure class="sheet-demo">
+  <div class="sd-body" aria-hidden="true">
+    <div class="sd-chat">
+      <div class="chat-head">
+        <div class="chat-ava"><Icon name="table" size={18} /></div>
+        <div><div class="chat-name">Объект Jimbaran</div><div class="chat-meta">рабочий чат · 9 участников</div></div>
+      </div>
+      <div class="sd-msgs">
+        <div class="msg">
+          <div class="msg-card">
+            <div class="msg-author">Прораб</div>
+            <div class="doc-mini doc-mini--paper"><b>UD SUMBER AIR</b><span class="hw">Air galon 50</span><span class="hw big">Rp 4.250.000</span></div>
+            <div class="msg-text">Вода на объект, накладная <time>09:41</time></div>
+          </div>
+          <span class="reaction"><Icon name="pen" size={14} />1</span>
+        </div>
+        <div class="msg">
+          <div class="msg-card">
+            <div class="msg-author">Менеджер</div>
+            <div class="doc-mini doc-mini--bank"><b>Transfer berhasil</b><span>BCA → UD Sumber Air</span><span class="big">Rp 4.250.000</span><small>29 Okt 2026 · 14:12</small></div>
+            <div class="msg-text">Оплатил воду <time>14:12</time></div>
+          </div>
+          <span class="reaction"><Icon name="pen" size={14} />1</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sd-sheet">
+      <div class="sd-sheet-head"><Logo height={16} /><span>Расходы · Google-таблица</span></div>
+      <div class="sd-row sd-row--head">
+        <span class="c-id">№</span><span class="c-date">Дата</span><span class="c-who">Поставщик</span><span class="c-cat">Категория</span><span class="c-sum">Сумма</span><span class="c-chk">Проверка</span>
+      </div>
+      {rows.map((r) => (
+        <div class:list={['sd-row', r.flag && `sd-row--${r.flag}`]}>
+          <span class="c-id">{r.id}</span>
+          <span class="c-date">{r.date}</span>
+          <span class="c-who">{r.who}</span>
+          <span class="c-cat">{r.cat}</span>
+          <span class="c-meta">{r.date} · {r.cat}</span>
+          <span class="c-sum">{r.sum}</span>
+          <span class="c-chk"><b>{r.check}</b>{r.note && <small>{r.note}</small>}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>

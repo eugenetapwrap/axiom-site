@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import Logo from '../components/Logo.astro';
 import Icon from '../components/Icon.astro';
 import MiniReport from '../components/MiniReport.astro';
+import HeroDoc from '../components/HeroDoc.astro';
+import SheetDemo from '../components/SheetDemo.astro';
 import {
   botLink, cta, ctaNote, nav, hero, trust, problem, steps, offer, features, group,
   reports, segments, data, compare, pricing, faq, final, footer,
@@ -20,7 +22,7 @@ import {
   <main>
     <!-- 01 Первый экран -->
     <section class="hero">
-      <div class="wrap split">
+      <div class="wrap split hero-split">
         <div>
           <h1>{hero.title}</h1>
           <p class="lead">{hero.lead}</p>
@@ -30,31 +32,7 @@ import {
           </div>
           <p class="cta-note">{ctaNote}</p>
         </div>
-        <div class="phone-wrap" aria-hidden="true">
-          <div class="phone">
-            <div class="screen">
-              <div class="chat-head">
-                <div class="chat-ava"><Icon name="table" size={18} /></div>
-                <div><div class="chat-name">Объект Jimbaran</div><div class="chat-meta">9 участников · Nota в группе</div></div>
-              </div>
-              <div class="chat-body">
-                <div class="msg">
-                  <div class="msg-card"><div class="msg-author">Прораб</div><div class="msg-photo"><Icon name="receipt" size={30} />фото накладной</div><div class="msg-text">Цемент, 40 мешков</div></div>
-                  <span class="reaction"><Icon name="pen" size={14} />1</span>
-                </div>
-                <div class="msg">
-                  <div class="msg-card"><div class="msg-author">Менеджер</div><div class="msg-photo"><Icon name="receipt" size={30} />скриншот перевода</div><div class="msg-text">Оплатил поставщику</div></div>
-                  <span class="reaction"><Icon name="pen" size={14} />1</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="float-card">
-            <div class="k">Обработано за 2 месяца</div>
-            <div class="v">128,40 <small>млн</small></div>
-            <div class="row"><span><b>5</b> дублей</span><span><b>7</b> проверить</span><span><strong>64</strong> платежа</span></div>
-          </div>
-        </div>
+        <HeroDoc caption={hero.caption} />
       </div>
     </section>
 
@@ -74,8 +52,8 @@ import {
       </div>
     </section>
 
-    <!-- 03 Как работает -->
-    <section class="section section--line" id="how">
+    <!-- 03 Как работает + пример чат → таблица -->
+    <section class="section section--paper" id="how">
       <div class="wrap">
         <h2 style="margin-bottom: 40px">{steps.title}</h2>
         <ol class="grid" style="--min: 300px; list-style: none; padding: 0; margin: 0">
@@ -83,10 +61,40 @@ import {
             <li class="step"><div class="step-n">{i + 1}</div><h3>{s.title}</h3><p>{s.text}</p></li>
           ))}
         </ol>
+        <SheetDemo caption={steps.demoCaption} />
       </div>
     </section>
 
-    <!-- 04 Проверка архива -->
+    <!-- 04 Возможности: не просто «чек в таблицу» -->
+    <section class="section">
+      <div class="wrap">
+        <h2 style="margin-bottom: 40px">{features.title}</h2>
+        <div class="grid" style="--min: 320px">
+          {features.items.map((c) => (
+            <div class="card"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3><p>{c.text}</p></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 Сравнение: привычка «админ с Excel» -->
+    <section class="section section--line">
+      <div class="wrap">
+        <h2 style="margin-bottom: 40px">{compare.title}</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th scope="col"><span class="sr-only">Параметр</span></th>{compare.cols.map((c, i) => <th scope="col" class:list={{ 'col-nota': i === 0 }}>{c}</th>)}</tr></thead>
+            <tbody>
+              {compare.rows.map((r) => (
+                <tr><th scope="row">{r[0]}</th><td class="col-nota">{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 Бесплатная проверка чата -->
     <section class="section section--paper" id="report">
       <div class="wrap">
         <div class="offer split">
@@ -104,6 +112,7 @@ import {
             <p class="lead" style="margin-bottom: 24px">{offer.lead}</p>
             <ul class="check">{offer.items.map((t) => <li><Icon name="check" size={22} />{t}</li>)}</ul>
             <div class="chips">{offer.chips.map((c) => <span>{c}</span>)}</div>
+            <p class="proof">{offer.proof}</p>
             <p class="howto"><b>Как выгрузить:</b> {offer.howto}</p>
             <a class="btn" href={botLink('land_offer')}>{cta}</a>
           </div>
@@ -111,20 +120,8 @@ import {
       </div>
     </section>
 
-    <!-- 05 Возможности -->
+    <!-- 07 Nota в группе: страх за рабочий чат -->
     <section class="section">
-      <div class="wrap">
-        <h2 style="margin-bottom: 40px">{features.title}</h2>
-        <div class="grid" style="--min: 320px">
-          {features.items.map((c) => (
-            <div class="card"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3><p>{c.text}</p></div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- 06 Nota в группе -->
-    <section class="section section--line">
       <div class="wrap split">
         <div>
           <h2 style="margin-bottom: 24px">{group.title}</h2>
@@ -141,7 +138,7 @@ import {
       </div>
     </section>
 
-    <!-- 07 Отчёты -->
+    <!-- 08 Отчёты -->
     <section class="section section--paper">
       <div class="wrap">
         <h2>{reports.title}</h2>
@@ -163,7 +160,7 @@ import {
       </div>
     </section>
 
-    <!-- 08 Для кого -->
+    <!-- 09 Для кого -->
     <section class="section">
       <div class="wrap">
         <h2 style="margin-bottom: 40px">{segments.title}</h2>
@@ -172,7 +169,7 @@ import {
       </div>
     </section>
 
-    <!-- 09 Данные -->
+    <!-- 10 Данные и доступ к Google -->
     <section class="section section--dark">
       <div class="wrap">
         <h2>{data.title}</h2>
@@ -182,23 +179,6 @@ import {
           ))}
         </div>
         <div class="who"><span>КТО ДЕЛАЕТ</span><p>{data.who}</p></div>
-      </div>
-    </section>
-
-    <!-- 10 Сравнение -->
-    <section class="section">
-      <div class="wrap">
-        <h2 style="margin-bottom: 40px">{compare.title}</h2>
-        <div class="table-scroll">
-          <table>
-            <thead><tr><th scope="col"><span class="sr-only">Параметр</span></th>{compare.cols.map((c, i) => <th scope="col" class:list={{ 'col-nota': i === 0 }}>{c}</th>)}</tr></thead>
-            <tbody>
-              {compare.rows.map((r) => (
-                <tr><th scope="row">{r[0]}</th><td class="col-nota">{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td></tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
     </section>
 
