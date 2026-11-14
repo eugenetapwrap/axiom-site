@@ -493,3 +493,7 @@ mark.todo { background: #fff1b8; color: #6b4e00; border-radius: 4px; padding: 0 
 .howto-mini li { line-height: 1.45; }
 .plan-unit { margin-top: -10px; font-size: 14px; color: var(--muted); }
 .tag.tag--grey { background: var(--box); color: var(--slate); }
+/* v6 */
+.proof-stat { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-top: 24px; padding: 18px 22px; border-radius: 16px; background: #e9eef4; }
+.proof-stat b { font-size: clamp(26px, 3vw, 34px); line-height: 1.1; color: var(--slate); }
+.proof-stat span { font-size: 17px; color: var(--ink); }
