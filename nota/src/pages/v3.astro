@@ -8,7 +8,7 @@ import ScreenSlot from '../components/ScreenSlot.astro';
 import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
-  meta, cta, nav, hero, trust, pain, how, analytics, compare, reviews, data, pricing, faq, final, footer,
+  meta, cta, nav, hero, trust, result, pain, how, analytics, compare, reviews, data, pricing, faq, final, footer,
 } from '../data/content-v3';
 ---
 <Base title={meta.title} description={meta.description} noindex>
@@ -21,7 +21,7 @@ import {
   </header>
 
   <main>
-    <!-- 1. Первый экран: контроль, кому, 2 минуты → 20 минут, QR, пример отчёта -->
+    <!-- 1. Первый экран: архив → отчёт за 20 минут, QR, пример отчёта -->
     <section class="hero hero2 hero3">
       <div class="wrap split hero-split">
         <div>
@@ -53,8 +53,22 @@ import {
       <ul class="wrap">{trust.map((t) => <li><Icon name="check" size={22} />{t}</li>)}</ul>
     </div>
 
-    <!-- 2. Где утекают деньги -->
-    <section class="section">
+    <!-- 2. Что придёт через 20 минут -->
+    <section class="section" id="result">
+      <div class="wrap">
+        <h2 style="margin-bottom: 32px">{result.title}</h2>
+        <div class="grid" style="--min: 280px">
+          {result.items.map((r) => (
+            <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={r.icon} /></div><h3>{r.title}</h3></div><p>{r.text}</p></div>
+          ))}
+        </div>
+        <p class="note">{result.note}</p>
+        <div class="cta-row" style="margin-top: 24px"><a class="btn" href={botLink('land3_result')}>{cta}</a></div>
+      </div>
+    </section>
+
+    <!-- 3. Где утекают деньги -->
+    <section class="section section--line">
       <div class="wrap">
         <h2 style="margin-bottom: 32px">{pain.title}</h2>
         <div class="grid" style="--min: 280px">
@@ -65,7 +79,7 @@ import {
       </div>
     </section>
 
-    <!-- 3. Как это работает: шаги, способы, как Nota понимает, поведение в группе -->
+    <!-- 4. Как это работает: шаги, способы, факты, группа -->
     <section class="section section--paper" id="how">
       <div class="wrap">
         <h2 style="margin-bottom: 32px">{how.title}</h2>
@@ -104,7 +118,7 @@ import {
       </div>
     </section>
 
-    <!-- 4. Таблица, отчёты и аналитика -->
+    <!-- 5. Таблица и аналитика -->
     <section class="section" id="analytics">
       <div class="wrap">
         <h2>{analytics.title}</h2>
@@ -150,7 +164,7 @@ import {
       </div>
     </section>
 
-    <!-- 5. Сравнение: накладная в 9:41 -->
+    <!-- 6. Сравнение: накладная в 9:41 -->
     <section class="section section--line">
       <div class="wrap">
         <h2 class="cmp-title">{compare.title}</h2>
@@ -188,7 +202,7 @@ import {
       </div>
     </section>
 
-    <!-- 6. Отзывы (заглушки до реальных текстов) -->
+    <!-- 7. Отзывы (заглушки до реальных текстов) -->
     <section class="section section--paper">
       <div class="wrap">
         <h2 style="margin-bottom: 32px">{reviews.title}</h2>
@@ -203,7 +217,7 @@ import {
       </div>
     </section>
 
-    <!-- 7. Кто делает и данные -->
+    <!-- 8. Данные и кто делает -->
     <section class="section section--dark">
       <div class="wrap">
         <h2>{data.title}</h2>
@@ -216,7 +230,7 @@ import {
       </div>
     </section>
 
-    <!-- 8. Цены -->
+    <!-- 9. Цены -->
     <section class="section section--paper" id="price">
       <div class="wrap">
         <h2>{pricing.title}</h2>
@@ -241,7 +255,7 @@ import {
       </div>
     </section>
 
-    <!-- 9. Вопросы -->
+    <!-- 10. Вопросы -->
     <section class="section" id="faq">
       <div class="wrap">
         <h2 style="margin-bottom: 24px">Вопросы</h2>
