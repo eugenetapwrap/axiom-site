@@ -11,8 +11,9 @@ interface Props {
   alt: string;
   w?: number;
   h?: number;
+  mobile?: { file: string; w: number; h: number }; // фрагмент листа для телефона
 }
-const { file, tab, tabs, alt, w, h } = Astro.props;
+const { file, tab, tabs, alt, w, h, mobile } = Astro.props;
 const exists = fs.existsSync(path.join(process.cwd(), 'public', file));
 ---
 <div class="shot">
@@ -24,7 +25,14 @@ const exists = fs.existsSync(path.join(process.cwd(), 'public', file));
   <div class="shot-body">
     {exists ? (
       <a href={file} target="_blank" rel="noopener" title="Открыть в полном размере">
-        <img src={file} alt={alt} width={w} height={h} loading="lazy" decoding="async" />
+        {mobile ? (
+          <picture>
+            <source media="(max-width: 640px)" srcset={mobile.file} width={mobile.w} height={mobile.h} />
+            <img src={file} alt={alt} width={w} height={h} loading="lazy" decoding="async" />
+          </picture>
+        ) : (
+          <img src={file} alt={alt} width={w} height={h} loading="lazy" decoding="async" />
+        )}
       </a>
     ) : (
       <div class="shot-empty" role="img" aria-label={`Здесь будет скриншот листа ${tab}`}>
