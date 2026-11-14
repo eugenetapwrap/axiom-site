@@ -25,7 +25,7 @@ import {
     <section class="hero hero2 hero3">
       <div class="wrap split hero-split">
         <div>
-          <span class="hero-badge">{hero.badge}</span>
+          <span class="hero-eyebrow">{hero.eyebrow}</span>
           <h1>{hero.title}</h1>
           <p class="lead">{hero.lead}</p>
           <div class="time-strip">
@@ -33,14 +33,14 @@ import {
             <span class="ts-arrow" aria-hidden="true">→</span>
             <div class="ts-item ts-item--nota"><small>{hero.nota.k}</small><b>{hero.nota.v}</b><span>{hero.nota.t}</span></div>
           </div>
-          <div class="cta-row">
+          <div class="cta-row cta-row--qr">
             <a class="btn" href={botLink('land3_hero')}>{cta}</a>
+            <div class="cta-qr">
+              <img src="/screens/qr-bot.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="64" height="64" />
+              <span>{hero.qr}</span>
+            </div>
           </div>
           <p class="cta-note">{hero.note}</p>
-          <div class="hero-qr">
-            <img src="/screens/qr-bot.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
-            <span>{hero.qr}</span>
-          </div>
         </div>
         <figure class="hero-report">
           <img src={hero.report.file} alt="Пример отчёта Nota по архиву: 96,15 млн рупий, 37 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
@@ -62,10 +62,6 @@ import {
             <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div><p>{c.text}</p></div>
           ))}
         </div>
-        <figure class="pain-shot">
-          <img src={pain.shot.file} alt="Фрагмент таблицы: счёт 96 отмечен как дубль счёта 23 и стоит к оплате" width={pain.shot.w} height={pain.shot.h} loading="lazy" />
-          <figcaption>{pain.shot.caption}</figcaption>
-        </figure>
       </div>
     </section>
 

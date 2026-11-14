@@ -461,3 +461,10 @@ mark.todo { background: #fff1b8; color: #6b4e00; border-radius: 4px; padding: 0 
   .pain-shot { grid-template-columns: minmax(0, 586px) minmax(0, 1fr); align-items: center; gap: 32px; }
   .pain-shot figcaption { font-size: 17px; }
 }
+
+.hero-eyebrow { display: block; margin-bottom: 14px; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--green); }
+.cta-row--qr { flex-wrap: nowrap; gap: 20px; }
+.cta-qr { display: none; align-items: center; gap: 10px; font-size: 14px; line-height: 1.35; color: var(--muted); max-width: 170px; }
+.cta-qr img { flex: none; width: 64px; height: 64px; border-radius: 8px; background: #fff; padding: 3px; box-shadow: inset 0 0 0 1px var(--line); }
+@media (min-width: 900px) and (hover: hover) { .cta-qr { display: flex; } }
+@media (max-width: 480px) { .cta-row--qr { flex-wrap: wrap; } }
