@@ -476,3 +476,6 @@ mark.todo { background: #fff1b8; color: #6b4e00; border-radius: 4px; padding: 0 
   .tight .section { padding: 64px 0; }
   .tight .hero { padding: 48px 0 64px; }
 }
+.steps4 .step { padding: 24px; }
+.steps4 .step-n { width: 40px; height: 40px; font-size: 18px; margin-bottom: 16px; }
+.steps4 .step h3 { font-size: 19px; }
