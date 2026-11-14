@@ -485,3 +485,11 @@ mark.todo { background: #fff1b8; color: #6b4e00; border-radius: 4px; padding: 0 
 .opt-box b { display: block; margin-bottom: 2px; }
 .opt-box b em { font-style: normal; font-size: 12px; font-weight: 700; color: #8a5a00; background: #fbefc9; border-radius: 999px; padding: 2px 8px; margin-left: 6px; vertical-align: 2px; }
 .opt-box p { color: var(--muted); }
+/* v5 */
+.howto-mini { margin-top: 10px; font-size: 15px; color: var(--muted); max-width: 520px; }
+.howto-mini summary { cursor: pointer; color: var(--slate); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; list-style: none; }
+.howto-mini summary::-webkit-details-marker { display: none; }
+.howto-mini ul { margin-top: 8px; display: grid; gap: 4px; padding-left: 0; }
+.howto-mini li { line-height: 1.45; }
+.plan-unit { margin-top: -10px; font-size: 14px; color: var(--muted); }
+.tag.tag--grey { background: var(--box); color: var(--slate); }
