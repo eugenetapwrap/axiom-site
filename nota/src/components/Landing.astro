@@ -290,9 +290,13 @@ const jsonld = [
         </div>
         <div class="rv-track" id="rv-track" tabindex="0" role="region" aria-label="Отзывы, листаются влево и вправо">
           {reviews.items.map((r) => (
-            <figure class="review">
+            <figure class:list={['review', { 'review--draft': r.draft }]}>
+              {r.draft && <p class="rv-draft"><mark class="todo">Черновик — найти клиента</mark></p>}
               <blockquote set:html={fmt(r.text)} />
-              <figcaption><b set:html={fmt(r.name)} /><span set:html={fmt(r.role)} /></figcaption>
+              <figcaption>
+                <span class="rv-ava" aria-hidden="true">{r.photo ? <img src={r.photo} alt="" width="48" height="48" loading="lazy" /> : r.draft ? '?' : r.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}</span>
+                <span class="rv-who"><b set:html={fmt(r.name)} /><span set:html={fmt(r.role)} /></span>
+              </figcaption>
             </figure>
           ))}
         </div>
