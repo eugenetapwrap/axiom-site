@@ -798,3 +798,15 @@ html:not([data-rep="plain"]) .v9 .s2-split .mini { display: none; }
 .v9 .an-btn small { flex: none; }
 @media (max-width: 1100px) { .v9 .an-btn { flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; } .v9 .an-btn b { font-size: 16px; } }
 @media (max-width: 640px) { .v9 .an-btn { padding: 10px 8px; justify-content: center; } .v9 .an-btn b { font-size: 14px; line-height: 1.25; } }
+/* v8/v9: в ценах переключатель периода — часть шапки блока: 16 px от подзаголовка (было 52: отступ подзаголовка + отступ строк) */
+.v8 .price-head { row-gap: 16px; }
+.v8 .price-head .lead { margin-bottom: 0; }
+/* v9: вкладки листов таблицы — как переключатель периода в ценах: серая подложка, выбранная вкладка тёмная */
+.v9 .an-pick { gap: 6px; padding: 6px; background: var(--box); border-radius: 18px; }
+.v9 .an-btn { background: transparent; box-shadow: none; border-radius: 13px; }
+.v9 .an-btn:hover { background: #fff; box-shadow: none; }
+.v9 .an-btn[aria-selected="true"] { background: var(--ink); box-shadow: none; }
+.v9 .an-btn[aria-selected="true"] b { color: #fff; }
+.v9 .an-btn[aria-selected="true"] small { color: #9fdcb4; }
+.v9 .an-btn small { color: var(--green-sheet); }
+@media (max-width: 640px) { .v9 .an-pick { padding: 4px; gap: 4px; border-radius: 14px; } .v9 .an-btn { border-radius: 10px; } }
