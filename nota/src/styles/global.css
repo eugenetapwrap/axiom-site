@@ -997,3 +997,7 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 .v10 .feat-list .feat-stat { margin-top: auto; padding-top: 12px; display: flex; flex-direction: column; gap: 0; font-weight: 400; }
 .v10 .feat-list .feat-stat b { font-size: 30px; line-height: 1.1; font-weight: 700; color: var(--orange); letter-spacing: -0.01em; }
 .v10 .feat-list .feat-stat span { font-size: 14px; color: var(--muted); }
+/* Звёздочка к источнику сумм: вплотную к слову и чуть выше строки; поле нажатия ~24 px за счёт отрицательных полей */
+.v10 .feat-stat .fn { position: relative; top: -0.35em; padding: 5px 8px; margin: -5px -8px -5px -7px; font-size: 15px; font-weight: 700; line-height: 1; color: var(--slate); text-decoration: none; }
+.v10 .feat-stat .fn:hover { color: var(--orange); }
+#stats-note:target { color: #fff; }

@@ -188,7 +188,7 @@ const jsonld = [
         <h2 class="h2-gap">{what.title}</h2>
         <ul class="feat-list">
           {what.items.map((c) => (
-            <li class:list={{ 'feat--accent': c.accent }}><span class="feat-icon"><Icon name={c.icon} /></span><div><h3>{c.title}</h3><p>{c.text}</p>{c.stat && <p class="feat-stat"><b>{c.stat.value}</b><span>{c.stat.text}</span></p>}</div></li>
+            <li class:list={{ 'feat--accent': c.accent }}><span class="feat-icon"><Icon name={c.icon} /></span><div><h3>{c.title}</h3><p>{c.text}</p>{c.stat && <p class="feat-stat"><b>{c.stat.value}</b><span>{c.stat.text}<a class="fn" href="#stats-note" aria-label="Откуда эти суммы">*</a></span></p>}</div></li>
           ))}
         </ul>
       </div>
@@ -397,7 +397,7 @@ const jsonld = [
         <a href={botLink('land10_support')}>Поддержка в боте</a>
       </nav>
       <div class="op">{footer.operator} · © 2026</div>
-      <p class="foot-note">{footer.testData} {footer.statsNote}</p>
+      <p class="foot-note">{footer.testData}<br /><span id="stats-note">*&nbsp;{footer.statsNote}</span></p>
     </div>
   </footer>
   <script is:inline>
