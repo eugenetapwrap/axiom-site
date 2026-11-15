@@ -7,6 +7,7 @@ import Icon from '../components/Icon.astro';
 import ScreenSlot from '../components/ScreenSlot.astro';
 import MiniReport from '../components/MiniReport.astro';
 import Pen from '../components/Pen.astro';
+import Reaction from '../components/Reaction.astro';
 import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
@@ -205,7 +206,7 @@ const jsonld = [
             show(0);
           })();
         </script>
-        <p class="note">{analytics.note}</p>
+        {analytics.note && <p class="note">{analytics.note}</p>}
       </div>
     </section>
 
@@ -219,12 +220,12 @@ const jsonld = [
           {send.items.map((c) => (
             <div class="card send-card send-card--row">
               <div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div>
-              <p>{c.text}</p>
-              <span class:list={['tag', `tag--${c.tone}`]}>{c.tag}</span>
+              <p>{c.text.split('{r}').map((part, i) => <>{i > 0 && <Reaction />}{part}</>)}</p>
+              {c.tag && <span class:list={['tag', `tag--${c.tone}`]}>{c.tag}</span>}
             </div>
           ))}
         </div>
-        <p class="note">{send.seen}</p>
+        <p class="note">{send.seen.split('{r}').map((part, i) => <>{i > 0 && <Reaction />}{part}</>)}</p>
       </div>
     </section>
 
@@ -234,7 +235,7 @@ const jsonld = [
         <h2 class="h2-gap">{what.title}</h2>
         <ul class="feat-list">
           {what.items.map((c) => (
-            <li><span class="feat-icon"><Icon name={c.icon} /></span><div><h3>{c.title}</h3><p>{c.text}</p></div></li>
+            <li class:list={{ 'feat--accent': c.accent }}><span class="feat-icon"><Icon name={c.icon} /></span><div><h3>{c.title}</h3><p>{c.text}</p></div></li>
           ))}
         </ul>
         <div class="proof-band"><b>{what.proof.value}</b><span>{what.proof.text}</span></div>
@@ -279,24 +280,20 @@ const jsonld = [
       </div>
     </section>
 
-    <!-- 7. Отчёт каждый понедельник. Октябрь сведён с примером отчёта на первом экране: 96,15 млн, 37 платежей -->
+    <!-- 7. Отчёт каждый понедельник: слева карточка недельного отчёта, справа что в нём -->
     <section class="section section--paper">
-      <div class="wrap">
-        <h2>{reports.title}</h2>
-        <p class="lead">{reports.lead}</p>
-        <div class="reports-row">
-          <MiniReport
-            title="Неделя · 3–9 ноя" period="Сравнение с прошлой неделей: +8%" total="21,70" sub="16 платежей"
-            marks={[{ n: '1', label: 'дубль', alert: true }, { n: '2', label: 'проверить', alert: true }, { n: '4', label: 'рукописных' }, { n: '0', label: 'не прочитано' }]}
-            bars={[3.1, 5.4, 2.2, 6.8, 2.9, 0.8, 0.5]}
-            cats={[['Материалы', '9 800 000', 45], ['Подрядчики', '6 200 000', 29], ['Без категории', '700 000', 3]]}
-          />
-          <MiniReport
-            title="Октябрь 2026" period="Сравнение с сентябрём: −4%" total="96,15" sub="37 платежей"
-            marks={[{ n: '2', label: 'дубля', alert: true }, { n: '3', label: 'проверить', alert: true }, { n: '9', label: 'рукописных' }, { n: '1', label: 'не прочитано' }]}
-            bars={[18.4, 31.2, 26.9, 19.65]} barsLabel="По неделям"
-            cats={[['Материалы', '41 120 000', 43], ['Подрядчики', '24 600 000', 26], ['Зарплаты', '14 400 000', 15]]}
-          />
+      <div class="wrap rep-split">
+        <MiniReport
+          title="Неделя · 3–9 ноя" period="Сравнение с прошлой неделей: +8%" total="21,70" sub="16 платежей"
+          marks={[{ n: '1', label: 'дубль', alert: true }, { n: '2', label: 'проверить', alert: true }, { n: '4', label: 'рукописных' }, { n: '0', label: 'не прочитано' }]}
+          bars={[3.1, 5.4, 2.2, 6.8, 2.9, 0.8, 0.5]}
+          cats={[['Материалы', '9 800 000', 45], ['Подрядчики', '6 200 000', 29], ['Без категории', '700 000', 3]]}
+        />
+        <div class="rep-text">
+          <h2>{reports.title}</h2>
+          <p class="lead">{reports.lead}</p>
+          <ul class="check">{reports.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
+          <p class="rep-more">{reports.more}</p>
         </div>
       </div>
     </section>
@@ -335,8 +332,9 @@ const jsonld = [
           </div>
           <fieldset class="bill">
             <legend class="sr-only">{pricing.billing.label}</legend>
-            <label><input type="radio" name="bill" value="month" checked /><span>{pricing.billing.month}</span></label>
-            <label><input type="radio" name="bill" value="year" /><span>{pricing.billing.year} <em>{pricing.billing.save}</em></span></label>
+            {pricing.billing.opts.map((o, i) => (
+              <label><input type="radio" name="bill" value={o.v} checked={i === 0} /><span><b class="lg">{o.lg}</b><b class="sm">{o.sm}</b>{o.save && <em>{o.save}</em>}</span></label>
+            ))}
           </fieldset>
         </div>
         <div class="grid plans" style="--min: 290px; gap: 24px">
@@ -344,10 +342,10 @@ const jsonld = [
             <div class:list={['plan', { 'plan--hl': p.highlight }]}>
               <h3>{p.name}</h3>
               <div class="plan-price">
-                <span class="pm">{p.month.price}</span><span class="py">{p.year.price}</span><small> / мес</small>
+                <span class="pm">{p.month.price}</span><span class="p3">{p.q3.price}</span><span class="p6">{p.q6.price}</span><small> / мес</small>
               </div>
               <div class="plan-unit">
-                <span class="pm">{p.month.unit}</span><span class="py">{p.year.total} · {p.year.unit}</span>
+                <span class="pm">{p.month.unit}</span><span class="p3">{p.q3.total} · {p.q3.unit}</span><span class="p6">{p.q6.total} · {p.q6.unit}</span>
               </div>
               <p><b>{p.docs}</b><br /><span class="muted">{p.who}</span></p>
               <ul class="check">{[...p.feats, ...pricing.common].map((f) => <li><Icon name="check" size={20} />{f}</li>)}</ul>
@@ -414,6 +412,7 @@ const jsonld = [
         <a href={botLink('land7_support')}>Поддержка в боте</a>
       </nav>
       <div class="op">{footer.operator} · © 2026</div>
+      <p class="foot-note">{footer.testData}</p>
     </div>
   </footer>
   <script is:inline>
