@@ -1,22 +1,21 @@
 ---
-// Версия 6 лендинга: костяк и порядок рассказа из v2, факты из v3–v5. Тексты: src/data/content-v6.ts.
-import Base from '../layouts/Base.astro';
-import Logo from '../components/Logo.astro';
-import Icon from '../components/Icon.astro';
-import ScreenSlot from '../components/ScreenSlot.astro';
-import MiniReport from '../components/MiniReport.astro';
-import { botLink } from '../data/content';
-import { fmt } from '../lib/fmt';
+// Версия 4 лендинга: объединение v2 и v3. Тексты: src/data/content-v4.ts. Заглушки ⟦…⟧ подсвечены жёлтым (fmt).
+import Base from '../../layouts/Base.astro';
+import Logo from '../../components/Logo.astro';
+import Icon from '../../components/Icon.astro';
+import ScreenSlot from '../../components/ScreenSlot.astro';
+import { botLink } from '../../data/content';
+import { fmt } from '../../lib/fmt';
 import {
-  meta, cta, nav, hero, result, analytics, send, what, compare, reports, segments, reviews, data, pricing, faq, final, footer,
-} from '../data/content-v6';
+  meta, cta, nav, hero, result, what, send, analytics, compare, reviews, data, pricing, faq, final, footer,
+} from '../../data/content-v4';
 ---
 <Base title={meta.title} description={meta.description} noindex>
   <header class="header">
     <div class="wrap">
       <a href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
       <nav aria-label="Разделы">{nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
-      <a class="btn btn--sm btn--dark" href={botLink('land6_header')}>Открыть в Telegram</a>
+      <a class="btn btn--sm btn--dark" href={botLink('land4_header')}>Открыть в Telegram</a>
     </div>
   </header>
 
@@ -34,17 +33,13 @@ import {
             <div class="ts-item ts-item--nota"><small>{hero.nota.k}</small><b>{hero.nota.v}</b><span>{hero.nota.t}</span></div>
           </div>
           <div class="cta-row cta-row--qr">
-            <a class="btn" href={botLink('land6_hero')}>{cta}</a>
+            <a class="btn" href={botLink('land4_hero')}>{cta}</a>
             <div class="cta-qr">
               <img src="/screens/qr-bot.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="64" height="64" />
               <span>{hero.qr}</span>
             </div>
           </div>
           <p class="cta-note">{hero.note}</p>
-          <details class="howto-mini">
-            <summary>{hero.howto.summary}</summary>
-            <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
-          </details>
         </div>
         <figure class="hero-report">
           <img src={hero.report.file} alt="Пример отчёта Nota по архиву: 96,15 млн рупий, 37 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
@@ -63,12 +58,43 @@ import {
           ))}
         </div>
         <p class="note">{result.note}</p>
-        <div class="cta-row" style="margin-top: 24px"><a class="btn" href={botLink('land6_result')}>{cta}</a></div>
+        <div class="cta-row" style="margin-top: 24px"><a class="btn" href={botLink('land4_result')}>{cta}</a></div>
       </div>
     </section>
 
-    <!-- 3. Таблица, которая ведётся сама -->
-    <section class="section section--line" id="analytics">
+    <!-- 3. Что Nota делает с каждым документом -->
+    <section class="section section--line" id="what">
+      <div class="wrap">
+        <h2 style="margin-bottom: 32px">{what.title}</h2>
+        <div class="grid" style="--min: 300px">
+          {what.items.map((c) => (
+            <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div><p>{c.text}</p></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Как присылать документы дальше (группа — по желанию) -->
+    <section class="section section--paper" id="send">
+      <div class="wrap">
+        <h2 style="margin-bottom: 32px">{send.title}</h2>
+        <div class="grid" style="--min: 260px">
+          {send.items.map((c) => (
+            <div class="card card--compact send-card"><div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div><p>{c.text}</p></div>
+          ))}
+        </div>
+        <div class="opt-box">
+          <Icon name="users" size={24} />
+          <div><b>{send.group.title} <em>{send.group.tag}</em></b><p>{send.group.text}</p></div>
+        </div>
+        <dl class="facts">
+          {send.facts.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
+        </dl>
+      </div>
+    </section>
+
+    <!-- 5. Таблица и аналитика -->
+    <section class="section" id="analytics">
       <div class="wrap">
         <h2>{analytics.title}</h2>
         <p class="lead">{analytics.lead}</p>
@@ -113,36 +139,6 @@ import {
       </div>
     </section>
 
-    <!-- 4. Как присылать документы дальше: четыре способа, группа по желанию -->
-    <section class="section section--paper" id="send">
-      <div class="wrap">
-        <h2 style="margin-bottom: 32px">{send.title}</h2>
-        <div class="grid" style="--min: 240px">
-          {send.items.map((c) => (
-            <div class="card send-card send-card--row">
-              <div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div>
-              <p>{c.text}</p>
-              <span class:list={['tag', `tag--${c.tone}`]}>{c.tag}</span>
-            </div>
-          ))}
-        </div>
-        <p class="note">{send.seen}</p>
-      </div>
-    </section>
-
-    <!-- 5. Что Nota делает с каждым документом -->
-    <section class="section section--line" id="what">
-      <div class="wrap">
-        <h2 style="margin-bottom: 32px">{what.title}</h2>
-        <div class="grid" style="--min: 300px">
-          {what.items.map((c) => (
-            <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div><p>{c.text}</p></div>
-          ))}
-        </div>
-        <div class="proof-stat"><b>{what.proof.value}</b><span>{what.proof.text}</span></div>
-      </div>
-    </section>
-
     <!-- 6. Сравнение: накладная в 9:41 -->
     <section class="section section--line">
       <div class="wrap">
@@ -181,38 +177,7 @@ import {
       </div>
     </section>
 
-    <!-- 7. Отчёт каждый понедельник -->
-    <section class="section section--paper">
-      <div class="wrap">
-        <h2>{reports.title}</h2>
-        <p class="lead">{reports.lead}</p>
-        <div class="reports-row">
-          <MiniReport
-            title="Неделя · 3–9 ноя" period="Сравнение с прошлой неделей: +8%" total="21,70" sub="16 платежей"
-            marks={[{ n: '1', label: 'дубль', alert: true }, { n: '2', label: 'проверить', alert: true }, { n: '4', label: 'рукописных' }, { n: '0', label: 'не прочитано' }]}
-            bars={[3.1, 5.4, 2.2, 6.8, 2.9, 0.8, 0.5]}
-            cats={[['Материалы', '9 800 000', 45], ['Подрядчики', '6 200 000', 29], ['Без категории', '700 000', 3]]}
-          />
-          <MiniReport
-            title="Октябрь 2026" period="Сравнение с сентябрём: −4%" total="96,15" sub="72 платежа"
-            marks={[{ n: '0', label: 'дублей' }, { n: '3', label: 'проверить', alert: true }, { n: '8', label: 'рукописных' }, { n: '1', label: 'не прочитано' }]}
-            bars={[8.4, 33.6, 24.9, 21.3, 8.0]}
-            cats={[['Материалы', '44 230 000', 46], ['Зарплаты', '29 810 000', 31], ['Подрядчики', '14 420 000', 15]]}
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- 8. Для кого -->
-    <section class="section">
-      <div class="wrap">
-        <h2 style="margin-bottom: 40px">{segments.title}</h2>
-        <div class="grid" style="--min: 250px">{segments.items.map((c) => <div class="card"><h3>{c.title}</h3><p>{c.text}</p></div>)}</div>
-        <p class="note">{segments.note}</p>
-      </div>
-    </section>
-
-    <!-- 9. Отзывы (заглушки до реальных текстов) -->
+    <!-- 7. Отзывы (заглушки до реальных текстов) -->
     <section class="section section--paper">
       <div class="wrap">
         <h2 style="margin-bottom: 32px">{reviews.title}</h2>
@@ -227,7 +192,7 @@ import {
       </div>
     </section>
 
-    <!-- 10. Данные и кто делает -->
+    <!-- 8. Данные и кто делает -->
     <section class="section section--dark">
       <div class="wrap">
         <h2>{data.title}</h2>
@@ -240,7 +205,7 @@ import {
       </div>
     </section>
 
-    <!-- 11. Цены -->
+    <!-- 9. Цены -->
     <section class="section section--paper" id="price">
       <div class="wrap">
         <h2>{pricing.title}</h2>
@@ -251,7 +216,6 @@ import {
               {p.highlight && <div class="plan-badge">{p.highlight}</div>}
               <h3>{p.name}</h3>
               <div class="plan-price">{p.price}<small> / мес</small></div>
-              <div class="plan-unit">{p.unit}</div>
               <p><b>{p.docs}</b><br /><span class="muted">{p.who}</span></p>
               <ul class="check">{p.feats.map((f) => <li><Icon name="check" size={20} />{f}</li>)}</ul>
               <a class:list={['btn', 'btn--sm', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}</a>
@@ -259,8 +223,6 @@ import {
           ))}
         </div>
         <ul class="plan-facts">
-          <li>{pricing.common}</li>
-          <li>{pricing.hint}</li>
           <li set:html={fmt(pricing.pay)} />
           <li set:html={fmt(pricing.over)} />
           <li>{pricing.note}</li>
@@ -268,7 +230,7 @@ import {
       </div>
     </section>
 
-    <!-- 12. Вопросы -->
+    <!-- 10. Вопросы -->
     <section class="section" id="faq">
       <div class="wrap">
         <h2 style="margin-bottom: 24px">Вопросы</h2>
@@ -281,7 +243,7 @@ import {
       <div class="wrap">
         <h2>{final.title}</h2>
         <p>{final.lead}</p>
-        <a class="btn" href={botLink('land6_final')}>{cta}</a>
+        <a class="btn" href={botLink('land4_final')}>{cta}</a>
         <div class="final-qr">
           <img src="/screens/qr-bot.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
           <span>Или наведите камеру телефона</span>
@@ -296,7 +258,7 @@ import {
       <nav aria-label="Документы">
         <a href={footer.terms}>Пользовательское соглашение <mark class="todo">ссылка</mark></a>
         <a href={footer.privacy}>Политика конфиденциальности <mark class="todo">ссылка</mark></a>
-        <a href={botLink('land6_support')}>Поддержка в боте</a>
+        <a href={botLink('land4_support')}>Поддержка в боте</a>
       </nav>
       <div class="op">{footer.operator} · © 2026</div>
     </div>

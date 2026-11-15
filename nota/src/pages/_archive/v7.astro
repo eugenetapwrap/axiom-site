@@ -1,18 +1,18 @@
 ---
 // Версия 7 лендинга: v6, прогнанная через скиллы. Тексты: src/data/content-v7.ts.
 // Изменения по сравнению с v6 — в founder/landing.md, раздел v7.
-import Base from '../layouts/Base.astro';
-import Logo from '../components/Logo.astro';
-import Icon from '../components/Icon.astro';
-import ScreenSlot from '../components/ScreenSlot.astro';
-import MiniReport from '../components/MiniReport.astro';
-import Pen from '../components/Pen.astro';
-import Reaction from '../components/Reaction.astro';
-import { botLink } from '../data/content';
-import { fmt } from '../lib/fmt';
+import Base from '../../layouts/Base.astro';
+import Logo from '../../components/Logo.astro';
+import Icon from '../../components/Icon.astro';
+import ScreenSlot from '../../components/ScreenSlot.astro';
+import MiniReport from '../../components/MiniReport.astro';
+import Pen from '../../components/Pen.astro';
+import Reaction from '../../components/Reaction.astro';
+import { botLink } from '../../data/content';
+import { fmt } from '../../lib/fmt';
 import {
   meta, cta, nav, hero, result, analytics, send, what, compare, reports, segments, reviews, data, pricing, faq, final, footer, steps,
-} from '../data/content-v7';
+} from '../../data/content-v7';
 
 // Карандашные пометки: режем заголовок на «до / слово / после».
 const cut = (text: string, word: string) => { const i = text.indexOf(word); return i < 0 ? [text, '', ''] : [text.slice(0, i), word, text.slice(i + word.length)]; };

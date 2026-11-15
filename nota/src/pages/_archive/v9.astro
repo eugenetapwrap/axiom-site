@@ -1,18 +1,19 @@
 ---
-// Версия 10 лендинга: v9 без переключателя + ответы основателя по разбору проверяющих. Тексты: src/data/content-v10.ts.
-// Первый экран новый, отчёт на компьютере скользящий. На телефоне цифр шагов нет, внизу закреплённая кнопка.
+// Версия 9 лендинга: v8 + новый первый экран и скользящая картинка отчёта (компьютер). Тексты: src/data/content-v9.ts.
+// Первый экран — только новый. Технический переключатель сверху: отчёт скользящий / как в v8; убрать перед запуском.
 // Решения — в founder/landing.md, разделы v7 и v8.
-import Base from '../layouts/Base.astro';
-import Logo from '../components/Logo.astro';
-import Icon from '../components/Icon.astro';
-import ScreenSlot from '../components/ScreenSlot.astro';
-import MiniReport from '../components/MiniReport.astro';
-import Pen from '../components/Pen.astro';
-import { botLink } from '../data/content';
-import { fmt } from '../lib/fmt';
+import Base from '../../layouts/Base.astro';
+import Logo from '../../components/Logo.astro';
+import Icon from '../../components/Icon.astro';
+import ScreenSlot from '../../components/ScreenSlot.astro';
+import MiniReport from '../../components/MiniReport.astro';
+import Pen from '../../components/Pen.astro';
+import Reaction from '../../components/Reaction.astro';
+import { botLink } from '../../data/content';
+import { fmt } from '../../lib/fmt';
 import {
   meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps, bar,
-} from '../data/content-v10';
+} from '../../data/content-v9';
 
 // Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
 const cut = (text: string, word: string) => { const i = text.indexOf(word); return i < 0 ? [text, '', ''] : [text.slice(0, i), word, text.slice(i + word.length)]; };
@@ -44,16 +45,40 @@ const jsonld = [
 ];
 ---
 <Base title={meta.title} description={meta.description} noindex og="/og-v8.png" selfFonts>
+  <!-- Технический переключатель: отчёт — скользящий / как в v8. Убрать перед запуском. -->
   <a class="skip" href="#main">К содержанию</a>
+  <div class="techbar" role="group" aria-label="Варианты страницы">
+    <div class="wrap">
+      {(['rep'] as const).map((g) => (
+        <span class="tb-group" role="group" aria-label={bar[g].label}>
+          <span class="techbar-label">{bar[g].label}</span>
+          {bar[g].opts.map(([v, label], i) => <button type="button" data-g={g} data-v={v} aria-pressed={i === 0 ? 'true' : 'false'}>{label}</button>)}
+        </span>
+      ))}
+      <small>{bar.note}</small>
+    </div>
+  </div>
+  <script is:inline>
+    (function () {
+      var root = document.documentElement;
+      function set(g, v) {
+        var def = g === 'hero' ? 'new' : 'sticky';
+        if (v === def) root.removeAttribute('data-' + g); else root.setAttribute('data-' + g, v);
+        document.querySelectorAll('.techbar [data-g="' + g + '"]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === v ? 'true' : 'false'); });
+        window.dispatchEvent(new Event('resize'));
+      }
+      document.querySelectorAll('.techbar [data-g]').forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.g, b.dataset.v); }); });
+    })();
+  </script>
   <header class="header">
     <div class="wrap">
       <a class="logo-link" href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
       <nav aria-label="Разделы">{nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
-      <a class="btn btn--sm btn--dark" href={botLink('land10_header')}>Открыть в Telegram</a>
+      <a class="btn btn--sm btn--dark" href={botLink('land9_header')}>Открыть в Telegram</a>
     </div>
   </header>
 
-  <main class="tight v7 v8 v9 v10" id="main">
+  <main class="tight v7 v8 v9" id="main">
     <div class="story">
     <!-- 1. Первый экран: архив → отчёт за 15 минут, QR, пример отчёта -->
     <section class="hero hero2 hero3">
@@ -65,19 +90,17 @@ const jsonld = [
           <div class="num-group">
           <span class="num-dot" aria-hidden="true"><i>1</i></span>
           <div class="cta-row cta-row--qr">
-            <a class="btn" href={botLink('land10_hero')}>{cta}</a>
+            <a class="btn" href={botLink('land9_hero')}>{cta}</a>
             <div class="cta-qr">
-              <img src="/screens/qr-bot-v10.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="60" height="60" />
+              <img src="/screens/qr-bot-v9.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="60" height="60" />
               <span>{hero.qr}</span>
             </div>
           </div>
           <p class="cta-note">{hero.note}</p>
-          <p class="phone-hint">{hero.phoneHint}</p>
           <details class="howto-mini">
             <summary>{hero.howto.summary}</summary>
             <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
           </details>
-          <p class="hero-segs"><b>Кому подходит:</b> {segments.items.map((c) => c.title.replace(/ /g, '\u00a0')).join('\u00a0· ')}</p>
           </div>
         </div>
         <figure class="hero-report in-flow">
@@ -93,13 +116,19 @@ const jsonld = [
       <div class="wrap">
         <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i>2</i></span>{steps.report.title}</h2>
         <div class="s2-split">
+          <MiniReport
+            title="Неделя · 3–9 ноя" period="Сравнение с прошлой неделей: +8%" total="21,70" sub="16 платежей"
+            marks={[{ n: '1', label: 'дубль', alert: true }, { n: '2', label: 'проверить', alert: true }, { n: '4', label: 'рукописных' }, { n: '0', label: 'не прочитано' }]}
+            bars={[3.1, 5.4, 2.2, 6.8, 2.9, 0.8, 0.5]}
+            cats={[['Материалы', '9 800 000', 45], ['Подрядчики', '6 200 000', 29], ['Без категории', '700 000', 3]]}
+          />
           <div class="s2-text">
             <ul class="check">{steps.report.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
             <div class="sched">
               <div class="sched-title">{steps.report.schedule.title}</div>
               <dl>{steps.report.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
             </div>
-            <div class="cta-row"><a class="btn" href={botLink('land10_result')}>{cta}</a></div>
+            <div class="cta-row"><a class="btn" href={botLink('land9_result')}>{cta}</a></div>
           </div>
         </div>
       </div>
@@ -170,11 +199,12 @@ const jsonld = [
           {send.items.map((c) => (
             <div class="card send-card send-card--row">
               <div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div>
-              <p>{c.text}</p>
+              <p>{c.text.split('{r}').map((part, i) => <>{i > 0 && <Reaction />}{part}</>)}</p>
               {c.tag && <span class:list={['tag', `tag--${c.tone}`]}>{c.tag}</span>}
             </div>
           ))}
         </div>
+        <p class="note">{send.seen.split('{r}').map((part, i) => <>{i > 0 && <Reaction />}{part}</>)}</p>
       </div>
     </section>
 
@@ -206,26 +236,23 @@ const jsonld = [
             ))}
           </fieldset>
         </div>
-        <p class="plan-common">Во всех тарифах: {pricing.common.join(', ')}.</p>
         <div class="grid plans" style="--min: 220px; gap: 24px">
           {pricing.plans.map((p) => (
             <div class:list={['plan', { 'plan--hl': p.highlight }]}>
               <h3>{p.name}</h3>
-              <div class="price-row">
               <div class="plan-price">
                 <span class="pm">{p.month.price}</span><span class="p3">{p.q3.price}</span><span class="p6">{p.q6.price}</span><small> / мес</small>
               </div>
               <div class="plan-unit">
-                <span class="pm">{p.month.unit}</span><span class="p3"><span>{p.q3.total}</span><span>{p.q3.unit}</span></span><span class="p6"><span>{p.q6.total}</span><span>{p.q6.unit}</span></span>
-              </div>
+                <span class="pm">{p.month.unit}</span><span class="p3">{p.q3.total} · {p.q3.unit}</span><span class="p6">{p.q6.total} · {p.q6.unit}</span>
               </div>
               <p><b>{p.docs}</b><br /><span class="muted">{p.who}</span></p>
-              <ul class="check">{p.feats.map((f) => <li><Icon name="check" size={20} />{f}</li>)}</ul>
+              <ul class="check">{[...p.feats, ...pricing.common].map((f) => <li><Icon name="check" size={20} />{f}</li>)}</ul>
               <a class:list={['btn', 'btn--plan', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}</a>
             </div>
           ))}
         </div>
-        <dl class="plan-facts3 g4">
+        <dl class="plan-facts3">
           {pricing.facts.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
         </dl>
         <script is:inline>
@@ -276,7 +303,7 @@ const jsonld = [
             ))}
           </div>
           {compare.rows.map((q, i) => (
-            <div class:list={['cmp-row', { 'cmp-row--m-hide': compare.mobileHide.includes(q) }]} role="row">
+            <div class="cmp-row" role="row">
               <div class="cmp-q" role="rowheader">{q}</div>
               {compare.options.map((o) => {
                 const [m, t] = o.cells[i];
@@ -330,9 +357,9 @@ const jsonld = [
         <h2>{final.title}</h2>
         <p>{final.lead}</p>
         <div class="final-cta">
-          <a class="btn" href={botLink('land10_final')}>{cta}</a>
+          <a class="btn" href={botLink('land9_final')}>{cta}</a>
           <div class="final-qr">
-            <img src="/screens/qr-bot-v10-dark.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
+            <img src="/screens/qr-bot-v9-dark.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
             <span>Или наведите камеру телефона</span>
           </div>
         </div>
@@ -340,31 +367,13 @@ const jsonld = [
     </section>
   </main>
 
-  <!-- Телефон: кнопка внизу экрана — только когда первая кнопка уехала вверх и на экране нет ни одной другой оранжевой кнопки
-       (шаг 2, тарифы, финал), чтобы две одинаковые кнопки не стояли рядом -->
-  <div class="sticky-cta" id="sticky-cta"><a class="btn" href={botLink('land10_sticky')}>{cta}</a></div>
-  <script is:inline>
-    (function () {
-      var bar = document.getElementById('sticky-cta'), heroBtn = document.querySelector('.hero .btn');
-      var others = [].slice.call(document.querySelectorAll('main .btn')).filter(function (b) { return b !== heroBtn; });
-      if (!bar || !heroBtn || !window.IntersectionObserver) return;
-      var heroOut = false, visible = new Set();
-      function upd() { bar.classList.toggle('on', heroOut && visible.size === 0); }
-      new IntersectionObserver(function (e) { heroOut = !e[0].isIntersecting && e[0].boundingClientRect.top < 0; upd(); }).observe(heroBtn);
-      var io = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { if (e.isIntersecting) visible.add(e.target); else visible.delete(e.target); });
-        upd();
-      }, { rootMargin: '0px 0px 90px 0px' });
-      others.forEach(function (b) { io.observe(b); });
-    })();
-  </script>
   <footer class="footer">
     <div class="wrap">
       <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
       <nav aria-label="Документы">
         <a href={footer.terms}>Пользовательское соглашение <mark class="todo">ссылка</mark></a>
         <a href={footer.privacy}>Политика конфиденциальности <mark class="todo">ссылка</mark></a>
-        <a href={botLink('land10_support')}>Поддержка в боте</a>
+        <a href={botLink('land9_support')}>Поддержка в боте</a>
       </nav>
       <div class="op">{footer.operator} · © 2026</div>
       <p class="foot-note">{footer.testData}</p>

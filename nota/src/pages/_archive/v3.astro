@@ -1,21 +1,22 @@
 ---
-// Версия 4 лендинга: объединение v2 и v3. Тексты: src/data/content-v4.ts. Заглушки ⟦…⟧ подсвечены жёлтым (fmt).
-import Base from '../layouts/Base.astro';
-import Logo from '../components/Logo.astro';
-import Icon from '../components/Icon.astro';
-import ScreenSlot from '../components/ScreenSlot.astro';
-import { botLink } from '../data/content';
-import { fmt } from '../lib/fmt';
+// Версия 3 лендинга: заголовок про контроль, боль наверху, одни цифры, шаг с Google на виду, 9 блоков.
+// Тексты: src/data/content-v3.ts. Заглушки ⟦…⟧ подсвечены жёлтым (fmt).
+import Base from '../../layouts/Base.astro';
+import Logo from '../../components/Logo.astro';
+import Icon from '../../components/Icon.astro';
+import ScreenSlot from '../../components/ScreenSlot.astro';
+import { botLink } from '../../data/content';
+import { fmt } from '../../lib/fmt';
 import {
-  meta, cta, nav, hero, result, what, send, analytics, compare, reviews, data, pricing, faq, final, footer,
-} from '../data/content-v4';
+  meta, cta, nav, hero, trust, result, pain, how, analytics, compare, reviews, data, pricing, faq, final, footer,
+} from '../../data/content-v3';
 ---
 <Base title={meta.title} description={meta.description} noindex>
   <header class="header">
     <div class="wrap">
       <a href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
       <nav aria-label="Разделы">{nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
-      <a class="btn btn--sm btn--dark" href={botLink('land4_header')}>Открыть в Telegram</a>
+      <a class="btn btn--sm btn--dark" href={botLink('land3_header')}>Открыть в Telegram</a>
     </div>
   </header>
 
@@ -33,7 +34,7 @@ import {
             <div class="ts-item ts-item--nota"><small>{hero.nota.k}</small><b>{hero.nota.v}</b><span>{hero.nota.t}</span></div>
           </div>
           <div class="cta-row cta-row--qr">
-            <a class="btn" href={botLink('land4_hero')}>{cta}</a>
+            <a class="btn" href={botLink('land3_hero')}>{cta}</a>
             <div class="cta-qr">
               <img src="/screens/qr-bot.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="64" height="64" />
               <span>{hero.qr}</span>
@@ -48,6 +49,10 @@ import {
       </div>
     </section>
 
+    <div class="trust">
+      <ul class="wrap">{trust.map((t) => <li><Icon name="check" size={22} />{t}</li>)}</ul>
+    </div>
+
     <!-- 2. Что придёт через 20 минут -->
     <section class="section" id="result">
       <div class="wrap">
@@ -58,38 +63,58 @@ import {
           ))}
         </div>
         <p class="note">{result.note}</p>
-        <div class="cta-row" style="margin-top: 24px"><a class="btn" href={botLink('land4_result')}>{cta}</a></div>
+        <div class="cta-row" style="margin-top: 24px"><a class="btn" href={botLink('land3_result')}>{cta}</a></div>
       </div>
     </section>
 
-    <!-- 3. Что Nota делает с каждым документом -->
-    <section class="section section--line" id="what">
+    <!-- 3. Где утекают деньги -->
+    <section class="section section--line">
       <div class="wrap">
-        <h2 style="margin-bottom: 32px">{what.title}</h2>
-        <div class="grid" style="--min: 300px">
-          {what.items.map((c) => (
+        <h2 style="margin-bottom: 32px">{pain.title}</h2>
+        <div class="grid" style="--min: 280px">
+          {pain.items.map((c) => (
             <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div><p>{c.text}</p></div>
           ))}
         </div>
       </div>
     </section>
 
-    <!-- 4. Как присылать документы дальше (группа — по желанию) -->
-    <section class="section section--paper" id="send">
+    <!-- 4. Как Nota ведёт учёт каждый день: 4 шага, способы, факты, группа -->
+    <section class="section section--paper" id="how">
       <div class="wrap">
-        <h2 style="margin-bottom: 32px">{send.title}</h2>
-        <div class="grid" style="--min: 260px">
-          {send.items.map((c) => (
-            <div class="card card--compact send-card"><div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div><p>{c.text}</p></div>
+        <h2 style="margin-bottom: 32px">{how.title}</h2>
+        <ol class="grid steps4" style="--min: 230px; list-style: none; padding: 0; margin: 0">
+          {how.steps.map((s, i) => (
+            <li class="step"><div class="step-n">{i + 1}</div><h3>{s.title}</h3><p>{s.text}</p></li>
           ))}
+        </ol>
+
+        <div class="ways">
+          <b>{how.ways.title}:</b>
+          <ul>
+            {how.ways.items.map((w) => (
+              <li><Icon name={w.icon} size={18} />{w.title}{w.tag && <em>{w.tag}</em>}</li>
+            ))}
+          </ul>
         </div>
-        <div class="opt-box">
-          <Icon name="users" size={24} />
-          <div><b>{send.group.title} <em>{send.group.tag}</em></b><p>{send.group.text}</p></div>
-        </div>
+
         <dl class="facts">
-          {send.facts.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
+          {how.facts.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
         </dl>
+
+        <div class="group-box split">
+          <div>
+            <h3 class="h3-lg">{how.group.title}</h3>
+            <ul class="check">{how.group.items.map((t) => <li><Icon name="check" size={22} />{t}</li>)}</ul>
+          </div>
+          <div class="chat-demo" aria-hidden="true">
+            <div class="msg">
+              <div class="msg-card"><div class="msg-author">Прораб</div><div class="doc-mini doc-mini--paper"><b>TOKO KERAMIK JAYA</b><span class="hw">Keramik 60×60, 12 dus</span><span class="hw big">Rp 3.360.000</span></div><div class="msg-text">Плитка на второй этаж <time>11:05</time></div></div>
+              <span class="reaction"><Icon name="pen" size={14} />1</span>
+            </div>
+            <div class="msg-dm"><b>Nota · только вам в личку</b><p>{how.group.dm}</p></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -243,7 +268,7 @@ import {
       <div class="wrap">
         <h2>{final.title}</h2>
         <p>{final.lead}</p>
-        <a class="btn" href={botLink('land4_final')}>{cta}</a>
+        <a class="btn" href={botLink('land3_final')}>{cta}</a>
         <div class="final-qr">
           <img src="/screens/qr-bot.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
           <span>Или наведите камеру телефона</span>
@@ -258,7 +283,7 @@ import {
       <nav aria-label="Документы">
         <a href={footer.terms}>Пользовательское соглашение <mark class="todo">ссылка</mark></a>
         <a href={footer.privacy}>Политика конфиденциальности <mark class="todo">ссылка</mark></a>
-        <a href={botLink('land4_support')}>Поддержка в боте</a>
+        <a href={botLink('land3_support')}>Поддержка в боте</a>
       </nav>
       <div class="op">{footer.operator} · © 2026</div>
     </div>

@@ -1,75 +1,118 @@
 ---
-// Версия 2 лендинга: первым — оффер «пришлите чеки за прошлый месяц — через 20 минут готовый учёт».
-// Тексты: src/data/content-v2.ts (отличия) + src/data/content.ts (общие блоки).
-import Base from '../layouts/Base.astro';
-import Logo from '../components/Logo.astro';
-import Icon from '../components/Icon.astro';
-import MiniReport from '../components/MiniReport.astro';
-import ScreenSlot from '../components/ScreenSlot.astro';
+import Base from '../../layouts/Base.astro';
+import Logo from '../../components/Logo.astro';
+import Icon from '../../components/Icon.astro';
+import MiniReport from '../../components/MiniReport.astro';
+import HeroDoc from '../../components/HeroDoc.astro';
+import SheetDemo from '../../components/SheetDemo.astro';
+import ScreenSlot from '../../components/ScreenSlot.astro';
 import {
-  botLink, trust, group, features, analytics, reports, segments, data, compare, footer,
-} from '../data/content';
-import {
-  meta, cta, nav, hero, result, analyticsTitle, daily, featuresTitle, pricing, faq, final,
-} from '../data/content-v2';
+  botLink, cta, ctaNote, nav, hero, trust, problem, steps, send, group, offer, features, analytics,
+  reports, segments, data, compare, pricing, faq, final, footer,
+} from '../../data/content';
 ---
-<Base title={meta.title} description={meta.description} noindex>
+<Base>
   <header class="header">
     <div class="wrap">
       <a href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
       <nav aria-label="Разделы">{nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
-      <a class="btn btn--sm btn--dark" href={botLink('land2_header')}>Открыть в Telegram</a>
+      <a class="btn btn--sm btn--dark" href={botLink('land_header')}>Открыть в Telegram</a>
     </div>
   </header>
 
-  <main class="tight">
-    <!-- 01 Первый экран: оффер «2 минуты от вас — 20 минут от Nota» -->
-    <section class="hero hero2">
+  <main>
+    <!-- 01 Первый экран -->
+    <section class="hero">
       <div class="wrap split hero-split">
         <div>
-          <span class="hero-badge">{hero.badge}</span>
           <h1>{hero.title}</h1>
           <p class="lead">{hero.lead}</p>
-          <div class="time-strip">
-            <div class="ts-item"><small>{hero.you.k}</small><b>{hero.you.v}</b><span>{hero.you.t}</span></div>
-            <span class="ts-arrow" aria-hidden="true">→</span>
-            <div class="ts-item ts-item--nota"><small>{hero.nota.k}</small><b>{hero.nota.v}</b><span>{hero.nota.t}</span></div>
-          </div>
           <div class="cta-row">
-            <a class="btn" href={botLink('land2_hero')}>{cta}</a>
-            <a class="link" href="#result">Что придёт</a>
+            <a class="btn" href={botLink('land_hero')}>{cta}</a>
+            <a class="link" href="#how">Как это работает</a>
           </div>
-          <p class="cta-note">{hero.note}</p>
+          <p class="cta-note">{ctaNote}</p>
         </div>
-        <figure class="hero-report">
-          <img src={hero.report.file} alt="Отчёт Nota по архиву: обработано 128,40 млн, 64 платежа, дубли, что проверить, категории, поставщики, крупнейшие платежи" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
-          <figcaption>{hero.report.caption}</figcaption>
-        </figure>
+        <HeroDoc caption={hero.caption} />
       </div>
     </section>
 
-    <!-- 02 Полоса доверия -->
     <div class="trust">
       <ul class="wrap">{trust.map((t) => <li><Icon name="check" size={22} />{t}</li>)}</ul>
     </div>
 
-    <!-- 03 Что придёт через 20 минут -->
-    <section class="section" id="result">
+    <!-- 02 Проблема -->
+    <section class="section">
       <div class="wrap">
-        <h2 style="margin-bottom: 32px">{result.title}</h2>
-        <div class="grid" style="--min: 280px">
-          {result.items.map((r) => (
-            <div class="card card--row"><div class="card-icon"><Icon name={r.icon} /></div><div><h3>{r.title}</h3><p>{r.text}</p></div></div>
+        <h2 style="margin-bottom: 40px">{problem.title}</h2>
+        <div class="grid" style="--min: 250px">
+          {problem.items.map((c) => (
+            <div class="card"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3><p>{c.text}</p></div>
           ))}
         </div>
-        <div class="cta-row" style="margin-top: 32px"><a class="btn" href={botLink('land2_result')}>{cta}</a></div>
       </div>
     </section>
 
-    <!-- 04 Не просто таблица: Payments, Monthly spend, Insights -->
+    <!-- 03 Как работает + пример чат → таблица -->
+    <section class="section section--paper" id="how">
+      <div class="wrap">
+        <h2 style="margin-bottom: 40px">{steps.title}</h2>
+        <ol class="grid" style="--min: 300px; list-style: none; padding: 0; margin: 0">
+          {steps.items.map((s, i) => (
+            <li class="step"><div class="step-n">{i + 1}</div><h3>{s.title}</h3><p>{s.text}</p></li>
+          ))}
+        </ol>
+        <SheetDemo caption={steps.demoCaption} />
+      </div>
+    </section>
+
+    <!-- 04 Способы отправки: группа по желанию -->
+    <section class="section" id="send">
+      <div class="wrap">
+        <h2>{send.title}</h2>
+        <p class="lead">{send.lead}</p>
+        <div class="grid" style="--min: 240px">
+          {send.items.map((c) => (
+            <div class="card send-card">
+              {c.tag && <span class="tag">{c.tag}</span>}
+              <div class="card-icon"><Icon name={c.icon} /></div>
+              <h3>{c.title}</h3>
+              <p>{c.text}</p>
+            </div>
+          ))}
+        </div>
+        <div class="group-box split">
+          <div>
+            <h3 class="h3-lg">{group.title}</h3>
+            <ul class="check">{group.items.map((t) => <li><Icon name="check" size={22} />{t}</li>)}</ul>
+          </div>
+          <div class="chat-demo" aria-hidden="true">
+            <div class="msg">
+              <div class="msg-card"><div class="msg-author">Прораб</div><div class="doc-mini doc-mini--paper"><b>TOKO KERAMIK JAYA</b><span class="hw">Keramik 60×60, 12 dus</span><span class="hw big">Rp 3.360.000</span></div><div class="msg-text">Плитка на второй этаж <time>11:05</time></div></div>
+              <span class="reaction"><Icon name="pen" size={14} />1</span>
+            </div>
+            <div class="msg-dm"><b>Nota · только вам в личку</b><p>Этот чек уже записан 3 окт, строка 14. В итог не добавляю, отметила как дубль.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 Возможности: не просто «чек в таблицу» -->
+    <section class="section section--line">
+      <div class="wrap">
+        <h2 style="margin-bottom: 40px">{features.title}</h2>
+        <div class="grid" style="--min: 320px">
+          {features.items.map((c) => (
+            <div class="card"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3><p>{c.text}</p></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 Таблица и аналитика: Payments, Monthly spend, Insights -->
     <section class="section section--paper" id="analytics">
       <div class="wrap">
-        <h2>{analyticsTitle}</h2>
+        <h2>{analytics.title}</h2>
         <p class="lead">{analytics.lead}</p>
         <div class="an" data-an>
           <div class="an-pick" role="tablist" aria-label="Листы таблицы">
@@ -113,50 +156,8 @@ import {
       </div>
     </section>
 
-    <!-- 05 Дальше каждый день: четыре способа, группа по желанию -->
-    <section class="section" id="daily">
-      <div class="wrap">
-        <h2>{daily.title}</h2>
-        <p class="lead">{daily.lead}</p>
-        <div class="grid" style="--min: 240px">
-          {daily.items.map((c) => (
-            <div class="card send-card send-card--row">
-              <div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div>
-              <p>{c.text}</p>
-              {c.tag && <span class:list={['tag', c.tone && `tag--${c.tone}`]}>{c.tag}</span>}
-            </div>
-          ))}
-        </div>
-        <div class="group-box split">
-          <div>
-            <h3 class="h3-lg">{group.title}</h3>
-            <ul class="check">{group.items.map((t) => <li><Icon name="check" size={22} />{t}</li>)}</ul>
-          </div>
-          <div class="chat-demo" aria-hidden="true">
-            <div class="msg">
-              <div class="msg-card"><div class="msg-author">Прораб</div><div class="doc-mini doc-mini--paper"><b>TOKO KERAMIK JAYA</b><span class="hw">Keramik 60×60, 12 dus</span><span class="hw big">Rp 3.360.000</span></div><div class="msg-text">Плитка на второй этаж <time>11:05</time></div></div>
-              <span class="reaction"><Icon name="pen" size={14} />1</span>
-            </div>
-            <div class="msg-dm"><b>Nota · только вам в личку</b><p>Этот чек уже записан 3 окт, строка 14. В итог не добавляю, отметила как дубль.</p></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 06 Что Nota делает с каждым документом -->
-    <section class="section section--line">
-      <div class="wrap">
-        <h2 style="margin-bottom: 40px">{featuresTitle}</h2>
-        <div class="grid" style="--min: 320px">
-          {features.items.map((c) => (
-            <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div><p>{c.text}</p></div>
-          ))}
-        </div>
-      </div>
-    </section>
-
     <!-- 07 Сравнение: привычка «админ с Excel» -->
-    <section class="section section--line">
+    <section class="section">
       <div class="wrap">
         <h2 class="cmp-title">{compare.title}</h2>
         <div class="cmp" role="table" aria-label="Сравнение: Nota, админ с Excel, приложение для расходов">
@@ -193,8 +194,33 @@ import {
       </div>
     </section>
 
-    <!-- 08 Отчёты -->
-    <section class="section section--paper">
+    <!-- 08 Бесплатная проверка архива -->
+    <section class="section section--paper" id="report">
+      <div class="wrap">
+        <div class="offer split">
+          <MiniReport
+            title="@company · oct_receipts.zip"
+            period="Получен 12 ноя · платежи за 12 авг – 30 окт"
+            total="128,40"
+            sub="64 платежа"
+            marks={[{ n: '5', label: 'дублей', alert: true }, { n: '7', label: 'проверить', alert: true }, { n: '15', label: 'рукописных' }, { n: '2', label: 'не прочитано' }]}
+            cats={[['Материалы', '52 640 000', 41], ['Подрядчики', '26 870 000', 21], ['Аренда', '25 000 000', 19], ['Без категории', '5 140 000', 4]]}
+            review={[['2 450 000', 'CV Bangun Bali', 'не сходится итог'], ['1 180 000', 'Mitra10', 'похож на чек от 3 сен'], ['860 000', 'UD Sumber Air', 'нет даты']]}
+          />
+          <div>
+            <h2>{offer.title}</h2>
+            <p class="lead" style="margin-bottom: 0">{offer.lead}</p>
+            <div class="chips">{offer.chips.map((c) => <span>{c}</span>)}</div>
+            <p class="proof">{offer.proof}</p>
+            <p class="howto"><b>Как выгрузить документы из чата:</b> {offer.howto}</p>
+            <a class="btn" href={botLink('land_offer')}>{offer.cta}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 Отчёты -->
+    <section class="section">
       <div class="wrap">
         <h2>{reports.title}</h2>
         <p class="lead">{reports.lead}</p>
@@ -215,8 +241,8 @@ import {
       </div>
     </section>
 
-    <!-- 09 Для кого -->
-    <section class="section">
+    <!-- 10 Для кого -->
+    <section class="section section--line">
       <div class="wrap">
         <h2 style="margin-bottom: 40px">{segments.title}</h2>
         <div class="grid" style="--min: 250px">{segments.items.map((c) => <div class="card"><h3>{c.title}</h3><p>{c.text}</p></div>)}</div>
@@ -224,7 +250,7 @@ import {
       </div>
     </section>
 
-    <!-- 10 Данные и доступ к Google -->
+    <!-- 11 Данные и доступ к Google -->
     <section class="section section--dark">
       <div class="wrap">
         <h2>{data.title}</h2>
@@ -237,7 +263,7 @@ import {
       </div>
     </section>
 
-    <!-- 11 Цены -->
+    <!-- 12 Цены -->
     <section class="section section--paper" id="price">
       <div class="wrap">
         <h2>{pricing.title}</h2>
@@ -258,7 +284,7 @@ import {
       </div>
     </section>
 
-    <!-- 12 Вопросы -->
+    <!-- 13 Вопросы -->
     <section class="section" id="faq">
       <div class="wrap">
         <h2 style="margin-bottom: 24px">Вопросы</h2>
@@ -266,12 +292,12 @@ import {
       </div>
     </section>
 
-    <!-- 13 Финал -->
+    <!-- 14 Финал -->
     <section class="section--dark final">
       <div class="wrap">
         <h2>{final.title}</h2>
         <p>{final.lead}</p>
-        <a class="btn" href={botLink('land2_final')}>{cta}</a>
+        <a class="btn" href={botLink('land_final')}>{cta}</a>
       </div>
     </section>
   </main>
@@ -282,7 +308,7 @@ import {
       <nav aria-label="Документы">
         <a href={footer.terms}>Пользовательское соглашение</a>
         <a href={footer.privacy}>Политика конфиденциальности</a>
-        <a href={botLink('land2_support')}>Поддержка в боте</a>
+        <a href={botLink('land_support')}>Поддержка в боте</a>
       </nav>
       <div class="op">{footer.operator} · © 2026</div>
     </div>
