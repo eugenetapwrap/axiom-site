@@ -51,64 +51,72 @@ Kirim arsip ZIP berisi dokumen dan dapatkan laporan. 30 dokumen pertama gratis.
 
 ## Первое сообщение после /start
 
-Цель онбординга (основатель, 15.11): человек подключает Google и видит свою таблицу. Самое лёгкое действие — первым: подключить Google в одно касание и переслать любой чек, который уже есть в телефоне, — через минуту он строкой в таблице. Архив — для тех, у кого есть документы за прошлые месяцы: «соберу завтра» не должно стоять на пути к первому результату.
+Кто нажимает Start: человек с сайта, которому обещали «пришлите архив — получите отчёт». У одного архив готов (сидит за компьютером), у другого под рукой только телефон: «соберу завтра» — и бот забыт. Поэтому в одном сообщении: что это за продукт (одной строкой), и два пути, которые человек выбирает по своей ситуации, а не гадает, что лучше:
+- 📦 **есть архив** — обещанный на сайте отчёт, дальше бот ведёт к Google;
+- 📊 **архива под рукой нет** — подключить Google и переслать любой чек: через минуту строка в своей таблице, архив — когда удобно.
+Внизу — бесплатно и без карты, условия, и что доступ только к созданным таблице и папкам: человеку должно быть спокойно.
 
 **RU**
 ```
 👋 Привет! Я Nota — веду учёт расходов по вашим документам.
 
-Разбираю чеки, счета и рукописные накладные, записываю их в вашу Google-таблицу и отмечаю дубли и ошибки в суммах.
+Разбираю чеки, счета и рукописные накладные, нахожу дубли и ошибки в суммах, записываю всё в вашу Google-таблицу и присылаю отчёты.
 
-Начнём за минуту:
-1. Подключите Google — создам на вашем Google Диске таблицу и две папки (доступ только к ним).
-2. Перешлите сюда любой чек — через минуту он появится строкой в таблице.
+Как начать:
 
-Есть документы за прошлые месяцы? Пришлите ZIP-архив — папку или выгрузку чата, и я сделаю отчёт.
+📦 Есть архив документов?
+Пришлите ZIP — выгрузку рабочего чата или папку с чеками. Примерно через 15 минут пришлю отчёт: куда ушли деньги и есть ли дубли.
 
-Первые 30 документов бесплатно.
-Подключая Google, вы принимаете условия и политику конфиденциальности.
+📊 Архива под рукой нет?
+Подключите Google и перешлите сюда любой чек — через минуту он появится строкой в вашей таблице. Архив можно прислать позже.
 
-[📊 Подключить Google]
-[📦 Как собрать архив]
+Первые 30 документов бесплатно, без карты.
+Доступ у меня будет только к таблице и папкам, которые я создам. Подключая Google, вы принимаете условия и политику конфиденциальности.
+
+[📦 Как собрать архив]  [📊 Подключить Google]
 ```
 
 **EN**
 ```
 👋 Hi! I'm Nota — I track expenses from your documents.
 
-I read receipts, invoices and handwritten delivery notes, write them to your Google Sheet and flag duplicates and wrong totals.
+I read receipts, invoices and handwritten delivery notes, find duplicates and wrong totals, write everything to your Google Sheet and send reports.
 
-Let's start in a minute:
-1. Connect Google — I'll create a sheet and two folders on your Google Drive (access to them only).
-2. Forward any receipt here — in a minute it will appear as a row in the sheet.
+How to start:
 
-Have documents from past months? Send a ZIP archive — a folder or a chat export, and I'll make a report.
+📦 Have an archive of documents?
+Send a ZIP — a work chat export or a folder of receipts. In about 15 minutes I'll send a report: where the money went and whether there are duplicates.
 
-First 30 documents are free.
-By connecting Google, you accept the terms and privacy policy.
+📊 No archive at hand?
+Connect Google and forward any receipt here — in a minute it will appear as a row in your sheet. You can send the archive later.
 
-[📊 Connect Google]
-[📦 How to make an archive]
+First 30 documents are free, no card needed.
+I'll only have access to the sheet and folders I create. By connecting Google, you accept the terms and privacy policy.
+
+[📦 How to make an archive]  [📊 Connect Google]
 ```
 
 **ID**
 ```
 👋 Halo! Saya Nota — mencatat pengeluaran dari dokumen Anda.
 
-Saya membaca struk, invoice, dan nota tulisan tangan, mencatatnya ke Google Sheet Anda, dan menandai duplikat serta jumlah yang salah.
+Saya membaca struk, invoice, dan nota tulisan tangan, menemukan duplikat dan jumlah yang salah, mencatat semuanya ke Google Sheet Anda, dan mengirim laporan.
 
-Mulai dalam semenit:
-1. Hubungkan Google — saya buat sheet dan dua folder di Google Drive Anda (akses hanya ke situ).
-2. Teruskan struk apa saja ke sini — dalam semenit struk itu muncul sebagai baris di sheet.
+Cara mulai:
 
-Punya dokumen bulan-bulan sebelumnya? Kirim arsip ZIP — folder atau ekspor chat, dan saya buatkan laporan.
+📦 Punya arsip dokumen?
+Kirim ZIP — ekspor chat kerja atau folder struk. Sekitar 15 menit lagi saya kirim laporan: ke mana uang pergi dan apakah ada duplikat.
 
-30 dokumen pertama gratis.
-Dengan menghubungkan Google, Anda menyetujui ketentuan dan kebijakan privasi.
+📊 Belum ada arsip?
+Hubungkan Google dan teruskan struk apa saja ke sini — dalam semenit struk itu muncul sebagai baris di sheet Anda. Arsip bisa dikirim nanti.
 
-[📊 Hubungkan Google]
-[📦 Cara membuat arsip]
+30 dokumen pertama gratis, tanpa kartu.
+Akses saya hanya ke sheet dan folder yang saya buat. Dengan menghubungkan Google, Anda menyetujui ketentuan dan kebijakan privasi.
+
+[📦 Cara membuat arsip]  [📊 Hubungkan Google]
 ```
+
+**Идея против «соберу завтра и забуду»** (если сделаете в боте): третья кнопка `[⏰ Напомнить про архив завтра]` — бот пишет на следующий день: «Вчера вы хотели прислать архив. Пришлите ZIP — через 15 минут будет отчёт. [📦 Как собрать архив]».
 
 ## Ответы бота на первых шагах (предложение, RU)
 
