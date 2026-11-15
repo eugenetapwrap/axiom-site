@@ -154,7 +154,7 @@ const jsonld = [
           <div class="an-pick" role="tablist" aria-label="Листы таблицы">
             {analytics.screens.map((sc, i) => (
               <button type="button" role="tab" class="an-btn" id={`an-tab-${sc.id}`} aria-controls={`an-panel-${sc.id}`} aria-selected={i === 0 ? 'true' : 'false'}>
-                <small>{sc.tab}</small><b>{sc.label}</b><span>{sc.short}</span>
+                <b>{sc.label}</b><small>{sc.tab}</small>
               </button>
             ))}
           </div>

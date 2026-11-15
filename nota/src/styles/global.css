@@ -792,3 +792,9 @@ html:not([data-rep="plain"]) .v9 .s2-split .mini { display: none; }
 .sched dt { font-weight: 700; color: var(--ink); }
 .sched dd { color: var(--muted); padding-left: 28px; }
 @media (max-width: 640px) { .sched { padding: 16px 18px 6px; } .sched dl { font-size: 15px; } .sched dd { padding-left: 14px; white-space: nowrap; } }
+/* v9: вкладки листов таблицы в одну строку — русское название и имя листа; без строки-описания (её повторяют пункты под скриншотом) */
+.v9 .an-btn { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 12px 18px; }
+.v9 .an-btn b { margin: 0; font-size: 18px; line-height: 1.3; }
+.v9 .an-btn small { flex: none; }
+@media (max-width: 1100px) { .v9 .an-btn { flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; } .v9 .an-btn b { font-size: 16px; } }
+@media (max-width: 640px) { .v9 .an-btn { padding: 10px 8px; justify-content: center; } .v9 .an-btn b { font-size: 14px; line-height: 1.25; } }
