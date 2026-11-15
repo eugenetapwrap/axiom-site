@@ -24,6 +24,7 @@ export const nav = [
   { href: '#result', label: 'Отчёт' },
   { href: '#analytics', label: 'Таблица' },
   { href: '#price', label: 'Цены' },
+  { href: '#reviews', label: 'Отзывы' }, // важно для доверия (основатель 15.11)
   { href: '#data', label: 'Данные' }, // осторожным важно, где данные и какой доступ к Google
   { href: '#faq', label: 'Вопросы' },
 ];
