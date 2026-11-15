@@ -958,3 +958,15 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
   body:has(.v10) .header nav { display: none; }
   body:has(.v10) .header .wrap { justify-content: space-between; }
 }
+/* Первый экран: под кнопкой одна строка в одном стиле; «Кому подходит» — тем же тихим стилем */
+.v10 .cta-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin-top: 16px; font-size: 15px; line-height: 1.45; color: var(--muted); }
+.v10 .cta-sep { color: #b8c2cc; }
+.v10 .howto-inline summary { cursor: pointer; list-style: none; color: var(--muted); text-decoration: underline; text-decoration-color: #b8c2cc; text-underline-offset: 3px; }
+.v10 .howto-inline summary::-webkit-details-marker { display: none; }
+.v10 .howto-inline summary:hover { color: var(--ink); }
+.v10 .howto-inline[open] { flex-basis: 100%; }
+.v10 .howto-inline ul { margin-top: 8px; display: grid; gap: 4px; }
+.v10 .hero-segs { margin-top: 14px; font-size: 15px; }
+.v10 .hero-segs b { color: var(--muted); font-weight: 600; }
+@media (max-width: 899px) { .v10 .phone-hint { margin-top: 6px; } }
+.v10 .cta-meta { flex-direction: column; align-items: flex-start; gap: 2px; }

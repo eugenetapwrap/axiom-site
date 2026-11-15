@@ -74,12 +74,15 @@ const jsonld = [
               <span>{hero.qr}</span>
             </div>
           </div>
-          <p class="cta-note">{hero.note}</p>
+          <!-- Под кнопкой две строки в одном сером стиле: бесплатно / как выгрузить архив (по нажатию раскрывается инструкция) -->
+          <div class="cta-meta">
+            <span>{hero.noteShort}</span>
+            <details class="howto-inline">
+              <summary>{hero.howto.summary}</summary>
+              <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
+            </details>
+          </div>
           <p class="phone-hint">{hero.phoneHint}</p>
-          <details class="howto-mini">
-            <summary>{hero.howto.summary}</summary>
-            <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
-          </details>
           <p class="hero-segs"><b>Кому подходит:</b> {segments.items.map((c) => c.title.replace(/ /g, '\u00a0')).join('\u00a0· ')}</p>
           </div>
         </div>
@@ -194,8 +197,20 @@ const jsonld = [
       </div>
     </section>
 
+    <!-- Для кого: после «Что Nota делает», перед ценами (основатель 15.11) -->
+    <section class="section section--paper">
+      <div class="wrap">
+        <h2 class="h2-gap">{segments.title}</h2>
+        <!-- На компьютере итоговая фраза стоит под первыми четырьмя сферами и заканчивается на одной линии с текстом «Бухгалтеров» -->
+        <div class="seg-grid">
+          <ul class="seg-list">{segments.items.map((c) => <li><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
+          <p class="note seg-note">{segments.note}</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Цены сразу после «Что Nota делает» и цифры про дубли; дальше отзывы и «Ваши данные» -->
-    <section class="section section--paper" id="price" data-bill="month">
+    <section class="section" id="price" data-bill="month">
       <div class="wrap">
         <div class="price-head">
           <div>
@@ -269,7 +284,7 @@ const jsonld = [
 
     <!-- После цен — по силе для продажи: отзывы → сравнение → ваши данные → вопросы → для кого -->
     <!-- Отзывы (заглушки до реальных текстов) -->
-    <section class="section" id="reviews">
+    <section class="section section--paper" id="reviews">
       <div class="wrap">
         <h2 class="h2-gap">{reviews.title}</h2>
         <div class="grid g4 reviews" style="--min: 250px">
@@ -284,7 +299,7 @@ const jsonld = [
     </section>
 
     <!-- 6. Сравнение: накладная в 9:41 -->
-    <section class="section section--paper">
+    <section class="section">
       <div class="wrap">
         <h2 class="cmp-title">{compare.title}</h2>
         <div class="cmp" role="table" aria-label="Сравнение: Nota, админ с Excel, приложение для расходов">
@@ -322,7 +337,7 @@ const jsonld = [
     </section>
 
     <!-- Ваши данные и кто делает: снимают страх пустить бота в чаты и Google -->
-    <section class="section data-sec" id="data">
+    <section class="section section--paper data-sec" id="data">
       <div class="wrap">
         <h2 class="h2-gap">{data.title}</h2>
         <div class="grid g4" style="--min: 240px; gap: 36px">
@@ -335,22 +350,10 @@ const jsonld = [
     </section>
 
     <!-- 12. Вопросы -->
-    <section class="section section--paper" id="faq">
+    <section class="section" id="faq">
       <div class="wrap">
         <h2 class="h2-gap">Вопросы</h2>
         <div class="faq">{faq.map((f) => <details><summary>{f.q}</summary><p set:html={fmt(f.a)} /></details>)}</div>
-      </div>
-    </section>
-
-    <!-- 8. Для кого: компактный список вместо серых карточек -->
-    <section class="section">
-      <div class="wrap">
-        <h2 class="h2-gap">{segments.title}</h2>
-        <!-- На компьютере итоговая фраза стоит под первыми четырьмя сферами и заканчивается на одной линии с текстом «Бухгалтеров» -->
-        <div class="seg-grid">
-          <ul class="seg-list">{segments.items.map((c) => <li><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
-          <p class="note seg-note">{segments.note}</p>
-        </div>
       </div>
     </section>
 
