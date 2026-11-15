@@ -48,7 +48,7 @@ export const hero = {
       'Нет архива? Перешлите чеки боту по одному: бот их запишет, а отчёт пришлёт в любое время по кнопке «Отчёт».',
     ],
   },
-  report: { file: '/screens/archive-report-v10.webp', w: 1080, h: 1350, caption: 'Пример отчёта' },
+  report: { file: '/screens/archive-report-v11.webp', w: 1080, h: 1350, caption: 'Пример отчёта' },
 };
 
 const drive = (s: string) => s.replace('на вашем Диске', 'на вашем Google Диске');
