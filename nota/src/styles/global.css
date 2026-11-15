@@ -753,3 +753,33 @@ html[data-variant="final"] [data-pen="h1"] > .pen-under { display: block; }
 .v8 .final-cta .final-qr { margin-top: 0; }
 @media (max-width: 480px) { .v8 .final-cta { width: 100%; align-items: stretch; } }
 .v8 .final-cta .final-qr span { max-width: 150px; text-align: left; }
+
+/* v9: технический переключатель из двух групп */
+.techbar .tb-group { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-right: 18px; }
+@media (max-width: 640px) { .techbar .tb-group { margin-right: 0; width: 100%; } .techbar .tb-group .techbar-label { display: inline; min-width: 96px; } }
+
+/* v9: первый экран — новый (по умолчанию) или как в v8 */
+html:not([data-hero="old"]) .v9 .h-old { display: none !important; }
+html[data-hero="old"] .v9 .h-new { display: none !important; }
+html:not([data-hero="old"]) .v9 .hero-eyebrow { color: var(--slate); }
+html:not([data-hero="old"]) .v9 .cta-qr img { width: 52px; height: 52px; }
+html:not([data-hero="old"]) .v9 .cta-qr { max-width: 150px; }
+
+/* v9: скользящая картинка отчёта — только на компьютере; на телефоне картинка идёт после кнопки, за ней пункты отчёта */
+.story { position: relative; }
+.story-media { display: none; }
+html:not([data-rep="plain"]) .v9 .s2-split .mini { display: none; }
+@media (min-width: 1000px) {
+  html:not([data-rep="plain"]) .v9 .story-media { display: block; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  html:not([data-rep="plain"]) .v9 .story-media .wrap { height: 100%; display: grid; grid-template-columns: 1fr 1fr; column-gap: 48px; padding-top: 40px; padding-bottom: 56px; }
+  html:not([data-rep="plain"]) .v9 .story-fig { grid-column: 2; position: sticky; top: 92px; align-self: start; justify-self: center; width: 100%; max-width: 520px; margin: 0; pointer-events: auto; }
+  html:not([data-rep="plain"]) .v9 .story-fig img { width: auto; max-width: 100%; height: auto; max-height: calc(100vh - 150px); margin: 0 auto; }
+  html:not([data-rep="plain"]) .v9 .hero-report.in-flow { display: none; }
+  html:not([data-rep="plain"]) .v9 .hero-split { grid-template-columns: 1fr 1fr; }
+  html:not([data-rep="plain"]) .v9 #result .wrap > * { max-width: calc((100% - 48px) / 2 - var(--g)); }
+  html:not([data-rep="plain"]) .v9 .s2-split { grid-template-columns: 1fr; }
+}
+@media (min-width: 1000px) {
+  /* шаг 2 не ниже картинки: пункты отчёта проезжают рядом с ней, картинка уходит вместе с концом блока */
+  html:not([data-rep="plain"]) .v9 #result { min-height: calc(min(650px, 100vh - 150px) + 34px + 112px); }
+}
