@@ -51,11 +51,13 @@ Kirim foto, PDF, atau arsip ZIP berisi dokumen dan dapatkan laporan. 30 dokumen 
 
 ## Первое сообщение после /start
 
-Задача одна: человек сразу видит два пути — прислать документы (любые: фото, PDF, ZIP с папкой или выгрузкой чата) или подключить Google — и кнопку под каждый. Что умеет Nota, он уже прочитал в описании до /start, здесь это не повторяем.
+Сначала две строки — что это за продукт (человек мог прийти по ссылке и не видеть описания), потом два пути — прислать документы (любые: фото, PDF, ZIP с папкой или выгрузкой чата) или подключить Google — и кнопку под каждый.
 
 **RU**
 ```
 👋 Привет! Я Nota — веду учёт расходов по вашим документам.
+
+Разбираю чеки, счета и рукописные накладные, записываю их в вашу Google-таблицу и отмечаю дубли и ошибки в суммах. Каждую неделю и месяц присылаю отчёт.
 
 С чего начать:
 1. Пришлите документы: фото, PDF или ZIP-архив (папку с чеками, выгрузку чата) — подготовлю отчёт.
@@ -73,6 +75,8 @@ Kirim foto, PDF, atau arsip ZIP berisi dokumen dan dapatkan laporan. 30 dokumen 
 ```
 👋 Hi! I'm Nota — I track expenses from your documents.
 
+I read receipts, invoices and handwritten delivery notes, write them to your Google Sheet and flag duplicates and wrong totals. Every week and month I send you a report.
+
 Where to start:
 1. Send documents: photos, PDFs or a ZIP archive (a folder of receipts, a chat export) — I'll prepare a report.
 2. Connect Google — I'll create a sheet and two folders on your Google Drive. I'll only have access to them.
@@ -87,6 +91,8 @@ By connecting Google, you accept the terms and privacy policy.
 **ID**
 ```
 👋 Halo! Saya Nota — mencatat pengeluaran dari dokumen Anda.
+
+Saya membaca struk, invoice, dan nota tulisan tangan, mencatatnya ke Google Sheet Anda, dan menandai duplikat serta jumlah yang salah. Setiap minggu dan bulan saya kirim laporan.
 
 Mulai dari mana:
 1. Kirim dokumen: foto, PDF, atau arsip ZIP (folder struk, ekspor chat) — saya siapkan laporannya.
