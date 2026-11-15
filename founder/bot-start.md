@@ -4,7 +4,7 @@
 
 ## Описание до /start (BotFather → Edit Description, до 512 знаков)
 
-**RU** (462 знак)
+**RU** (448 знак)
 ```
 Nota ведёт учёт расходов по документам в Telegram.
 
@@ -14,10 +14,10 @@ Nota ведёт учёт расходов по документам в Telegram.
 • Отмечает дубли и суммы, которые не сходятся
 • Присылает отчёты за неделю и месяц
 
-Пришлите фото, PDF или ZIP-архив с документами и получите отчёт. Первые 30 документов бесплатно.
+Пришлите ZIP-архив с документами и получите отчёт. Первые 30 документов бесплатно.
 ```
 
-**EN** (471)
+**EN** (455)
 ```
 Nota tracks expenses from your documents in Telegram.
 
@@ -27,10 +27,10 @@ Nota tracks expenses from your documents in Telegram.
 • Flags duplicates and totals that don't add up
 • Sends weekly and monthly reports
 
-Send photos, PDFs or a ZIP archive of documents and get a report. First 30 documents free.
+Send a ZIP archive of documents and get a report. First 30 documents free.
 ```
 
-**ID** (477)
+**ID** (461)
 ```
 Nota mencatat pengeluaran dari dokumen Anda di Telegram.
 
@@ -40,7 +40,7 @@ Nota mencatat pengeluaran dari dokumen Anda di Telegram.
 • Menandai duplikat dan jumlah yang tidak cocok
 • Mengirim laporan mingguan dan bulanan
 
-Kirim foto, PDF, atau arsip ZIP berisi dokumen dan dapatkan laporan. 30 dokumen pertama gratis.
+Kirim arsip ZIP berisi dokumen dan dapatkan laporan. 30 dokumen pertama gratis.
 ```
 
 ## Короткое описание в профиле (BotFather → Edit About, до 120 знаков)
@@ -60,10 +60,10 @@ Kirim foto, PDF, atau arsip ZIP berisi dokumen dan dapatkan laporan. 30 dokumen 
 Разбираю чеки, счета и рукописные накладные, записываю их в вашу Google-таблицу и отмечаю дубли и ошибки в суммах. Каждую неделю и месяц присылаю отчёт.
 
 С чего начать:
-1. Пришлите документы: фото, PDF или ZIP-архив (папку с чеками, выгрузку чата) — подготовлю отчёт.
-2. Подключите Google — создам таблицу и две папки на вашем Google Диске. Доступ у меня будет только к ним.
+1. Пришлите ZIP-архив — папку с чеками или выгрузку чата, и я подготовлю отчёт. Первые 30 документов бесплатно.
+2. Подключите Google — создам на вашем Google Диске таблицу и две папки (доступ только к ним) и буду записывать туда каждый документ.
 
-Первые 30 документов бесплатно.
+Документы можно присылать и по одному — фото или PDF. Отчёт пришлю после 30 документов или в любой момент по кнопке «Отчёт».
 
 Подключая Google, вы принимаете условия и политику конфиденциальности.
 
@@ -78,10 +78,10 @@ Kirim foto, PDF, atau arsip ZIP berisi dokumen dan dapatkan laporan. 30 dokumen 
 I read receipts, invoices and handwritten delivery notes, write them to your Google Sheet and flag duplicates and wrong totals. Every week and month I send you a report.
 
 Where to start:
-1. Send documents: photos, PDFs or a ZIP archive (a folder of receipts, a chat export) — I'll prepare a report.
-2. Connect Google — I'll create a sheet and two folders on your Google Drive. I'll only have access to them.
+1. Send a ZIP archive — a folder of receipts or a chat export, and I'll prepare a report. First 30 documents are free.
+2. Connect Google — I'll create a sheet and two folders on your Google Drive (access to them only) and record every document there.
 
-First 30 documents are free.
+You can also send documents one by one — photos or PDFs. I'll send a report after 30 documents or anytime with the «Report» button.
 
 By connecting Google, you accept the terms and privacy policy.
 
@@ -95,10 +95,10 @@ By connecting Google, you accept the terms and privacy policy.
 Saya membaca struk, invoice, dan nota tulisan tangan, mencatatnya ke Google Sheet Anda, dan menandai duplikat serta jumlah yang salah. Setiap minggu dan bulan saya kirim laporan.
 
 Mulai dari mana:
-1. Kirim dokumen: foto, PDF, atau arsip ZIP (folder struk, ekspor chat) — saya siapkan laporannya.
-2. Hubungkan Google — saya buat sheet dan dua folder di Google Drive Anda. Akses saya hanya ke situ.
+1. Kirim arsip ZIP — folder struk atau ekspor chat, dan saya siapkan laporannya. 30 dokumen pertama gratis.
+2. Hubungkan Google — saya buat sheet dan dua folder di Google Drive Anda (akses hanya ke situ) dan mencatat setiap dokumen di sana.
 
-30 dokumen pertama gratis.
+Dokumen juga bisa dikirim satu per satu — foto atau PDF. Laporan saya kirim setelah 30 dokumen atau kapan saja lewat tombol «Laporan».
 
 Dengan menghubungkan Google, Anda menyetujui ketentuan dan kebijakan privasi.
 
@@ -120,6 +120,7 @@ Dengan menghubungkan Google, Anda menyetujui ketentuan dan kebijakan privasi.
 ```
 
 ## Проверить в боте
+- Есть ли у бота кнопка «Отчёт» (на неё ссылается первое сообщение и сайт: «В любое время — по кнопке «Отчёт»»).
 - Telegram Desktop сохраняет экспорт папкой, а не одним файлом: шаг «сожмите папку в ZIP» уже в ответе на кнопку — проверить, что бот принимает такой ZIP.
 - Какая вторая папка из «двух папок»? На сайте сейчас «в папку» (шаг 3) и «к таблице и двум папкам» («Ваши данные») — выровнять по ответу (аудит, вопрос 18).
 - Ссылка на политику конфиденциальности нужна и для проверки приложения в Google.
