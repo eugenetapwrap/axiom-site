@@ -346,8 +346,11 @@ const jsonld = [
     <section class="section">
       <div class="wrap">
         <h2 class="h2-gap">{segments.title}</h2>
-        <ul class="seg-list">{segments.items.map((c) => <li><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
-        <p class="note seg-note">{segments.note}</p>
+        <!-- На компьютере итоговая фраза стоит под первыми четырьмя сферами и заканчивается на одной линии с текстом «Бухгалтеров» -->
+        <div class="seg-grid">
+          <ul class="seg-list">{segments.items.map((c) => <li><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
+          <p class="note seg-note">{segments.note}</p>
+        </div>
       </div>
     </section>
 
