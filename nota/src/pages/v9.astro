@@ -124,7 +124,10 @@ const jsonld = [
           />
           <div class="s2-text">
             <ul class="check">{steps.report.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
-            <p class="s2-more">{steps.report.more}</p>
+            <div class="sched">
+              <div class="sched-title">{steps.report.schedule.title}</div>
+              <dl>{steps.report.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
+            </div>
             <div class="cta-row"><a class="btn" href={botLink('land9_result')}>{cta}</a></div>
           </div>
         </div>

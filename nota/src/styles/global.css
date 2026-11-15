@@ -783,3 +783,12 @@ html:not([data-rep="plain"]) .v9 .s2-split .mini { display: none; }
   /* шаг 2 не ниже картинки: пункты отчёта проезжают рядом с ней, картинка уходит вместе с концом блока */
   html:not([data-rep="plain"]) .v9 #result { min-height: calc(min(650px, 100vh - 150px) + 34px + 112px); }
 }
+/* v9: «Когда приходит отчёт» — расписание в шаге 2. Общая левая колонка по самому длинному «когда», сплошные линии между строками */
+.sched { margin-top: 24px; padding: 18px 22px 8px; background: #fff; border-radius: 16px; box-shadow: inset 0 0 0 1px var(--line); max-width: 520px; }
+.sched-title { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--slate); margin-bottom: 6px; }
+.sched dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; font-size: 17px; line-height: 1.35; }
+.sched dt, .sched dd { margin: 0; padding: 11px 0; border-top: 1px solid var(--line); }
+.sched dt:first-of-type, .sched dd:first-of-type { border-top: 0; }
+.sched dt { font-weight: 700; color: var(--ink); }
+.sched dd { color: var(--muted); padding-left: 28px; }
+@media (max-width: 640px) { .sched { padding: 16px 18px 6px; } .sched dl { font-size: 15px; } .sched dd { padding-left: 14px; white-space: nowrap; } }
