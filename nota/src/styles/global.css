@@ -848,3 +848,8 @@ body:has(.v10) .header .btn--dark:hover { background: var(--ink); color: #fff; }
 }
 @media (prefers-reduced-motion: reduce) { .sticky-cta { transition: none; } }
 .v10 .hero-segs { text-wrap: wrap; }
+/* v10: в тарифе подпись «≈ $… за документ» справа от цены, в одной строке — блок ниже */
+.v10 .price-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.v10 .price-row .plan-unit { margin: 0 0 4px; max-width: 150px; text-align: right; line-height: 1.35; }
+.v10 .price-row .plan-unit .p3 > span, .v10 .price-row .plan-unit .p6 > span { display: block; white-space: nowrap; }
+.v10 .price-row .plan-unit { max-width: none; }
