@@ -61,7 +61,7 @@ const jsonld = [
     <!-- 1. Первый экран: архив → отчёт за 15 минут, QR, пример отчёта -->
     <section class="hero hero2 hero3">
       <div class="wrap split hero-split">
-        <div>
+        <div class="hero-left">
           <span class="hero-eyebrow">{hero.eyebrow}</span>
           <h1>{h1Cut[0]}<Pen u id="h1">{h1Cut[1]}</Pen>{h1Cut[2]}</h1>
           <p class="lead">{hero.lead}</p>
@@ -74,17 +74,16 @@ const jsonld = [
               <span>{hero.qr}</span>
             </div>
           </div>
-          <!-- Под кнопкой две строки в одном сером стиле: бесплатно / как выгрузить архив (по нажатию раскрывается инструкция) -->
-          <div class="cta-meta">
-            <span>{hero.noteShort}</span>
-            <details class="howto-inline">
-              <summary>{hero.howto.summary}</summary>
-              <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
-            </details>
-          </div>
-          <p class="phone-hint">{hero.phoneHint}</p>
+          <!-- Под кнопкой — две строки про оффер вплотную: бесплатно и кому подходит -->
+          <p class="cta-line">{hero.noteShort}</p>
           <p class="hero-segs"><b>Кому подходит:</b> {segments.items.map((c) => c.title.replace(/ /g, '\u00a0')).join('\u00a0· ')}</p>
+          <p class="phone-hint">{hero.phoneHint}</p>
           </div>
+          <!-- «Как выгрузить архив» — служебная ссылка внизу блока (на компьютере — по нижней линии примера отчёта) -->
+          <details class="howto-inline howto-bottom">
+            <summary>{hero.howto.summary}</summary>
+            <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
+          </details>
         </div>
         <figure class="hero-report in-flow">
           <img src={hero.report.file} alt="Пример отчёта Nota по архиву: 96,15 млн рупий, 37 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />

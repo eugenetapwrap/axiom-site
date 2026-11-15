@@ -972,3 +972,14 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 .v10 .cta-meta { flex-direction: column; align-items: flex-start; gap: 2px; }
 /* «Кому подходит» — обычным чёрным (основатель 15.11) */
 .v10 .hero-segs, .v10 .hero-segs b { color: var(--ink); }
+/* Первый экран: под кнопкой «40 бесплатно» и «Кому подходит» вплотную; «Как выгрузить архив» — внизу блока */
+.v10 .cta-line { margin-top: 16px; font-size: 15px; line-height: 1.45; color: var(--muted); }
+.v10 .cta-line + .hero-segs { margin-top: 4px; }
+.v10 .howto-bottom { margin-top: 20px; font-size: 14px; color: var(--muted); }
+.v10 .howto-bottom summary { display: inline-block; }
+.v10 .howto-bottom ul { margin-top: 8px; display: grid; gap: 4px; font-size: 14px; line-height: 1.45; max-width: 480px; }
+@media (min-width: 1000px) {
+  /* левая колонка — по высоте примера отчёта справа, ссылка прижата к низу */
+  .v10 .hero-left { display: flex; flex-direction: column; min-height: calc(min(650px, 100vh - 150px) + 34px); }
+  .v10 .howto-bottom { margin-top: auto; padding-top: 24px; margin-left: var(--g); }
+}
