@@ -261,6 +261,12 @@ const jsonld = [
             </div>
           ))}
         </div>
+        <!-- Дополнительный пакет — одной полоской под тарифами, цена одна для всех (основатель 15.11) -->
+        <div class="pack">
+          <span class="pack-b" aria-hidden="true">+{pricing.pack.size}</span>
+          <p><b>{pricing.pack.title}</b> {pricing.pack.text}</p>
+          <span class="pack-p">{pricing.pack.price}<small> за пакет</small></span>
+        </div>
         <dl class="plan-facts3 g4">
           {pricing.facts.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
         </dl>
