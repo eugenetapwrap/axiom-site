@@ -10,10 +10,11 @@ interface Props {
   sub: string;
   marks: Mark[];
   bars?: number[];
+  barsLabel?: string;
   cats?: [string, string, number][];
   review?: [string, string, string][];
 }
-const { title, period, total, sub, marks, bars, cats, review } = Astro.props;
+const { title, period, total, sub, marks, bars, barsLabel = 'По дням', cats, review } = Astro.props;
 const max = bars ? Math.max(...bars) : 1;
 ---
 <figure class="mini">
@@ -27,7 +28,7 @@ const max = bars ? Math.max(...bars) : 1;
   </div>
   {bars && (
     <>
-      <div class="mini-label">По дням</div>
+      <div class="mini-label">{barsLabel}</div>
       <div class="mini-bars">{bars.map((v) => <i style={`height:${Math.round((64 * v) / max)}px`} class:list={{ top: v === max }} />)}</div>
     </>
   )}
