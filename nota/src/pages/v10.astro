@@ -77,8 +77,8 @@ const jsonld = [
             <summary>{hero.howto.summary}</summary>
             <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
           </details>
+          <p class="hero-segs"><b>Кому подходит:</b> {segments.items.map((c) => c.title.replace(/ /g, '\u00a0')).join('\u00a0· ')}</p>
           </div>
-          <p class="hero-segs"><b>Подходит:</b> {segments.items.map((c) => c.title).join(' · ')}</p>
         </div>
         <figure class="hero-report in-flow">
           <img src={hero.report.file} alt="Пример отчёта Nota по архиву: 96,15 млн рупий, 37 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
