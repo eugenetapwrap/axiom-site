@@ -971,6 +971,14 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 /* «Для кого»: шесть карточек — 1 колонка на телефоне, 3 × 2 с планшета; у «Любой другой бизнес» полоска серая */
 @media (min-width: 1200px) { .v10 .seg-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .v10 .seg-list li.seg-any h3::before { background: #b8c2cc; }
+/* «Как присылать дальше» на компьютере (4 в ряд): иконка над заголовком — заголовки в одну строку, тексты с одной высоты */
+@media (min-width: 1100px) {
+  .v10 #send .send-head { flex-direction: column; align-items: flex-start; gap: 14px; margin-bottom: 8px; }
+}
+/* «Ваши данные» на компьютере: 2 × 2 — заголовки в одну строку вместо 2–3 */
+@media (min-width: 900px) { .v10 .data-sec .grid.g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 56px !important; } }
+/* Подвал на телефоне: ссылки столбиком без лишних промежутков, поле нажатия 44 px */
+@media (max-width: 760px) { .footer nav { flex-direction: column; gap: 0; } .footer nav a { padding: 11px 0; } }
 /* Шесть пунктов меню помещаются от 880 px; уже — меню прячется, как на телефоне (логотип и кнопка) */
 @media (max-width: 879px) {
   body:has(.v10) .header nav { display: none; }
@@ -986,7 +994,7 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 .v10 .howto-inline ul { margin-top: 8px; display: grid; gap: 4px; }
 .v10 .hero-segs { margin-top: 14px; font-size: 15px; }
 .v10 .hero-segs b { color: var(--muted); font-weight: 600; }
-@media (max-width: 899px) { .v10 .phone-hint { margin-top: 6px; } }
+@media (max-width: 899px) { .v10 .phone-hint { margin-top: 16px; } } /* отделена от строки «30 документов бесплатно» (основатель 15.11) */
 .v10 .cta-meta { flex-direction: column; align-items: flex-start; gap: 2px; }
 /* «Кому подходит» — обычным чёрным (основатель 15.11) */
 .v10 .hero-segs, .v10 .hero-segs b { color: var(--ink); }
