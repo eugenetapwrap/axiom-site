@@ -165,7 +165,7 @@ Akses saya hanya ke sheet dan folder yang saya buat. Dengan menghubungkan Google
 ```
 📦 Архив разобран: {N} из {M} документов
 
-Расходы: 128,40 млн IDR
+💰 Расходы: 128,40 млн IDR
 🟠 Стоит проверить: 7 · 5,6 млн
 
 Подготовлено в Nota · @NotaGetBot
