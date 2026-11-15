@@ -615,7 +615,7 @@ html[data-variant="numbers"] .num-group > .num-dot { height: 60px; }
 .pen-layer path.num-line, .pen-layer path.num-head { stroke: var(--slate); stroke-width: 2; opacity: .5; animation: none !important; }
 .pen-layer path.num-line { stroke-dasharray: 5 7; }
 .pen-layer path.num-head { stroke-dasharray: none; opacity: .7; }
-@media (max-width: 480px) { html[data-variant="numbers"] .num-group .btn, html[data-variant="numbers"] .num-sec .btn { font-size: 18px; padding: 0 14px; } }
+@media (max-width: 480px) { html[data-variant="numbers"] .num-group .btn, html[data-variant="numbers"] .num-sec .btn { font-size: 19px; padding: 0 12px; } }
 
 /* v7, вариант «Итог»: раскладка шагов + цифры (на компьютере с пунктиром, на телефоне цифра у заголовка),
    шаг 2 «Что покажет отчёт», подчёркнутые «20 минут» в главном заголовке */
@@ -636,7 +636,7 @@ html[data-variant="final"] .num-dot { display: flex; align-items: center; positi
   html[data-variant="final"] .num-sec h2 { padding-left: var(--g); }
   html[data-variant="final"] .num-sec h2 .num-dot { left: 0; }
 }
-@media (max-width: 480px) { html[data-variant="final"] .num-group .btn { font-size: 18px; padding: 0 14px; } }
+@media (max-width: 480px) { html[data-variant="final"] .num-group .btn { font-size: 19px; padding: 0 12px; } }
 html[data-variant="final"] [data-pen="h1"] > .pen-under { display: block; }
 
 /* v7: правки основателя 15.11 */
@@ -663,3 +663,14 @@ html[data-variant="final"] [data-pen="h1"] > .pen-under { display: block; }
 .v7 .seg-list h3 { position: relative; }
 .v7 .seg-list h3::before { content: ''; position: absolute; left: -18px; top: 0.18em; bottom: 0.18em; width: 3px; border-radius: 2px; background: var(--orange); }
 .v7 .seg-note { font-weight: 700; color: var(--ink); }
+
+/* v8 = «Итог» из v7 без переключателя: цифры шагов, на компьютере пунктир по левой полосе, на телефоне цифра у заголовка */
+.v8 { --g: 46px; }
+.v8 .num-group { position: relative; margin-left: var(--g); }
+.v8 .num-group > .num-dot { height: 60px; }
+.v8 .num-sec h2 { position: relative; }
+.v8 .num-dot { display: flex; align-items: center; position: absolute; left: calc(-1 * var(--g)); top: 0; width: 34px; height: 1.12em; }
+@media (min-width: 900px) { .v8 { --g: 64px; } .v8 .num-sec .wrap > * { margin-left: var(--g); } }
+@media (max-width: 899px) { .v8 .num-sec h2 { padding-left: var(--g); } .v8 .num-sec h2 .num-dot { left: 0; } }
+@media (max-width: 480px) { .v8 .num-group .btn { font-size: 19px; padding: 0 12px; } }
+.v8 .pen--u > .pen-under { display: block; }
