@@ -24,7 +24,7 @@ const exists = fs.existsSync(path.join(process.cwd(), 'public', file));
   </div>
   <div class="shot-body">
     {exists ? (
-      <a href={file} target="_blank" rel="noopener" title="Открыть в полном размере">
+      <a href={file} target="_blank" rel="noopener" title="Открыть в полном размере" aria-label={`${alt}: открыть в полном размере, в новой вкладке`}>
         {mobile ? (
           <picture>
             <source media="(max-width: 640px)" srcset={mobile.file} width={mobile.w} height={mobile.h} />

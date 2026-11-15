@@ -1,0 +1,13 @@
+---
+// Страница 404: коротко и ссылка на главную; от поисковиков закрыта.
+import Base from '../layouts/Base.astro';
+---
+<Base title="Страница не найдена — Nota" description="Такой страницы нет. Перейдите на главную Nota." noindex selfFonts>
+  <main class="section" id="main">
+    <div class="wrap" style="max-width: 640px">
+      <h1 class="h2-gap">Такой страницы нет</h1>
+      <p class="lead">Возможно, ссылка устарела. Всё о Nota — на главной.</p>
+      <a class="btn" href="/">На главную</a>
+    </div>
+  </main>
+</Base>

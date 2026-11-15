@@ -12,7 +12,7 @@ import Pen from './Pen.astro';
 import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
-  meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps, bar,
+  meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps, bar, shotAlt,
 } from '../data/content-v10';
 
 // Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
@@ -22,22 +22,31 @@ const h1Cut = cut(hero.title, '15\u00a0минут');
 // Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
 interface Props { noindex?: boolean }
 const { noindex = false } = Astro.props;
-const site = 'https://nota.axiomco.io';
+// Домен — один раз, в astro.config.mjs (site)
+const site = new URL('/', Astro.site).href;
 const jsonld = [
+  { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${site}#website`, name: 'Nota', url: site, inLanguage: 'ru' },
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
+    '@id': `${site}#app`,
     name: 'Nota',
-    url: `${site}/`,
+    url: site,
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Telegram',
     inLanguage: ['ru', 'en', 'id'],
     description: meta.description,
-    publisher: { '@type': 'Organization', name: 'Axiom Consulting' },
-    offers: pricing.plans.filter((p) => p.month).map((p) => ({
-      '@type': 'Offer', name: p.name, price: p.month!.price.replace('$', ''), priceCurrency: 'USD',
-      url: botLink(p.tag),
-    })),
+    image: new URL('/og-v10.png', Astro.site).href,
+    screenshot: new URL(hero.report.file, Astro.site).href,
+    publisher: { '@type': 'Organization', name: 'Axiom Consulting' }, // url и юрлицо — после ответа основателя (аудит 15.11, вопрос 42)
+    // Цена — за месяц; ссылка — на блок цен, а не в бота (переходы из поиска не путаются с нажатиями в ценах)
+    offers: pricing.plans.filter((p) => p.month).map((p) => {
+      const price = p.month!.price.replace('$', '');
+      return {
+        '@type': 'Offer', name: `${p.name}: ${p.docs.toLowerCase()}`, price, priceCurrency: 'USD', url: `${site}#price`,
+        priceSpecification: { '@type': 'UnitPriceSpecification', price, priceCurrency: 'USD', billingDuration: 'P1M', unitCode: 'MON' },
+      };
+    }),
   },
   {
     '@context': 'https://schema.org',
@@ -66,7 +75,7 @@ const jsonld = [
           <h1>{h1Cut[0]}<Pen u id="h1">{h1Cut[1]}</Pen>{h1Cut[2]}</h1>
           <p class="lead">{hero.lead}</p>
           <div class="num-group">
-          <span class="num-dot" aria-hidden="true"><i>1</i></span>
+          <span class="num-dot" aria-hidden="true"><i data-n="1"></i></span>
           <div class="cta-row cta-row--qr">
             <a class="btn" href={botLink('land10_hero')}>{cta}</a>
             <div class="cta-qr">
@@ -95,7 +104,7 @@ const jsonld = [
          отчёта (на телефоне скрыта — там пример отчёта прямо над блоком), справа что в отчёте и как часто -->
     <section class="section section--paper num-sec" id="result">
       <div class="wrap">
-        <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i>2</i></span>{steps.report.title}</h2>
+        <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i data-n="2"></i></span>{steps.report.title}</h2>
         <div class="s2-split">
           <div class="s2-text">
             <ul class="check">{steps.report.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
@@ -123,7 +132,7 @@ const jsonld = [
     <!-- 3. Шаг 3: подключите Google, и таблица будет вестись сама -->
     <section class="section num-sec" id="analytics">
       <div class="wrap">
-        <h2><span class="num-dot" aria-hidden="true"><i>3</i></span>{steps.table.title}</h2>
+        <h2><span class="num-dot" aria-hidden="true"><i data-n="3"></i></span>{steps.table.title}</h2>
         <p class="lead">{steps.table.lead}</p>
         <div class="an" data-an>
           <div class="an-pick" role="tablist" aria-label="Листы таблицы">
@@ -135,7 +144,7 @@ const jsonld = [
           </div>
           {analytics.screens.map((sc, i) => (
             <div class:list={['an-panel', { on: i === 0 }]} role="tabpanel" id={`an-panel-${sc.id}`} aria-labelledby={`an-tab-${sc.id}`}>
-              <ScreenSlot file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={`Лист ${sc.tab} на тестовых данных`} w={sc.w} h={sc.h} mobile={sc.mobile} />
+              <ScreenSlot file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={shotAlt[sc.id] ?? `Лист ${sc.tab} на тестовых данных`} w={sc.w} h={sc.h} mobile={sc.mobile} />
               <ul class="an-points">{sc.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
             </div>
           ))}
@@ -154,9 +163,13 @@ const jsonld = [
             tabs.forEach(function (t, i) {
               t.addEventListener('click', function () { show(i); });
               t.addEventListener('keydown', function (e) {
-                if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-                var n = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
-                show(n); tabs[n].focus();
+                var n;
+                if (e.key === 'ArrowRight') n = (i + 1) % tabs.length;
+                else if (e.key === 'ArrowLeft') n = (i + tabs.length - 1) % tabs.length;
+                else if (e.key === 'Home') n = 0;
+                else if (e.key === 'End') n = tabs.length - 1;
+                else return;
+                e.preventDefault(); show(n); tabs[n].focus();
               });
             });
             show(0);
@@ -169,7 +182,7 @@ const jsonld = [
     <!-- 4. Шаг 4: как присылать документы дальше, группа по желанию -->
     <section class="section section--paper num-sec" id="send">
       <div class="wrap">
-        <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i>4</i></span>{send.title}</h2>
+        <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i data-n="4"></i></span>{send.title}</h2>
         <div class="grid g4" style="--min: 240px">
           {send.items.map((c) => (
             <div class="card send-card send-card--row">
@@ -226,7 +239,7 @@ const jsonld = [
           </div>
           {pricing.plans.map((p) => (
             <div class:list={['ptab-r', { 'ptab-r--hl': p.highlight, 'ptab-r--custom': p.custom }]} role="row">
-              <div class="ptab-n" role="cell"><b>{p.name}</b><span>{p.who}</span></div>
+              <div class="ptab-n" role="rowheader"><b>{p.name}</b><span>{p.who}</span></div>
               <div class="ptab-v" role="cell"><b>{p.vol}</b> <small>документов<span class="m-only"> в месяц</span></small></div>
               <div class="ptab-g" role="cell"><span class="m-only">Группы: </span>{p.groups}</div>
               <div class="ptab-p" role="cell">
@@ -237,7 +250,7 @@ const jsonld = [
                   </>
                 )}
               </div>
-              <div class="ptab-a" role="cell"><a class:list={['btn', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}</a></div>
+              <div class="ptab-a" role="cell"><a class:list={['btn', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}<span class="sr-only"> — тариф {p.name}</span></a></div>
             </div>
           ))}
         </div>
@@ -245,7 +258,7 @@ const jsonld = [
         <div class="pa">
           {pricing.plans.map((p) => (
             <div class:list={['pa-c', { 'pa-c--hl': p.highlight, 'pa-c--dk': p.custom }]}>
-              <div class="pa-n">{p.name}</div>
+              <h3 class="pa-n">{p.name}</h3>
               <div class="pa-w">{p.who}</div>
               <div class="pa-v"><b>{p.custom ? 'Более 500' : p.vol}</b><span>документов в месяц</span></div>
               {p.custom ? <div class="pa-p pa-p--custom">{p.custom}</div> : (
@@ -257,7 +270,7 @@ const jsonld = [
               <ul class="pa-l">
                 {(p.services ?? [`Группы: ${p.groups}`, ...pricing.common.map((c) => c[0].toUpperCase() + c.slice(1))]).map((f) => <li><Icon name="check" size={18} />{f}</li>)}
               </ul>
-              <a class:list={['btn', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}</a>
+              <a class:list={['btn', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}<span class="sr-only"> — тариф {p.name}</span></a>
             </div>
           ))}
         </div>
@@ -309,10 +322,10 @@ const jsonld = [
             function step() { var c = t.querySelector('.review'); return c ? c.getBoundingClientRect().width + parseFloat(getComputedStyle(t).columnGap || 0) : t.clientWidth; }
             function sync() {
               var max = t.scrollWidth - t.clientWidth - 2;
-              btns[0].disabled = t.scrollLeft <= 2; btns[1].disabled = t.scrollLeft >= max;
+              btns[0].setAttribute('aria-disabled', String(t.scrollLeft <= 2)); btns[1].setAttribute('aria-disabled', String(t.scrollLeft >= max)); /* не disabled: иначе фокус слетает на body */
               document.querySelector('.rv-nav').hidden = max <= 0;
             }
-            btns.forEach(function (b) { b.addEventListener('click', function () { t.scrollBy({ left: step() * Number(b.dataset.dir), behavior: calm ? 'auto' : 'smooth' }); }); });
+            btns.forEach(function (b) { b.addEventListener('click', function () { if (b.getAttribute('aria-disabled') === 'true') return; t.scrollBy({ left: step() * Number(b.dataset.dir), behavior: calm ? 'auto' : 'smooth' }); }); });
             t.addEventListener('scroll', sync, { passive: true }); window.addEventListener('resize', sync); sync();
           })();
         </script>
@@ -345,7 +358,7 @@ const jsonld = [
                 const [m, t] = o.cells[i];
                 return (
                   <div class:list={['cmp-c', `m-${m}`, { 'cmp-c--nota': o.nota }]} role="cell">
-                    <span class="vs-mark"><Icon name={m === 'yes' ? 'check' : m === 'no' ? 'x' : 'minus'} size={16} /></span>
+                    <span class="vs-mark"><Icon name={m === 'yes' ? 'check' : m === 'no' ? 'x' : 'minus'} size={16} /><span class="sr-only">{m === 'yes' ? 'Плюс.' : m === 'no' ? 'Минус.' : 'Отчасти.'}</span></span>
                     <span class="cmp-who">{o.short ?? o.name}</span>
                     <span class="cmp-t">{t}</span>
                   </div>
@@ -366,7 +379,7 @@ const jsonld = [
             <div class="dark-item"><Icon name={d.icon} /><div><h3>{d.title}</h3><p set:html={fmt(d.text)} /></div></div>
           ))}
         </div>
-        <div class="who"><span class="who-label">КТО ДЕЛАЕТ</span><p>{data.who}</p></div>
+        <div class="who"><span class="who-label">Кто делает</span><p>{data.who}</p></div>
       </div>
     </section>
 
@@ -386,7 +399,7 @@ const jsonld = [
         <div class="final-cta">
           <a class="btn" href={botLink('land10_final')}>{cta}</a>
           <div class="final-qr">
-            <img src="/screens/qr-bot-v10-dark.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
+            <img src="/screens/qr-bot-v10-final.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
             <span>Или наведите камеру телефона</span>
           </div>
         </div>
@@ -396,7 +409,7 @@ const jsonld = [
 
   <!-- Телефон: кнопка внизу экрана — только когда первая кнопка уехала вверх и на экране нет ни одной другой оранжевой кнопки
        (шаг 2, тарифы, финал), чтобы две одинаковые кнопки не стояли рядом -->
-  <div class="sticky-cta" id="sticky-cta"><a class="btn" href={botLink('land10_sticky')}>{cta}</a></div>
+  <aside aria-label="Быстрый старт"><div class="sticky-cta" id="sticky-cta"><a class="btn" href={botLink('land10_sticky')}>{cta}</a></div></aside>
   <script is:inline>
     (function () {
       var bar = document.getElementById('sticky-cta'), heroBtn = document.querySelector('.hero .btn');
