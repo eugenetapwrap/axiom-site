@@ -6,11 +6,21 @@ import Logo from '../components/Logo.astro';
 import Icon from '../components/Icon.astro';
 import ScreenSlot from '../components/ScreenSlot.astro';
 import MiniReport from '../components/MiniReport.astro';
+import Pen from '../components/Pen.astro';
 import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
   meta, cta, nav, hero, result, analytics, send, what, compare, reports, segments, reviews, data, pricing, faq, final, footer, steps,
 } from '../data/content-v7';
+
+// Карандашные пометки: режем заголовок на «до / слово / после».
+const cut = (text: string, word: string) => { const i = text.indexOf(word); return i < 0 ? [text, '', ''] : [text.slice(0, i), word, text.slice(i + word.length)]; };
+const h1Cut = cut(hero.title, '20\u00a0минут');
+const resCut = cut(result.title, '20 минут');
+const anA = cut(analytics.title, 'Таблица');
+const anB = cut(anA[2], 'ведётся сама');
+const sendCut = cut(send.title, 'дальше');
+const variants = ['plain', 'steps', 'numbers', 'circle', 'underline', 'side'] as const;
 
 // Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
 const site = 'https://nota.axiomco.io';
@@ -43,23 +53,25 @@ const jsonld = [
   <div class="techbar" role="group" aria-label={steps.bar.label}>
     <div class="wrap">
       <span class="techbar-label">{steps.bar.label}</span>
-      <button type="button" data-variant="plain" aria-pressed="true">{steps.bar.plain}</button>
-      <button type="button" data-variant="steps" aria-pressed="false">{steps.bar.steps}</button>
+      {variants.map((v, i) => <button type="button" data-variant={v} aria-pressed={i === 0 ? 'true' : 'false'}>{steps.bar[v]}</button>)}
       <small>{steps.bar.note}</small>
     </div>
   </div>
   <script is:inline>
     (function () {
       var root = document.documentElement;
+      var known = ['steps', 'numbers', 'circle', 'underline', 'side'];
       function set(v) {
-        if (v === 'steps') root.setAttribute('data-variant', 'steps'); else root.removeAttribute('data-variant');
-        document.querySelectorAll('.techbar [data-variant]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.variant === (v === 'steps' ? 'steps' : 'plain') ? 'true' : 'false'); });
+        if (known.indexOf(v) < 0) v = 'plain';
+        if (v === 'plain') root.removeAttribute('data-variant'); else root.setAttribute('data-variant', v);
+        document.querySelectorAll('.techbar [data-variant]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.variant === v ? 'true' : 'false'); });
+        document.dispatchEvent(new CustomEvent('variant'));
       }
-      set(location.hash === '#steps' ? 'steps' : 'plain');
+      set(location.hash.slice(1));
       document.querySelectorAll('.techbar [data-variant]').forEach(function (b) {
         b.addEventListener('click', function () {
           set(b.dataset.variant);
-          try { history.replaceState(null, '', b.dataset.variant === 'steps' ? '#steps' : location.pathname + location.search); } catch (e) {}
+          try { history.replaceState(null, '', b.dataset.variant === 'plain' ? location.pathname + location.search : '#' + b.dataset.variant); } catch (e) {}
         });
       });
     })();
@@ -77,8 +89,9 @@ const jsonld = [
     <section class="hero hero2 hero3">
       <div class="wrap split hero-split">
         <div>
+          <span class="side-num" aria-hidden="true">1</span>
           <span class="hero-eyebrow">{hero.eyebrow}</span>
-          <h1>{hero.title}</h1>
+          <h1 data-side="1">{h1Cut[0]}<Pen c u id="h1">{h1Cut[1]}</Pen>{h1Cut[2]}</h1>
           <p class="lead">{hero.lead}</p>
           <div class="time-strip">
             <div class="ts-item"><small>{hero.you.k}</small><b>{hero.you.v}</b><span>{hero.you.t}</span></div>
@@ -86,6 +99,8 @@ const jsonld = [
             <div class="ts-item ts-item--nota"><small>{hero.nota.k}</small><b>{hero.nota.v}</b><span>{hero.nota.t}</span></div>
           </div>
           <div class="step-tag v-steps"><span class="step-n">1</span>{steps.tags[0]}</div>
+          <div class="num-group">
+          <span class="num-dot" aria-hidden="true"><i>1</i></span>
           <div class="cta-row cta-row--qr">
             <a class="btn" href={botLink('land7_hero')}>{cta}</a>
             <div class="cta-qr">
@@ -98,6 +113,7 @@ const jsonld = [
             <summary>{hero.howto.summary}</summary>
             <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
           </details>
+          </div>
         </div>
         <figure class="hero-report">
           <img src={hero.report.file} alt="Пример отчёта Nota по архиву: 96,15 млн рупий, 37 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
@@ -107,20 +123,24 @@ const jsonld = [
     </section>
 
     <!-- 2. Что придёт через 20 минут -->
-    <section class="section" id="result">
+    <section class="section num-sec" id="result">
       <div class="wrap">
         <div class="v-plain">
-          <h2 class="h2-gap">{result.title}</h2>
+          <span class="side-num" aria-hidden="true">2</span>
+          <h2 class="h2-gap" data-side="2">{resCut[0]}<Pen c u id="result">{resCut[1]}</Pen>{resCut[2]}</h2>
           <div class="grid" style="--min: 280px">
-            {result.items.map((r) => (
-              <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={r.icon} /></div><h3>{r.title}</h3></div><p>{r.text}</p></div>
-            ))}
+            {result.items.map((r) => {
+              const t = r.icon === 'table' ? cut(r.title, 'Таблица') : null;
+              return (
+                <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={r.icon} /></div><h3>{t ? <>{t[0]}<Pen c id="tcard">{t[1]}</Pen>{t[2]}</> : r.title}</h3></div><p>{r.text}</p></div>
+              );
+            })}
           </div>
           <p class="note">{result.note}</p>
         </div>
         <div class="v-steps">
           <div class="step-tag step-tag--link"><span class="step-n">2</span>{steps.tags[1]}</div>
-          <h2 class="h2-gap">{steps.report.title}</h2>
+          <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i>2</i></span>{steps.report.title}</h2>
           <div class="grid" style="--min: 280px">
             {steps.report.items.map((r) => (
               <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={r.icon} /></div><h3>{r.title}</h3></div><p>{r.text}</p></div>
@@ -133,15 +153,16 @@ const jsonld = [
     </section>
 
     <!-- 3. Таблица, которая ведётся сама -->
-    <section class="section section--line" id="analytics">
+    <section class="section section--line num-sec" id="analytics">
       <div class="wrap">
         <div class="v-plain">
-          <h2>{analytics.title}</h2>
+          <span class="side-num" aria-hidden="true">3</span>
+          <h2 data-side="3">{anA[0]}<Pen c id="table">{anA[1]}</Pen>{anB[0]}<Pen u>{anB[1]}</Pen>{anB[2]}</h2>
           <p class="lead">{analytics.lead}</p>
         </div>
         <div class="v-steps">
           <div class="step-tag step-tag--link"><span class="step-n">3</span>{steps.tags[2]}</div>
-          <h2>{steps.table.title}</h2>
+          <h2><span class="num-dot" aria-hidden="true"><i>3</i></span>{steps.table.title}</h2>
           <p class="lead">{steps.table.lead}</p>
         </div>
         <div class="an" data-an>
@@ -186,10 +207,11 @@ const jsonld = [
     </section>
 
     <!-- 4. Как присылать документы дальше: четыре способа, группа по желанию -->
-    <section class="section section--paper" id="send">
+    <section class="section section--paper num-sec" id="send">
       <div class="wrap">
         <div class="step-tag step-tag--link v-steps"><span class="step-n">4</span>{steps.tags[3]}</div>
-        <h2 class="h2-gap">{send.title}</h2>
+        <span class="side-num" aria-hidden="true">4</span>
+        <h2 class="h2-gap" data-side="4"><span class="num-dot" aria-hidden="true"><i>4</i></span>{sendCut[0]}<Pen u>{sendCut[1]}</Pen>{sendCut[2]}</h2>
         <div class="grid" style="--min: 240px">
           {send.items.map((c) => (
             <div class="card send-card send-card--row">
@@ -391,5 +413,79 @@ const jsonld = [
       <div class="op">{footer.operator} · © 2026</div>
     </div>
   </footer>
+  <script is:inline>
+    // Карандашные стрелки (вариант «Обводки») и нить с номерами на поле (вариант «Нить сбоку»).
+    // Рисуются поверх страницы одним SVG и пересчитываются при любом изменении размеров.
+    (function () {
+      var root = document.documentElement, NS = 'http://www.w3.org/2000/svg', layer, timer;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function q(s) { return document.querySelector(s); }
+      function box(e) { var r = e.getBoundingClientRect(); return { l: r.left + scrollX, r: r.right + scrollX, t: r.top + scrollY, b: r.bottom + scrollY, cx: (r.left + r.right) / 2 + scrollX, cy: (r.top + r.bottom) / 2 + scrollY }; }
+      function add(d, cls) { var p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.setAttribute('pathLength', '1'); if (cls) p.setAttribute('class', cls); layer.appendChild(p); return p; }
+      function head(x, y, fx, fy, cls) {
+        var a = Math.atan2(y - fy, x - fx), L = 13, s = 0.5;
+        add('M' + (x - L * Math.cos(a - s)) + ' ' + (y - L * Math.sin(a - s)) + ' L' + x + ' ' + y + ' L' + (x - L * Math.cos(a + s)) + ' ' + (y - L * Math.sin(a + s)), cls || 'pen-head');
+      }
+      function ring(x, y, n) {
+        add('M' + (x + 14) + ' ' + (y - 13) + ' C' + (x + 26) + ' ' + (y + 1) + ' ' + (x + 15) + ' ' + (y + 19) + ' ' + (x - 2) + ' ' + (y + 18) + ' C' + (x - 19) + ' ' + (y + 17) + ' ' + (x - 23) + ' ' + (y + 1) + ' ' + (x - 15) + ' ' + (y - 11) + ' C' + (x - 8) + ' ' + (y - 20) + ' ' + (x + 9) + ' ' + (y - 21) + ' ' + (x + 20) + ' ' + (y - 8));
+        var t = document.createElementNS(NS, 'text'); t.setAttribute('x', x - 1); t.setAttribute('y', y + 9); t.setAttribute('text-anchor', 'middle'); t.textContent = n; layer.appendChild(t);
+      }
+      function draw(animate) {
+        if (!layer) { layer = document.createElementNS(NS, 'svg'); layer.setAttribute('class', 'pen-layer'); layer.setAttribute('aria-hidden', 'true'); document.body.appendChild(layer); }
+        layer.innerHTML = '';
+        layer.setAttribute('width', 0); layer.setAttribute('height', 0);
+        var v = root.getAttribute('data-variant'), W = innerWidth;
+        layer.setAttribute('width', document.documentElement.scrollWidth); layer.setAttribute('height', document.documentElement.scrollHeight);
+        if (v === 'circle' && W >= 900) {
+          // 1) «20 минут» в заголовке первого экрана → «20 минут» в «Что придёт»: по зазору между колонками
+          var s1 = q('[data-pen="h1"] .pen-circle'), t1 = q('[data-pen="result"] .pen-circle'), rep = q('.hero-report'), h1 = q('.hero h1');
+          if (s1 && t1 && rep && box(rep).t < box(h1).b) {
+            var S = box(s1), T = box(t1), lane = box(rep).l - 26, ex = T.cx + 4, ey = T.t - 8;
+            add('M' + (S.r + 2) + ' ' + S.cy + ' C' + lane + ' ' + S.cy + ' ' + lane + ' ' + (S.cy + 20) + ' ' + lane + ' ' + (S.cy + 70) + ' L' + (lane + 3) + ' ' + (T.t - 110) + ' C' + (lane + 4) + ' ' + (T.t - 50) + ' ' + (ex + 40) + ' ' + (ey - 46) + ' ' + ex + ' ' + ey);
+            head(ex, ey, ex + 26, ey - 30);
+          }
+          // 2) карточка «Таблица» → заголовок «Таблица, которая ведётся сама»: из-под карточки справа и вниз-влево
+          var s2 = q('[data-pen="tcard"]'), t2 = q('[data-pen="table"] .pen-circle');
+          if (s2 && t2) {
+            var card = box(s2.closest('.card')), T2 = box(t2), sx = card.r - 18, sy = card.b + 8, ex2 = T2.r + 6, ey2 = T2.t + 8;
+            add('M' + sx + ' ' + sy + ' C' + (sx + 6) + ' ' + (sy + (ey2 - sy) * 0.62) + ' ' + (ex2 + 170) + ' ' + (ey2 - 34) + ' ' + ex2 + ' ' + ey2);
+            head(ex2, ey2, ex2 + 40, ey2 - 14);
+          }
+        }
+        if (v === 'numbers') {
+          // Пунктир от цифры к цифре по левой полосе
+          var dots = [].slice.call(document.querySelectorAll('.num-dot i')).filter(function (d) { return d.offsetParent; }).map(box);
+          dots.forEach(function (d, i) {
+            var n = dots[i + 1]; if (!n) return;
+            var y1 = d.b + 8, y2 = n.t - 10;
+            var p = add('M' + d.cx + ' ' + y1 + ' L' + d.cx + ' ' + y2, 'num-line'); p.removeAttribute('pathLength');
+            head(d.cx, y2, d.cx, y2 - 20, 'num-head');
+          });
+        }
+        if (v === 'side' && W >= 1360) {
+          var hs = [].slice.call(document.querySelectorAll('[data-side]')).filter(function (h) { return h.offsetParent; });
+          var pts = hs.map(function (h, i) { var b = box(h); return { x: b.l - 54, y: b.t + (i === 0 ? 30 : 26) }; });
+          pts.forEach(function (p, i) {
+            ring(p.x, p.y, i + 1);
+            var n = pts[i + 1]; if (!n) return;
+            var y1 = p.y + 26, y2 = n.y - 28, d = y2 - y1;
+            add('M' + p.x + ' ' + y1 + ' C' + (p.x + 12) + ' ' + (y1 + d * 0.33) + ' ' + (p.x - 12) + ' ' + (y1 + d * 0.66) + ' ' + p.x + ' ' + y2);
+            head(p.x, y2, p.x - 2, y2 - 20);
+          });
+        }
+        if (animate && !reduce) layer.classList.add('pen-anim'); else layer.classList.remove('pen-anim');
+      }
+      function animatePens() {
+        if (reduce) return;
+        document.querySelectorAll('.pen-svg').forEach(function (s) { s.classList.remove('pen-anim'); void s.getBoundingClientRect(); if (s.offsetParent !== null || getComputedStyle(s).display !== 'none') s.classList.add('pen-anim'); });
+      }
+      function later() { clearTimeout(timer); timer = setTimeout(function () { draw(false); }, 120); }
+      document.addEventListener('variant', function () { draw(true); animatePens(); });
+      window.addEventListener('resize', later);
+      if (window.ResizeObserver) new ResizeObserver(later).observe(document.body);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { draw(false); });
+      window.addEventListener('load', function () { draw(!!root.getAttribute('data-variant')); animatePens(); });
+    })();
+  </script>
   <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
 </Base>
