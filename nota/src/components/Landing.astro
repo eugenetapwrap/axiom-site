@@ -246,7 +246,7 @@ const jsonld = [
                 </div>
               )}
               <ul class="pa-l">
-                {[`Группы: ${p.groups}`, ...pricing.common.map((c) => c[0].toUpperCase() + c.slice(1))].map((f) => <li><Icon name="check" size={18} />{f}</li>)}
+                {(p.services ?? [`Группы: ${p.groups}`, ...pricing.common.map((c) => c[0].toUpperCase() + c.slice(1))]).map((f) => <li><Icon name="check" size={18} />{f}</li>)}
               </ul>
               <a class:list={['btn', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}</a>
             </div>

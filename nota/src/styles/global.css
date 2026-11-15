@@ -931,3 +931,8 @@ body:has(.v10) .header .btn--dark:hover { background: var(--ink); color: #fff; }
   .v10 .pa { display: none; }
 }
 @media (min-width: 641px) { .v10 .plan-common { display: none; } }
+/* «Когда приходит отчёт»: белая карточка на бежевом была слишком яркой — фон на тон темнее бумаги, без рамки */
+.sched { background: #ebe7de; box-shadow: none; }
+.sched dt, .sched dd { border-top-color: #dcd7cb; }
+/* Меню в шапке — по нижней линии букв логотипа (было на 9 px выше) */
+body:has(.v10) .header nav { position: relative; top: 9px; }
