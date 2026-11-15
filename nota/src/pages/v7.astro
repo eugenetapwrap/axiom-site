@@ -20,7 +20,7 @@ const resCut = cut(result.title, '20 минут');
 const anA = cut(analytics.title, 'Таблица');
 const anB = cut(anA[2], 'ведётся сама');
 const sendCut = cut(send.title, 'дальше');
-const variants = ['plain', 'steps', 'numbers', 'circle', 'underline', 'side'] as const;
+const variants = ['plain', 'final', 'steps', 'numbers', 'circle', 'underline', 'side'] as const;
 
 // Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
 const site = 'https://nota.axiomco.io';
@@ -60,7 +60,7 @@ const jsonld = [
   <script is:inline>
     (function () {
       var root = document.documentElement;
-      var known = ['steps', 'numbers', 'circle', 'underline', 'side'];
+      var known = ['final', 'steps', 'numbers', 'circle', 'underline', 'side'];
       function set(v) {
         if (known.indexOf(v) < 0) v = 'plain';
         if (v === 'plain') root.removeAttribute('data-variant'); else root.setAttribute('data-variant', v);
@@ -116,7 +116,10 @@ const jsonld = [
           </div>
         </div>
         <figure class="hero-report">
+          <span class="rep-wrap">
+          <svg class="pen-svg rep-pen" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M30 41C11 26 52 6 108 6c56 0 90 13 86 30-4 15-58 21-104 19C44 53 5 45 9 30 12 19 40 10 74 8" /></svg>
           <img src={hero.report.file} alt="Пример отчёта Nota по архиву: 96,15 млн рупий, 37 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
+          </span>
           <figcaption>{hero.report.caption}</figcaption>
         </figure>
       </div>
@@ -140,7 +143,7 @@ const jsonld = [
         </div>
         <div class="v-steps">
           <div class="step-tag step-tag--link"><span class="step-n">2</span>{steps.tags[1]}</div>
-          <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i>2</i></span>{steps.report.title}</h2>
+          <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i>2</i></span><span class="t-steps">{steps.report.title}</span><span class="t-final">{steps.report.titleFinal}</span></h2>
           <div class="grid" style="--min: 280px">
             {steps.report.items.map((r) => (
               <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={r.icon} /></div><h3>{r.title}</h3></div><p>{r.text}</p></div>
@@ -452,7 +455,7 @@ const jsonld = [
             head(ex2, ey2, ex2 + 40, ey2 - 14);
           }
         }
-        if (v === 'numbers') {
+        if (v === 'numbers' || (v === 'final' && W >= 900)) {
           // Пунктир от цифры к цифре по левой полосе
           var dots = [].slice.call(document.querySelectorAll('.num-dot i')).filter(function (d) { return d.offsetParent; }).map(box);
           dots.forEach(function (d, i) {
