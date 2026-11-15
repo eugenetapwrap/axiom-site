@@ -151,7 +151,7 @@ export const reviews = reviewsV3; // заглушки до настоящих о
 // ЦЕНЫ — ВРЕМЕННЫЕ, точные даст основатель. Помесячно — как в v3–v6. За 3 месяца ≈ −10%, за 6 месяцев ≈ −15%,
 // округлено до целых долларов в месяц. Год добавим позже.
 // Лимиты: 200 / 300 / 600 документов, больше 600 — индивидуально. Группы: 5 / 15 / без ограничений (решения основателя 15.11).
-// Цены — черновик, основатель пересчитает в экономике.
+// Цены — черновик, основатель пересчитает в экономике. Блок — таблица-лестница (строка на тариф), решение основателя 15.11.
 // «≈ $… за документ» убрано: ценность не в документах; справа от цены — только сумма за 3 и 6 месяцев.
 export const pricing = {
   title: 'Цены',
@@ -166,21 +166,21 @@ export const pricing = {
   },
   plans: [
     {
-      name: 'Start', docs: 'До 200 документов в месяц', who: 'Один-два проекта',
+      name: 'Start', vol: '200', groups: 'до 5', docs: 'До 200 документов в месяц', who: 'Один-два проекта',
       month: { price: '$19', unit: '≈ $0,19 за документ' },
       q3: { price: '$17', unit: '≈ $0,17 за документ', total: '$51 за 3 месяца' },
       q6: { price: '$16', unit: '≈ $0,16 за документ', total: '$96 за 6 месяцев' },
       feats: ['До 5 групп'], tag: 'land10_price_start', cta: 'Начать бесплатно',
     },
     {
-      name: 'Business', docs: 'До 300 документов в месяц', who: 'Несколько проектов',
+      name: 'Business', vol: '300', groups: 'до 15', docs: 'До 300 документов в месяц', who: 'Несколько проектов',
       month: { price: '$45', unit: '≈ $0,15 за документ' },
       q3: { price: '$40', unit: '≈ $0,13 за документ', total: '$120 за 3 месяца' },
       q6: { price: '$38', unit: '≈ $0,13 за документ', total: '$228 за 6 месяцев' },
       feats: ['До 15 групп'], tag: 'land10_price_business', cta: 'Начать бесплатно', highlight: true,
     },
     {
-      name: 'Компания', docs: 'До 600 документов в месяц', who: 'Девелопер, управляющая компания',
+      name: 'Компания', vol: '600', groups: 'без ограничений', docs: 'До 600 документов в месяц', who: 'Девелопер, управляющая компания',
       month: { price: '$119', unit: '≈ $0,12 за документ' },
       q3: { price: '$107', unit: '≈ $0,11 за документ', total: '$321 за 3 месяца' },
       q6: { price: '$101', unit: '≈ $0,10 за документ', total: '$606 за 6 месяцев' },
@@ -188,11 +188,11 @@ export const pricing = {
     },
     // Больше 600 документов — это уже система учёта (CRM, ERP) и консалтинг Axiom, цену обсуждаем (решение основателя 15.11)
     {
-      name: 'Индивидуально', docs: 'Больше 600 документов в месяц', who: 'Обсудим решение под ваши объёмы: от Nota до системы учёта вместе с Axiom Consulting',
+      name: 'Индивидуально', vol: '600+', groups: 'без ограничений', docs: 'Больше 600 документов в месяц', who: 'Система учёта вместе с Axiom Consulting',
       custom: 'По запросу',
       feats: ['Групп без ограничений'], tag: 'land10_price_custom', cta: 'Обсудить', outline: true,
     },
-  ] as { name: string; docs: string; who: string; custom?: string; month?: { price: string }; q3?: { price: string; total: string }; q6?: { price: string; total: string }; feats: string[]; tag: string; cta: string; highlight?: boolean; outline?: boolean }[],
+  ] as { name: string; vol: string; groups: string; docs: string; who: string; custom?: string; month?: { price: string }; q3?: { price: string; total: string }; q6?: { price: string; total: string }; feats: string[]; tag: string; cta: string; highlight?: boolean; outline?: boolean }[],
   // Общие пункты — одной строкой над карточками, в карточках только то, что различается
   common: ['отчёты каждую неделю и месяц', 'сотрудников сколько угодно', 'дубли не тратят лимит'],
   facts: [

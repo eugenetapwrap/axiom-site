@@ -210,25 +210,26 @@ const jsonld = [
           </fieldset>
         </div>
         <p class="plan-common">Во всех тарифах: {pricing.common.join(', ')}.</p>
-        <div class="grid g4 plans" style="--min: 220px; gap: 24px">
+        <!-- Тарифы таблицей-лестницей: строка на тариф — сравнение объёма, групп и цены одним взглядом.
+             На телефоне строки — плотные блоки, заголовков колонок нет, у групп подпись «Группы:» -->
+        <div class="ptab" role="table" aria-label="Тарифы">
+          <div class="ptab-h" role="row">
+            <span role="columnheader">Тариф</span><span role="columnheader">Документов в месяц</span><span role="columnheader">Группы</span><span role="columnheader">Цена</span><span role="columnheader"><span class="sr-only">Действие</span></span>
+          </div>
           {pricing.plans.map((p) => (
-            <div class:list={['plan', { 'plan--hl': p.highlight }]}>
-              <h3>{p.name}</h3>
-              {p.custom ? (
-                <div class="price-row"><div class="plan-price plan-price--custom">{p.custom}</div></div>
-              ) : (
-                <div class="price-row">
-                <div class="plan-price">
-                  <span class="pm">{p.month!.price}</span><span class="p3">{p.q3!.price}</span><span class="p6">{p.q6!.price}</span><small> / мес</small>
-                </div>
-                <div class="plan-unit">
-                  <span class="p3">{p.q3!.total}</span><span class="p6">{p.q6!.total}</span>
-                </div>
-                </div>
-              )}
-              <p><b>{p.docs}</b><br /><span class="muted">{p.who}</span></p>
-              <ul class="check">{p.feats.map((f) => <li><Icon name="check" size={20} />{f}</li>)}</ul>
-              <a class:list={['btn', 'btn--plan', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}</a>
+            <div class:list={['ptab-r', { 'ptab-r--hl': p.highlight, 'ptab-r--custom': p.custom }]} role="row">
+              <div class="ptab-n" role="cell"><b>{p.name}</b><span>{p.who}</span></div>
+              <div class="ptab-v" role="cell"><b>{p.vol}</b> <small>документов<span class="m-only"> в месяц</span></small></div>
+              <div class="ptab-g" role="cell"><span class="m-only">Группы: </span>{p.groups}</div>
+              <div class="ptab-p" role="cell">
+                {p.custom ? <b class="ptab-custom">{p.custom}</b> : (
+                  <>
+                    <b><span class="pm">{p.month!.price}</span><span class="p3">{p.q3!.price}</span><span class="p6">{p.q6!.price}</span></b><small> / мес</small>
+                    <span class="ptab-tot"><span class="p3">{p.q3!.total}</span><span class="p6">{p.q6!.total}</span></span>
+                  </>
+                )}
+              </div>
+              <div class="ptab-a" role="cell"><a class:list={['btn', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}</a></div>
             </div>
           ))}
         </div>
