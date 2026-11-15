@@ -210,9 +210,7 @@ const jsonld = [
           </fieldset>
         </div>
         <p class="plan-common">Во всех тарифах: {pricing.common.join(', ')}.</p>
-        <p class="tech-label">Вариант 1 · таблица</p>
-        <!-- Тарифы таблицей-лестницей: строка на тариф — сравнение объёма, групп и цены одним взглядом.
-             На телефоне строки — плотные блоки, заголовков колонок нет, у групп подпись «Группы:» -->
+        <!-- Таблица-лестница (только телефон): строка на тариф, строки — плотные блоки, у групп подпись «Группы:» -->
         <div class="ptab" role="table" aria-label="Тарифы">
           <div class="ptab-h" role="row">
             <span role="columnheader">Тариф</span><span role="columnheader">Документов в месяц</span><span role="columnheader">Группы</span><span role="columnheader">Цена</span><span role="columnheader"><span class="sr-only">Действие</span></span>
@@ -234,8 +232,7 @@ const jsonld = [
             </div>
           ))}
         </div>
-        <!-- Вариант 2 (для сравнения, служебный): карточки — главная цифра объём, список «что входит», меняется только строка про группы -->
-        <p class="tech-label">Вариант 2 · карточки</p>
+        <!-- Карточки (компьютер и планшет): главная цифра — объём, список «что входит», меняется только строка про группы -->
         <div class="pa">
           {pricing.plans.map((p) => (
             <div class:list={['pa-c', { 'pa-c--hl': p.highlight, 'pa-c--dk': p.custom }]}>

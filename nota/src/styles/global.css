@@ -923,3 +923,11 @@ body:has(.v10) .header .btn--dark:hover { background: var(--ink); color: #fff; }
 .pa-c--dk .btn.btn--outline { color: #fff; box-shadow: inset 0 0 0 2px #fff; }
 .pa-c--dk .btn.btn--outline:hover { background: #fff; color: var(--slate); }
 @media (max-width: 640px) { .pa-w { min-height: 0; } }
+/* v10: тарифы — карточки со списком на компьютере и планшете, таблица на телефоне.
+   Строка «Во всех тарифах…» — только на телефоне (в карточках эти пункты уже в списке) */
+.v10 .ptab { display: none; }
+@media (max-width: 640px) {
+  .v10 .ptab { display: block; }
+  .v10 .pa { display: none; }
+}
+@media (min-width: 641px) { .v10 .plan-common { display: none; } }
