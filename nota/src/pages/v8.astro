@@ -247,19 +247,6 @@ const jsonld = [
       </div>
     </section>
 
-    <!-- 11. Данные и кто делает -->
-    <section class="section section--dark">
-      <div class="wrap">
-        <h2>{data.title}</h2>
-        <div class="grid" style="--min: 300px; gap: 36px">
-          {data.items.map((d) => (
-            <div class="dark-item"><Icon name={d.icon} /><div><h3>{d.title}</h3><p set:html={fmt(d.text)} /></div></div>
-          ))}
-        </div>
-        <div class="who"><span class="who-label">КТО ДЕЛАЕТ</span><p>{data.who} <span class="op-line" set:html={fmt(data.operator)} /></p></div>
-      </div>
-    </section>
-
     <!-- 6. Сравнение: накладная в 9:41 -->
     <section class="section section--line">
       <div class="wrap">
@@ -325,6 +312,19 @@ const jsonld = [
           <img src="/screens/qr-bot.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
           <span>Или наведите камеру телефона</span>
         </div>
+      </div>
+    </section>
+
+    <!-- Ваши данные и кто делает: внизу, перед подвалом (решение основателя) -->
+    <section class="section section--dark">
+      <div class="wrap">
+        <h2>{data.title}</h2>
+        <div class="grid" style="--min: 240px; gap: 36px">
+          {data.items.map((d) => (
+            <div class="dark-item"><Icon name={d.icon} /><div><h3>{d.title}</h3><p set:html={fmt(d.text)} /></div></div>
+          ))}
+        </div>
+        <div class="who"><span class="who-label">КТО ДЕЛАЕТ</span><p>{data.who}</p></div>
       </div>
     </section>
   </main>

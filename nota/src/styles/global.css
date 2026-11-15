@@ -688,3 +688,5 @@ html[data-variant="final"] [data-pen="h1"] > .pen-under { display: block; }
 .v8 h2, .v8 h1 { text-wrap: balance; }
 .v8 .lead, .v8 .note, .v8 .s2-more, .v8 p { text-wrap: pretty; }
 .v8 .price-head > div { flex: 1 1 100%; }
+.v8 .final + .section--dark { border-top: 1px solid #2c333b; }
+.v8 .who p { max-width: none; }
