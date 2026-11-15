@@ -936,3 +936,9 @@ body:has(.v10) .header .btn--dark:hover { background: var(--ink); color: #fff; }
 .sched dt, .sched dd { border-top-color: #dcd7cb; }
 /* Меню в шапке — по нижней линии букв логотипа (было на 9 px выше) */
 body:has(.v10) .header nav { position: relative; top: 9px; }
+/* QR на первом экране: 54 px (меньше кнопки 60 px), тёмно-синий — визуально легче; подпись в две строки по высоте кода */
+.v10 .cta-qr img, html:not([data-hero="old"]) .v10 .cta-qr img { width: 54px; height: 54px; }
+.v10 .cta-qr { gap: 10px; max-width: none; }
+.v10 .cta-qr span { max-width: 92px; line-height: 1.3; }
+html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
+.v10 .cta-qr span { max-width: none; }

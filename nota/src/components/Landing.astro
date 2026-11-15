@@ -70,7 +70,7 @@ const jsonld = [
           <div class="cta-row cta-row--qr">
             <a class="btn" href={botLink('land10_hero')}>{cta}</a>
             <div class="cta-qr">
-              <img src="/screens/qr-bot-v10.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="60" height="60" />
+              <img src="/screens/qr-bot-v10.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="54" height="54" />
               <span>{hero.qr}</span>
             </div>
           </div>
@@ -238,7 +238,7 @@ const jsonld = [
             <div class:list={['pa-c', { 'pa-c--hl': p.highlight, 'pa-c--dk': p.custom }]}>
               <div class="pa-n">{p.name}</div>
               <div class="pa-w">{p.who}</div>
-              <div class="pa-v"><b>{p.custom ? 'Больше 600' : p.vol}</b><span>документов в месяц</span></div>
+              <div class="pa-v"><b>{p.custom ? 'Более 600' : p.vol}</b><span>документов в месяц</span></div>
               {p.custom ? <div class="pa-p pa-p--custom">{p.custom}</div> : (
                 <div class="pa-p">
                   <span class="pm">{p.month!.price}</span><span class="p3">{p.q3!.price}</span><span class="p6">{p.q6!.price}</span><small> / мес</small>
