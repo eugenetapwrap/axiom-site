@@ -106,7 +106,7 @@ export const send = {
     { icon: 'archive', title: 'Архивом', text: 'Документы за прошлые месяцы одним файлом. Команда в WhatsApp? Выгружайте чат раз в неделю.', tag: 'Быстрый старт', tone: 'green' },
     { icon: 'receipt', title: 'Лично боту', text: 'Сфотографировали чек, через минуту он в таблице.' },
     { icon: 'forward', title: 'Пересылкой', text: 'Из рабочих чатов, WhatsApp или почты.' },
-    { icon: 'signed', title: 'В рабочей группе', text: 'Nota берёт только платёжные документы, в группу не пишет, ставит ✍ на записанный чек.', tag: 'По желанию', tone: 'yellow' },
+    { icon: 'team', title: 'В рабочей группе', text: 'Nota берёт только платёжные документы, в группу не пишет, ставит ✍ на записанный чек.', tag: 'По желанию', tone: 'yellow' },
   ] as { icon: string; title: string; text: string; tag?: string; tone?: string }[],
 };
 
