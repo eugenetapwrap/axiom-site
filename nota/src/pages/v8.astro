@@ -43,7 +43,7 @@ const jsonld = [
   },
 ];
 ---
-<Base title={meta.title} description={meta.description} noindex og="/og-v7.png">
+<Base title={meta.title} description={meta.description} noindex og="/og-v7.png" selfFonts>
   <a class="skip" href="#main">К содержанию</a>
   <header class="header">
     <div class="wrap">
@@ -91,7 +91,7 @@ const jsonld = [
 
     <!-- 2. Шаг 2: что покажет отчёт. Объединён с бывшим «Отчёт каждый понедельник»: слева карточка недельного
          отчёта (на телефоне скрыта — там пример отчёта прямо над блоком), справа что в отчёте и как часто -->
-    <section class="section num-sec" id="result">
+    <section class="section section--paper num-sec" id="result">
       <div class="wrap">
         <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i>2</i></span>{steps.report.title}</h2>
         <div class="s2-split">
@@ -111,7 +111,7 @@ const jsonld = [
     </section>
 
     <!-- 3. Шаг 3: подключите Google, и таблица будет вестись сама -->
-    <section class="section section--line num-sec" id="analytics">
+    <section class="section num-sec" id="analytics">
       <div class="wrap">
         <h2><span class="num-dot" aria-hidden="true"><i>3</i></span>{steps.table.title}</h2>
         <p class="lead">{steps.table.lead}</p>
@@ -160,7 +160,7 @@ const jsonld = [
     <section class="section section--paper num-sec" id="send">
       <div class="wrap">
         <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i>4</i></span>{send.title}</h2>
-        <div class="grid" style="--min: 240px">
+        <div class="grid g4" style="--min: 240px">
           {send.items.map((c) => (
             <div class="card send-card send-card--row">
               <div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div>
@@ -187,7 +187,7 @@ const jsonld = [
     </section>
 
     <!-- Цены сразу после «Что Nota делает» и цифры про дубли; дальше отзывы и «Ваши данные» -->
-    <section class="section section--line" id="price" data-bill="month">
+    <section class="section section--paper" id="price" data-bill="month">
       <div class="wrap">
         <div class="price-head">
           <div>
@@ -201,7 +201,7 @@ const jsonld = [
             ))}
           </fieldset>
         </div>
-        <div class="grid plans" style="--min: 290px; gap: 24px">
+        <div class="grid plans" style="--min: 220px; gap: 24px">
           {pricing.plans.map((p) => (
             <div class:list={['plan', { 'plan--hl': p.highlight }]}>
               <h3>{p.name}</h3>
@@ -232,11 +232,12 @@ const jsonld = [
       </div>
     </section>
 
-    <!-- 9. Отзывы (заглушки до реальных текстов) -->
-    <section class="section section--paper">
+    <!-- После цен — по силе для продажи: отзывы → сравнение → ваши данные → вопросы → для кого -->
+    <!-- Отзывы (заглушки до реальных текстов) -->
+    <section class="section">
       <div class="wrap">
         <h2 class="h2-gap">{reviews.title}</h2>
-        <div class="grid reviews" style="--min: 250px">
+        <div class="grid g4 reviews" style="--min: 250px">
           {reviews.items.map((r) => (
             <figure class="review">
               <blockquote set:html={fmt(r.text)} />
@@ -248,7 +249,7 @@ const jsonld = [
     </section>
 
     <!-- 6. Сравнение: накладная в 9:41 -->
-    <section class="section section--line">
+    <section class="section section--paper">
       <div class="wrap">
         <h2 class="cmp-title">{compare.title}</h2>
         <div class="cmp" role="table" aria-label="Сравнение: Nota, админ с Excel, приложение для расходов">
@@ -285,20 +286,33 @@ const jsonld = [
       </div>
     </section>
 
-    <!-- 8. Для кого: компактный список вместо серых карточек -->
-    <section class="section section--paper">
+    <!-- Ваши данные и кто делает: снимают страх пустить бота в чаты и Google -->
+    <section class="section data-sec" id="data">
       <div class="wrap">
-        <h2 class="h2-gap">{segments.title}</h2>
-        <ul class="seg-list">{segments.items.map((c) => <li><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
-        <p class="note seg-note">{segments.note}</p>
+        <h2 class="h2-gap">{data.title}</h2>
+        <div class="grid g4" style="--min: 240px; gap: 36px">
+          {data.items.map((d) => (
+            <div class="dark-item"><Icon name={d.icon} /><div><h3>{d.title}</h3><p set:html={fmt(d.text)} /></div></div>
+          ))}
+        </div>
+        <div class="who"><span class="who-label">КТО ДЕЛАЕТ</span><p>{data.who}</p></div>
       </div>
     </section>
 
     <!-- 12. Вопросы -->
-    <section class="section" id="faq">
+    <section class="section section--paper" id="faq">
       <div class="wrap">
-        <h2 style="margin-bottom: 24px">Вопросы</h2>
+        <h2 class="h2-gap">Вопросы</h2>
         <div class="faq">{faq.map((f) => <details><summary>{f.q}</summary><p set:html={fmt(f.a)} /></details>)}</div>
+      </div>
+    </section>
+
+    <!-- 8. Для кого: компактный список вместо серых карточек -->
+    <section class="section">
+      <div class="wrap">
+        <h2 class="h2-gap">{segments.title}</h2>
+        <ul class="seg-list">{segments.items.map((c) => <li><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
+        <p class="note seg-note">{segments.note}</p>
       </div>
     </section>
 
@@ -312,19 +326,6 @@ const jsonld = [
           <img src="/screens/qr-bot.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
           <span>Или наведите камеру телефона</span>
         </div>
-      </div>
-    </section>
-
-    <!-- Ваши данные и кто делает: внизу, перед подвалом (решение основателя) -->
-    <section class="section section--dark">
-      <div class="wrap">
-        <h2>{data.title}</h2>
-        <div class="grid" style="--min: 240px; gap: 36px">
-          {data.items.map((d) => (
-            <div class="dark-item"><Icon name={d.icon} /><div><h3>{d.title}</h3><p set:html={fmt(d.text)} /></div></div>
-          ))}
-        </div>
-        <div class="who"><span class="who-label">КТО ДЕЛАЕТ</span><p>{data.who}</p></div>
       </div>
     </section>
   </main>
