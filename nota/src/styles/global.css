@@ -551,3 +551,24 @@ mark.todo { background: #fff1b8; color: #6b4e00; border-radius: 4px; padding: 0 
 .plan-facts3 dd { margin: 0; color: var(--muted); }
 @media (max-width: 640px) { .bill { width: 100%; } .bill label { flex: 1; } .bill span { justify-content: center; padding: 0 12px; } }
 @media (prefers-reduced-motion: reduce) { .bill span { transition: none; } }
+
+/* v7: технический переключатель вариантов (убрать перед запуском) */
+.techbar { background: #e9eef4; border-bottom: 1px solid #d5dde6; font-size: 14px; }
+.techbar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; min-height: 48px; padding-top: 6px; padding-bottom: 6px; }
+.techbar-label { font-weight: 700; color: var(--slate); margin-right: 4px; }
+.techbar button { font: inherit; font-weight: 600; min-height: 36px; padding: 0 14px; border-radius: 999px; border: 0; background: #fff; color: var(--ink); cursor: pointer; box-shadow: inset 0 0 0 1px #c9d3de; }
+.techbar button[aria-pressed="true"] { background: var(--slate); color: #fff; box-shadow: none; }
+.techbar button:focus-visible { outline: 3px solid var(--slate); outline-offset: 2px; }
+.techbar small { color: var(--muted); font-size: 13px; }
+html:not([data-variant="steps"]) .v-steps { display: none !important; }
+html[data-variant="steps"] .v-plain { display: none !important; }
+
+/* v7, вариант «Шаги со стрелками»: метка шага + пунктир со стрелкой от предыдущего блока */
+.step-tag { position: relative; display: flex; align-items: center; gap: 10px; width: fit-content; margin-bottom: 16px; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--slate); }
+.step-n { flex: none; width: 32px; height: 32px; border-radius: 50%; background: var(--slate); color: #fff; display: grid; place-items: center; font-size: 15px; letter-spacing: 0; }
+.hero .step-tag { margin: 0 0 14px; }
+.step-tag--link { --rail: 72px; }
+.step-tag--link::before { content: ''; position: absolute; left: 15px; bottom: calc(100% + 10px); height: var(--rail); border-left: 2px dashed var(--slate); opacity: .45; }
+.step-tag--link::after { content: ''; position: absolute; left: 11px; bottom: calc(100% + 7px); width: 8px; height: 8px; border-right: 2px solid var(--slate); border-bottom: 2px solid var(--slate); transform: rotate(45deg); opacity: .7; }
+@media (min-width: 900px) { .step-tag--link { --rail: 104px; } }
+@media (max-width: 640px) { .techbar small, .techbar-label { display: none; } .techbar .wrap { flex-wrap: nowrap; } .techbar button { flex: 1; padding: 0 10px; } }

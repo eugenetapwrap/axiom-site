@@ -9,7 +9,7 @@ import MiniReport from '../components/MiniReport.astro';
 import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
-  meta, cta, nav, hero, result, analytics, send, what, compare, reports, segments, reviews, data, pricing, faq, final, footer,
+  meta, cta, nav, hero, result, analytics, send, what, compare, reports, segments, reviews, data, pricing, faq, final, footer, steps,
 } from '../data/content-v7';
 
 // Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
@@ -39,6 +39,31 @@ const jsonld = [
 ---
 <Base title={meta.title} description={meta.description} noindex og="/og-v7.png">
   <a class="skip" href="#main">К содержанию</a>
+  <!-- Технический переключатель вариантов: «Как сейчас» / «Шаги со стрелками». Убрать перед запуском. -->
+  <div class="techbar" role="group" aria-label={steps.bar.label}>
+    <div class="wrap">
+      <span class="techbar-label">{steps.bar.label}</span>
+      <button type="button" data-variant="plain" aria-pressed="true">{steps.bar.plain}</button>
+      <button type="button" data-variant="steps" aria-pressed="false">{steps.bar.steps}</button>
+      <small>{steps.bar.note}</small>
+    </div>
+  </div>
+  <script is:inline>
+    (function () {
+      var root = document.documentElement;
+      function set(v) {
+        if (v === 'steps') root.setAttribute('data-variant', 'steps'); else root.removeAttribute('data-variant');
+        document.querySelectorAll('.techbar [data-variant]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.variant === (v === 'steps' ? 'steps' : 'plain') ? 'true' : 'false'); });
+      }
+      set(location.hash === '#steps' ? 'steps' : 'plain');
+      document.querySelectorAll('.techbar [data-variant]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          set(b.dataset.variant);
+          try { history.replaceState(null, '', b.dataset.variant === 'steps' ? '#steps' : location.pathname + location.search); } catch (e) {}
+        });
+      });
+    })();
+  </script>
   <header class="header">
     <div class="wrap">
       <a class="logo-link" href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
@@ -60,6 +85,7 @@ const jsonld = [
             <span class="ts-arrow" aria-hidden="true">→</span>
             <div class="ts-item ts-item--nota"><small>{hero.nota.k}</small><b>{hero.nota.v}</b><span>{hero.nota.t}</span></div>
           </div>
+          <div class="step-tag v-steps"><span class="step-n">1</span>{steps.tags[0]}</div>
           <div class="cta-row cta-row--qr">
             <a class="btn" href={botLink('land7_hero')}>{cta}</a>
             <div class="cta-qr">
@@ -83,13 +109,25 @@ const jsonld = [
     <!-- 2. Что придёт через 20 минут -->
     <section class="section" id="result">
       <div class="wrap">
-        <h2 class="h2-gap">{result.title}</h2>
-        <div class="grid" style="--min: 280px">
-          {result.items.map((r) => (
-            <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={r.icon} /></div><h3>{r.title}</h3></div><p>{r.text}</p></div>
-          ))}
+        <div class="v-plain">
+          <h2 class="h2-gap">{result.title}</h2>
+          <div class="grid" style="--min: 280px">
+            {result.items.map((r) => (
+              <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={r.icon} /></div><h3>{r.title}</h3></div><p>{r.text}</p></div>
+            ))}
+          </div>
+          <p class="note">{result.note}</p>
         </div>
-        <p class="note">{result.note}</p>
+        <div class="v-steps">
+          <div class="step-tag step-tag--link"><span class="step-n">2</span>{steps.tags[1]}</div>
+          <h2 class="h2-gap">{steps.report.title}</h2>
+          <div class="grid" style="--min: 280px">
+            {steps.report.items.map((r) => (
+              <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={r.icon} /></div><h3>{r.title}</h3></div><p>{r.text}</p></div>
+            ))}
+          </div>
+          <p class="note">{steps.report.note}</p>
+        </div>
         <div class="cta-row" style="margin-top: 24px"><a class="btn" href={botLink('land7_result')}>{cta}</a></div>
       </div>
     </section>
@@ -97,8 +135,15 @@ const jsonld = [
     <!-- 3. Таблица, которая ведётся сама -->
     <section class="section section--line" id="analytics">
       <div class="wrap">
-        <h2>{analytics.title}</h2>
-        <p class="lead">{analytics.lead}</p>
+        <div class="v-plain">
+          <h2>{analytics.title}</h2>
+          <p class="lead">{analytics.lead}</p>
+        </div>
+        <div class="v-steps">
+          <div class="step-tag step-tag--link"><span class="step-n">3</span>{steps.tags[2]}</div>
+          <h2>{steps.table.title}</h2>
+          <p class="lead">{steps.table.lead}</p>
+        </div>
         <div class="an" data-an>
           <div class="an-pick" role="tablist" aria-label="Листы таблицы">
             {analytics.screens.map((sc, i) => (
@@ -143,6 +188,7 @@ const jsonld = [
     <!-- 4. Как присылать документы дальше: четыре способа, группа по желанию -->
     <section class="section section--paper" id="send">
       <div class="wrap">
+        <div class="step-tag step-tag--link v-steps"><span class="step-n">4</span>{steps.tags[3]}</div>
         <h2 class="h2-gap">{send.title}</h2>
         <div class="grid" style="--min: 240px">
           {send.items.map((c) => (
