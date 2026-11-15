@@ -11,7 +11,7 @@ import Reaction from '../components/Reaction.astro';
 import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
-  meta, cta, nav, hero, result, analytics, send, what, compare, reports, segments, reviews, data, pricing, faq, final, footer, steps,
+  meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps,
 } from '../data/content-v8';
 
 // Карандашное подчёркивание «20 минут» в главном заголовке: режем на «до / слово / после».
@@ -89,17 +89,25 @@ const jsonld = [
       </div>
     </section>
 
-    <!-- 2. Шаг 2: что покажет отчёт (Google не нужен) -->
+    <!-- 2. Шаг 2: что покажет отчёт. Объединён с бывшим «Отчёт каждый понедельник»: слева карточка недельного
+         отчёта (на телефоне скрыта — там пример отчёта прямо над блоком), справа что в отчёте и как часто -->
     <section class="section num-sec" id="result">
       <div class="wrap">
         <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i>2</i></span>{steps.report.title}</h2>
-        <div class="grid" style="--min: 280px">
-          {steps.report.items.map((r) => (
-            <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={r.icon} /></div><h3>{r.title}</h3></div><p>{r.text}</p></div>
-          ))}
+        <div class="s2-split">
+          <MiniReport
+            title="Неделя · 3–9 ноя" period="Сравнение с прошлой неделей: +8%" total="21,70" sub="16 платежей"
+            marks={[{ n: '1', label: 'дубль', alert: true }, { n: '2', label: 'проверить', alert: true }, { n: '4', label: 'рукописных' }, { n: '0', label: 'не прочитано' }]}
+            bars={[3.1, 5.4, 2.2, 6.8, 2.9, 0.8, 0.5]}
+            cats={[['Материалы', '9 800 000', 45], ['Подрядчики', '6 200 000', 29], ['Без категории', '700 000', 3]]}
+          />
+          <div class="s2-text">
+            <ul class="check">{steps.report.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
+            <p class="s2-more">{steps.report.more}</p>
+            <p class="s2-note">{steps.report.note}</p>
+            <div class="cta-row"><a class="btn" href={botLink('land8_result')}>{cta}</a></div>
+          </div>
         </div>
-        <p class="note">{steps.report.note}</p>
-        <div class="cta-row" style="margin-top: 24px"><a class="btn" href={botLink('land8_result')}>{cta}</a></div>
       </div>
     </section>
 
@@ -179,71 +187,6 @@ const jsonld = [
       </div>
     </section>
 
-    <!-- 6. Сравнение: накладная в 9:41 -->
-    <section class="section section--line">
-      <div class="wrap">
-        <h2 class="cmp-title">{compare.title}</h2>
-        <div class="cmp" role="table" aria-label="Сравнение: Nota, админ с Excel, приложение для расходов">
-          <div class="cmp-row cmp-head" role="row">
-            <div class="cmp-q" role="columnheader"><span class="sr-only">Вопрос</span></div>
-            {compare.options.map((o) => (
-              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="columnheader">{o.nota ? <Logo height={24} /> : o.name}</div>
-            ))}
-          </div>
-          <div class="cmp-row cmp-when" role="row">
-            <div class="cmp-q" role="rowheader">{compare.whenLabel}</div>
-            {compare.options.map((o) => (
-              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="cell">
-                <span class="cmp-who">{o.short ?? o.name}</span><b>{o.when}</b><small>{o.whenNote}</small>
-              </div>
-            ))}
-          </div>
-          {compare.rows.map((q, i) => (
-            <div class="cmp-row" role="row">
-              <div class="cmp-q" role="rowheader">{q}</div>
-              {compare.options.map((o) => {
-                const [m, t] = o.cells[i];
-                return (
-                  <div class:list={['cmp-c', `m-${m}`, { 'cmp-c--nota': o.nota }]} role="cell">
-                    <span class="vs-mark"><Icon name={m === 'yes' ? 'check' : m === 'no' ? 'x' : 'minus'} size={16} /></span>
-                    <span class="cmp-who">{o.short ?? o.name}</span>
-                    <span class="cmp-t">{t}</span>
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- 7. Отчёт каждый понедельник: слева карточка недельного отчёта, справа что в нём -->
-    <section class="section section--paper">
-      <div class="wrap rep-split">
-        <MiniReport
-          title="Неделя · 3–9 ноя" period="Сравнение с прошлой неделей: +8%" total="21,70" sub="16 платежей"
-          marks={[{ n: '1', label: 'дубль', alert: true }, { n: '2', label: 'проверить', alert: true }, { n: '4', label: 'рукописных' }, { n: '0', label: 'не прочитано' }]}
-          bars={[3.1, 5.4, 2.2, 6.8, 2.9, 0.8, 0.5]}
-          cats={[['Материалы', '9 800 000', 45], ['Подрядчики', '6 200 000', 29], ['Без категории', '700 000', 3]]}
-        />
-        <div class="rep-text">
-          <h2>{reports.title}</h2>
-          <p class="lead">{reports.lead}</p>
-          <ul class="check">{reports.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
-          <p class="rep-more">{reports.more}</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 8. Для кого: компактный список вместо серых карточек -->
-    <section class="section">
-      <div class="wrap">
-        <h2 class="h2-gap">{segments.title}</h2>
-        <ul class="seg-list">{segments.items.map((c) => <li><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
-        <p class="note seg-note">{segments.note}</p>
-      </div>
-    </section>
-
     <!-- 9. Отзывы (заглушки до реальных текстов) -->
     <section class="section section--paper">
       <div class="wrap">
@@ -259,7 +202,7 @@ const jsonld = [
       </div>
     </section>
 
-    <!-- 10. Цены перед «Ваши данные»; переключатель периода: помесячно / 3 месяца / 6 месяцев -->
+    <!-- Цены сразу после «Что Nota делает» и цифры про дубли; перед ними отзывы, после — «Ваши данные» -->
     <section class="section" id="price" data-bill="month">
       <div class="wrap">
         <div class="price-head">
@@ -315,6 +258,53 @@ const jsonld = [
           ))}
         </div>
         <div class="who"><span class="who-label">КТО ДЕЛАЕТ</span><p>{data.who} <span class="op-line" set:html={fmt(data.operator)} /></p></div>
+      </div>
+    </section>
+
+    <!-- 6. Сравнение: накладная в 9:41 -->
+    <section class="section section--line">
+      <div class="wrap">
+        <h2 class="cmp-title">{compare.title}</h2>
+        <div class="cmp" role="table" aria-label="Сравнение: Nota, админ с Excel, приложение для расходов">
+          <div class="cmp-row cmp-head" role="row">
+            <div class="cmp-q" role="columnheader"><span class="sr-only">Вопрос</span></div>
+            {compare.options.map((o) => (
+              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="columnheader">{o.nota ? <Logo height={24} /> : o.name}</div>
+            ))}
+          </div>
+          <div class="cmp-row cmp-when" role="row">
+            <div class="cmp-q" role="rowheader">{compare.whenLabel}</div>
+            {compare.options.map((o) => (
+              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="cell">
+                <span class="cmp-who">{o.short ?? o.name}</span><b>{o.when}</b><small>{o.whenNote}</small>
+              </div>
+            ))}
+          </div>
+          {compare.rows.map((q, i) => (
+            <div class="cmp-row" role="row">
+              <div class="cmp-q" role="rowheader">{q}</div>
+              {compare.options.map((o) => {
+                const [m, t] = o.cells[i];
+                return (
+                  <div class:list={['cmp-c', `m-${m}`, { 'cmp-c--nota': o.nota }]} role="cell">
+                    <span class="vs-mark"><Icon name={m === 'yes' ? 'check' : m === 'no' ? 'x' : 'minus'} size={16} /></span>
+                    <span class="cmp-who">{o.short ?? o.name}</span>
+                    <span class="cmp-t">{t}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Для кого: компактный список вместо серых карточек -->
+    <section class="section section--paper">
+      <div class="wrap">
+        <h2 class="h2-gap">{segments.title}</h2>
+        <ul class="seg-list">{segments.items.map((c) => <li><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
+        <p class="note seg-note">{segments.note}</p>
       </div>
     </section>
 
