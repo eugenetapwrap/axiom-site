@@ -646,7 +646,6 @@ html[data-variant="final"] [data-pen="h1"] > .pen-under { display: block; }
 .v7 .send-card--row { display: flex; flex-direction: column; }
 .v7 .send-card--row p { margin-bottom: 14px; }
 .v7 .send-card--row .tag { margin-top: auto; align-self: flex-start; }
-.feat--accent { border-top: 2px solid var(--orange) !important; }
 .feat--accent .feat-icon { color: var(--orange); background: #fdeee8; }
 .rep-split { display: grid; gap: 32px 56px; align-items: center; grid-template-columns: minmax(0, 400px) minmax(0, 1fr); }
 .rep-split .mini { max-width: 400px; justify-self: center; }
@@ -659,3 +658,8 @@ html[data-variant="final"] [data-pen="h1"] > .pen-under { display: block; }
 .bill .sm { display: none; }
 @media (max-width: 640px) { .bill .lg { display: none; } .bill .sm { display: inline; } .bill span { gap: 6px; padding: 0 8px; } .bill em { padding: 2px 6px; font-size: 12px; } }
 .foot-note { flex-basis: 100%; font-size: 13px; color: #8b95a0; }
+/* «Для кого»: оранжевая черта только на высоту заголовка, итоговая строка жирным */
+.v7 .seg-list li { border-left: 0; }
+.v7 .seg-list h3 { position: relative; }
+.v7 .seg-list h3::before { content: ''; position: absolute; left: -18px; top: 0.18em; bottom: 0.18em; width: 3px; border-radius: 2px; background: var(--orange); }
+.v7 .seg-note { font-weight: 700; color: var(--ink); }

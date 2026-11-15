@@ -97,10 +97,11 @@ export const send = {
 // 3,5 млрд рупий — со слов основателя (≈), ПОДТВЕРДИТЬ точную цифру перед рекламой.
 export const what = {
   ...whatV4,
+  // Верхний ряд (читает, ловит дубли, сверяет суммы) — иконки фирменным оранжевым, нижний — серые
   items: whatV4.items.map((it) => {
-    if (it.icon === 'receipt') return { ...it, title: 'Читает любые форматы', accent: false };
-    // Дубли — главная денежная ценность: иконка и линия фирменным оранжевым
+    if (it.icon === 'receipt') return { ...it, title: 'Читает любые форматы', accent: true };
     if (it.icon === 'copy') return { ...it, text: 'Тот же чек от двоих или переснятый. Nota отметит дубль, чтобы один счёт не оплатили дважды.', accent: true };
+    if (it.icon === 'calc') return { ...it, accent: true };
     return { ...it, accent: false };
   }),
   proof: { value: '≈ Rp 3,5 млрд', text: 'дублей уже поймано с Nota. Эти деньги могли заплатить второй раз.' },
