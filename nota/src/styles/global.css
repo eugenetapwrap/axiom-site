@@ -618,7 +618,7 @@ html[data-variant="numbers"] .num-group > .num-dot { height: 60px; }
 @media (max-width: 480px) { html[data-variant="numbers"] .num-group .btn, html[data-variant="numbers"] .num-sec .btn { font-size: 18px; padding: 0 14px; } }
 
 /* v7, вариант «Итог»: раскладка шагов + цифры (на компьютере с пунктиром, на телефоне цифра у заголовка),
-   шаг 2 «Что покажет отчёт», подчёркнутые «20 минут» в главном заголовке, обведённая плитка дублей в примере отчёта */
+   шаг 2 «Что покажет отчёт», подчёркнутые «20 минут» в главном заголовке */
 .t-final { display: none; }
 html[data-variant="final"] .t-final { display: inline; }
 html[data-variant="final"] .t-steps { display: none; }
@@ -638,10 +638,6 @@ html[data-variant="final"] .num-dot { display: flex; align-items: center; positi
 }
 @media (max-width: 480px) { html[data-variant="final"] .num-group .btn { font-size: 18px; padding: 0 14px; } }
 html[data-variant="final"] [data-pen="h1"] > .pen-under { display: block; }
-.rep-wrap { position: relative; display: block; }
-.rep-pen { left: 1.3%; top: 27.4%; width: 27.9%; height: 21.6%; z-index: 1; }
-html[data-variant="final"] .rep-pen { display: block; }
-.rep-pen path { stroke-width: 3; }
 
 /* v7: правки основателя 15.11 */
 .tg-react { display: inline-flex; align-items: center; gap: 4px; padding: 2px 3px 2px 8px; margin: 0 2px; border-radius: 999px; background: #e3eefb; vertical-align: -0.3em; line-height: 1; }
