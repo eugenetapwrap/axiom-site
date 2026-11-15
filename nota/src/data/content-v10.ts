@@ -111,10 +111,11 @@ export const send = {
 
 // Цифры — строкой в своих пунктах, без отдельной плашки (основатель 15.11). Обе за 2 года работы системы.
 // Было: дубли ≈ $210K (Rp 3,5 млрд по курсу ~16 500), ошибки ≈ $135K. Основатель 15.11: уменьшить обе на 30% → $147K и $94,5K ≈ $95K.
+// «Ловит / поймано / уже» основателю не нравятся → «Находит дубли», «найдено за 2 года» в обеих подписях (15.11).
 // ПОДТВЕРДИТЬ: точные суммы (основатель назвал примерно).
 const stats = {
-  duplicates: { value: '≈ $147K', text: 'дублей уже поймано за\u00a02\u00a0года' },
-  errors: { value: '≈ $95K', text: 'ошибок в суммах уже найдено за\u00a02\u00a0года' },
+  duplicates: { value: '≈ $147K', text: 'дублей найдено за\u00a02\u00a0года' },
+  errors: { value: '≈ $95K', text: 'ошибок в суммах найдено за\u00a02\u00a0года' },
 };
 
 export const what = {
@@ -123,7 +124,7 @@ export const what = {
   items: whatV4.items.map((it) => {
     if (it.icon === 'globe') return { ...it, text: 'Платежи в других валютах пересчитывает по курсу центрального банка на дату платежа. Валюту можно сменить в любой момент.', accent: false };
     if (it.icon === 'receipt') return { ...it, icon: 'handwritten', title: 'Читает любые форматы', text: 'Чеки из магазинов, счета и инвойсы, мятые и рукописные накладные, скриншоты банковских переводов, PDF и фото. На любом языке.', accent: true };
-    if (it.icon === 'copy') return { ...it, text: 'Тот же чек от двоих или переснятый. Nota отметит дубль, чтобы один счёт не оплатили дважды.', accent: true, stat: stats.duplicates };
+    if (it.icon === 'copy') return { ...it, title: 'Находит дубли', text: 'Тот же чек от двоих или переснятый. Nota отметит дубль, чтобы один счёт не оплатили дважды.', accent: true, stat: stats.duplicates };
     if (it.icon === 'calc') return { ...it, accent: true, stat: stats.errors };
     if (it.icon === 'check') return { ...it, icon: 'review', accent: false };
     return { ...it, accent: false };
