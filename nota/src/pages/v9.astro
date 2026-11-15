@@ -1,6 +1,6 @@
 ---
 // Версия 9 лендинга: v8 + новый первый экран и скользящая картинка отчёта (компьютер). Тексты: src/data/content-v9.ts.
-// Технический переключатель сверху сравнивает с v8 по частям; убрать перед запуском.
+// Первый экран — только новый. Технический переключатель сверху: отчёт скользящий / как в v8; убрать перед запуском.
 // Решения — в founder/landing.md, разделы v7 и v8.
 import Base from '../layouts/Base.astro';
 import Logo from '../components/Logo.astro';
@@ -45,11 +45,11 @@ const jsonld = [
 ];
 ---
 <Base title={meta.title} description={meta.description} noindex og="/og-v8.png" selfFonts>
-  <!-- Технический переключатель: первый экран (новый / как в v8) и отчёт (скользящий / как в v8). Убрать перед запуском. -->
+  <!-- Технический переключатель: отчёт — скользящий / как в v8. Убрать перед запуском. -->
   <a class="skip" href="#main">К содержанию</a>
   <div class="techbar" role="group" aria-label="Варианты страницы">
     <div class="wrap">
-      {(['hero', 'rep'] as const).map((g) => (
+      {(['rep'] as const).map((g) => (
         <span class="tb-group" role="group" aria-label={bar[g].label}>
           <span class="techbar-label">{bar[g].label}</span>
           {bar[g].opts.map(([v, label], i) => <button type="button" data-g={g} data-v={v} aria-pressed={i === 0 ? 'true' : 'false'}>{label}</button>)}
@@ -86,12 +86,7 @@ const jsonld = [
         <div>
           <span class="hero-eyebrow">{hero.eyebrow}</span>
           <h1>{h1Cut[0]}<Pen u id="h1">{h1Cut[1]}</Pen>{h1Cut[2]}</h1>
-          <p class="lead"><span class="h-new">{hero.leadNew}</span><span class="h-old">{hero.lead}</span></p>
-          <div class="time-strip h-old">
-            <div class="ts-item"><small>{hero.you.k}</small><b>{hero.you.v}</b><span>{hero.you.t}</span></div>
-            <span class="ts-arrow" aria-hidden="true">→</span>
-            <div class="ts-item ts-item--nota"><small>{hero.nota.k}</small><b>{hero.nota.v}</b><span>{hero.nota.t}</span></div>
-          </div>
+          <p class="lead">{hero.lead}</p>
           <div class="num-group">
           <span class="num-dot" aria-hidden="true"><i>1</i></span>
           <div class="cta-row cta-row--qr">
