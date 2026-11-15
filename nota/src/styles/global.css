@@ -983,3 +983,8 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
   .v10 .hero-left { display: flex; flex-direction: column; min-height: calc(min(650px, 100vh - 150px) + 34px); }
   .v10 .howto-bottom { margin-top: auto; padding-top: 24px; margin-left: var(--g); }
 }
+/* «Как выгрузить архив» — не у самого низа блока, а через одну пустую строку после «Кому подходит» (основатель) */
+@media (min-width: 1000px) {
+  .v10 .hero-left { min-height: 0; display: block; }
+  .v10 .howto-bottom { margin-top: 24px; padding-top: 0; }
+}
