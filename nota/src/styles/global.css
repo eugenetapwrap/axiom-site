@@ -945,13 +945,18 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 /* «По запросу» — на одной оси с ценами: плашка объёма той же высоты, текст того же размера, что суммы */
 .pa-c--dk .pa-v b { font-size: 30px; }
 .pa-p--custom { font-size: 34px; letter-spacing: -0.01em; white-space: nowrap; }
-/* «Для кого» на компьютере: «И любой бизнес…» — под первыми четырьмя колонками, низ на одной линии с последней строкой «Бухгалтеров» */
-@media (min-width: 1200px) {
-  .v10 .seg-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 32px; }
-  .v10 .seg-grid .seg-list { display: contents; }
-  .v10 .seg-grid .seg-list li:nth-child(-n+4) { grid-row: 1; }
-  .v10 .seg-grid .seg-list li:nth-child(5) { grid-column: 5; grid-row: 1 / span 2; }
-  .v10 .seg-grid .seg-note { grid-column: 1 / 5; grid-row: 2; align-self: end; margin: 0; padding: 16px 0 0 18px; }
+/* «Для кого»: «И любой бизнес…» серым справа от заголовка, по базовой линии. На телефоне — под списком сфер */
+.v10 .seg-head .seg-note { margin: 0; font-size: 17px; font-weight: 400; color: var(--muted); }
+.v10 .seg-head h2 { margin: 0; }
+@media (min-width: 641px) {
+  .v10 .seg-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 32px; margin-bottom: 32px; }
+}
+@media (max-width: 640px) {
+  .v10 .seg-wrap { display: flex; flex-direction: column; }
+  .v10 .seg-head { display: contents; }
+  .v10 .seg-head h2 { order: 0; margin-bottom: 24px; }
+  .v10 .seg-list { order: 1; }
+  .v10 .seg-head .seg-note { order: 2; margin-top: 24px; }
 }
 /* Шесть пунктов меню помещаются от 880 px; уже — меню прячется, как на телефоне (логотип и кнопка) */
 @media (max-width: 879px) {
