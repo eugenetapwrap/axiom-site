@@ -51,6 +51,8 @@ Kirim arsip ZIP berisi dokumen dan dapatkan laporan. 30 dokumen pertama gratis.
 
 ## Первое сообщение после /start
 
+Текст утверждён основателем 15.11 (правки основателя: «папку с документами», «на что обратить внимание», «любой документ»).
+
 Кто нажимает Start: человек с сайта, которому обещали «пришлите архив — получите отчёт». У одного архив готов (сидит за компьютером), у другого под рукой только телефон: «соберу завтра» — и бот забыт. Поэтому в одном сообщении: что это за продукт (одной строкой), и два пути, которые человек выбирает по своей ситуации, а не гадает, что лучше:
 - 📦 **есть архив** — обещанный на сайте отчёт, дальше бот ведёт к Google;
 - 📊 **архива под рукой нет** — подключить Google и переслать любой чек: через минуту строка в своей таблице, архив — когда удобно.
@@ -65,12 +67,13 @@ Kirim arsip ZIP berisi dokumen dan dapatkan laporan. 30 dokumen pertama gratis.
 Как начать:
 
 📦 Есть архив документов?
-Пришлите ZIP — выгрузку рабочего чата или папку с чеками. Примерно через 15 минут пришлю отчёт: куда ушли деньги и есть ли дубли.
+Пришлите ZIP — выгрузку рабочего чата или папку с документами. Примерно через 15 минут пришлю отчёт: куда ушли деньги и на что обратить внимание.
 
 📊 Архива под рукой нет?
-Подключите Google и перешлите сюда любой чек — через минуту он появится строкой в вашей таблице. Архив можно прислать позже.
+Подключите Google и перешлите сюда любой документ — через минуту он появится строкой в вашей таблице. Архив можно прислать позже.
 
 Первые 30 документов бесплатно, без карты.
+
 Доступ у меня будет только к таблице и папкам, которые я создам. Подключая Google, вы принимаете условия и политику конфиденциальности.
 
 [📦 Как собрать архив]  [📊 Подключить Google]
@@ -85,12 +88,13 @@ I read receipts, invoices and handwritten delivery notes, find duplicates and wr
 How to start:
 
 📦 Have an archive of documents?
-Send a ZIP — a work chat export or a folder of receipts. In about 15 minutes I'll send a report: where the money went and whether there are duplicates.
+Send a ZIP — a work chat export or a folder of documents. In about 15 minutes I'll send a report: where the money went and what needs your attention.
 
 📊 No archive at hand?
-Connect Google and forward any receipt here — in a minute it will appear as a row in your sheet. You can send the archive later.
+Connect Google and forward any document here — in a minute it will appear as a row in your sheet. You can send the archive later.
 
 First 30 documents are free, no card needed.
+
 I'll only have access to the sheet and folders I create. By connecting Google, you accept the terms and privacy policy.
 
 [📦 How to make an archive]  [📊 Connect Google]
@@ -105,12 +109,13 @@ Saya membaca struk, invoice, dan nota tulisan tangan, menemukan duplikat dan jum
 Cara mulai:
 
 📦 Punya arsip dokumen?
-Kirim ZIP — ekspor chat kerja atau folder struk. Sekitar 15 menit lagi saya kirim laporan: ke mana uang pergi dan apakah ada duplikat.
+Kirim ZIP — ekspor chat kerja atau folder dokumen. Sekitar 15 menit lagi saya kirim laporan: ke mana uang pergi dan apa yang perlu diperhatikan.
 
 📊 Belum ada arsip?
-Hubungkan Google dan teruskan struk apa saja ke sini — dalam semenit struk itu muncul sebagai baris di sheet Anda. Arsip bisa dikirim nanti.
+Hubungkan Google dan teruskan dokumen apa saja ke sini — dalam semenit dokumen itu muncul sebagai baris di sheet Anda. Arsip bisa dikirim nanti.
 
 30 dokumen pertama gratis, tanpa kartu.
+
 Akses saya hanya ke sheet dan folder yang saya buat. Dengan menghubungkan Google, Anda menyetujui ketentuan dan kebijakan privasi.
 
 [📦 Cara membuat arsip]  [📊 Hubungkan Google]
