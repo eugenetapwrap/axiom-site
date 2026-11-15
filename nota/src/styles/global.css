@@ -945,19 +945,6 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 /* «По запросу» — на одной оси с ценами: плашка объёма той же высоты, текст того же размера, что суммы */
 .pa-c--dk .pa-v b { font-size: 30px; }
 .pa-p--custom { font-size: 34px; letter-spacing: -0.01em; white-space: nowrap; }
-/* «Для кого»: «И любой бизнес…» серым справа от заголовка, по базовой линии. На телефоне — под списком сфер */
-.v10 .seg-head .seg-note { margin: 0; font-size: 17px; font-weight: 400; color: var(--muted); }
-.v10 .seg-head h2 { margin: 0; }
-@media (min-width: 641px) {
-  .v10 .seg-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 32px; margin-bottom: 32px; }
-}
-@media (max-width: 640px) {
-  .v10 .seg-wrap { display: flex; flex-direction: column; }
-  .v10 .seg-head { display: contents; }
-  .v10 .seg-head h2 { order: 0; margin-bottom: 24px; }
-  .v10 .seg-list { order: 1; }
-  .v10 .seg-head .seg-note { order: 2; margin-top: 24px; }
-}
 /* Шесть пунктов меню помещаются от 880 px; уже — меню прячется, как на телефоне (логотип и кнопка) */
 @media (max-width: 879px) {
   body:has(.v10) .header nav { display: none; }
