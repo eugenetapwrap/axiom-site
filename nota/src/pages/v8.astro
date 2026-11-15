@@ -187,23 +187,8 @@ const jsonld = [
       </div>
     </section>
 
-    <!-- 9. Отзывы (заглушки до реальных текстов) -->
-    <section class="section section--paper">
-      <div class="wrap">
-        <h2 class="h2-gap">{reviews.title}</h2>
-        <div class="grid reviews" style="--min: 250px">
-          {reviews.items.map((r) => (
-            <figure class="review">
-              <blockquote set:html={fmt(r.text)} />
-              <figcaption><b set:html={fmt(r.name)} /><span set:html={fmt(r.role)} /></figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- Цены сразу после «Что Nota делает» и цифры про дубли; перед ними отзывы, после — «Ваши данные» -->
-    <section class="section" id="price" data-bill="month">
+    <!-- Цены сразу после «Что Nota делает» и цифры про дубли; дальше отзывы и «Ваши данные» -->
+    <section class="section section--line" id="price" data-bill="month">
       <div class="wrap">
         <div class="price-head">
           <div>
@@ -245,6 +230,21 @@ const jsonld = [
             });
           })();
         </script>
+      </div>
+    </section>
+
+    <!-- 9. Отзывы (заглушки до реальных текстов) -->
+    <section class="section section--paper">
+      <div class="wrap">
+        <h2 class="h2-gap">{reviews.title}</h2>
+        <div class="grid reviews" style="--min: 250px">
+          {reviews.items.map((r) => (
+            <figure class="review">
+              <blockquote set:html={fmt(r.text)} />
+              <figcaption><b set:html={fmt(r.name)} /><span set:html={fmt(r.role)} /></figcaption>
+            </figure>
+          ))}
+        </div>
       </div>
     </section>
 
