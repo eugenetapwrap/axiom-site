@@ -51,38 +51,39 @@ Kirim arsip ZIP berisi dokumen dan dapatkan laporan. 30 dokumen pertama gratis.
 
 ## Первое сообщение после /start
 
-Сначала две строки — что это за продукт (человек мог прийти по ссылке и не видеть описания), потом два пути — прислать документы (любые: фото, PDF, ZIP с папкой или выгрузкой чата) или подключить Google — и кнопку под каждый.
+Главное на онбординге — человек не путается и получает обещанный результат: **отчёт**. Поэтому один путь к отчёту (архивом или по одному + кнопка «Отчёт»), а Google — следующий шаг: для первого отчёта он не нужен (на сайте: «Отчёт придёт и без Google»).
 
 **RU**
 ```
 👋 Привет! Я Nota — веду учёт расходов по вашим документам.
 
-Разбираю чеки, счета и рукописные накладные, записываю их в вашу Google-таблицу и отмечаю дубли и ошибки в суммах. Каждую неделю и месяц присылаю отчёт.
+Разбираю чеки, счета и рукописные накладные, записываю их в Google-таблицу и отмечаю дубли и ошибки в суммах.
 
-С чего начать:
-1. Пришлите ZIP-архив — папку с чеками или выгрузку чата, и я подготовлю отчёт. Первые 30 документов бесплатно.
-2. Подключите Google — создам на вашем Google Диске таблицу и две папки (доступ только к ним) и буду записывать туда каждый документ.
+Как получить первый отчёт:
+• Пришлите ZIP-архив — папку с чеками или выгрузку чата. Отчёт придёт сам.
+• Или перешлите несколько чеков по одному и нажмите «Отчёт».
 
-Документы можно присылать и по одному — фото или PDF. Отчёт пришлю после 30 документов или в любой момент по кнопке «Отчёт».
+Первые 30 документов бесплатно.
 
+Потом подключите Google — и каждый новый документ будет сам попадать в вашу таблицу.
 Подключая Google, вы принимаете условия и политику конфиденциальности.
 
 [📦 Как собрать архив]  [📊 Подключить Google]
 ```
-«условия» и «политику конфиденциальности» — ссылки. Отдельную ссылку «Как работает Nota» убрали: лишний пункт на первом экране.
 
 **EN**
 ```
 👋 Hi! I'm Nota — I track expenses from your documents.
 
-I read receipts, invoices and handwritten delivery notes, write them to your Google Sheet and flag duplicates and wrong totals. Every week and month I send you a report.
+I read receipts, invoices and handwritten delivery notes, write them to a Google Sheet and flag duplicates and wrong totals.
 
-Where to start:
-1. Send a ZIP archive — a folder of receipts or a chat export, and I'll prepare a report. First 30 documents are free.
-2. Connect Google — I'll create a sheet and two folders on your Google Drive (access to them only) and record every document there.
+How to get your first report:
+• Send a ZIP archive — a folder of receipts or a chat export. The report will come by itself.
+• Or forward a few receipts one by one and tap «Report».
 
-You can also send documents one by one — photos or PDFs. I'll send a report after 30 documents or anytime with the «Report» button.
+First 30 documents are free.
 
+Then connect Google — and every new document will go to your sheet automatically.
 By connecting Google, you accept the terms and privacy policy.
 
 [📦 How to make an archive]  [📊 Connect Google]
@@ -92,17 +93,42 @@ By connecting Google, you accept the terms and privacy policy.
 ```
 👋 Halo! Saya Nota — mencatat pengeluaran dari dokumen Anda.
 
-Saya membaca struk, invoice, dan nota tulisan tangan, mencatatnya ke Google Sheet Anda, dan menandai duplikat serta jumlah yang salah. Setiap minggu dan bulan saya kirim laporan.
+Saya membaca struk, invoice, dan nota tulisan tangan, mencatatnya ke Google Sheet, dan menandai duplikat serta jumlah yang salah.
 
-Mulai dari mana:
-1. Kirim arsip ZIP — folder struk atau ekspor chat, dan saya siapkan laporannya. 30 dokumen pertama gratis.
-2. Hubungkan Google — saya buat sheet dan dua folder di Google Drive Anda (akses hanya ke situ) dan mencatat setiap dokumen di sana.
+Cara mendapatkan laporan pertama:
+• Kirim arsip ZIP — folder struk atau ekspor chat. Laporan akan datang sendiri.
+• Atau teruskan beberapa struk satu per satu lalu tekan «Laporan».
 
-Dokumen juga bisa dikirim satu per satu — foto atau PDF. Laporan saya kirim setelah 30 dokumen atau kapan saja lewat tombol «Laporan».
+30 dokumen pertama gratis.
 
+Setelah itu hubungkan Google — setiap dokumen baru akan otomatis masuk ke sheet Anda.
 Dengan menghubungkan Google, Anda menyetujui ketentuan dan kebijakan privasi.
 
 [📦 Cara membuat arsip]  [📊 Hubungkan Google]
+```
+
+## Ответы бота на первых шагах (предложение, RU)
+
+Чтобы человек на каждом шаге понимал, что происходит и что дальше. В ⟨⟩ — подставляет бот.
+
+**Получил архив**
+```
+📦 Архив получил: ⟨47⟩ файлов. Разбираю — отчёт пришлю примерно через 15 минут.
+В бесплатный отчёт войдут первые 30 документов.
+```
+
+**Получил документ по одному**
+```
+✍ Записал: ⟨2 450 000 IDR⟩, ⟨TB Sumber Rejeki⟩.
+Документов: ⟨3⟩ из 30 бесплатных. Отчёт придёт после 30 — или нажмите «Отчёт», чтобы получить его сейчас.
+```
+
+**Прислал отчёт (Google ещё не подключён)**
+```
+Это ваш первый отчёт ☝️
+Подключите Google — и каждый новый документ будет сам попадать в таблицу, а оригиналы в папку. Без Google присланное хранится 10 дней.
+
+[📊 Подключить Google]
 ```
 
 ## Ответ на кнопку «Как собрать архив» (предложение)
