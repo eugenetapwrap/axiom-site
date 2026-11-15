@@ -137,6 +137,8 @@ export const what = {
     return { ...it, accent: false };
   }),
 };
+// Нижний ряд: «Ведёт архив документов» перед «Не угадывает молча» (основатель 15.11)
+{ const it = what.items; const a = it.findIndex((x) => x.icon === 'folder'); const b = it.findIndex((x) => x.icon === 'review'); if (a > b) [it[a], it[b]] = [it[b], it[a]]; }
 
 // Сравнение: 5 строк из 7 — без «Один чек прислали дважды» (про дубли и так много) и «Где хранятся данные» (есть блок «Ваши данные»).
 const keepRows = [0, 1, 2, 4, 6];
