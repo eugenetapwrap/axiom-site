@@ -108,12 +108,12 @@ export const send = {
 // 3,5 млрд рупий — со слов основателя (≈), ПОДТВЕРДИТЬ точную цифру перед рекламой.
 export const what = {
   ...whatV4,
-  // Все иконки серые; новые иконки «рукописная накладная» и «проверить» (с маленьким оранжевым вопросом) — 15.11
+  // Верхний ряд (читает, ловит дубли, сверяет суммы) — иконки оранжевые, нижний — серые (решение основателя 15.11)
   items: whatV4.items.map((it) => {
     if (it.icon === 'globe') return { ...it, text: 'Платежи в других валютах пересчитывает по курсу центрального банка на дату платежа. Валюту можно сменить в любой момент.', accent: false };
-    if (it.icon === 'receipt') return { ...it, icon: 'handwritten', title: 'Читает любые форматы', accent: false };
-    if (it.icon === 'copy') return { ...it, text: 'Тот же чек от двоих или переснятый. Nota отметит дубль, чтобы один счёт не оплатили дважды.', accent: false };
-    if (it.icon === 'calc') return { ...it, accent: false };
+    if (it.icon === 'receipt') return { ...it, icon: 'handwritten', title: 'Читает любые форматы', accent: true };
+    if (it.icon === 'copy') return { ...it, text: 'Тот же чек от двоих или переснятый. Nota отметит дубль, чтобы один счёт не оплатили дважды.', accent: true };
+    if (it.icon === 'calc') return { ...it, accent: true };
     if (it.icon === 'check') return { ...it, icon: 'review', accent: false };
     return { ...it, accent: false };
   }),
