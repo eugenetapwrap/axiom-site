@@ -254,6 +254,13 @@ mark.todo { background: #fff1b8; color: #6b4e00; border-radius: 4px; padding: 0 
 .review blockquote { margin: 0; font-size: 17px; line-height: 1.5; }
 .review figcaption b { display: block; }
 .v10 .review figcaption { margin-top: auto; } /* имена на одной линии, даже если отзывы разной длины */
+/* Пять отзывов без «сироты»: на компьютере 3 + 2 (нижние шире, ряды одной ширины), на планшете 2 + 2 + 1 во всю ширину */
+@media (min-width: 641px) and (max-width: 1099px) { .v10 .reviews .review:nth-child(5):last-child { grid-column: 1 / -1; } }
+@media (min-width: 1100px) {
+  .v10 .reviews.g4 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .v10 .reviews .review { grid-column: span 2; }
+  .v10 .reviews .review:nth-child(n+4) { grid-column: span 3; }
+}
 .review figcaption span { display: block; font-size: 14px; color: var(--muted); }
 .plan-facts { margin-top: 24px; display: grid; gap: 6px; font-size: 16px; color: var(--muted); }
 .op-line { display: block; margin-top: 8px; font-size: 16px; color: var(--on-dark); }
