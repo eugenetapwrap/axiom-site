@@ -253,6 +253,7 @@ mark.todo { background: #fff1b8; color: #6b4e00; border-radius: 4px; padding: 0 
 .review { margin: 0; padding: 24px; background: #fff; border-radius: 18px; box-shadow: inset 0 0 0 1px var(--line); display: flex; flex-direction: column; gap: 16px; }
 .review blockquote { margin: 0; font-size: 17px; line-height: 1.5; }
 .review figcaption b { display: block; }
+.v10 .review figcaption { margin-top: auto; } /* имена на одной линии, даже если отзывы разной длины */
 .review figcaption span { display: block; font-size: 14px; color: var(--muted); }
 .plan-facts { margin-top: 24px; display: grid; gap: 6px; font-size: 16px; color: var(--muted); }
 .op-line { display: block; margin-top: 8px; font-size: 16px; color: var(--on-dark); }
