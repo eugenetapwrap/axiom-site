@@ -254,13 +254,21 @@ mark.todo { background: #fff1b8; color: #6b4e00; border-radius: 4px; padding: 0 
 .review blockquote { margin: 0; font-size: 17px; line-height: 1.5; }
 .review figcaption b { display: block; }
 .v10 .review figcaption { margin-top: auto; } /* имена на одной линии, даже если отзывы разной длины */
-/* Пять отзывов без «сироты»: на компьютере 3 + 2 (нижние шире, ряды одной ширины), на планшете 2 + 2 + 1 во всю ширину */
-@media (min-width: 641px) and (max-width: 1099px) { .v10 .reviews .review:nth-child(5):last-child { grid-column: 1 / -1; } }
-@media (min-width: 1100px) {
-  .v10 .reviews.g4 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .v10 .reviews .review { grid-column: span 2; }
-  .v10 .reviews .review:nth-child(n+4) { grid-column: span 3; }
-}
+/* Лента отзывов: 3 карточки на компьютере, 2 на планшете, на телефоне одна и край следующей; прокрутка с привязкой к карточке */
+.v10 .rv-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.v10 .rv-head h2 { margin: 0; }
+.v10 .rv-nav { display: flex; gap: 8px; flex: none; }
+.v10 .rv-btn { width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; color: var(--slate); box-shadow: inset 0 0 0 1px var(--line); display: grid; place-items: center; cursor: pointer; transition: opacity .15s, box-shadow .15s; }
+.v10 .rv-btn svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.v10 .rv-btn:hover:not(:disabled) { box-shadow: inset 0 0 0 2px var(--slate); }
+.v10 .rv-btn:focus-visible { outline: 3px solid var(--slate); outline-offset: 2px; }
+.v10 .rv-btn:disabled { opacity: .35; cursor: default; }
+.v10 .rv-track { display: grid; grid-auto-flow: column; grid-auto-columns: 85%; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; padding: 2px; margin: -2px; }
+.v10 .rv-track::-webkit-scrollbar { display: none; }
+.v10 .rv-track:focus-visible { outline: 3px solid var(--slate); outline-offset: 4px; border-radius: 18px; }
+.v10 .rv-track .review { scroll-snap-align: start; }
+@media (min-width: 641px) { .v10 .rv-track { grid-auto-columns: calc((100% - 20px) / 2); gap: 20px; } }
+@media (min-width: 1100px) { .v10 .rv-track { grid-auto-columns: calc((100% - 40px) / 3); } }
 .review figcaption span { display: block; font-size: 14px; color: var(--muted); }
 .plan-facts { margin-top: 24px; display: grid; gap: 6px; font-size: 16px; color: var(--muted); }
 .op-line { display: block; margin-top: 8px; font-size: 16px; color: var(--on-dark); }

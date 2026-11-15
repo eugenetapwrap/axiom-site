@@ -277,11 +277,18 @@ const jsonld = [
     </section>
 
     <!-- После цен — по силе для продажи: отзывы → сравнение → ваши данные → вопросы → для кого -->
-    <!-- Отзывы: тексты основателя (15.11), порядок как у основателя — первым реальный кейс со сговором -->
+    <!-- Отзывы: тексты основателя (15.11), порядок как у основателя — первым реальный кейс со сговором; лентой -->
     <section class="section section--paper" id="reviews">
       <div class="wrap">
-        <h2 class="h2-gap">{reviews.title}</h2>
-        <div class="grid g4 reviews" style="--min: 250px">
+        <!-- Лента отзывов (основатель 15.11): 3 на экране компьютера, 2 на планшете, 1 с краем следующего на телефоне; листается свайпом и стрелками, без автопрокрутки -->
+        <div class="rv-head h2-gap">
+          <h2>{reviews.title}</h2>
+          <div class="rv-nav">
+            <button class="rv-btn" type="button" data-dir="-1" aria-controls="rv-track" aria-label="Предыдущий отзыв"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M14.5 6l-6 6 6 6" /></svg></button>
+            <button class="rv-btn" type="button" data-dir="1" aria-controls="rv-track" aria-label="Следующий отзыв"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9.5 6l6 6-6 6" /></svg></button>
+          </div>
+        </div>
+        <div class="rv-track" id="rv-track" tabindex="0" role="region" aria-label="Отзывы, листаются влево и вправо">
           {reviews.items.map((r) => (
             <figure class="review">
               <blockquote set:html={fmt(r.text)} />
@@ -289,6 +296,22 @@ const jsonld = [
             </figure>
           ))}
         </div>
+        <script is:inline>
+          // Стрелки листают ленту на одну карточку; у краёв стрелка гаснет
+          (function () {
+            var t = document.getElementById('rv-track'); if (!t) return;
+            var btns = document.querySelectorAll('.rv-btn');
+            var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            function step() { var c = t.querySelector('.review'); return c ? c.getBoundingClientRect().width + parseFloat(getComputedStyle(t).columnGap || 0) : t.clientWidth; }
+            function sync() {
+              var max = t.scrollWidth - t.clientWidth - 2;
+              btns[0].disabled = t.scrollLeft <= 2; btns[1].disabled = t.scrollLeft >= max;
+              document.querySelector('.rv-nav').hidden = max <= 0;
+            }
+            btns.forEach(function (b) { b.addEventListener('click', function () { t.scrollBy({ left: step() * Number(b.dataset.dir), behavior: calm ? 'auto' : 'smooth' }); }); });
+            t.addEventListener('scroll', sync, { passive: true }); window.addEventListener('resize', sync); sync();
+          })();
+        </script>
       </div>
     </section>
 
