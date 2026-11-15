@@ -971,14 +971,6 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 /* «Для кого»: шесть карточек — 1 колонка на телефоне, 3 × 2 с планшета; у «Любой другой бизнес» полоска серая */
 @media (min-width: 1200px) { .v10 .seg-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .v10 .seg-list li.seg-any h3::before { background: #b8c2cc; }
-/* Дополнительный пакет: полоска под тарифами, второстепенная — белая с рамкой, без оранжевого */
-.v10 .pack { margin-top: 24px; display: flex; align-items: center; gap: 16px; padding: 16px 20px; background: #fff; border-radius: 16px; box-shadow: inset 0 0 0 1px var(--line); }
-.v10 .pack-b { flex: none; width: 56px; height: 56px; border-radius: 14px; background: var(--box); color: var(--slate); font-size: 18px; font-weight: 700; display: grid; place-items: center; }
-.v10 .pack p { margin: 0; flex: 1; min-width: 0; font-size: 16px; color: var(--muted); }
-.v10 .pack p b { color: var(--ink); }
-.v10 .pack-p { flex: none; font-size: 28px; font-weight: 700; line-height: 1; color: var(--slate); white-space: nowrap; }
-.v10 .pack-p small { font-size: 14px; font-weight: 400; color: var(--muted); }
-@media (max-width: 640px) { .v10 .pack { flex-wrap: wrap; align-items: flex-start; } .v10 .pack p { flex-basis: calc(100% - 72px); } .v10 .pack-p { margin-left: 72px; } }
 /* Шесть пунктов меню помещаются от 880 px; уже — меню прячется, как на телефоне (логотип и кнопка) */
 @media (max-width: 879px) {
   body:has(.v10) .header nav { display: none; }
