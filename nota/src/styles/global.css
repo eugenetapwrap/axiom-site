@@ -810,3 +810,7 @@ html:not([data-rep="plain"]) .v9 .s2-split .mini { display: none; }
 .v9 .an-btn[aria-selected="true"] small { color: #9fdcb4; }
 .v9 .an-btn small { color: var(--green-sheet); }
 @media (max-width: 640px) { .v9 .an-pick { padding: 4px; gap: 4px; border-radius: 14px; } .v9 .an-btn { border-radius: 10px; } }
+/* v9: QR высотой с кнопку, без рамки и без белых полей внутри — модули крупнее, читается с телефона.
+   Код ведёт на start=land9_qr. Белое поле вокруг даёт сама страница. В тёмном финале — QR с белым фоном и полем внутри файла. */
+html:not([data-hero="old"]) .v9 .cta-qr img, .v9 .cta-qr img { width: 60px; height: 60px; padding: 0; background: transparent; box-shadow: none; border-radius: 0; }
+.v9 .final-qr img { padding: 0; background: transparent; border-radius: 8px; }
