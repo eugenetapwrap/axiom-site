@@ -997,5 +997,3 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 .v10 .feat-list .feat-stat { margin-top: auto; padding-top: 12px; display: flex; flex-direction: column; gap: 0; font-weight: 400; }
 .v10 .feat-list .feat-stat b { font-size: 30px; line-height: 1.1; font-weight: 700; color: var(--orange); letter-spacing: -0.01em; }
 .v10 .feat-list .feat-stat span { font-size: 14px; color: var(--muted); }
-.v10 .stat-note { margin-top: 24px; font-size: 14px; color: var(--muted); }
-@media (min-width: 900px) { .v10 .stat-note { margin-top: 32px; } }

@@ -191,7 +191,6 @@ const jsonld = [
             <li class:list={{ 'feat--accent': c.accent }}><span class="feat-icon"><Icon name={c.icon} /></span><div><h3>{c.title}</h3><p>{c.text}</p>{c.stat && <p class="feat-stat"><b>{c.stat.value}</b><span>{c.stat.text}</span></p>}</div></li>
           ))}
         </ul>
-        <p class="stat-note">{what.statNote}</p>
       </div>
     </section>
 
@@ -398,7 +397,7 @@ const jsonld = [
         <a href={botLink('land10_support')}>Поддержка в боте</a>
       </nav>
       <div class="op">{footer.operator} · © 2026</div>
-      <p class="foot-note">{footer.testData}</p>
+      <p class="foot-note">{footer.testData} {footer.statsNote}</p>
     </div>
   </footer>
   <script is:inline>
