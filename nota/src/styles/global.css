@@ -993,6 +993,7 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 /* Цифра про дубли — короткой жирной строкой в пункте «Ловит дубли» (вместо плашки во всю ширину) */
 .v10 .feat-list .feat-stat { margin-top: 8px; font-weight: 700; color: var(--ink); }
 /* Цифра про дубли — крупно и отдельно: «≈ $210K» оранжевым, подпись мелко */
-.v10 .feat-list .feat-stat { margin-top: 12px; display: flex; flex-direction: column; gap: 0; font-weight: 400; }
+.v10 .feat-list li > div { display: flex; flex-direction: column; align-self: stretch; }
+.v10 .feat-list .feat-stat { margin-top: auto; padding-top: 12px; display: flex; flex-direction: column; gap: 0; font-weight: 400; }
 .v10 .feat-list .feat-stat b { font-size: 30px; line-height: 1.1; font-weight: 700; color: var(--orange); letter-spacing: -0.01em; }
 .v10 .feat-list .feat-stat span { font-size: 14px; color: var(--muted); }

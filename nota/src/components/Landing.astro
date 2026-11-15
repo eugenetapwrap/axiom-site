@@ -182,13 +182,13 @@ const jsonld = [
       </div>
     </section>
 
-    <!-- 5. Что Nota делает с каждым документом; цифра про пойманные дубли — строкой в «Ловит дубли» -->
+    <!-- 5. Что Nota делает с каждым документом; цифры (дубли, ошибки в суммах) — строкой в своих пунктах, на одной линии -->
     <section class="section" id="what">
       <div class="wrap">
         <h2 class="h2-gap">{what.title}</h2>
         <ul class="feat-list">
           {what.items.map((c) => (
-            <li class:list={{ 'feat--accent': c.accent }}><span class="feat-icon"><Icon name={c.icon} /></span><div><h3>{c.title}</h3><p>{c.text}</p>{c.icon === 'copy' && <p class="feat-stat"><b>{what.proof.value}</b><span>{what.proof.text}</span></p>}</div></li>
+            <li class:list={{ 'feat--accent': c.accent }}><span class="feat-icon"><Icon name={c.icon} /></span><div><h3>{c.title}</h3><p>{c.text}</p>{c.stat && <p class="feat-stat"><b>{c.stat.value}</b><span>{c.stat.text}</span></p>}</div></li>
           ))}
         </ul>
       </div>
