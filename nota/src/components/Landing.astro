@@ -34,8 +34,8 @@ const jsonld = [
     inLanguage: ['ru', 'en', 'id'],
     description: meta.description,
     publisher: { '@type': 'Organization', name: 'Axiom Consulting' },
-    offers: pricing.plans.map((p) => ({
-      '@type': 'Offer', name: p.name, price: p.month.price.replace('$', ''), priceCurrency: 'USD',
+    offers: pricing.plans.filter((p) => p.month).map((p) => ({
+      '@type': 'Offer', name: p.name, price: p.month!.price.replace('$', ''), priceCurrency: 'USD',
       url: botLink(p.tag),
     })),
   },
@@ -210,18 +210,22 @@ const jsonld = [
           </fieldset>
         </div>
         <p class="plan-common">Во всех тарифах: {pricing.common.join(', ')}.</p>
-        <div class="grid plans" style="--min: 220px; gap: 24px">
+        <div class="grid g4 plans" style="--min: 220px; gap: 24px">
           {pricing.plans.map((p) => (
             <div class:list={['plan', { 'plan--hl': p.highlight }]}>
               <h3>{p.name}</h3>
-              <div class="price-row">
-              <div class="plan-price">
-                <span class="pm">{p.month.price}</span><span class="p3">{p.q3.price}</span><span class="p6">{p.q6.price}</span><small> / мес</small>
-              </div>
-              <div class="plan-unit">
-                <span class="p3">{p.q3.total}</span><span class="p6">{p.q6.total}</span>
-              </div>
-              </div>
+              {p.custom ? (
+                <div class="price-row"><div class="plan-price plan-price--custom">{p.custom}</div></div>
+              ) : (
+                <div class="price-row">
+                <div class="plan-price">
+                  <span class="pm">{p.month!.price}</span><span class="p3">{p.q3!.price}</span><span class="p6">{p.q6!.price}</span><small> / мес</small>
+                </div>
+                <div class="plan-unit">
+                  <span class="p3">{p.q3!.total}</span><span class="p6">{p.q6!.total}</span>
+                </div>
+                </div>
+              )}
               <p><b>{p.docs}</b><br /><span class="muted">{p.who}</span></p>
               <ul class="check">{p.feats.map((f) => <li><Icon name="check" size={20} />{f}</li>)}</ul>
               <a class:list={['btn', 'btn--plan', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}</a>
