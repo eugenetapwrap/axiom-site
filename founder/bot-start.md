@@ -1,12 +1,12 @@
 # Бот: описание в BotFather и первое сообщение (/start)
 
-Правки 15.11 к текстам основателя: 30 документов вместо 40, «дубли» как на сайте, «Google Диск» полностью, опечатка «дуругие», в описание добавлен первый шаг и бесплатный объём, к условиям — политика конфиденциальности.
+Правки 15.11 к текстам основателя (первая строка описания — «по документам», так решил основатель): 30 документов вместо 40, «дубли» как на сайте, «Google Диск» полностью, опечатка «дуругие», в описание добавлен первый шаг и бесплатный объём, к условиям — политика конфиденциальности.
 
 ## Описание до /start (BotFather → Edit Description, до 512 знаков)
 
-**RU** (451 знак)
+**RU** (444 знак)
 ```
-Nota ведёт учёт расходов по чекам сотрудников в Telegram.
+Nota ведёт учёт расходов по документам в Telegram.
 
 • Читает чеки, счета, скриншоты переводов и рукописные накладные на любом языке
 • Записывает в вашу Google-таблицу: дата, сумма, поставщик, категория, проект
@@ -17,9 +17,9 @@ Nota ведёт учёт расходов по чекам сотрудников
 Пришлите архив рабочего чата и получите отчёт. Первые 30 документов бесплатно.
 ```
 
-**EN** (454)
+**EN** (448)
 ```
-Nota tracks expenses from your team's receipts in Telegram.
+Nota tracks expenses from your documents in Telegram.
 
 • Reads receipts, invoices, transfer screenshots and handwritten delivery notes in any language
 • Writes them to your Google Sheet: date, amount, supplier, category, project
@@ -30,9 +30,9 @@ Nota tracks expenses from your team's receipts in Telegram.
 Send a work chat archive and get a report. First 30 documents free.
 ```
 
-**ID** (460)
+**ID** (453)
 ```
-Nota mencatat pengeluaran dari struk karyawan Anda di Telegram.
+Nota mencatat pengeluaran dari dokumen Anda di Telegram.
 
 • Membaca struk, invoice, bukti transfer, dan nota tulisan tangan dalam bahasa apa pun
 • Mencatat ke Google Sheet Anda: tanggal, jumlah, pemasok, kategori, proyek
@@ -45,9 +45,9 @@ Kirim arsip chat kerja dan dapatkan laporan. 30 dokumen pertama gratis.
 
 ## Короткое описание в профиле (BotFather → Edit About, до 120 знаков)
 
-- RU: `Учёт расходов по чекам сотрудников: Google-таблица, дубли, отчёты. 30 документов бесплатно.`
-- EN: `Expense tracking from team receipts: Google Sheet, duplicates, reports. First 30 documents free.`
-- ID: `Catat pengeluaran dari struk karyawan: Google Sheet, duplikat, laporan. 30 dokumen pertama gratis.`
+- RU: `Учёт расходов по документам в Telegram: Google-таблица, дубли, отчёты. 30 документов бесплатно.`
+- EN: `Expense tracking from documents in Telegram: Google Sheet, duplicates, reports. First 30 documents free.`
+- ID: `Catat pengeluaran dari dokumen di Telegram: Google Sheet, duplikat, laporan. 30 dokumen pertama gratis.`
 
 ## Первое сообщение после /start
 
