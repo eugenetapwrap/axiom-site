@@ -101,19 +101,20 @@ export const send = {
     { icon: 'archive', title: 'Архивом', text: 'Документы за прошлые месяцы одним файлом. Команда в WhatsApp? Выгружайте чат раз в неделю.', tag: 'Быстрый старт', tone: 'green' },
     { icon: 'receipt', title: 'Лично боту', text: 'Сфотографировали чек, через минуту он в таблице.' },
     { icon: 'forward', title: 'Пересылкой', text: 'Из рабочих чатов, WhatsApp или почты.' },
-    { icon: 'users', title: 'В рабочей группе', text: 'Nota берёт только платёжные документы, в группу не пишет, ставит ✍ на записанный чек.', tag: 'По желанию', tone: 'yellow' },
+    { icon: 'signed', title: 'В рабочей группе', text: 'Nota берёт только платёжные документы, в группу не пишет, ставит ✍ на записанный чек.', tag: 'По желанию', tone: 'yellow' },
   ] as { icon: string; title: string; text: string; tag?: string; tone?: string }[],
 };
 
 // 3,5 млрд рупий — со слов основателя (≈), ПОДТВЕРДИТЬ точную цифру перед рекламой.
 export const what = {
   ...whatV4,
-  // Верхний ряд (читает, ловит дубли, сверяет суммы) — иконки фирменным оранжевым, нижний — серые
+  // Все иконки серые; новые иконки «рукописная накладная» и «проверить» (с маленьким оранжевым вопросом) — 15.11
   items: whatV4.items.map((it) => {
     if (it.icon === 'globe') return { ...it, text: 'Платежи в других валютах пересчитывает по курсу центрального банка на дату платежа. Валюту можно сменить в любой момент.', accent: false };
-    if (it.icon === 'receipt') return { ...it, title: 'Читает любые форматы', accent: true };
-    if (it.icon === 'copy') return { ...it, text: 'Тот же чек от двоих или переснятый. Nota отметит дубль, чтобы один счёт не оплатили дважды.', accent: true };
-    if (it.icon === 'calc') return { ...it, accent: true };
+    if (it.icon === 'receipt') return { ...it, icon: 'handwritten', title: 'Читает любые форматы', accent: false };
+    if (it.icon === 'copy') return { ...it, text: 'Тот же чек от двоих или переснятый. Nota отметит дубль, чтобы один счёт не оплатили дважды.', accent: false };
+    if (it.icon === 'calc') return { ...it, accent: false };
+    if (it.icon === 'check') return { ...it, icon: 'review', accent: false };
     return { ...it, accent: false };
   }),
   proof: { value: '≈ Rp 3,5 млрд', text: 'дублей уже поймано с Nota. Эти деньги могли заплатить второй раз.' },
