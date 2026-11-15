@@ -748,3 +748,8 @@ html[data-variant="final"] [data-pen="h1"] > .pen-under { display: block; }
 .v8 .seg-list { grid-template-columns: 1fr; }
 @media (min-width: 641px) { .v8 .seg-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (min-width: 1200px) { .v8 .seg-list { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+/* v8: кнопка и QR в финале — одна группа с общим левым краем, группа по центру */
+.v8 .final-cta { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; width: fit-content; max-width: 100%; margin: 0 auto; }
+.v8 .final-cta .final-qr { margin-top: 0; }
+@media (max-width: 480px) { .v8 .final-cta { width: 100%; align-items: stretch; } }
+.v8 .final-cta .final-qr span { max-width: 150px; text-align: left; }
