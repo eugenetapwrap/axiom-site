@@ -945,6 +945,9 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 /* «По запросу» — на одной оси с ценами: плашка объёма той же высоты, текст того же размера, что суммы */
 .pa-c--dk .pa-v b { font-size: 30px; }
 .pa-p--custom { font-size: 34px; letter-spacing: -0.01em; white-space: nowrap; }
+/* «Для кого»: шесть карточек — 1 колонка на телефоне, 3 × 2 с планшета; у «Любой другой бизнес» полоска серая */
+@media (min-width: 1200px) { .v10 .seg-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.v10 .seg-list li.seg-any h3::before { background: #b8c2cc; }
 /* Шесть пунктов меню помещаются от 880 px; уже — меню прячется, как на телефоне (логотип и кнопка) */
 @media (max-width: 879px) {
   body:has(.v10) .header nav { display: none; }
