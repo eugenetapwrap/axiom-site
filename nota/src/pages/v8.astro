@@ -14,9 +14,9 @@ import {
   meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps,
 } from '../data/content-v8';
 
-// Карандашное подчёркивание «20 минут» в главном заголовке: режем на «до / слово / после».
+// Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
 const cut = (text: string, word: string) => { const i = text.indexOf(word); return i < 0 ? [text, '', ''] : [text.slice(0, i), word, text.slice(i + word.length)]; };
-const h1Cut = cut(hero.title, '20\u00a0минут');
+const h1Cut = cut(hero.title, '15\u00a0минут');
 
 // Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
 const site = 'https://nota.axiomco.io';
@@ -43,7 +43,7 @@ const jsonld = [
   },
 ];
 ---
-<Base title={meta.title} description={meta.description} noindex og="/og-v7.png" selfFonts>
+<Base title={meta.title} description={meta.description} noindex og="/og-v8.png" selfFonts>
   <a class="skip" href="#main">К содержанию</a>
   <header class="header">
     <div class="wrap">
@@ -54,7 +54,7 @@ const jsonld = [
   </header>
 
   <main class="tight v7 v8" id="main">
-    <!-- 1. Первый экран: архив → отчёт за 20 минут, QR, пример отчёта -->
+    <!-- 1. Первый экран: архив → отчёт за 15 минут, QR, пример отчёта -->
     <section class="hero hero2 hero3">
       <div class="wrap split hero-split">
         <div>
