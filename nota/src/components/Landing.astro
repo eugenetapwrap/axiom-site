@@ -1,6 +1,6 @@
 ---
-// Лендинг Nota, версия 10 — главная страница сайта (src/pages/index.astro). Тексты: src/data/content-v10.ts.
-// Прежние версии v1–v9 — в src/pages/_archive (папка с «_» не попадает на сайт).
+// Лендинг Nota, версия 11 — главная страница сайта (src/pages/index.astro). Тексты: src/data/content-v11.ts.
+// Прежние версии v1–v10 — в src/pages/_archive (папка с «_» не попадает на сайт).
 // Первый экран новый, отчёт на компьютере скользящий. На телефоне цифр шагов нет, внизу закреплённая кнопка.
 // Решения — в founder/landing.md, разделы v7 и v8.
 import Base from '../layouts/Base.astro';
@@ -13,7 +13,7 @@ import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
   meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps, bar, shotAlt,
-} from '../data/content-v10';
+} from '../data/content-v11';
 
 // Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
 const cut = (text: string, word: string) => { const i = text.indexOf(word); return i < 0 ? [text, '', ''] : [text.slice(0, i), word, text.slice(i + word.length)]; };
@@ -37,7 +37,7 @@ const jsonld = [
     inLanguage: ['ru', 'en', 'id'],
     description: meta.description,
     image: new URL('/og-v10.png', Astro.site).href,
-    screenshot: new URL(hero.report.file, Astro.site).href,
+    screenshot: new URL(hero.report.file2x, Astro.site).href,
     publisher: { '@type': 'Organization', name: 'Axiom Consulting' }, // url и юрлицо — после ответа основателя (аудит 15.11, вопрос 42)
     // Цена — за месяц; ссылка — на блок цен, а не в бота (переходы из поиска не путаются с нажатиями в ценах)
     offers: pricing.plans.filter((p) => p.month).map((p) => {
@@ -65,14 +65,14 @@ const jsonld = [
     </div>
   </header>
 
-  <main class="tight v7 v8 v9 v10" id="main">
+  <main class="tight v7 v8 v9 v10 v11" id="main">
     <div class="story">
     <!-- 1. Первый экран: архив → отчёт за 15 минут, QR, пример отчёта -->
     <section class="hero hero2 hero3">
       <div class="wrap split hero-split">
         <div class="hero-left">
           <span class="hero-eyebrow">{hero.eyebrow}</span>
-          <h1>{h1Cut[0]}<Pen u id="h1">{h1Cut[1]}</Pen>{h1Cut[2]}</h1>
+          <h1>{h1Cut[0]}<Pen u line id="h1">{h1Cut[1]}</Pen>{h1Cut[2]}</h1>
           <p class="lead">{hero.lead}</p>
           <div class="num-group">
           <span class="num-dot" aria-hidden="true"><i data-n="1"></i></span>
@@ -87,14 +87,10 @@ const jsonld = [
           <p class="cta-line">{hero.noteShort}</p>
           <p class="phone-hint">{hero.phoneHint}</p>
           </div>
-          <!-- «Как выгрузить архив» — служебная ссылка внизу блока (на компьютере — по нижней линии примера отчёта) -->
-          <details class="howto-inline howto-bottom">
-            <summary>{hero.howto.summary}</summary>
-            <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
-          </details>
+          <!-- «Как выгрузить архив» убрано в v11: инструкция — в боте (кнопка «Как собрать архив») -->
         </div>
         <figure class="hero-report in-flow">
-          <img src={hero.report.file} alt="Пример отчёта Nota по архиву: 96,15 млн рупий, 27 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
+          <img src={hero.report.file} srcset={`${hero.report.file} 1x, ${hero.report.file2x} 2x`} alt="Пример отчёта Nota по архиву: 96,15 млн рупий, 27 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
           <figcaption>{hero.report.caption}</figcaption>
         </figure>
       </div>
@@ -122,7 +118,7 @@ const jsonld = [
     <div class="story-media" aria-hidden="true">
       <div class="wrap">
         <figure class="hero-report story-fig">
-          <img src={hero.report.file} alt="" width={hero.report.w} height={hero.report.h} />
+          <img src={hero.report.file} srcset={`${hero.report.file} 1x, ${hero.report.file2x} 2x`} alt="" width={hero.report.w} height={hero.report.h} />
           <figcaption>{hero.report.caption}</figcaption>
         </figure>
       </div>
@@ -179,7 +175,7 @@ const jsonld = [
       </div>
     </section>
 
-    <!-- 4. Шаг 4: как присылать документы дальше, группа по желанию -->
+    <!-- 4. Шаг 4: как присылать документы дальше, группа по желанию (v11: иконка меньше и в строку с названием) -->
     <section class="section section--paper num-sec" id="send">
       <div class="wrap">
         <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i data-n="4"></i></span>{send.title}</h2>
@@ -195,13 +191,13 @@ const jsonld = [
       </div>
     </section>
 
-    <!-- 5. Что Nota делает с каждым документом; цифры (дубли, ошибки в суммах) — строкой в своих пунктах, на одной линии -->
+    <!-- 5. Что Nota делает с каждым документом (v11: без иконок); цифры (дубли, ошибки в суммах) — строкой в своих пунктах, на одной линии -->
     <section class="section" id="what">
       <div class="wrap">
         <h2 class="h2-gap">{what.title}</h2>
         <ul class="feat-list">
           {what.items.map((c) => (
-            <li class:list={{ 'feat--accent': c.accent }}><span class="feat-icon"><Icon name={c.icon} /></span><div><h3>{c.title}</h3><p>{c.text}</p>{c.stat && <p class="feat-stat"><b>{c.stat.value}</b><span>{c.stat.text}<a class="fn" href="#stats-note" aria-label="Откуда эти суммы">*</a></span></p>}</div></li>
+            <li class:list={{ 'feat--accent': c.accent }}><div><h3>{c.title}</h3><p>{c.text}</p>{c.stat && <p class="feat-stat"><b>{c.stat.value}</b><span>{c.stat.text}<a class="fn" href="#stats-note" aria-label="Откуда эти суммы">*</a></span></p>}</div></li>
           ))}
         </ul>
       </div>

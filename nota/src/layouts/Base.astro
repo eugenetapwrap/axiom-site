@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { meta } from '../data/content-v10';
+import { meta } from '../data/content-v11';
 
 interface Props { title?: string; description?: string; noindex?: boolean; og?: string; ogAlt?: string; selfFonts?: boolean }
 const { title = meta.title, description = meta.description, noindex = false, og: ogPath = '/og-v10.png', ogAlt = meta.ogAlt, selfFonts = false } = Astro.props;

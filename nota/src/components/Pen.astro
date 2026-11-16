@@ -2,11 +2,12 @@
 // Карандашная пометка фирменным оранжевым вокруг слова: обводка (c) и/или подчёркивание (u).
 // Видна только в своём варианте страницы (html[data-variant="circle" | "underline"]), иначе слово как обычно.
 // id нужен, чтобы скрипт мог провести от пометки стрелку.
-interface Props { c?: boolean; u?: boolean; id?: string }
-const { c = false, u = false, id } = Astro.props;
+// line — одна линия подчёркивания, чуть вверх слева направо (v11), без него — две линии, как в прежних версиях.
+interface Props { c?: boolean; u?: boolean; line?: boolean; id?: string }
+const { c = false, u = false, line = false, id } = Astro.props;
 ---
 <span class:list={['pen', { 'pen--c': c, 'pen--u': u }]} data-pen={id}><slot />{c && (
   <svg class="pen-svg pen-circle" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M30 41C11 26 52 6 108 6c56 0 90 13 86 30-4 15-58 21-104 19C44 53 5 45 9 30 12 19 40 10 74 8" /></svg>
 )}{u && (
-  <svg class="pen-svg pen-under" viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 8C42 4 92 11 140 6s52 2 57 3" /><path pathLength="1" d="M12 13c50-4 108 1 182-3" /></svg>
+  <svg class="pen-svg pen-under" viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true" focusable="false">{line ? <path pathLength="1" d="M3 13C50 11.5 120 8 197 4" /> : <><path pathLength="1" d="M3 8C42 4 92 11 140 6s52 2 57 3" /><path pathLength="1" d="M12 13c50-4 108 1 182-3" /></>}</svg>
 )}</span>
