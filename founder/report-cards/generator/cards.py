@@ -101,7 +101,6 @@ T = {
    arch_label=lambda per, d: f'Расходы за {per} · архив получен {d}', since=lambda d: f'данные с {d}',
    avg='в среднем за день',
    cmp_week='к прошлой неделе', cmp_month=lambda m: f'к {MON_DAT_RU[m]}',
-   no_prev_week='За прошлую неделю данных нет', no_prev_month=lambda m: f'За {MON_FULL["ru"][m]} данных нет',
    docs=lambda n: f'{plural_ru(n,"документ","документа","документов")}<br>{plural_ru(n,"учтён","учтено","учтено")}',
    review=lambda n: f'{n} {plural_ru(n,"документ","документа","документов")}<br>{plural_ru(n,"ожидает","ожидают","ожидают")} проверки',
    dup=lambda n: f'{n} {plural_ru(n,"дубль","дубля","дублей")}<br>{plural_ru(n,"исключён","исключено","исключено")}',
@@ -119,7 +118,6 @@ T = {
    arch_label=lambda per, d: f'Expenses for {per} · archive received {d}', since=lambda d: f'data from {d}',
    avg='average per day',
    cmp_week='vs last week', cmp_month=lambda m: f'vs {MON_FULL["en"][m]}',
-   no_prev_week='No data for last week', no_prev_month=lambda m: f'No data for {MON_FULL["en"][m]}',
    docs=lambda n: f'{"document" if n==1 else "documents"}<br>counted',
    review=lambda n: f'{n} {"document" if n==1 else "documents"}<br>awaiting review',
    dup=lambda n: f'{n} {"duplicate" if n==1 else "duplicates"}<br>excluded',
@@ -137,7 +135,6 @@ T = {
    arch_label=lambda per, d: f'Pengeluaran {per} · arsip diterima {d}', since=lambda d: f'data sejak {d}',
    avg='rata-rata per hari',
    cmp_week='dari minggu lalu', cmp_month=lambda m: f'dari {MON_FULL["id"][m]}',
-   no_prev_week='Tidak ada data minggu lalu', no_prev_month=lambda m: f'Tidak ada data {MON_FULL["id"][m]}',
    docs=lambda n: 'dokumen<br>tercatat',
    review=lambda n: f'{n} dokumen<br>menunggu dicek',
    dup=lambda n: f'{n} duplikat<br>dikecualikan',
@@ -268,7 +265,7 @@ def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None
     s = s.replace('Расходы за неделю · 26 окт – 1 ноя 2026', lab, 1)
     # число, среднее, сравнение
     if prev_rows is None:
-        cmp = f'<span style="margin-top: 6px; font-size: 22px; line-height: 28px; color: {GRAY}; white-space: nowrap">{L["no_prev_week"] if kind == "week" else L["no_prev_month"]((start.replace(day=1) - dt.timedelta(days=1)).month)}</span>'
+        cmp = ''                                                   # нет данных за прошлый период — ничего не пишем (17.11)
     else:
         ptot = sum(r['amount'] for r in classify(prev_rows)[0])
         if ptot > 0:
