@@ -8,7 +8,7 @@ const { chromium } = require('playwright');
   if (!src || !out) { console.error('usage: node render.cjs card.html card.png [scale]'); process.exit(1); }
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1080, height: 1800 }, deviceScaleFactor: scale });
-  await p.goto('file://' + require('path').resolve(src), { waitUntil: 'load' });
+  await p.goto(require('url').pathToFileURL(require('path').resolve(src)).href, { waitUntil: 'load' });   // пути с пробелами, # и % — тоже
   await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(100);
   // шрифт встроен в HTML; если он не загрузился, картинка выйдет другим шрифтом — лучше ошибка (код 3), чем тихая подмена
   const fontOk = await p.evaluate(() => { const ff = [...document.fonts].filter((f) => f.family.replace(/["']/g, '') === 'Inter');

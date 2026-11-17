@@ -2,7 +2,7 @@
 # валюты IDR, VND, RUB, THB, USD, EUR, SGD. Python 3.9+, без зависимостей.
 # Шаблоны — утверждённые карточки (archive.html, week.html); статичные части остаются, динамические пересобираются.
 import os, re, html, base64, calendar, datetime as dt
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, ROUND_HALF_UP, localcontext
 
 TPL_DIR = os.path.abspath(os.environ.get('NOTA_TPL_DIR', os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
@@ -64,7 +64,9 @@ def _group(intpart, loc, html=True, gap='0.33em'):
     return SEP[loc][0].join(s)
 def _rnd(x, nd=0):
     """Округление половин вверх, как привыкли люди: 2,5 → 3, 0,125 → 0,13 (встроенный round даёт 2 и 0,12)."""
-    return float(Decimal(repr(float(x))).quantize(Decimal(1).scaleb(-nd), rounding=ROUND_HALF_UP))
+    with localcontext() as c:
+        c.prec = 120                                           # хватит и для мусорных сумм из распознавания (1e30)
+        return float(Decimal(repr(float(x))).quantize(Decimal(1).scaleb(-nd), rounding=ROUND_HALF_UP))
 def num(v, loc, dec=2, gap='0.24em'):
     """Число с разделителями языка: 1 230,45 / 1,230.45 / 1.230,45."""
     neg = v < 0; v = abs(v)
@@ -229,29 +231,55 @@ T = {
 }
 
 # ---------------- данные ----------------
+_MON_EN = {m: i for i, m in enumerate(['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'], 1)}
 def _as_date(x):
-    """date, datetime или строка «2026-11-10…» → date; пусто или не дата → None."""
-    if x is None or x == '': return None
+    """Дата из любого источника → date. Понимает: date, datetime, строку ISO «2026-11-10» (можно со временем),
+    формат листа Payments «1 Oct 26» / «1 Oct 2026», серийный номер даты Google Таблиц (число, 46336 = 10.11.2026).
+    Пусто → None (строка без даты). Любой другой формат — ValueError: лучше ошибка, чем тихо потерянные расходы."""
+    if x is None or (isinstance(x, str) and not x.strip()): return None
     if isinstance(x, dt.datetime): return x.date()
     if isinstance(x, dt.date): return x
-    try: return dt.date.fromisoformat(str(x).strip()[:10])
-    except ValueError: return None
+    if isinstance(x, (int, float, Decimal)) and not isinstance(x, bool):
+        return dt.date(1899, 12, 30) + dt.timedelta(days=int(x))      # серийный номер Google Таблиц
+    t = str(x).strip()
+    m = re.match(r'(\d{4})-(\d{2})-(\d{2})(?:$|[T ])', t)
+    if m: return dt.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+    m = re.fullmatch(r'(\d{1,2})\s+([A-Za-z]{3})[a-z]*\.?\s+(\d{2}|\d{4})', t)
+    if m and m.group(2).lower() in _MON_EN:
+        y = int(m.group(3)); y = y + 2000 if y < 100 else y
+        return dt.date(y, _MON_EN[m.group(2).lower()], int(m.group(1)))
+    raise ValueError(f'Nota: неизвестный формат даты {x!r}; нужны date, datetime, «2026-11-10», «1 Oct 26» или серийный номер Google Таблиц')
+
+def _as_amount(x):
+    """Сумма → float. Число, Decimal или строка из цифр с точкой («1500000», «12.5»). Строки с разделителями разрядов
+    («1,500,000», «1 500 000») не угадываем: запятая может быть и десятичной — ValueError."""
+    if x is None or (isinstance(x, str) and not x.strip()): return 0.0
+    if isinstance(x, str) and not re.fullmatch(r'\s*-?\d+(\.\d+)?\s*', x):
+        raise ValueError(f'Nota: сумма должна быть числом, получено {x!r} (в Google Sheets API — valueRenderOption=UNFORMATTED_VALUE)')
+    return float(x)
+
+_CANON = {'check': {'dbl': 'DBL', 'review': 'Review', 'ok': 'OK'}, 'status': {'rejected': 'Rejected'},
+          'type': {'hand': 'Hand', 'statement': 'Statement', 'proof': 'Proof'}}
 
 def norm_rows(rows):
-    """Строки из любого источника (лист, база): Decimal → float, datetime → date, NULL → пусто.
+    """Строки из любого источника (лист, база): Decimal → float, даты → date, NULL → пусто.
+    check, status и type — без учёта регистра («dbl», «REJECTED» → «DBL», «Rejected»).
     Поставщик и категория экранируются: это текст из документов, в HTML он должен остаться текстом."""
     if rows is None: return None
     out = []
     for r in rows:
         t = {k: ('' if r.get(k) is None else str(r.get(k)).strip()) for k in ('payee', 'cat', 'check', 'status', 'type')}
+        for k, m in _CANON.items(): t[k] = m.get(t[k].lower(), t[k])
         t['payee'], t['cat'] = html.escape(t['payee'], quote=False), html.escape(t['cat'], quote=False)
-        out.append(dict(r, date=_as_date(r.get('date')), amount=float(r.get('amount') or 0), **t))
+        out.append(dict(r, date=_as_date(r.get('date')), amount=_as_amount(r.get('amount')), **t))
     return out
 
 def classify(rows):
-    """inc — входят в расходы; dbl — дубли; rev — на проверке (входят); rej — отклонённые и неплатёжные."""
-    inc = [r for r in rows if r['amount'] > 0 and r['status'] != 'Rejected' and r['check'] != 'DBL' and r['type'] not in ('Statement', 'Proof')]
-    dbl = [r for r in rows if r['check'] == 'DBL']
+    """inc — входят в расходы; dbl — дубли (DBL с суммой; статус не важен: найденный дубль обычно ещё и Rejected);
+    rev — на проверке (входят); rej — остальное: отклонённые, выписки и подтверждения оплаты, нулевые и отрицательные суммы."""
+    ok = lambda r: r['amount'] > 0 and r['type'] not in ('Statement', 'Proof')
+    inc = [r for r in rows if ok(r) and r['status'] != 'Rejected' and r['check'] != 'DBL']
+    dbl = [r for r in rows if ok(r) and r['check'] == 'DBL']
     rev = [r for r in inc if r['check'] == 'Review']
     used = {id(r) for r in inc} | {id(r) for r in dbl}
     rej = [r for r in rows if id(r) not in used]
@@ -269,6 +297,19 @@ def list_items(rows, key, max_rows):
         items = [(k, v, 'n') for k, v in named]
     if blank: items.append(('', blank, 'u' if key == 'cat' else 'm'))
     return items
+
+def fit_amounts(items, tot, loc, cur):
+    """Суммы строк списка так, чтобы на картинке они в сумме давали итог: каждая округляется вниз до 0,01
+    (у USD, EUR, SGD — до 1), недостающие сотые получают строки с наибольшими остатками. Меньше 0,005 — «<0,01»."""
+    dec, sc = CUR[cur]['dec'], CUR[cur]['scale']
+    raw = [Decimal(repr(v / sc)).scaleb(dec) for _, v, _ in items]
+    with localcontext() as c:
+        c.prec = 120
+        base = [int(x) for x in raw]
+        target = int(Decimal(repr(tot / sc)).scaleb(dec).quantize(Decimal(1), rounding=ROUND_HALF_UP))
+    for i in sorted(range(len(raw)), key=lambda i: -(raw[i] - base[i]))[:max(0, target - sum(base))]: base[i] += 1
+    tiny = '&lt;' + ('0' + SEP[loc][1] + '01' if dec else '1')
+    return [num(b / 10 ** dec, loc, dec=dec) if b else (tiny if r > 0 else num(0, loc, dec=dec)) for b, r in zip(base, raw)]
 
 def shares(items, tot):
     """Доли в процентах методом наибольших остатков; доля меньше 0,5% — «<1» и в распределение не входит
@@ -317,22 +358,22 @@ def _lists(base, max_rows, loc, cur, archive, prev_inc=None, gap=10):
         if kind == 'o': return L['others'](k[1])
         if kind in ('u', 'm'): return L['uncat'] if key == 'cat' else L['nosup']
         return cat_name(k, loc) if key == 'cat' else k
-    def row(k, v, kind, key, pct, dl):
+    def row(k, v, kind, key, pct, dl, sv):
         u = kind == 'u'
         dot = f'<span style="display: inline-block; width: {12 if archive else 11}px; height: {12 if archive else 11}px; background: {ORANGE}; border-radius: 50%; margin-right: 10px; vertical-align: 2px"></span>' if u else ''
-        dtx = f'<span style="flex: none; margin-left: 10px; font-size: 20px; font-weight: 600; color: {dl[1]}">{dl[0]}</span>' if dl else ''
+        dtx = f'<span style="flex: none; margin-left: 10px; line-height: normal; font-size: 20px; font-weight: 600; color: {dl[1]}">{dl[0]}</span>' if dl else ''
         cols = '1fr auto 64px' if archive else 'minmax(0, 1fr) auto 52px'
         return ('<div><div style="display: grid; grid-template-columns: ' + cols + '; column-gap: ' + ('12' if archive else '10') + 'px; align-items: baseline">'
-          f'<span style="display: flex; align-items: baseline; min-width: 0; font-size: 24px; font-weight: {600 if u else 400}; color: {INK}; white-space: nowrap">'
-          f'<span style="overflow: hidden; text-overflow: ellipsis; min-width: 0">{dot}{name(k, kind, key)}</span>{dtx}</span>'
-          f'<span style="font-size: 24px; font-weight: {600 if u else 500}; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{short(v, loc, cur)}</span>'
+          f'<span style="display: flex; align-items: baseline; min-width: 0; font-size: 24px; line-height: 29px; font-weight: {600 if u else 400}; color: {INK}; white-space: nowrap">'   # 29 px — как у Inter; тайский, китайский и др. не раздувают строку
+          f'<span style="overflow: hidden; text-overflow: ellipsis; min-width: 0; padding: 5px 0; margin: -5px 0">{dot}{name(k, kind, key)}</span>{dtx}</span>'
+          f'<span style="font-size: 24px; font-weight: {600 if u else 500}; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{sv}</span>'
           f'<span style="font-size: {22 if archive else 20}px; color: {MUTED}; text-align: right; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{pct}%</span></div>'
           f'<div style="margin-top: 6px; height: 8px; border-radius: 4px; background: #EEF1EE"><div style="width: {v / tot * 100 if tot else 0:.1f}%; height: 8px; border-radius: 4px; background: {ORANGE if u else TEAL}"></div></div></div>')
     def col(title, key):
-        items = list_items(base, key, max_rows); pc = shares(items, tot)
+        items = list_items(base, key, max_rows); pc = shares(items, tot); sv = fit_amounts(items, tot, loc, cur)
         dl = deltas(items, prev_inc, key, loc, cur) if key == 'cat' else {}
         h = f'<div style="display: flex; flex-direction: column; gap: {gap}px"><div style="{HSTY}; margin-bottom: 10px">{_head(title, loc, cur)}</div>'
-        for (k, v, kind), p in zip(items, pc): h += row(k, v, kind, key, p, dl.get(k))
+        for (k, v, kind), p, a in zip(items, pc, sv): h += row(k, v, kind, key, p, dl.get(k), a)
         return h + '</div>'
     return ('<div style="display: grid; grid-template-columns: minmax(0, 1fr) 2px minmax(0, 1fr); column-gap: 32px; align-items: start">'
             + col(L['h_cat'], 'cat') + '<div style="background: #E2E7E3; align-self: stretch"></div>' + col(L['h_sup'], 'payee') + '</div>')
@@ -353,21 +394,34 @@ def _footer_gap(s, px):
 
 ZERO = lambda t: f'<div style="font-size: 24px; line-height: 28px; color: {GRAY}; padding-top: 10px">{t}</div>'
 
+def _lbl_shift(i, colw, gap, width, text):
+    """Подпись над столбцом — по центру столбца; если у края графика не помещается, сдвигаем внутрь (сдвиг в px)."""
+    lw = _tw(text, 22, '600t', 0.02) + 2; c = i * (colw + gap) + colw / 2; left = c - lw / 2
+    return min(max(left, 0), max(0, width - lw)) - left
+
 # ---------------- неделя и месяц ----------------
 def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None, report_date=None, client_start=None):
     """prev_rows — строки прошлого периода; можно передать все строки клиента, генератор сам возьмёт нужные дни;
     None — сравнения нет. report_date — день отправки: плановый отчёт — после периода (по умолчанию), отчёт по запросу —
     внутри периода (тогда считаются дни по report_date включительно). client_start — день первого документа клиента.
     Даты — date, datetime или строка ISO."""
-    L = T[loc]; acc = html.escape(str(acc), quote=False)
+    L = T[loc]; acc = html.escape(str(acc), quote=False); kind = str(kind).lower()
     start, end, report_date, client_start = _as_date(start), _as_date(end), _as_date(report_date), _as_date(client_start)
-    rows, prev_rows = norm_rows(rows), norm_rows(prev_rows)
+    # ошибки вызова — сразу и понятно, а не странная картинка
+    if kind not in ('week', 'month'): raise ValueError(f"Nota: kind должен быть 'week' или 'month', получено {kind!r}")
+    if kind == 'week' and (end - start).days != 6: raise ValueError(f'Nota: неделя — 7 дней (пн–вс), получено {start} – {end}')
+    if kind == 'month' and (start.day != 1 or end != start.replace(day=calendar.monthrange(start.year, start.month)[1])):
+        raise ValueError(f'Nota: месяц — с 1-го по последнее число, получено {start} – {end}')
+    if report_date and report_date < start: raise ValueError(f'Nota: report_date {report_date} раньше начала периода {start}')
+    same = prev_rows is rows                                     # prev_rows=rows с генератором или курсором базы — не потерять строки
+    rows = norm_rows(rows); prev_rows = rows if same else norm_rows(prev_rows)
     report_date = report_date or (end + dt.timedelta(days=1))   # плановый отчёт приходит после периода — делим на все дни
     last = min(end, report_date)                                # отчёт по запросу: по сегодняшний день включительно
     rows = [r for r in rows if r['date'] and start <= r['date'] <= last]
     inc, dbl, rev, rej = classify(rows)
     tot = sum(r['amount'] for r in inc)
     if tot <= 0: return None                                   # пусто — вместо карточки сообщение «нет расходов»
+    if client_start and client_start > last: client_start = None   # дата первого документа позже отчёта — не учитываем
     d0 = max(start, client_start) if client_start else start
     days = max(1, (last - d0).days + 1)
     # прошлый период: неделя перед этой или прошлый месяц; отчёт по запросу — те же дни (пн с пн, 1–12 с 1–12)
@@ -424,13 +478,17 @@ def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None
     dates = [start + dt.timedelta(days=i) for i in range((end - start).days + 1)]
     per = {d: sum(r['amount'] for r in inc if r['date'] == d) for d in dates}
     unc = {d: sum(r['amount'] for r in inc if r['date'] == d and not r['cat']) for d in dates}
-    mx = max(per.values()); mxd = next(d for d in dates if per[d] == mx); cols = len(dates); gapc = 12 if kind == 'week' else 4; rad = 4 if kind == 'week' else 3
+    mx = max(per.values()); spent = [d for d in dates if per[d] > 0]   # максимум — по тому, что видно на картинке, среди дней с расходами
+    shown = {d: _rnd(per[d] / CUR[cur]['scale'], CUR[cur]['dec']) for d in spent}
+    mxd = next(d for d in spent if shown[d] == max(shown.values())); cols = len(dates); gapc = 12 if kind == 'week' else 4; rad = 4 if kind == 'week' else 3
     bars = ''
-    for d in dates:
+    CHART_W = 451                                              # ширина графика в шаблоне (левая колонка), px
+    colw = (CHART_W - gapc * (cols - 1)) / cols
+    for ci, d in enumerate(dates):
         v = per[d]
         if v <= 0: bars += '<div style="display: flex; flex-direction: column; justify-content: flex-end; min-width: 0"></div>'; continue
         h = max(4, round(v / mx * 152)); top = round(unc[d] / v * h) if unc[d] else 0; hi = d == mxd; body = TEAL if hi else '#C3DBD5'
-        lbl = (f'<div style="display: flex; justify-content: center; height: 26px; margin-bottom: 6px; overflow: visible"><span style="font-size: 22px; font-weight: 600; line-height: 26px; color: {INK}; white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{short(v, loc, cur)}</span></div>') if hi else ''
+        lbl = (f'<div style="display: flex; justify-content: center; height: 26px; margin-bottom: 6px; overflow: visible"><span style="position: relative; left: {_lbl_shift(ci, colw, gapc, CHART_W, short(v, loc, cur)):.1f}px; font-size: 22px; font-weight: 600; line-height: 26px; color: {INK}; white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{short(v, loc, cur)}</span></div>') if hi else ''
         seg = (f'<div style="height: {top}px; background: {ORANGE}; border-radius: {rad}px {rad}px 0 0"></div><div style="flex: 1; background: {body}; border-radius: 0"></div>') if top else f'<div style="flex: 1; background: {body}; border-radius: {rad}px {rad}px 0 0"></div>'
         bars += f'<div style="display: flex; flex-direction: column; justify-content: flex-end; min-width: 0">{lbl}<div style="height: {h}px; display: flex; flex-direction: column">{seg}</div></div>'
     labels = [WD[loc][d.weekday()] for d in dates] if kind == 'week' else [str(d.day) if (d.day - 1) % 7 == 0 else '' for d in dates]
@@ -484,7 +542,7 @@ def _docset_card(rows, acc, loc, cur, fname=None, received=None, files=None, lim
         old = '<div style="height: 26px; flex: none"></div><div style="font-size: 24px; color: #56635D; white-space: nowrap">' + TPL_LAB + '</div>'
         assert s.count(old) == 1
         s = s.replace(old, '<div style="height: 18px; flex: none"></div><div style="height: 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px">'
-                      f'<div style="font-size: 24px; color: #56635D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{L["f30_label"](limit, per) if per else L["f30_label"](limit, "").rsplit(" · ", 1)[0]}</div></div>')
+                      f'<div style="font-size: 24px; color: #56635D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{L["f30_label"](min(limit, len(rows)), per) if per else L["f30_label"](min(limit, len(rows)), "").rsplit(" · ", 1)[0]}</div></div>')
         assert s.count('<div style="height: 31px; flex: none"></div>') == 1
         s = s.replace('<div style="height: 31px; flex: none"></div>', '<div style="height: 20px; flex: none"></div>')
     else:
@@ -504,7 +562,8 @@ def _docset_card(rows, acc, loc, cur, fname=None, received=None, files=None, lim
     a, b = block(s, '<div style="height: 120px; display: flex; align-items: flex-end; justify-content: space-between">'); s = s[:a] + numrow + s[b:]
     nl = 'Не вошли в расчёт: 2 неплатёжных документа и 1 нечитаемый файл'
     i = s.find(nl); a = s.rfind('<div', 0, i); b = s.find('</div>', i) + 6
-    rej_n = sum(1 for r in rows if r['status'] == 'Rejected' and r['check'] != 'DBL')   # «отклонённые» — только Rejected
+    dbl_ids = {id(r) for r in dbl}
+    rej_n = sum(1 for r in rows if r['status'] == 'Rejected' and id(r) not in dbl_ids)   # «отклонённые» — только Rejected; дубль уже в плитке
     if rej_n and not f30: s = s[:a] + f'<div style="font-size: 24px; line-height: 30px; color: {MUTED}; font-variant-numeric: tabular-nums">{L["rejected"](rej_n)}</div>' + s[b:]
     else:
         sp = s.rfind('<div style="height: 12px; flex: none"></div>', 0, a); s = s[:sp] + s[b:]
