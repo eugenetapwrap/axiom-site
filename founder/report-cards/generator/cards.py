@@ -1,11 +1,37 @@
-# Генератор карточек отчётов Nota v2: архив, неделя, месяц; языки ru / en / id; валюты IDR, VND, RUB, USD, EUR и др.
+# Генератор карточек отчётов Nota v3: архив, первые 30 документов, неделя, месяц; языки ru / en / id;
+# валюты IDR, VND, RUB, THB, USD, EUR, SGD. Python 3.9+, без зависимостей.
 # Шаблоны — утверждённые карточки (archive.html, week.html); статичные части остаются, динамические пересобираются.
-import os, re, datetime as dt
+import os, re, html, base64, calendar, datetime as dt
+from decimal import Decimal, ROUND_HALF_UP
 
-TPL_DIR = os.environ.get('NOTA_TPL_DIR', os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+TPL_DIR = os.path.abspath(os.environ.get('NOTA_TPL_DIR', os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+# Шрифты встраиваются в HTML (data:), поэтому карточка не зависит от путей, ОС и способа открытия (goto, setContent).
+# Все под именем Inter, чтобы шаблоны не менять: кириллица и латиница Inter, вьетнамские буквы Inter, тайский — Noto Sans Thai
+# (названия поставщиков и категорий приходят из таблицы как есть). Лицензия шрифтов — SIL OFL 1.1.
+FONTS = [
+    ('inter-cyrillic.woff2', 'U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116'),
+    ('inter-latin.woff2', 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD'),
+    ('inter-vietnamese.woff2', 'U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB'),
+    ('noto-sans-thai.woff2', 'U+0E01-0E5B,U+200C-200D,U+25CC'),
+]
+_FONT_CSS = None
+def _font_css():
+    global _FONT_CSS
+    if _FONT_CSS is None:
+        rules = []
+        for fn, rng in FONTS:
+            with open(os.path.join(TPL_DIR, 'fonts', fn), 'rb') as f: b64 = base64.b64encode(f.read()).decode('ascii')
+            rules.append("@font-face{font-family:'Inter';font-weight:400 700;font-display:block;"
+                         f"src:url(data:font/woff2;base64,{b64}) format('woff2');unicode-range:{rng}}}")
+        _FONT_CSS = '\n'.join(rules)
+    return _FONT_CSS
+
 def _tpl(name):
-    s = open(os.path.join(TPL_DIR, name)).read()
-    s = re.sub(r"file://[^']*?/fonts/", 'file://' + os.path.join(TPL_DIR, 'fonts') + '/', s)   # шрифт Inter — в папке fonts рядом с шаблонами
+    with open(os.path.join(TPL_DIR, name), encoding='utf-8') as f: s = f.read()
+    s = re.sub(r"@font-face\{[^}]*\}\n?", '', s)                         # пути к шрифтам из макета не нужны
+    assert '<head><style>' in s, name; s = s.replace('<head><style>', '<head><style>' + _font_css(), 1)
+    s = s.replace('<script src="./support.js"></script>\n', '')            # служебный скрипт макета, в пакете его нет
     s = s.replace('width: 1080px; height: 1350px;', 'width: 1080px; height: auto;')          # высота по содержимому
     s = s.replace('display: grid; grid-template-columns: 1fr 2px 1fr; column-gap: 32px',
                   'display: grid; grid-template-columns: minmax(0, 1fr) 2px minmax(0, 1fr); column-gap: 32px')
@@ -36,10 +62,13 @@ def _group(intpart, loc, html=True, gap='0.33em'):
     if loc == 'ru':
         return (f'<span style="display: inline-block; width: {gap}"></span>' if html else ' ').join(s)
     return SEP[loc][0].join(s)
+def _rnd(x, nd=0):
+    """Округление половин вверх, как привыкли люди: 2,5 → 3, 0,125 → 0,13 (встроенный round даёт 2 и 0,12)."""
+    return float(Decimal(repr(float(x))).quantize(Decimal(1).scaleb(-nd), rounding=ROUND_HALF_UP))
 def num(v, loc, dec=2, gap='0.24em'):
     """Число с разделителями языка: 1 230,45 / 1,230.45 / 1.230,45."""
     neg = v < 0; v = abs(v)
-    q = round(v, dec); i = int(q); d = f'{q:.{dec}f}'.split('.')[1] if dec else ''
+    q = _rnd(v, dec); neg = neg and q > 0; i = int(q); d = f'{q:.{dec}f}'.split('.')[1] if dec else ''
     s = _group(i, loc, gap=gap) + ((SEP[loc][1] + d) if dec else '')
     return ('−' if neg else '') + s
 def short(v, loc, cur):
@@ -64,11 +93,11 @@ _CW = {
 def _tw(html, size, wt='400', ls=0.0):
     """Примерная ширина строки в px; разрядные отступы (inline-block) учитываются."""
     t = _CW[wt]; w = 0.0
-    for m in re.finditer(r'<span style="display: inline-block; width: ([\d.]+)em"></span>|<[^>]+>|&lt;|&nbsp;|.', html, re.S):
+    for m in re.finditer(r'<span style="display: inline-block; width: ([\d.]+)em"></span>|<[^>]+>|&[A-Za-z]+;|&#\d+;|.', html, re.S):
         g = m.group(0)
         if m.group(1): w += float(m.group(1)) * size; continue
         if g.startswith('<'): continue
-        c = '<' if g == '&lt;' else (' ' if g == '&nbsp;' else g)
+        c = {'&lt;': '<', '&nbsp;': ' '}.get(g, '&' if g.startswith('&') and len(g) > 1 else g)
         if c in t: k = t[c]
         elif c.isascii() and c.isalpha(): k = t['U'] if c.isupper() else t['L']
         elif c.isalpha(): k = t['u'] if c.isupper() else t['l']
@@ -78,14 +107,14 @@ def _tw(html, size, wt='400', ls=0.0):
 
 BIG = [(120, 72), (100, 60), (84, 50), (72, 44)]             # кегль итога и копеек: до 4 цифр, 5, 6, больше
 def _big_step(v, cur):
-    n = len(str(int(round(abs(v / CUR[cur]['scale']), CUR[cur]['dec']))))
+    n = len(str(int(_rnd(abs(v / CUR[cur]['scale']), CUR[cur]['dec']))))
     return 0 if n <= 4 else (1 if n == 5 else (2 if n == 6 else 3))
 def _big_w(v, loc, cur, i):
     fs, dc = BIG[i]; x = v / CUR[cur]['scale']; u = CUR[cur]['unit'][loc]
     if CUR[cur]['dec']:
-        ip, d = f'{x:.2f}'.split('.')
+        ip, d = f'{_rnd(x, 2):.2f}'.split('.')
         w = _tw(_group(int(ip), loc, gap='0.3em'), fs, '700', 0.025) + _tw(SEP[loc][1] + d, dc, '700', 0.025)
-    else: w = _tw(_group(int(round(x)), loc, gap='0.3em'), fs, '700', 0.025)
+    else: w = _tw(_group(int(_rnd(x)), loc, gap='0.3em'), fs, '700', 0.025)
     return w + ((14 + _tw(u, 28, '500')) if u else 0)
 def fit_step(v, loc, cur, right_w, avail=968, gap=24, safety=12):
     """Ступень кегля итога: по числу цифр; если вместе с правым столбцом строка не влезает в поле — на ступень меньше."""
@@ -96,8 +125,9 @@ def fit_step(v, loc, cur, right_w, avail=968, gap=24, safety=12):
 def big_span(v, loc, cur, step=None):
     x = v / CUR[cur]['scale']; dec = CUR[cur]['dec']
     fs, dc = BIG[_big_step(v, cur) if step is None else step]
-    if dec: i, d = f'{x:.2f}'.split('.'); body = _group(int(i), loc, gap='0.3em') + f'<span style="font-size: {dc}px">{SEP[loc][1]}{d}</span>'
-    else: body = _group(int(round(x)), loc, gap='0.3em')                 # USD, EUR, SGD — без центов
+    if 0 < abs(x) < 0.5 * 10 ** -dec: body = '&lt;' + ('0' + SEP[loc][1] + '01' if dec else '1')   # крошечный итог — как в списках
+    elif dec: i, d = f'{_rnd(x, 2):.2f}'.split('.'); body = _group(int(i), loc, gap='0.3em') + f'<span style="font-size: {dc}px">{SEP[loc][1]}{d}</span>'
+    else: body = _group(int(_rnd(x)), loc, gap='0.3em')                  # USD, EUR, SGD — без центов
     return f'<span style="font-size: {fs}px; font-weight: 700; line-height: 1; letter-spacing: 0.025em; color: {INK}; white-space: nowrap">{body}</span>'
 
 # ---------------- тексты ----------------
@@ -118,8 +148,10 @@ WD = {'ru': ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'], 'en': ['Mo
 def cat_name(key, loc): return key
 
 def date_short(d, loc):              # 12 ноя / Nov 12 / 12 Nov
+    if not d: return ''
     return f'{MON[loc][d.month]} {d.day}' if loc == 'en' else f'{d.day} {MON[loc][d.month]}'
 def date_wd(d, loc):                 # ср, 11.11 / Wed, Nov 11 / Rab, 11.11
+    if not d: return ''
     return f'{WD[loc][d.weekday()]}, {MON[loc][d.month]} {d.day}' if loc == 'en' else f'{WD[loc][d.weekday()]}, {d.day:02d}.{d.month:02d}'
 def span_label(a, b, loc):
     M = MON[loc]
@@ -137,6 +169,7 @@ T = {
  'ru': dict(
    week_label=lambda s: f'Расходы за неделю · {s}', month_label=lambda m, y: f'Расходы за месяц · {MON_FULL["ru"][m]} {y}',
    arch_label=lambda per, d: f'Расходы за {per} · архив получен {d}', since=lambda d: f'данные с {d}',
+   arch_label_nd=lambda d: f'Расходы · архив получен {d}',
    f30_label=lambda n, per: f'Расходы по первым {n} {"документу" if (n%10==1 and n%100!=11) else "документам"} · {per}',
    docs_from=lambda n: f'из {n} {"документа" if (n%10==1 and n%100!=11) else "документов"}',
    avg='в среднем за день',
@@ -156,6 +189,7 @@ T = {
  'en': dict(
    week_label=lambda s: f'Weekly expenses · {s}', month_label=lambda m, y: f'Monthly expenses · {MON_FULL["en"][m]} {y}',
    arch_label=lambda per, d: f'Expenses for {per} · archive received {d}', since=lambda d: f'data from {d}',
+   arch_label_nd=lambda d: f'Expenses · archive received {d}',
    f30_label=lambda n, per: f'Expenses from the first {n} documents · {per}',
    docs_from=lambda n: f'from {n} {"document" if n==1 else "documents"}',
    avg='average per day',
@@ -175,6 +209,7 @@ T = {
  'id': dict(
    week_label=lambda s: f'Pengeluaran mingguan · {s}', month_label=lambda m, y: f'Pengeluaran bulanan · {MON_FULL["id"][m]} {y}',
    arch_label=lambda per, d: f'Pengeluaran {per} · arsip diterima {d}', since=lambda d: f'data sejak {d}',
+   arch_label_nd=lambda d: f'Pengeluaran · arsip diterima {d}',
    f30_label=lambda n, per: f'Pengeluaran dari {n} dokumen pertama · {per}',
    docs_from=lambda n: f'dari {n} dokumen',
    avg='rata-rata per hari',
@@ -194,14 +229,23 @@ T = {
 }
 
 # ---------------- данные ----------------
+def _as_date(x):
+    """date, datetime или строка «2026-11-10…» → date; пусто или не дата → None."""
+    if x is None or x == '': return None
+    if isinstance(x, dt.datetime): return x.date()
+    if isinstance(x, dt.date): return x
+    try: return dt.date.fromisoformat(str(x).strip()[:10])
+    except ValueError: return None
+
 def norm_rows(rows):
-    """Строки из любого источника (лист, база): Decimal → float, datetime → date, NULL → пустая строка."""
+    """Строки из любого источника (лист, база): Decimal → float, datetime → date, NULL → пусто.
+    Поставщик и категория экранируются: это текст из документов, в HTML он должен остаться текстом."""
     if rows is None: return None
     out = []
     for r in rows:
-        d = r['date']; d = d.date() if isinstance(d, dt.datetime) else d
-        out.append(dict(r, date=d, amount=float(r['amount'] or 0),
-                        **{k: ('' if r.get(k) is None else str(r.get(k)).strip()) for k in ('payee', 'cat', 'check', 'status', 'type')}))
+        t = {k: ('' if r.get(k) is None else str(r.get(k)).strip()) for k in ('payee', 'cat', 'check', 'status', 'type')}
+        t['payee'], t['cat'] = html.escape(t['payee'], quote=False), html.escape(t['cat'], quote=False)
+        out.append(dict(r, date=_as_date(r.get('date')), amount=float(r.get('amount') or 0), **t))
     return out
 
 def classify(rows):
@@ -209,7 +253,8 @@ def classify(rows):
     inc = [r for r in rows if r['amount'] > 0 and r['status'] != 'Rejected' and r['check'] != 'DBL' and r['type'] not in ('Statement', 'Proof')]
     dbl = [r for r in rows if r['check'] == 'DBL']
     rev = [r for r in inc if r['check'] == 'Review']
-    rej = [r for r in rows if r not in inc and r not in dbl]
+    used = {id(r) for r in inc} | {id(r) for r in dbl}
+    rej = [r for r in rows if id(r) not in used]
     return inc, dbl, rev, rej
 
 def list_items(rows, key, max_rows):
@@ -226,9 +271,13 @@ def list_items(rows, key, max_rows):
     return items
 
 def shares(items, tot):
-    raw = [v / tot * 100 if tot else 0 for _, v, _ in items]; base = [int(x) for x in raw]
-    for i in sorted(range(len(raw)), key=lambda i: -(raw[i] - base[i]))[:max(0, 100 - sum(base))]: base[i] += 1
-    return [('&lt;1' if (b == 0 and r > 0) else str(b)) for b, r in zip(base, raw)]
+    """Доли в процентах методом наибольших остатков; доля меньше 0,5% — «<1» и в распределение не входит
+    (иначе из двух одинаковых маленьких строк одна станет «1», другая «<1»)."""
+    raw = [v / tot * 100 if tot else 0 for _, v, _ in items]
+    big = [i for i, x in enumerate(raw) if x >= 0.5]
+    base = {i: int(raw[i]) for i in big}; target = int(_rnd(sum(raw[i] for i in big)))
+    for i in sorted(big, key=lambda i: -(raw[i] - base[i]))[:max(0, target - sum(base.values()))]: base[i] += 1
+    return [(str(base[i]) if base[i] else '&lt;1') if i in base else ('&lt;1' if raw[i] > 0 else '0') for i in range(len(raw))]
 
 def deltas(items, prev_inc, key, loc, cur):
     """Изменение к прошлому периоду в единицах валюты; цветом — только самый большой рост и самое большое снижение."""
@@ -239,12 +288,12 @@ def deltas(items, prev_inc, key, loc, cur):
     for k, v, kind in items:
         if kind == 'o': continue
         d = v - p.get(k, 0)
-        if abs(d / CUR[cur]['scale']) >= 0.5 * 10 ** -CUR[cur]['dec']: vals[k] = d   # меньше 0,01 (в USD — меньше 1) не показываем
+        if _rnd(abs(d) / CUR[cur]['scale'], CUR[cur]['dec']) > 0: vals[k] = d   # то, что округляется до 0 (меньше 0,005; у USD — меньше 0,5), не показываем
     if not vals: return {}
     mx = max(vals.values()); mn = min(vals.values()); out = {}
     for k, d in vals.items():
         x = d / CUR[cur]['scale']
-        txt = ('+' if d > 0 else '') + (num(x, loc, dec=0) if abs(x) >= 1000 else short(d, loc, cur))   # от 1 000 единиц — без копеек
+        txt = ('+' if d > 0 else '') + (num(x, loc, dec=0) if _rnd(abs(x), CUR[cur]['dec']) >= 1000 else short(d, loc, cur))   # от 1 000 единиц — без копеек
         out[k] = (txt, ORANGE if (d == mx and d > 0) else (GREEN if (d == mn and d < 0) else GRAY))
     return out
 
@@ -271,10 +320,11 @@ def _lists(base, max_rows, loc, cur, archive, prev_inc=None, gap=10):
     def row(k, v, kind, key, pct, dl):
         u = kind == 'u'
         dot = f'<span style="display: inline-block; width: {12 if archive else 11}px; height: {12 if archive else 11}px; background: {ORANGE}; border-radius: 50%; margin-right: 10px; vertical-align: 2px"></span>' if u else ''
-        dtx = f'<span style="margin-left: 10px; font-size: 20px; font-weight: 600; color: {dl[1]}">{dl[0]}</span>' if dl else ''
+        dtx = f'<span style="flex: none; margin-left: 10px; font-size: 20px; font-weight: 600; color: {dl[1]}">{dl[0]}</span>' if dl else ''
         cols = '1fr auto 64px' if archive else 'minmax(0, 1fr) auto 52px'
         return ('<div><div style="display: grid; grid-template-columns: ' + cols + '; column-gap: ' + ('12' if archive else '10') + 'px; align-items: baseline">'
-          f'<span style="font-size: 24px; font-weight: {600 if u else 400}; color: {INK}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{dot}{name(k, kind, key)}{dtx}</span>'
+          f'<span style="display: flex; align-items: baseline; min-width: 0; font-size: 24px; font-weight: {600 if u else 400}; color: {INK}; white-space: nowrap">'
+          f'<span style="overflow: hidden; text-overflow: ellipsis; min-width: 0">{dot}{name(k, kind, key)}</span>{dtx}</span>'
           f'<span style="font-size: 24px; font-weight: {600 if u else 500}; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{short(v, loc, cur)}</span>'
           f'<span style="font-size: {22 if archive else 20}px; color: {MUTED}; text-align: right; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{pct}%</span></div>'
           f'<div style="margin-top: 6px; height: 8px; border-radius: 4px; background: #EEF1EE"><div style="width: {v / tot * 100 if tot else 0:.1f}%; height: 8px; border-radius: 4px; background: {ORANGE if u else TEAL}"></div></div></div>')
@@ -305,26 +355,30 @@ ZERO = lambda t: f'<div style="font-size: 24px; line-height: 28px; color: {GRAY}
 
 # ---------------- неделя и месяц ----------------
 def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None, report_date=None, client_start=None):
-    """prev_rows=None — данных за прошлый период нет. report_date — день отправки (для среднего за день).
-    client_start — день первого документа клиента (первый период)."""
-    L = T[loc]
+    """prev_rows — строки прошлого периода; можно передать все строки клиента, генератор сам возьмёт нужные дни;
+    None — сравнения нет. report_date — день отправки: плановый отчёт — после периода (по умолчанию), отчёт по запросу —
+    внутри периода (тогда считаются дни по report_date включительно). client_start — день первого документа клиента.
+    Даты — date, datetime или строка ISO."""
+    L = T[loc]; acc = html.escape(str(acc), quote=False)
+    start, end, report_date, client_start = _as_date(start), _as_date(end), _as_date(report_date), _as_date(client_start)
     rows, prev_rows = norm_rows(rows), norm_rows(prev_rows)
-    rows = [r for r in rows if start <= r['date'] <= end]
+    report_date = report_date or (end + dt.timedelta(days=1))   # плановый отчёт приходит после периода — делим на все дни
+    last = min(end, report_date)                                # отчёт по запросу: по сегодняшний день включительно
+    rows = [r for r in rows if r['date'] and start <= r['date'] <= last]
     inc, dbl, rev, rej = classify(rows)
     tot = sum(r['amount'] for r in inc)
     if tot <= 0: return None                                   # пусто — вместо карточки сообщение «нет расходов»
-    report_date = report_date or (end + dt.timedelta(days=1))   # плановый отчёт приходит после периода — делим на все дни
     d0 = max(start, client_start) if client_start else start
-    d1 = min(end, report_date)                                  # отчёт по запросу: дни до сегодняшнего включительно
-    days = max(1, (d1 - d0).days + 1)
-    # отчёт по запросу внутри периода — сравниваем с теми же днями прошлого периода (пн с пн, 1–12 с 1–12)
-    if prev_rows is not None and report_date <= end:
-        if kind == 'week': pstart = start - dt.timedelta(days=7)
-        else: pstart = (start.replace(day=1) - dt.timedelta(days=1)).replace(day=1)
-        import calendar
-        if kind == 'week': pcut = pstart + (report_date - start)
-        else: pcut = pstart.replace(day=min(report_date.day, calendar.monthrange(pstart.year, pstart.month)[1]))
-        prev_rows = [r for r in prev_rows if pstart <= r['date'] <= pcut]
+    days = max(1, (last - d0).days + 1)
+    # прошлый период: неделя перед этой или прошлый месяц; отчёт по запросу — те же дни (пн с пн, 1–12 с 1–12)
+    pstart = start - dt.timedelta(days=7) if kind == 'week' else (start.replace(day=1) - dt.timedelta(days=1)).replace(day=1)
+    pend = start - dt.timedelta(days=1)
+    if report_date <= end:
+        pend = min(pend, pstart + (report_date - start) if kind == 'week'
+                   else pstart.replace(day=min(report_date.day, calendar.monthrange(pstart.year, pstart.month)[1])))
+    if prev_rows is not None:
+        prev_rows = [r for r in prev_rows if r['date'] and pstart <= r['date'] <= pend]
+        if client_start and client_start > pstart: prev_rows = None   # прошлый период у клиента неполный — сравнивать не с чем
     # пустой прошлый период ([] из базы, всё отклонено, ноль расходов) = данных нет: ни строки сравнения, ни изменений у категорий
     if prev_rows is not None and sum(r['amount'] for r in classify(prev_rows)[0]) <= 0: prev_rows = None
     s = _localize_static(_tpl('week.html'), loc, cur, acc).replace('Андрей Соколов', acc, 1)
@@ -338,8 +392,8 @@ def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None
     else:
         ptot = sum(r['amount'] for r in classify(prev_rows)[0])
         if ptot > 0:
-            dd = (tot - ptot) / ptot * 100; d = round(dd)
-            ctxt = (('×' + str(round(dd / 100 + 1))) if dd / 100 + 1 < 99.5 else '×99+') if dd >= 200 else (('+' if d > 0 else ('−' if d < 0 else '')) + f'{abs(d)}%')
+            dd = (tot - ptot) / ptot * 100; d = int(_rnd(dd)); xn = int(_rnd(tot / ptot))
+            ctxt = (f'×{xn}' if xn <= 99 else '×99+') if d >= 200 else (('+' if d > 0 else ('−' if d < 0 else '')) + f'{abs(d)}%')
             u = CUR[cur]['unit'][loc]
             ref = L['cmp_week'] if kind == 'week' else L['cmp_month'](((start.replace(day=1) - dt.timedelta(days=1)).month))
             cmp_w = _tw(ctxt, 22, '600') + _tw(f' {ref} · ', 22) + _tw(short(ptot, loc, cur), 22, '600t') + (_tw(' ' + u, 22) if u else 0)
@@ -370,12 +424,12 @@ def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None
     dates = [start + dt.timedelta(days=i) for i in range((end - start).days + 1)]
     per = {d: sum(r['amount'] for r in inc if r['date'] == d) for d in dates}
     unc = {d: sum(r['amount'] for r in inc if r['date'] == d and not r['cat']) for d in dates}
-    mx = max(per.values()); cols = len(dates); gapc = 12 if kind == 'week' else 4; rad = 4 if kind == 'week' else 3
+    mx = max(per.values()); mxd = next(d for d in dates if per[d] == mx); cols = len(dates); gapc = 12 if kind == 'week' else 4; rad = 4 if kind == 'week' else 3
     bars = ''
     for d in dates:
         v = per[d]
         if v <= 0: bars += '<div style="display: flex; flex-direction: column; justify-content: flex-end; min-width: 0"></div>'; continue
-        h = max(4, round(v / mx * 152)); top = round(unc[d] / v * h) if unc[d] else 0; hi = v == mx; body = TEAL if hi else '#C3DBD5'
+        h = max(4, round(v / mx * 152)); top = round(unc[d] / v * h) if unc[d] else 0; hi = d == mxd; body = TEAL if hi else '#C3DBD5'
         lbl = (f'<div style="display: flex; justify-content: center; height: 26px; margin-bottom: 6px; overflow: visible"><span style="font-size: 22px; font-weight: 600; line-height: 26px; color: {INK}; white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{short(v, loc, cur)}</span></div>') if hi else ''
         seg = (f'<div style="height: {top}px; background: {ORANGE}; border-radius: {rad}px {rad}px 0 0"></div><div style="flex: 1; background: {body}; border-radius: 0"></div>') if top else f'<div style="flex: 1; background: {body}; border-radius: {rad}px {rad}px 0 0"></div>'
         bars += f'<div style="display: flex; flex-direction: column; justify-content: flex-end; min-width: 0">{lbl}<div style="height: {h}px; display: flex; flex-direction: column">{seg}</div></div>'
@@ -411,16 +465,17 @@ def first30_card(rows, acc, loc='ru', cur='IDR', limit=30):
     """Отчёт по первым 30 документам: приходит, когда закончились бесплатные документы (только с подключённым Google).
     rows — первые 30 строк листа Payments. Тело как у архива, верх и шапка как у недели (основатель, 17.11);
     строки «Не вошли в расчёт» нет — отчёт строится по таблице; сравнения нет — прошлого периода у клиента нет."""
-    return _docset_card(rows, acc, loc, cur, limit=limit)
+    return _docset_card(list(rows)[:limit], acc, loc, cur, limit=limit)
 
 def _docset_card(rows, acc, loc, cur, fname=None, received=None, files=None, limit=None):
     f30 = limit is not None
-    L = T[loc]; rows = norm_rows(rows)
+    L = T[loc]; rows = norm_rows(rows); received = _as_date(received)
+    acc = html.escape(str(acc), quote=False); fname = html.escape(str(fname or ''), quote=False)
     inc, dbl, rev, rej = classify(rows)
     tot = sum(r['amount'] for r in inc)                          # итог без дублей (17.11)
     if tot <= 0: return None
     s = _localize_static(_tpl('archive.html'), loc, cur, acc)
-    dates = [r['date'] for r in rows]; per = span_label(min(dates), max(dates), loc)
+    dates = [r['date'] for r in rows if r['date']]; per = span_label(min(dates), max(dates), loc) if dates else None
     TPL_LAB = 'Расходы за 1–31 окт 2026 · архив получен 3 ноя'
     if f30:
         HS = '<div style="height: 48px; display: flex; align-items: center; gap: 24px">'
@@ -429,7 +484,7 @@ def _docset_card(rows, acc, loc, cur, fname=None, received=None, files=None, lim
         old = '<div style="height: 26px; flex: none"></div><div style="font-size: 24px; color: #56635D; white-space: nowrap">' + TPL_LAB + '</div>'
         assert s.count(old) == 1
         s = s.replace(old, '<div style="height: 18px; flex: none"></div><div style="height: 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px">'
-                      f'<div style="font-size: 24px; color: #56635D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{L["f30_label"](limit, per)}</div></div>')
+                      f'<div style="font-size: 24px; color: #56635D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{L["f30_label"](limit, per) if per else L["f30_label"](limit, "").rsplit(" · ", 1)[0]}</div></div>')
         assert s.count('<div style="height: 31px; flex: none"></div>') == 1
         s = s.replace('<div style="height: 31px; flex: none"></div>', '<div style="height: 20px; flex: none"></div>')
     else:
@@ -438,7 +493,7 @@ def _docset_card(rows, acc, loc, cur, fname=None, received=None, files=None, lim
                       '<div style="flex: 0 1 auto; max-width: 440px; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 28px; line-height: 1.2; font-weight: 600; color: #14201B; white-space: nowrap">', 1)
         s = s.replace('<div style="font-size: 28px; line-height: 1; font-weight: 400; color: #56635D; white-space: nowrap">',
                       '<div style="flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 28px; line-height: 1.2; font-weight: 400; color: #56635D; white-space: nowrap">', 1)
-        s = s.replace(TPL_LAB, L['arch_label'](per, date_short(received, loc)), 1)
+        s = s.replace(TPL_LAB, L['arch_label'](per, date_short(received, loc)) if per else L['arch_label_nd'](date_short(received, loc)), 1)
     nr = 'height: 126px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px' if f30 else 'height: 120px; display: flex; align-items: flex-end; justify-content: space-between'
     cnt = L['docs_from'](len(rows)) if f30 else L['files'](files if files is not None else len(rows))
     numrow = (f'<div style="{nr}"><div style="display: flex; align-items: baseline; gap: 14px; white-space: nowrap">'
@@ -449,7 +504,8 @@ def _docset_card(rows, acc, loc, cur, fname=None, received=None, files=None, lim
     a, b = block(s, '<div style="height: 120px; display: flex; align-items: flex-end; justify-content: space-between">'); s = s[:a] + numrow + s[b:]
     nl = 'Не вошли в расчёт: 2 неплатёжных документа и 1 нечитаемый файл'
     i = s.find(nl); a = s.rfind('<div', 0, i); b = s.find('</div>', i) + 6
-    if rej and not f30: s = s[:a] + f'<div style="font-size: 24px; line-height: 30px; color: {MUTED}; font-variant-numeric: tabular-nums">{L["rejected"](len(rej))}</div>' + s[b:]
+    rej_n = sum(1 for r in rows if r['status'] == 'Rejected' and r['check'] != 'DBL')   # «отклонённые» — только Rejected
+    if rej_n and not f30: s = s[:a] + f'<div style="font-size: 24px; line-height: 30px; color: {MUTED}; font-variant-numeric: tabular-nums">{L["rejected"](rej_n)}</div>' + s[b:]
     else:
         sp = s.rfind('<div style="height: 12px; flex: none"></div>', 0, a); s = s[:sp] + s[b:]
     def tile(c, v, t, amount=None):
