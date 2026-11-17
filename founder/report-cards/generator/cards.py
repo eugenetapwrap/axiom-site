@@ -189,7 +189,8 @@ def deltas(items, prev_inc, key, loc, cur):
     if not vals: return {}
     mx = max(vals.values()); mn = min(vals.values()); out = {}
     for k, d in vals.items():
-        txt = ('+' if d > 0 else '') + short(d, loc, cur)
+        x = d / CUR[cur]['scale']
+        txt = ('+' if d > 0 else '') + (num(x, loc, dec=0) if abs(x) >= 1000 else short(d, loc, cur))   # от 1 000 единиц — без копеек
         out[k] = (txt, ORANGE if (d == mx and d > 0) else (GREEN if (d == mn and d < 0) else GRAY))
     return out
 
@@ -355,18 +356,18 @@ def archive_card(rows, acc, fname, received, loc='ru', cur='IDR'):
     if rej: s = s[:a] + f'<div style="font-size: 24px; line-height: 30px; color: {MUTED}; font-variant-numeric: tabular-nums">{L["rejected"](len(rej))}</div>' + s[b:]
     else:
         sp = s.rfind('<div style="height: 12px; flex: none"></div>', 0, a); s = s[:sp] + s[b:]
-    def tile(c, v, t):
-        nlen = len(re.sub(r'<[^>]+>', '', v))
-        fs = 48 if nlen <= 8 else (40 if nlen <= 10 else 34)
+    def tile(c, v, t, amount=None):
+        dg = len(str(int(abs(amount) / CUR[cur]['scale']))) if amount is not None else 1
+        fs = 48 if dg <= 3 else (40 if dg == 4 else (34 if dg == 5 else 30))
         return ('<div style="box-sizing: border-box; min-width: 0; padding: 20px; background: #EEF1EE; border-radius: 12px; display: flex; flex-direction: column; gap: 4px">'
             f'<div style="display: flex; align-items: baseline; gap: 8px; white-space: nowrap"><span style="font-size: {fs}px; font-weight: 700; line-height: 52px; color: {c}; font-variant-numeric: tabular-nums">{v}</span>{_unit_html(loc, cur)}</div>'
             f'<div style="font-size: 24px; line-height: 28px; min-height: 56px; color: {MUTED}">{t}</div></div>')
     ztile = lambda t: ('<div style="box-sizing: border-box; min-width: 0; padding: 20px; background: #EEF1EE; border-radius: 12px; display: flex; flex-direction: column; gap: 4px">'
                        f'<div style="font-size: 24px; line-height: 28px; color: {GRAY}; padding-top: 12px">{t}</div></div>')
     hand = [r for r in inc if r['type'] == 'Hand']
-    t1 = tile(ORANGE, short(sum(r['amount'] for r in dbl), loc, cur), L['dup_tile'](len(dbl))) if dbl else ztile(L['no_dup'])
-    t2 = tile(ORANGE, short(sum(r['amount'] for r in rev), loc, cur), L['review_tile'](len(rev))) if rev else ztile(L['no_review'])
-    t3 = tile('#334154', short(sum(r['amount'] for r in hand), loc, cur), L['hand_tile'](len(hand))) if hand else ztile(L['no_hand'])
+    t1 = tile(ORANGE, short(sum(r['amount'] for r in dbl), loc, cur), L['dup_tile'](len(dbl)), sum(r['amount'] for r in dbl)) if dbl else ztile(L['no_dup'])
+    t2 = tile(ORANGE, short(sum(r['amount'] for r in rev), loc, cur), L['review_tile'](len(rev)), sum(r['amount'] for r in rev)) if rev else ztile(L['no_review'])
+    t3 = tile('#334154', short(sum(r['amount'] for r in hand), loc, cur), L['hand_tile'](len(hand)), sum(r['amount'] for r in hand)) if hand else ztile(L['no_hand'])
     a, b = block(s, '<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">')
     s = s[:a] + '<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">' + t1 + t2 + t3 + '</div>' + s[b:]
     g = _lists(inc, 7, loc, cur, archive=True)
