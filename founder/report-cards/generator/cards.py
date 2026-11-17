@@ -5,6 +5,7 @@ import os, re, datetime as dt
 TPL_DIR = os.environ.get('NOTA_TPL_DIR', os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 def _tpl(name):
     s = open(os.path.join(TPL_DIR, name)).read()
+    s = re.sub(r"file://[^']*?/fonts/", 'file://' + os.path.join(TPL_DIR, 'fonts') + '/', s)   # шрифт Inter — в папке fonts рядом с шаблонами
     s = s.replace('width: 1080px; height: 1350px;', 'width: 1080px; height: auto;')          # высота по содержимому
     s = s.replace('display: grid; grid-template-columns: 1fr 2px 1fr; column-gap: 32px',
                   'display: grid; grid-template-columns: minmax(0, 1fr) 2px minmax(0, 1fr); column-gap: 32px')
@@ -67,17 +68,8 @@ MON_FULL = {'ru': ['', 'январь', 'февраль', 'март', 'апрел
             'id': ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']}
 MON_DAT_RU = ['', 'январю', 'февралю', 'марту', 'апрелю', 'маю', 'июню', 'июлю', 'августу', 'сентябрю', 'октябрю', 'ноябрю', 'декабрю']
 WD = {'ru': ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'], 'en': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], 'id': ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']}
-CAT_NAMES = {   # ключи — как в таблице (столбец Category)
-    'Materials': {'ru': 'Материалы', 'en': 'Materials', 'id': 'Material'},
-    'Supplies': {'ru': 'Расходники', 'en': 'Supplies', 'id': 'Perlengkapan'},
-    'Staff': {'ru': 'Зарплаты', 'en': 'Payroll', 'id': 'Gaji'},
-    'Repairs': {'ru': 'Ремонт', 'en': 'Repairs', 'id': 'Perbaikan'},
-    'Fuel': {'ru': 'Топливо', 'en': 'Fuel', 'id': 'BBM'},
-    'Transport': {'ru': 'Транспорт', 'en': 'Transport', 'id': 'Transportasi'},
-    'Contractors': {'ru': 'Подрядчики', 'en': 'Contractors', 'id': 'Kontraktor'},
-    'Other': {'ru': 'Прочее', 'en': 'Other', 'id': 'Lainnya'},
-}
-def cat_name(key, loc): return CAT_NAMES.get(key, {}).get(loc, key)
+# Категории берутся из листа Payments как есть: какие названия там стоят и на каком языке (язык задаёт таблица), такие и показываем.
+def cat_name(key, loc): return key
 
 def date_short(d, loc):              # 12 ноя / Nov 12 / 12 Nov
     return f'{MON[loc][d.month]} {d.day}' if loc == 'en' else f'{d.day} {MON[loc][d.month]}'
