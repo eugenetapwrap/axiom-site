@@ -249,7 +249,9 @@ def _localize_static(s, loc, cur, acc):
     s = s.replace('Подготовлено в Nota · контроль расходов в Telegram · ', L['footer'])
     s = s.replace('padding: 6px 16px">IDR</div>', f'padding: 6px 16px">{cur}</div>', 1)
     s = s.replace('<div style="font-size: 22px; font-weight: 600; color: #14201B; background: #EEF1EE; border-radius: 999px; padding: 6px 16px">Разобран</div>', '')
-    s = s.replace('>КРУПНЕЙШИЕ ПЛАТЕЖИ<', f'>{L["h_pay"]}<')
+    # у USD, EUR, SGD суммы платежей в той же валюте, что и везде, — код и в этом заголовке; у рупий здесь полные суммы, «МЛН» не ставим
+    pay_unit = f', <span style="font-weight: 600; color: {GRAY}">{cur}</span>' if CUR[cur]['scale'] == 1 else ''
+    s = s.replace('>КРУПНЕЙШИЕ ПЛАТЕЖИ<', f'>{L["h_pay"]}{pay_unit}<')
     return s
 
 def _footer_gap(s, px):
