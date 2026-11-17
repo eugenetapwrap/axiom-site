@@ -16,15 +16,17 @@ TEAL = '#0E5A52'; ORANGE = '#E8501C'; GREEN = '#0C7A4F'; MUTED = '#56635D'; GRAY
 HSTY = 'font-size: 19px; font-weight: 700; letter-spacing: 0.08em; color: #334154'
 
 # ---------------- валюты ----------------
-# scale — делитель для коротких сумм (млн / тыс. / как есть); full_dec — знаков после запятой у полных сумм.
+# scale — делитель для коротких сумм (млн / тыс. / как есть); dec — знаков у коротких сумм (итог, списки, среднее, изменения);
+# full_dec — знаков у полных сумм (крупнейшие платежи). USD, EUR, SGD — без центов везде, кроме крупнейших платежей (основатель, 17.11).
+# unit — подпись у итога, среднего, плиток и в заголовках: у USD, EUR, SGD — код валюты там же, где у рупий «млн» (основатель, 17.11).
 CUR = {
-    'IDR': dict(scale=1e6, unit={'ru': 'млн', 'en': 'M', 'id': 'jt'}, full_dec=0),
-    'VND': dict(scale=1e6, unit={'ru': 'млн', 'en': 'M', 'id': 'jt'}, full_dec=0),
-    'RUB': dict(scale=1e3, unit={'ru': 'тыс.', 'en': 'K', 'id': 'rb'}, full_dec=0),
-    'THB': dict(scale=1e3, unit={'ru': 'тыс.', 'en': 'K', 'id': 'rb'}, full_dec=0),
-    'USD': dict(scale=1, unit={'ru': '', 'en': '', 'id': ''}, full_dec=2),
-    'EUR': dict(scale=1, unit={'ru': '', 'en': '', 'id': ''}, full_dec=2),
-    'SGD': dict(scale=1, unit={'ru': '', 'en': '', 'id': ''}, full_dec=2),
+    'IDR': dict(scale=1e6, unit={'ru': 'млн', 'en': 'M', 'id': 'jt'}, dec=2, full_dec=0),
+    'VND': dict(scale=1e6, unit={'ru': 'млн', 'en': 'M', 'id': 'jt'}, dec=2, full_dec=0),
+    'RUB': dict(scale=1e3, unit={'ru': 'тыс.', 'en': 'K', 'id': 'rb'}, dec=2, full_dec=0),
+    'THB': dict(scale=1e3, unit={'ru': 'тыс.', 'en': 'K', 'id': 'rb'}, dec=2, full_dec=0),
+    'USD': dict(scale=1, unit={'ru': 'USD', 'en': 'USD', 'id': 'USD'}, dec=0, full_dec=2),
+    'EUR': dict(scale=1, unit={'ru': 'EUR', 'en': 'EUR', 'id': 'EUR'}, dec=0, full_dec=2),
+    'SGD': dict(scale=1, unit={'ru': 'SGD', 'en': 'SGD', 'id': 'SGD'}, dec=0, full_dec=2),
 }
 
 # ---------------- числа ----------------
@@ -41,17 +43,18 @@ def num(v, loc, dec=2, gap='0.24em'):
     s = _group(i, loc, gap=gap) + ((SEP[loc][1] + d) if dec else '')
     return ('−' if neg else '') + s
 def short(v, loc, cur):
-    """Сумма в единицах валюты (млн / тыс. / как есть), 2 знака; меньше 0,005 — «<0,01»."""
-    x = v / CUR[cur]['scale']
-    if 0 < abs(x) < 0.005: return '&lt;0' + SEP[loc][1] + '01'
-    return num(x, loc)
+    """Сумма в единицах валюты (млн / тыс. / как есть): IDR, VND, RUB, THB — 2 знака, меньше 0,005 — «<0,01»;
+    USD, EUR, SGD — целые, меньше 0,5 — «<1»."""
+    x = v / CUR[cur]['scale']; dec = CUR[cur]['dec']
+    if 0 < abs(x) < 0.5 * 10 ** -dec: return '&lt;' + ('0' + SEP[loc][1] + '01' if dec else '1')
+    return num(x, loc, dec=dec)
 def full(v, loc, cur):
     return num(v, loc, dec=CUR[cur]['full_dec'], gap='0.33em')
 def big_span(v, loc, cur):
-    x = v / CUR[cur]['scale']; n = len(str(int(abs(x))))
+    x = v / CUR[cur]['scale']; dec = CUR[cur]['dec']; n = len(str(int(round(abs(x), dec))))
     fs, dc = (120, 72) if n <= 4 else ((100, 60) if n == 5 else ((84, 50) if n == 6 else (72, 44)))
-    q = f'{x:.2f}'; i, d = q.split('.')
-    body = _group(int(i), loc, gap='0.3em') + f'<span style="font-size: {dc}px">{SEP[loc][1]}{d}</span>'
+    if dec: i, d = f'{x:.2f}'.split('.'); body = _group(int(i), loc, gap='0.3em') + f'<span style="font-size: {dc}px">{SEP[loc][1]}{d}</span>'
+    else: body = _group(int(round(x)), loc, gap='0.3em')                 # USD, EUR, SGD — без центов
     return f'<span style="font-size: {fs}px; font-weight: 700; line-height: 1; letter-spacing: 0.025em; color: {INK}; white-space: nowrap">{body}</span>'
 
 # ---------------- тексты ----------------
@@ -193,7 +196,7 @@ def deltas(items, prev_inc, key, loc, cur):
     for k, v, kind in items:
         if kind == 'o': continue
         d = v - p.get(k, 0)
-        if abs(d / CUR[cur]['scale']) >= 0.005: vals[k] = d
+        if abs(d / CUR[cur]['scale']) >= 0.5 * 10 ** -CUR[cur]['dec']: vals[k] = d   # меньше 0,01 (в USD — меньше 1) не показываем
     if not vals: return {}
     mx = max(vals.values()); mn = min(vals.values()); out = {}
     for k, d in vals.items():
