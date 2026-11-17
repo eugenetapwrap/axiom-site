@@ -142,6 +142,16 @@ T = {
 }
 
 # ---------------- данные ----------------
+def norm_rows(rows):
+    """Строки из любого источника (лист, база): Decimal → float, datetime → date, NULL → пустая строка."""
+    if rows is None: return None
+    out = []
+    for r in rows:
+        d = r['date']; d = d.date() if isinstance(d, dt.datetime) else d
+        out.append(dict(r, date=d, amount=float(r['amount'] or 0),
+                        **{k: ('' if r.get(k) is None else str(r.get(k)).strip()) for k in ('payee', 'cat', 'check', 'status', 'type')}))
+    return out
+
 def classify(rows):
     """inc — входят в расходы; dbl — дубли; rev — на проверке (входят); rej — отклонённые и неплатёжные."""
     inc = [r for r in rows if r['amount'] > 0 and r['status'] != 'Rejected' and r['check'] != 'DBL' and r['type'] not in ('Statement', 'Proof')]
@@ -244,6 +254,7 @@ def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None
     """prev_rows=None — данных за прошлый период нет. report_date — день отправки (для среднего за день).
     client_start — день первого документа клиента (первый период)."""
     L = T[loc]
+    rows, prev_rows = norm_rows(rows), norm_rows(prev_rows)
     rows = [r for r in rows if start <= r['date'] <= end]
     inc, dbl, rev, rej = classify(rows)
     tot = sum(r['amount'] for r in inc)
@@ -260,6 +271,8 @@ def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None
         if kind == 'week': pcut = pstart + (report_date - start)
         else: pcut = pstart.replace(day=min(report_date.day, calendar.monthrange(pstart.year, pstart.month)[1]))
         prev_rows = [r for r in prev_rows if pstart <= r['date'] <= pcut]
+    # пустой прошлый период ([] из базы, всё отклонено, ноль расходов) = данных нет: ни строки сравнения, ни изменений у категорий
+    if prev_rows is not None and sum(r['amount'] for r in classify(prev_rows)[0]) <= 0: prev_rows = None
     s = _localize_static(_tpl('week.html'), loc, cur, acc).replace('Андрей Соколов', acc, 1)
     lab = L['week_label'](span_label(start, end, loc)) if kind == 'week' else L['month_label'](start.month, start.year)
     if client_start and client_start > start: lab += ' · ' + L['since'](date_short(client_start, loc))
@@ -332,8 +345,9 @@ def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None
     return _footer_gap(s, 56)
 
 # ---------------- архив ----------------
-def archive_card(rows, acc, fname, received, loc='ru', cur='IDR'):
-    L = T[loc]
+def archive_card(rows, acc, fname, received, loc='ru', cur='IDR', files=None):
+    """files — число файлов в архиве; по умолчанию одна строка = один файл."""
+    L = T[loc]; rows = norm_rows(rows)
     inc, dbl, rev, rej = classify(rows)
     tot = sum(r['amount'] for r in inc)                          # итог без дублей (17.11)
     if tot <= 0: return None
@@ -349,7 +363,7 @@ def archive_card(rows, acc, fname, received, loc='ru', cur='IDR'):
       f'{big_span(tot, loc, cur)}{_unit_html(loc, cur, size=28)}</div>'
       '<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding-bottom: 8px">'
       f'<span style="font-size: 44px; font-weight: 600; line-height: 48px; color: {INK}; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{L["payments"](len(inc))}</span>'
-      f'<span style="font-size: 24px; line-height: 28px; color: {MUTED}">{L["files"](len(rows))}</span></div></div>')
+      f'<span style="font-size: 24px; line-height: 28px; color: {MUTED}">{L["files"](files if files is not None else len(rows))}</span></div></div>')
     a, b = block(s, '<div style="height: 120px; display: flex; align-items: flex-end; justify-content: space-between">'); s = s[:a] + numrow + s[b:]
     nl = 'Не вошли в расчёт: 2 неплатёжных документа и 1 нечитаемый файл'
     i = s.find(nl); a = s.rfind('<div', 0, i); b = s.find('</div>', i) + 6
