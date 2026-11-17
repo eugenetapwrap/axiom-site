@@ -260,6 +260,14 @@ def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None
     d0 = max(start, client_start) if client_start else start
     d1 = min(end, report_date)                                  # отчёт по запросу: дни до сегодняшнего включительно
     days = max(1, (d1 - d0).days + 1)
+    # отчёт по запросу внутри периода — сравниваем с теми же днями прошлого периода (пн с пн, 1–12 с 1–12)
+    if prev_rows is not None and report_date <= end:
+        if kind == 'week': pstart = start - dt.timedelta(days=7)
+        else: pstart = (start.replace(day=1) - dt.timedelta(days=1)).replace(day=1)
+        import calendar
+        if kind == 'week': pcut = pstart + (report_date - start)
+        else: pcut = pstart.replace(day=min(report_date.day, calendar.monthrange(pstart.year, pstart.month)[1]))
+        prev_rows = [r for r in prev_rows if pstart <= r['date'] <= pcut]
     s = _localize_static(_tpl('week.html'), loc, cur, acc).replace('Андрей Соколов', acc, 1)
     lab = L['week_label'](span_label(start, end, loc)) if kind == 'week' else L['month_label'](start.month, start.year)
     if client_start and client_start > start: lab += ' · ' + L['since'](date_short(client_start, loc))
