@@ -51,4 +51,4 @@
 - `archive_card(rows, account, file_name, received_date, loc='ru', cur='IDR')`;
 - `period_card(rows, start, end, 'week'|'month', account, loc, cur, prev_rows=None, report_date=None, client_start=None)` — `prev_rows=None` значит данных за прошлый период нет; `report_date` — день отправки (для среднего за день); `client_start` — первый документ клиента.
 
-Строка — dict: date, amount (в валюте отчёта), payee, check (OK / Review / DBL), status (Rejected — не входит), cat (ключ из таблицы: Materials, Supplies…), type (Hand — рукописный). Возвращает HTML или None (нет расходов). Рендер — Playwright, ширина 1080; высоту считать по правилу выше.
+Строка — dict: date, amount (в валюте отчёта), payee, check (OK / Review / DBL), status (Rejected — не входит), cat (ключ из таблицы: Materials, Supplies…), type (Hand — рукописный). Возвращает HTML или None (нет расходов). Рендер — Playwright, вёрстка 1080 px, картинка в двойном разрешении: deviceScaleFactor 2 → 2160 × 2700 (решение основателя 17.11), у коротких карточек высота по правилу выше × 2.
