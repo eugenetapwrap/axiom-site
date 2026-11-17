@@ -1,13 +1,13 @@
-// Рендер HTML карточки в PNG: node render.cjs card.html card.png
-// Вёрстка 1080 px, картинка в двойном разрешении (2160 px по ширине).
+// Рендер HTML карточки в PNG: node render.cjs card.html card.png [масштаб]
+// Вёрстка 1080 px, картинка в двойном разрешении (2160 px по ширине); масштаб 1 — 1080 px, для превью.
 // Высота — по содержимому, но не меньше 1080 (квадрат); почти полная — ровно 1350; больше 1350 — ошибка (код 2).
 // Нужен Playwright с Chromium: npm i playwright && npx playwright install chromium
 const { chromium } = require('playwright');
 (async () => {
-  const [src, out] = process.argv.slice(2);
-  if (!src || !out) { console.error('usage: node render.cjs card.html card.png'); process.exit(1); }
+  const [src, out, sc] = process.argv.slice(2); const scale = Number(sc || 2);
+  if (!src || !out) { console.error('usage: node render.cjs card.html card.png [scale]'); process.exit(1); }
   const b = await chromium.launch();
-  const p = await b.newPage({ viewport: { width: 1080, height: 1800 }, deviceScaleFactor: 2 });
+  const p = await b.newPage({ viewport: { width: 1080, height: 1800 }, deviceScaleFactor: scale });
   await p.goto('file://' + require('path').resolve(src), { waitUntil: 'load' });
   await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(100);
   const H = await p.evaluate(() => {
@@ -17,5 +17,5 @@ const { chromium } = require('playwright');
   });
   if (H < 0) { console.error('карточка не влезает в 1350 px:', -H); await b.close(); process.exit(2); }
   await p.screenshot({ path: out, clip: { x: 0, y: 0, width: 1080, height: H } });
-  await b.close(); console.log(out, 2160 + '×' + H * 2);
+  await b.close(); console.log(out, 1080 * scale + '×' + H * scale);
 })();

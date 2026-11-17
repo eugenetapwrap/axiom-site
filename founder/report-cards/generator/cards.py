@@ -91,6 +91,8 @@ T = {
  'ru': dict(
    week_label=lambda s: f'Расходы за неделю · {s}', month_label=lambda m, y: f'Расходы за месяц · {MON_FULL["ru"][m]} {y}',
    arch_label=lambda per, d: f'Расходы за {per} · архив получен {d}', since=lambda d: f'данные с {d}',
+   f30_label=lambda n, per: f'Расходы по первым {n} {"документу" if (n%10==1 and n%100!=11) else "документам"} · {per}',
+   docs_from=lambda n: f'из {n} {"документа" if (n%10==1 and n%100!=11) else "документов"}',
    avg='в среднем за день',
    cmp_week='к прошлой неделе', cmp_month=lambda m: f'к {MON_DAT_RU[m]}',
    docs=lambda n: f'{plural_ru(n,"документ","документа","документов")}<br>{plural_ru(n,"учтён","учтено","учтено")}',
@@ -108,6 +110,8 @@ T = {
  'en': dict(
    week_label=lambda s: f'Weekly expenses · {s}', month_label=lambda m, y: f'Monthly expenses · {MON_FULL["en"][m]} {y}',
    arch_label=lambda per, d: f'Expenses for {per} · archive received {d}', since=lambda d: f'data from {d}',
+   f30_label=lambda n, per: f'Expenses from the first {n} documents · {per}',
+   docs_from=lambda n: f'from {n} {"document" if n==1 else "documents"}',
    avg='average per day',
    cmp_week='vs last week', cmp_month=lambda m: f'vs {MON_FULL["en"][m]}',
    docs=lambda n: f'{"document" if n==1 else "documents"}<br>counted',
@@ -125,6 +129,8 @@ T = {
  'id': dict(
    week_label=lambda s: f'Pengeluaran mingguan · {s}', month_label=lambda m, y: f'Pengeluaran bulanan · {MON_FULL["id"][m]} {y}',
    arch_label=lambda per, d: f'Pengeluaran {per} · arsip diterima {d}', since=lambda d: f'data sejak {d}',
+   f30_label=lambda n, per: f'Pengeluaran dari {n} dokumen pertama · {per}',
+   docs_from=lambda n: f'dari {n} dokumen',
    avg='rata-rata per hari',
    cmp_week='dari minggu lalu', cmp_month=lambda m: f'dari {MON_FULL["id"][m]}',
    docs=lambda n: 'dokumen<br>tercatat',
@@ -344,30 +350,54 @@ def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None
     a, b = block(s, '<div style="display: grid; grid-template-columns: minmax(0, 1fr) 2px minmax(0, 1fr); column-gap: 32px; align-items: start">'); s = s[:a] + g + s[b:]
     return _footer_gap(s, 56)
 
-# ---------------- архив ----------------
+# ---------------- архив и первые 30 документов ----------------
 def archive_card(rows, acc, fname, received, loc='ru', cur='IDR', files=None):
-    """files — число файлов в архиве; по умолчанию одна строка = один файл."""
+    """Отчёт по архиву. files — число файлов в архиве; по умолчанию одна строка = один файл."""
+    return _docset_card(rows, acc, loc, cur, fname=fname, received=received, files=files)
+
+def first30_card(rows, acc, loc='ru', cur='IDR', limit=30):
+    """Отчёт по первым 30 документам: приходит, когда закончились бесплатные документы (только с подключённым Google).
+    rows — первые 30 строк листа Payments. Тело как у архива, верх и шапка как у недели (основатель, 17.11);
+    строки «Не вошли в расчёт» нет — отчёт строится по таблице; сравнения нет — прошлого периода у клиента нет."""
+    return _docset_card(rows, acc, loc, cur, limit=limit)
+
+def _docset_card(rows, acc, loc, cur, fname=None, received=None, files=None, limit=None):
+    f30 = limit is not None
     L = T[loc]; rows = norm_rows(rows)
     inc, dbl, rev, rej = classify(rows)
     tot = sum(r['amount'] for r in inc)                          # итог без дублей (17.11)
     if tot <= 0: return None
     s = _localize_static(_tpl('archive.html'), loc, cur, acc)
-    s = s.replace('>Андрей Соколов<', f'>{acc}<', 1).replace('>receipts_october.zip<', f'>{fname}<', 1)
-    s = s.replace('<div style="flex: none; font-size: 28px; line-height: 1; font-weight: 600; color: #14201B; white-space: nowrap">',
-                  '<div style="flex: 0 1 auto; max-width: 440px; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 28px; line-height: 1.2; font-weight: 600; color: #14201B; white-space: nowrap">', 1)
-    s = s.replace('<div style="font-size: 28px; line-height: 1; font-weight: 400; color: #56635D; white-space: nowrap">',
-                  '<div style="flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 28px; line-height: 1.2; font-weight: 400; color: #56635D; white-space: nowrap">', 1)
-    dates = [r['date'] for r in rows]
-    s = s.replace('Расходы за 1–31 окт 2026 · архив получен 3 ноя', L['arch_label'](span_label(min(dates), max(dates), loc), date_short(received, loc)), 1)
-    numrow = ('<div style="height: 120px; display: flex; align-items: flex-end; justify-content: space-between"><div style="display: flex; align-items: baseline; gap: 14px; white-space: nowrap">'
+    dates = [r['date'] for r in rows]; per = span_label(min(dates), max(dates), loc)
+    TPL_LAB = 'Расходы за 1–31 окт 2026 · архив получен 3 ноя'
+    if f30:
+        HS = '<div style="height: 48px; display: flex; align-items: center; gap: 24px">'
+        wk = _localize_static(_tpl('week.html'), loc, cur, acc).replace('Андрей Соколов', acc, 1)
+        wa, wb = block(wk, HS); ha, hb = block(s, HS); s = s[:ha] + wk[wa:wb] + s[hb:]
+        old = '<div style="height: 26px; flex: none"></div><div style="font-size: 24px; color: #56635D; white-space: nowrap">' + TPL_LAB + '</div>'
+        assert s.count(old) == 1
+        s = s.replace(old, '<div style="height: 18px; flex: none"></div><div style="height: 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px">'
+                      f'<div style="font-size: 24px; color: #56635D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{L["f30_label"](limit, per)}</div></div>')
+        assert s.count('<div style="height: 31px; flex: none"></div>') == 1
+        s = s.replace('<div style="height: 31px; flex: none"></div>', '<div style="height: 20px; flex: none"></div>')
+    else:
+        s = s.replace('>Андрей Соколов<', f'>{acc}<', 1).replace('>receipts_october.zip<', f'>{fname}<', 1)
+        s = s.replace('<div style="flex: none; font-size: 28px; line-height: 1; font-weight: 600; color: #14201B; white-space: nowrap">',
+                      '<div style="flex: 0 1 auto; max-width: 440px; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 28px; line-height: 1.2; font-weight: 600; color: #14201B; white-space: nowrap">', 1)
+        s = s.replace('<div style="font-size: 28px; line-height: 1; font-weight: 400; color: #56635D; white-space: nowrap">',
+                      '<div style="flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 28px; line-height: 1.2; font-weight: 400; color: #56635D; white-space: nowrap">', 1)
+        s = s.replace(TPL_LAB, L['arch_label'](per, date_short(received, loc)), 1)
+    nr = 'height: 126px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px' if f30 else 'height: 120px; display: flex; align-items: flex-end; justify-content: space-between'
+    cnt = L['docs_from'](len(rows)) if f30 else L['files'](files if files is not None else len(rows))
+    numrow = (f'<div style="{nr}"><div style="display: flex; align-items: baseline; gap: 14px; white-space: nowrap">'
       f'{big_span(tot, loc, cur)}{_unit_html(loc, cur, size=28)}</div>'
       '<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding-bottom: 8px">'
       f'<span style="font-size: 44px; font-weight: 600; line-height: 48px; color: {INK}; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{L["payments"](len(inc))}</span>'
-      f'<span style="font-size: 24px; line-height: 28px; color: {MUTED}">{L["files"](files if files is not None else len(rows))}</span></div></div>')
+      f'<span style="font-size: 24px; line-height: 28px; color: {MUTED}">{cnt}</span></div></div>')
     a, b = block(s, '<div style="height: 120px; display: flex; align-items: flex-end; justify-content: space-between">'); s = s[:a] + numrow + s[b:]
     nl = 'Не вошли в расчёт: 2 неплатёжных документа и 1 нечитаемый файл'
     i = s.find(nl); a = s.rfind('<div', 0, i); b = s.find('</div>', i) + 6
-    if rej: s = s[:a] + f'<div style="font-size: 24px; line-height: 30px; color: {MUTED}; font-variant-numeric: tabular-nums">{L["rejected"](len(rej))}</div>' + s[b:]
+    if rej and not f30: s = s[:a] + f'<div style="font-size: 24px; line-height: 30px; color: {MUTED}; font-variant-numeric: tabular-nums">{L["rejected"](len(rej))}</div>' + s[b:]
     else:
         sp = s.rfind('<div style="height: 12px; flex: none"></div>', 0, a); s = s[:sp] + s[b:]
     def tile(c, v, t, amount=None):
@@ -389,11 +419,11 @@ def archive_card(rows, acc, fname, received, loc='ru', cur='IDR', files=None):
     rows_ = ''
     for i, r in enumerate(sorted(inc, key=lambda r: -r['amount'])[:3]):
         bt = 'border-top: 2px solid #E2E7E3; ' if i else ''
-        rows_ += (f'<div style="{bt}height: 56px; display: grid; grid-template-columns: minmax(190px, max-content) 110px minmax(0, 1fr) auto; column-gap: 20px; align-items: center">'
+        rows_ += (f'<div style="{bt}height: 56px; display: grid; grid-template-columns: minmax(190px, max-content) 110px minmax(0, 1fr) auto; column-gap: 20px; align-items: center">'   # длинная категория — многоточие, не шире 260 px
           f'<span style="font-size: 26px; font-weight: 600; color: {INK}; text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{full(r["amount"], loc, cur)}</span>'
           f'<span style="font-size: 22px; color: {MUTED}; white-space: nowrap">{date_short(r["date"], loc)}</span>'
           f'<span style="font-size: 24px; color: {INK}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{r["payee"] or L["nosup_pay"]}</span>'
-          f'<span style="font-size: 22px; color: {MUTED}; white-space: nowrap">{cat_name(r["cat"], loc) if r["cat"] else L["uncat"]}</span></div>')
+          f'<span style="font-size: 22px; color: {MUTED}; white-space: nowrap; max-width: 260px; overflow: hidden; text-overflow: ellipsis; text-align: right">{cat_name(r["cat"], loc) if r["cat"] else L["uncat"]}</span></div>')
     a, b = block(s, '<div style="box-sizing: border-box; padding: 4px 24px; background: #EEF1EE; border-radius: 12px; display: flex; flex-direction: column">')
     s = s[:a] + '<div style="box-sizing: border-box; padding: 4px 24px; background: #EEF1EE; border-radius: 12px; display: flex; flex-direction: column">' + rows_ + '</div>' + s[b:]
     s = s.replace('>Категории, <span', '>Категории, <span')  # no-op: заголовки списков пересобраны
