@@ -50,9 +50,52 @@ def short(v, loc, cur):
     return num(x, loc, dec=dec)
 def full(v, loc, cur):
     return num(v, loc, dec=CUR[cur]['full_dec'], gap='0.33em')
-def big_span(v, loc, cur):
-    x = v / CUR[cur]['scale']; dec = CUR[cur]['dec']; n = len(str(int(round(abs(x), dec))))
-    fs, dc = (120, 72) if n <= 4 else ((100, 60) if n == 5 else ((84, 50) if n == 6 else (72, 44)))
+# ---------------- ширина строки с итогом ----------------
+# Ширины символов Inter в долях кегля, измерены в Chromium (17.11): цифры и знаки — точно, буквы — в среднем по алфавиту
+# (L/U — латиница строчные/прописные, l/u — кириллица). Нужны, чтобы итог и правый столбец не вылезали за поле.
+_CW = {
+    '400': {"0": 0.613, "1": 0.362, "2": 0.561, "3": 0.599, "4": 0.618, "5": 0.577, "6": 0.584, "7": 0.533, "8": 0.582, "9": 0.584, " ": 0.25, ",": 0.22, ".": 0.22, "·": 0.22, "−": 0.628, "+": 0.628, "%": 0.844, "×": 0.628, "<": 0.628, "L": 0.488, "U": 0.654, "l": 0.574, "u": 0.712},
+    '500': {"0": 0.625, "1": 0.372, "2": 0.574, "3": 0.605, "4": 0.631, "5": 0.584, "6": 0.595, "7": 0.544, "8": 0.593, "9": 0.595, " ": 0.238, ",": 0.228, ".": 0.228, "·": 0.228, "−": 0.637, "+": 0.637, "%": 0.875, "×": 0.637, "<": 0.637, "L": 0.501, "U": 0.662, "l": 0.588, "u": 0.721},
+    '600': {"0": 0.638, "1": 0.38, "2": 0.586, "3": 0.613, "4": 0.644, "5": 0.592, "6": 0.606, "7": 0.556, "8": 0.604, "9": 0.606, " ": 0.226, ",": 0.236, ".": 0.236, "·": 0.236, "−": 0.646, "+": 0.646, "%": 0.906, "×": 0.646, "<": 0.646, "L": 0.514, "U": 0.67, "l": 0.601, "u": 0.731},
+    '700': {"0": 0.65, "1": 0.39, "2": 0.599, "3": 0.62, "4": 0.657, "5": 0.6, "6": 0.617, "7": 0.567, "8": 0.614, "9": 0.617, " ": 0.214, ",": 0.245, ".": 0.245, "·": 0.245, "−": 0.655, "+": 0.655, "%": 0.938, "×": 0.655, "<": 0.655, "L": 0.527, "U": 0.679, "l": 0.615, "u": 0.741},
+    '600t': {"0": 0.645, "1": 0.645, "2": 0.645, "3": 0.645, "4": 0.645, "5": 0.645, "6": 0.645, "7": 0.645, "8": 0.645, "9": 0.645, " ": 0.269, ",": 0.269, ".": 0.269, "·": 0.236, "−": 0.645, "+": 0.645, "%": 0.906, "×": 0.645, "<": 0.645, "L": 0.514, "U": 0.67, "l": 0.601, "u": 0.731},
+}
+
+def _tw(html, size, wt='400', ls=0.0):
+    """Примерная ширина строки в px; разрядные отступы (inline-block) учитываются."""
+    t = _CW[wt]; w = 0.0
+    for m in re.finditer(r'<span style="display: inline-block; width: ([\d.]+)em"></span>|<[^>]+>|&lt;|&nbsp;|.', html, re.S):
+        g = m.group(0)
+        if m.group(1): w += float(m.group(1)) * size; continue
+        if g.startswith('<'): continue
+        c = '<' if g == '&lt;' else (' ' if g == '&nbsp;' else g)
+        if c in t: k = t[c]
+        elif c.isascii() and c.isalpha(): k = t['U'] if c.isupper() else t['L']
+        elif c.isalpha(): k = t['u'] if c.isupper() else t['l']
+        else: k = t['L']
+        w += (k + ls) * size
+    return w
+
+BIG = [(120, 72), (100, 60), (84, 50), (72, 44)]             # кегль итога и копеек: до 4 цифр, 5, 6, больше
+def _big_step(v, cur):
+    n = len(str(int(round(abs(v / CUR[cur]['scale']), CUR[cur]['dec']))))
+    return 0 if n <= 4 else (1 if n == 5 else (2 if n == 6 else 3))
+def _big_w(v, loc, cur, i):
+    fs, dc = BIG[i]; x = v / CUR[cur]['scale']; u = CUR[cur]['unit'][loc]
+    if CUR[cur]['dec']:
+        ip, d = f'{x:.2f}'.split('.')
+        w = _tw(_group(int(ip), loc, gap='0.3em'), fs, '700', 0.025) + _tw(SEP[loc][1] + d, dc, '700', 0.025)
+    else: w = _tw(_group(int(round(x)), loc, gap='0.3em'), fs, '700', 0.025)
+    return w + ((14 + _tw(u, 28, '500')) if u else 0)
+def fit_step(v, loc, cur, right_w, avail=968, gap=24, safety=12):
+    """Ступень кегля итога: по числу цифр; если вместе с правым столбцом строка не влезает в поле — на ступень меньше."""
+    i = _big_step(v, cur)
+    while i < len(BIG) - 1 and _big_w(v, loc, cur, i) + gap + right_w > avail - safety: i += 1
+    return i
+
+def big_span(v, loc, cur, step=None):
+    x = v / CUR[cur]['scale']; dec = CUR[cur]['dec']
+    fs, dc = BIG[_big_step(v, cur) if step is None else step]
     if dec: i, d = f'{x:.2f}'.split('.'); body = _group(int(i), loc, gap='0.3em') + f'<span style="font-size: {dc}px">{SEP[loc][1]}{d}</span>'
     else: body = _group(int(round(x)), loc, gap='0.3em')                 # USD, EUR, SGD — без центов
     return f'<span style="font-size: {fs}px; font-weight: 700; line-height: 1; letter-spacing: 0.025em; color: {INK}; white-space: nowrap">{body}</span>'
@@ -289,6 +332,7 @@ def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None
     if client_start and client_start > start: lab += ' · ' + L['since'](date_short(client_start, loc))
     s = s.replace('Расходы за неделю · 26 окт – 1 ноя 2026', lab, 1)
     # число, среднее, сравнение
+    cmp_w = 0
     if prev_rows is None:
         cmp = ''                                                   # нет данных за прошлый период — ничего не пишем (17.11)
     else:
@@ -298,11 +342,14 @@ def period_card(rows, start, end, kind, acc, loc='ru', cur='IDR', prev_rows=None
             ctxt = (('×' + str(round(dd / 100 + 1))) if dd / 100 + 1 < 99.5 else '×99+') if dd >= 200 else (('+' if d > 0 else ('−' if d < 0 else '')) + f'{abs(d)}%')
             u = CUR[cur]['unit'][loc]
             ref = L['cmp_week'] if kind == 'week' else L['cmp_month'](((start.replace(day=1) - dt.timedelta(days=1)).month))
+            cmp_w = _tw(ctxt, 22, '600') + _tw(f' {ref} · ', 22) + _tw(short(ptot, loc, cur), 22, '600t') + (_tw(' ' + u, 22) if u else 0)
             cmp = (f'<span style="margin-top: 6px; font-size: 22px; line-height: 28px; color: {MUTED}; white-space: nowrap; font-variant-numeric: tabular-nums">'
                    f'<span style="font-weight: 600; color: {INK}">{ctxt}</span> {ref} · {short(ptot, loc, cur)}{(" " + u) if u else ""}</span>')
         else: cmp = ''
+    u_ = CUR[cur]['unit'][loc]
+    right_w = max(_tw(short(tot / days, loc, cur), 44, '600t', 0.02) + ((8 + _tw(u_, 24, '500')) if u_ else 0), _tw(L['avg'], 24), cmp_w)
     numrow = ('<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px">'
-      f'<div style="display: flex; align-items: baseline; gap: 14px; white-space: nowrap">{big_span(tot, loc, cur)}{_unit_html(loc, cur, size=28)}</div>'
+      f'<div style="display: flex; align-items: baseline; gap: 14px; white-space: nowrap">{big_span(tot, loc, cur, fit_step(tot, loc, cur, right_w))}{_unit_html(loc, cur, size=28)}</div>'
       '<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding-bottom: 8px">'
       f'<div style="display: flex; align-items: baseline; gap: 8px; white-space: nowrap"><span style="font-size: 44px; font-weight: 600; line-height: 48px; color: {INK}; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{short(tot / days, loc, cur)}</span>{_unit_html(loc, cur)}</div>'
       f'<span style="font-size: 24px; line-height: 28px; color: {MUTED}">{L["avg"]}</span>{cmp}</div></div>')
@@ -395,7 +442,7 @@ def _docset_card(rows, acc, loc, cur, fname=None, received=None, files=None, lim
     nr = 'height: 126px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px' if f30 else 'height: 120px; display: flex; align-items: flex-end; justify-content: space-between'
     cnt = L['docs_from'](len(rows)) if f30 else L['files'](files if files is not None else len(rows))
     numrow = (f'<div style="{nr}"><div style="display: flex; align-items: baseline; gap: 14px; white-space: nowrap">'
-      f'{big_span(tot, loc, cur)}{_unit_html(loc, cur, size=28)}</div>'
+      f'{big_span(tot, loc, cur, fit_step(tot, loc, cur, max(_tw(L["payments"](len(inc)), 44, "600t", 0.02), _tw(cnt, 24))))}{_unit_html(loc, cur, size=28)}</div>'
       '<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding-bottom: 8px">'
       f'<span style="font-size: 44px; font-weight: 600; line-height: 48px; color: {INK}; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{L["payments"](len(inc))}</span>'
       f'<span style="font-size: 24px; line-height: 28px; color: {MUTED}">{cnt}</span></div></div>')
