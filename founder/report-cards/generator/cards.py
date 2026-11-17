@@ -21,13 +21,23 @@ def plural(n,a,b,c):
     return c
 def full(v): return SP.join(f"{int(round(v)):,}".split(','))
 def mln(v):
+    if 0<v<5000: return '&lt;0,01'
     s=f"{v/1e6:,.2f}"; i,d=s.split('.'); return '<span style="display: inline-block; width: 0.24em"></span>'.join(i.split(','))+','+d
 def mln_plain(v):
     s=f"{v/1e6:,.2f}"; i,d=s.split('.'); return ' '.join(i.split(','))+','+d
-def big(v):
+def big(v, dec=72):
     s=f"{v/1e6:,.2f}"; i,d=s.split('.')
-    return '<span style="display: inline-block; width: 0.3em"></span>'.join(i.split(','))+f'<span style="font-size: 72px">,{d}</span>'
+    return '<span style="display: inline-block; width: 0.3em"></span>'.join(i.split(','))+f'<span style="font-size: {dec}px">,{d}</span>'
+def big_span(v):
+    n=len(str(int(v/1e6)))
+    fs,dec={True:(120,72)}.get(n<=4,(100,60) if n==5 else ((84,50) if n==6 else (72,44)))
+    return f'<span style="font-size: {fs}px; font-weight: 700; line-height: 1; letter-spacing: 0.025em; color: #14201B; white-space: nowrap">{big(v,dec)}</span>'
 
+def span_label(a,b):
+    if a==b: return f'{a.day} {MON[a.month]} {a.year}'
+    if (a.month,a.year)==(b.month,b.year): return f'{a.day}–{b.day} {MON[b.month]} {b.year}'
+    if a.year==b.year: return f'{a.day} {MON[a.month]} – {b.day} {MON[b.month]} {b.year}'
+    return f'{a.day} {MON[a.month]} {a.year} – {b.day} {MON[b.month]} {b.year}'
 def parse_rows(values):
     head=values[0]; out=[]
     for r in values[1:]:
@@ -80,15 +90,15 @@ def deltas_for(items, prev_rows, key):
     mx=max(vals.values()); mn=min(vals.values())
     out={}
     for n,d in vals.items():
-        if d>=200: txt='×'+str(round(d/100+1))
+        if d>=200: txt=('×'+str(round(d/100+1))) if d/100+1<99.5 else '×99+'
         else:
             r=round(d); txt=('+' if r>0 else ('−' if r<0 else ''))+str(abs(r))+'%'
         c=ORANGE if (d==mx and d>0) else (GREEN if (d==mn and d<0) else GRAY)
         out[n]=(txt,c)
     return out
 
-def row_period(name,v,tot,kind,delta,mn=None):
-    pct=round(v/tot*100) if tot else 0; w=f'{v/tot*100:.1f}' if tot else '0'
+def row_period(name,v,tot,kind,delta,mn=None,pct=None):
+    pct=pct if pct is not None else (round(v/tot*100) if tot else 0); w=f'{v/tot*100:.1f}' if tot else '0'
     u=kind=='u'; m=kind=='m'
     dot=f'<span style="display: inline-block; width: 11px; height: 11px; background: {ORANGE}; border-radius: 50%; margin-right: 10px; vertical-align: 2px"></span>' if u else ''
     d=''
@@ -102,8 +112,8 @@ def row_period(name,v,tot,kind,delta,mn=None):
       f'<span style="font-size: 20px; color: {MUTED}; text-align: right; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{pct}%</span></div>'
       f'<div style="margin-top: 6px; height: 8px; border-radius: 4px; background: #EEF1EE"><div style="width: {w}%; height: 8px; border-radius: 4px; background: {ORANGE if u else ("#C9D0CB" if m else TEAL)}"></div></div></div>')
 
-def row_arch(name,v,tot,kind):
-    pct=round(v/tot*100) if tot else 0; w=f'{v/tot*100:.1f}' if tot else '0'
+def row_arch(name,v,tot,kind,pct=None):
+    pct=pct if pct is not None else (round(v/tot*100) if tot else 0); w=f'{v/tot*100:.1f}' if tot else '0'
     u=kind=='u'; m=kind=='m'
     dot=f'<span style="display: inline-block; width: 12px; height: 12px; background: {ORANGE}; border-radius: 50%; margin-right: 10px; vertical-align: 2px"></span>' if u else ''
     nc=GRAY if m else '#14201B'
@@ -119,8 +129,11 @@ def lists_grid(inc, max_rows, rowfn, prev=None, gap=10, archive=False):
     def col(title, items, deltas):
         mn=None
         h=(f'<div style="display: flex; flex-direction: column; gap: {gap}px"><div style="{HSTY}; margin-bottom: 10px">{title}, <span style="font-weight: 600; color: {GRAY}">МЛН</span></div>')
-        for n,v,k in items:
-            h+= rowfn(n,v,tot,k) if archive else rowfn(n,v,tot,k,deltas.get(n),mn)
+        raw=[v/tot*100 if tot else 0 for _,v,_ in items]; base=[int(x) for x in raw]
+        for i in sorted(range(len(raw)),key=lambda i:-(raw[i]-base[i]))[:max(0,100-sum(base))]: base[i]+=1
+        pcts=[('&lt;1' if (b==0 and r>0) else str(b)) for b,r in zip(base,raw)]
+        for (n,v,k),pc in zip(items,pcts):
+            h+= rowfn(n,v,tot,k,pct=pc) if archive else rowfn(n,v,tot,k,deltas.get(n),mn,pct=pc)
         return h+'</div>'
     dc=deltas_for(cats,prev,'cat') if prev is not None else {}
     return ('<div style="display: grid; grid-template-columns: minmax(0, 1fr) 2px minmax(0, 1fr); column-gap: 32px; align-items: start">'+col('КАТЕГОРИИ',cats,dc)
@@ -131,9 +144,10 @@ def period_card(rows_all, start, end, kind, acc, prev_rows=None, prev_label=None
     rows=[r for r in rows_all if start<=r['date']<=end]
     inc,dbl,rev,rej=classify(rows)
     tot=sum(r['amount'] for r in inc); days=(end-start).days+1
+    if tot<=0: return None
     s=TPL_PERIOD.replace('Андрей Соколов',acc,1)
     if kind=='week':
-        lab=f'Расходы за неделю · {start.day}{(" "+MON[start.month]) if start.month!=end.month else ""}–{end.day} {MON[end.month]} {end.year}'
+        lab='Расходы за неделю · '+span_label(start,end)
     else:
         lab=f'Расходы за месяц · {MON_NOM[start.month]} {start.year}'
     s=s.replace('Расходы за неделю · 26 окт – 1 ноя 2026',lab,1)
@@ -144,11 +158,11 @@ def period_card(rows_all, start, end, kind, acc, prev_rows=None, prev_label=None
         ptot=sum(r['amount'] for r in pinc)
         if ptot>0:
             dd=(tot-ptot)/ptot*100; d=round(dd); sign='+' if d>0 else ('−' if d<0 else '')
-            ctxt=('×'+str(round(dd/100+1))) if dd>=200 else f'{sign}{abs(d)}%'
+            ctxt=(('×'+str(round(dd/100+1))) if dd/100+1<99.5 else '×99+') if dd>=200 else f'{sign}{abs(d)}%'
             cmp=(f'<span style="margin-top: 6px; font-size: 22px; line-height: 28px; color: {MUTED}; white-space: nowrap; font-variant-numeric: tabular-nums">'
                  f'<span style="font-weight: 600; color: #14201B">{ctxt}</span> {prev_label} · {mln(ptot)} млн</span>')
     numrow=('<div style="display: flex; align-items: flex-end; justify-content: space-between">'
-      f'<div style="display: flex; align-items: baseline; gap: 14px"><span style="font-size: 120px; font-weight: 700; line-height: 1; letter-spacing: 0.025em; color: #14201B">{big(tot)}</span><span style="font-size: 28px; font-weight: 500; color: {MUTED}">млн</span></div>'
+      f'<div style="display: flex; align-items: baseline; gap: 14px; white-space: nowrap">{big_span(tot)}<span style="font-size: 28px; font-weight: 500; color: {MUTED}">млн</span></div>'
       '<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding-bottom: 8px">'
       f'<div style="display: flex; align-items: baseline; gap: 8px; white-space: nowrap"><span style="font-size: 44px; font-weight: 600; line-height: 48px; color: #14201B; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{mln(tot/days)}</span><span style="font-size: 24px; font-weight: 500; color: {MUTED}">млн</span></div>'
       f'<span style="font-size: 24px; line-height: 28px; color: {MUTED}">в среднем за день</span>{cmp}</div></div>')
@@ -209,13 +223,17 @@ def period_card(rows_all, start, end, kind, acc, prev_rows=None, prev_label=None
 def archive_card(rows, acc, fname, received):
     inc,dbl,rev,rej=classify(rows)
     gross=inc+dbl; tot=sum(r['amount'] for r in gross)
+    if tot<=0: return None
     s=TPL_ARCH.replace('>Андрей Соколов<',f'>{acc}<',1).replace('>receipts_october.zip<',f'>{fname}<',1)
+    s=s.replace('<div style="flex: none; font-size: 28px; line-height: 1.2; font-weight: 600; color: #14201B; white-space: nowrap">','X',0)
+    s=s.replace('<div style="flex: none; font-size: 28px; line-height: 1; font-weight: 600; color: #14201B; white-space: nowrap">','<div style="flex: 0 1 auto; max-width: 440px; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 28px; line-height: 1.2; font-weight: 600; color: #14201B; white-space: nowrap">',1)
+    s=s.replace('<div style="font-size: 28px; line-height: 1; font-weight: 400; color: #56635D; white-space: nowrap">','<div style="flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 28px; line-height: 1.2; font-weight: 400; color: #56635D; white-space: nowrap">',1)
     d0=min(r['date'] for r in rows); d1=max(r['date'] for r in rows)
-    per=(f'{d0.day}–{d1.day} {MON[d1.month]} {d1.year}' if (d0.month,d0.year)==(d1.month,d1.year) else f'{d0.day} {MON[d0.month]} – {d1.day} {MON[d1.month]} {d1.year}')
+    per=span_label(d0,d1)
     s=s.replace('Расходы за 1–31 окт 2026 · архив получен 3 ноя',f'Расходы за {per} · архив получен {received.day} {MON[received.month]}',1)
     npay=len(gross); nf=len(rows)
-    numrow=('<div style="height: 120px; display: flex; align-items: flex-end; justify-content: space-between"><div style="display: flex; align-items: baseline; gap: 14px">'
-      f'<span style="font-size: 120px; font-weight: 700; line-height: 1; letter-spacing: 0.025em; color: #14201B">{big(tot)}</span><span style="font-size: 28px; font-weight: 500; color: {MUTED}">млн</span></div>'
+    numrow=('<div style="height: 120px; display: flex; align-items: flex-end; justify-content: space-between"><div style="display: flex; align-items: baseline; gap: 14px; white-space: nowrap">'
+      f'{big_span(tot)}<span style="font-size: 28px; font-weight: 500; color: {MUTED}">млн</span></div>'
       '<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding-bottom: 8px">'
       f'<span style="font-size: 44px; font-weight: 600; line-height: 48px; color: #14201B; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{npay} {plural(npay,"платёж","платежа","платежей")}</span>'
       f'<span style="font-size: 24px; line-height: 28px; color: {MUTED}">из {nf} {"файла" if (nf%10==1 and nf%100!=11) else "файлов"}</span></div></div>')
@@ -229,7 +247,7 @@ def archive_card(rows, acc, fname, received):
         sp=s.rfind('<div style="height: 12px; flex: none"></div>',0,a); s=s[:sp]+s[b:]
     # плитки
     tile=lambda c,v,u,t: ('<div style="box-sizing: border-box; min-width: 0; padding: 20px; background: #EEF1EE; border-radius: 12px; display: flex; flex-direction: column; gap: 4px">'
-        f'<div style="display: flex; align-items: baseline; gap: 8px; white-space: nowrap"><span style="font-size: 48px; font-weight: 700; line-height: 52px; color: {c}; font-variant-numeric: tabular-nums">{v}</span>'
+        f'<div style="display: flex; align-items: baseline; gap: 8px; white-space: nowrap"><span style="font-size: {48 if len(str(v))<=7 else (40 if len(str(v))<=9 else 34)}px; font-weight: 700; line-height: 52px; color: {c}; font-variant-numeric: tabular-nums">{v}</span>'
         +(f'<span style="font-size: 24px; font-weight: 500; color: {MUTED}">млн</span>' if u else '')+'</div>'
         f'<div style="font-size: 24px; line-height: 28px; min-height: 56px; color: {MUTED}">{t}</div></div>')
     hand=[r for r in gross if r['type']=='Hand']
@@ -244,7 +262,7 @@ def archive_card(rows, acc, fname, received):
     top3=sorted(gross,key=lambda r:-r['amount'])[:3]; rows_=''
     for i,r in enumerate(top3):
         bt='border-top: 2px solid #E2E7E3; ' if i else ''
-        rows_+=(f'<div style="{bt}height: 56px; display: grid; grid-template-columns: 190px 110px minmax(0, 1fr) auto; column-gap: 20px; align-items: center">'
+        rows_+=(f'<div style="{bt}height: 56px; display: grid; grid-template-columns: minmax(190px, max-content) 110px minmax(0, 1fr) auto; column-gap: 20px; align-items: center">'
           f'<span style="font-size: 26px; font-weight: 600; color: #14201B; text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: 0.02em">{full(r["amount"])}</span>'
           f'<span style="font-size: 22px; color: {MUTED}; white-space: nowrap">{r["date"].day} {MON[r["date"].month]}</span>'
           f'<span style="font-size: 24px; color: {"#14201B" if r["payee"] else GRAY}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{r["payee"] or "Поставщик не указан"}</span>'
@@ -257,5 +275,7 @@ def footer_gap(s, px):
     i=s.find('Подготовлено в Nota'); a=s.rfind('<div style="',0,i)
     return s[:a]+s[a:i].replace('<div style="',f'<div style="padding-top: {px}px; ',1)+s[i:]
 _pc=period_card; _ac=archive_card
-def period_card(*a, **k): return footer_gap(_pc(*a, **k), 56)
-def archive_card(*a, **k): return footer_gap(_ac(*a, **k), 32)
+def period_card(*a, **k):
+    h=_pc(*a, **k); return footer_gap(h, 56) if h else None
+def archive_card(*a, **k):
+    h=_ac(*a, **k); return footer_gap(h, 32) if h else None
