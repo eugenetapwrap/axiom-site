@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Nota — рилс о продукте</title>
+<style>
+@font-face{font-family:'Inter';font-weight:400 700;src:url('../report-cards/fonts/inter-cyrillic.woff2') format('woff2');unicode-range:U+0400-045F,U+2116}
+@font-face{font-family:'Inter';font-weight:400 700;src:url('../report-cards/fonts/inter-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+2212}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#F2F0EA}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#F2F0EA;font-family:'Inter',sans-serif;color:#15181D;font-optical-sizing:auto}
+.abs{position:absolute}
+.h{left:72px;width:936px;top:250px;font-size:74px;line-height:84px;font-weight:700;letter-spacing:-0.01em}
+.h .o{color:#E8501C}.h .m{color:#56635D;font-weight:600}
+.sub{left:72px;width:880px;top:1410px;font-size:38px;line-height:50px;color:#3E4A44}
+.card{background:#fff;border-radius:36px;box-shadow:0 18px 50px rgba(21,24,29,.10),0 2px 6px rgba(21,24,29,.06)}
+/* чат */
+#chat{left:72px;top:660px;width:936px;height:720px;overflow:hidden}
+.chhead{height:104px;display:flex;align-items:center;gap:22px;padding:0 34px;border-bottom:2px solid #ECEAE3}
+.av{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:28px;color:#fff;flex:none}
+.chname{font-size:32px;font-weight:700}.chmeta{font-size:24px;color:#7A857F;margin-top:2px}
+.msg{position:absolute;left:34px;top:140px;display:flex;gap:18px}
+.bubble{background:#F6F5F1;border-radius:28px;padding:18px;position:relative}
+.from{font-size:24px;font-weight:700;color:#0E5A52;margin:0 0 12px 6px}
+.time{position:absolute;right:30px;bottom:28px;background:rgba(21,24,29,.62);color:#fff;font-size:22px;padding:4px 12px;border-radius:14px}
+/* документ (выдуманный) */
+.doc{width:540px;background:#FFFEFA;border-radius:10px;padding:26px 28px;font-family:'JetBrains Mono',monospace;font-size:22px;line-height:33px;color:#2B2F33;box-shadow:inset 0 0 0 2px #EAE6DA}
+.doc .t{font-family:'Inter';font-weight:700;font-size:28px;letter-spacing:.04em;text-align:center;margin-bottom:6px}
+.doc .c{text-align:center;color:#6B7279;font-size:20px;margin-bottom:12px}
+.doc .r{display:flex;justify-content:space-between}
+.doc hr{border:0;border-top:2px dashed #CFC9BA;margin:10px 0}
+.doc .tot{font-weight:700;font-size:24px}
+.react{position:absolute;left:116px;top:612px;height:56px;display:flex;align-items:center;gap:12px;background:#fff;border:2px solid #E2E7E3;border-radius:28px;padding:0 20px 0 14px;font-size:26px;color:#3E4A44}
+.react .e{font-size:30px}
+/* таблица */
+#sheet{left:72px;top:660px;width:936px;overflow:hidden}
+.shtop{height:70px;display:flex;align-items:center;gap:14px;padding:0 28px;background:#EEF1EE;border-radius:36px 36px 0 0;font-size:24px;color:#3E4A44;font-weight:600}
+.shtop .dot{width:22px;height:22px;border-radius:5px;background:#12A36B}
+.row{display:grid;grid-template-columns:62px 96px 190px 1fr 196px 108px;align-items:center;height:76px;border-bottom:2px solid #ECEAE3;font-size:25px;padding:0 20px;column-gap:10px;white-space:nowrap;position:relative}
+.row.hd{height:58px;font-size:20px;color:#7A857F;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.row .n{color:#7A857F}.row .a{font-variant-numeric:tabular-nums;font-weight:600;text-align:right}.row .p{overflow:hidden;text-overflow:ellipsis}
+.badge{display:inline-block;font-size:20px;font-weight:700;padding:5px 12px;border-radius:10px;letter-spacing:.04em}
+.ok{background:#E3F3EA;color:#0C7A4F}.dbl{background:#E8501C;color:#fff}
+.note{position:absolute;left:112px;bottom:4px;font-size:23px;color:#B5400F;font-weight:600}
+#r15{height:108px;align-items:start;padding-top:20px}
+/* папка */
+#folder{left:72px;top:660px;width:936px;padding:40px}
+.fhead{display:flex;align-items:center;gap:22px;font-size:34px;font-weight:700;margin-bottom:34px}
+.ficon{width:76px;height:58px;background:#F4B400;border-radius:8px;position:relative}.ficon:before{content:'';position:absolute;left:0;top:-10px;width:34px;height:16px;background:#F4B400;border-radius:6px 6px 0 0}
+.fpath{font-size:24px;color:#7A857F;font-weight:500}
+.files{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.file{height:230px;border-radius:20px;background:#F6F5F1;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;font-size:26px;font-weight:600;position:relative;border:3px solid transparent}
+.file .th{position:absolute;left:18px;right:18px;top:18px;bottom:62px;border-radius:10px;background:repeating-linear-gradient(#FFFEFA 0 22px,#ECE8DC 22px 24px)}
+.file.hi{border-color:#E8501C;background:#FFF3EE}
+/* отчёт */
+#week{left:180px;top:600px;width:720px;border-radius:24px;box-shadow:0 24px 60px rgba(21,24,29,.16)}
+/* призыв */
+#logo{left:330px;top:470px;width:420px}
+.cta{left:72px;width:936px;text-align:center}
+#c1{top:690px;font-size:76px;line-height:86px;font-weight:700;letter-spacing:-0.01em}
+#c2{top:1010px}
+.pill{display:inline-block;background:#15181D;color:#fff;font-size:38px;font-weight:600;padding:22px 40px;border-radius:999px}
+#c3{top:1150px;font-size:70px;font-weight:700;color:#E8501C}
+#c4{top:1250px;font-size:34px;color:#56635D}
+</style></head><body>
+<div id="stage">
+  <!-- 1–2. чат -->
+  <div class="abs h" id="h1a">Сотрудник прислал накладную в 9:41.</div>
+  <div class="abs h" id="h1b" style="top:418px"><span class="o">Когда она окажется в&nbsp;таблице?</span></div>
+  <div class="abs h" id="h2">С Nota — в 9:42.<br><span class="m">Без вас.</span></div>
+  <div class="abs card" id="chat">
+    <div class="chhead"><div class="av" style="background:#0E5A52">В</div><div><div class="chname">Вилла · стройка</div><div class="chmeta">рабочая группа · 6 участников</div></div></div>
+    <div class="msg"><div class="av" style="background:#B58A3C">M</div>
+      <div><div class="from">Made</div><div class="bubble">
+        <div class="doc"><div class="t">SURAT JALAN</div><div class="c">No. 0412 · 18/11/2026</div>
+          <div class="r"><span>Semen 50 kg × 10</span><span>1.200.000</span></div>
+          <div class="r"><span>Pasir 1 m³ × 1</span><span>450.000</span></div><hr>
+          <div class="r tot"><span>TOTAL</span><span>Rp 1.650.000</span></div>
+          <div class="c" style="margin:12px 0 0">Toko Contoh Jaya</div></div>
+        <div class="time">9:41</div></div></div></div>
+    <div class="react" id="react"><span class="e">✍</span><span>Nota · 9:42</span></div>
+  </div>
+  <div class="abs sub" id="s2">Nota в группу не пишет — только ставит ✍ под записанным документом.</div>
+
+  <!-- 3–4. таблица -->
+  <div class="abs h" id="h3">Документ — строкой<br>в вашей Google-таблице</div>
+  <div class="abs h" id="h4">Тот же чек ещё раз?<br><span class="o">Nota заметит.</span></div>
+  <div class="abs card" id="sheet">
+    <div class="shtop"><span class="dot"></span>Nota · Payments</div>
+    <div class="row hd"><span>№</span><span>Дата</span><span style="text-align:right">Сумма</span><span>Поставщик</span><span>Категория</span><span>Check</span></div>
+    <div class="row"><span class="n">11</span><span>17.11</span><span class="a">320 000</span><span class="p">UD Sumber Air</span><span>Расходники</span><span><b class="badge ok">OK</b></span></div>
+    <div class="row"><span class="n">12</span><span>17.11</span><span class="a">2 400 000</span><span class="p">CV Karya Mandiri</span><span>Подрядчики</span><span><b class="badge ok">OK</b></span></div>
+    <div class="row"><span class="n">13</span><span>18.11</span><span class="a">185 000</span><span class="p">Bengkel Sinar</span><span>Топливо</span><span><b class="badge ok">OK</b></span></div>
+    <div class="row" id="r14"><span class="n">14</span><span>18.11</span><span class="a">1 650 000</span><span class="p">Toko Contoh Jaya</span><span>Материалы</span><span><b class="badge ok">OK</b></span></div>
+    <div class="row" id="r15"><span class="n">15</span><span>18.11</span><span class="a">1 650 000</span><span class="p">Toko Contoh Jaya</span><span>Материалы</span><span><b class="badge dbl">DBL</b></span><span class="note">уже записан под №14</span></div>
+  </div>
+  <div class="abs" id="dup" style="left:560px;top:600px;transform-origin:50% 50%"><div class="bubble" style="background:#fff;box-shadow:0 18px 50px rgba(21,24,29,.18)"><div class="doc" style="width:380px;font-size:16px;line-height:24px">
+    <div class="t" style="font-size:21px">SURAT JALAN</div><div class="c" style="font-size:15px">No. 0412 · 18/11/2026</div>
+    <div class="r"><span>Semen 50 kg × 10</span><span>1.200.000</span></div><div class="r"><span>Pasir 1 m³ × 1</span><span>450.000</span></div><hr>
+    <div class="r tot" style="font-size:18px"><span>TOTAL</span><span>Rp 1.650.000</span></div></div></div></div>
+  <div class="abs sub" id="s3">Читает чеки, счета, скриншоты переводов и рукописные накладные — на любом языке.</div>
+  <div class="abs sub" id="s4">Дубль отмечен — один счёт не оплатят дважды.</div>
+
+  <!-- 5. папка -->
+  <div class="abs h" id="h5">Оригинал — в папке<br>на вашем Google Диске</div>
+  <div class="abs card" id="folder">
+    <div class="fhead"><div class="ficon"></div><div>Documents<div class="fpath">Мой диск › Nota</div></div></div>
+    <div class="files">
+      <div class="file"><div class="th"></div>10.jpg</div><div class="file"><div class="th"></div>11.pdf</div><div class="file"><div class="th"></div>12.jpg</div>
+      <div class="file"><div class="th"></div>13.jpg</div><div class="file hi" id="f14"><div class="th"></div>14.jpg</div><div class="file"><div class="th"></div>15.jpg</div>
+    </div>
+  </div>
+  <div class="abs sub" id="s5">Номер строки ведёт к оригиналу — он открывается из таблицы в один клик.</div>
+
+  <!-- 6. отчёт -->
+  <div class="abs h" id="h6">Каждый понедельник —<br>отчёт за неделю</div>
+  <img class="abs" id="week" src="assets/week.png">
+
+  <!-- 7. призыв -->
+  <img class="abs" id="logo" src="assets/logo.svg">
+  <div class="abs cta" id="c1">Пришлите архив чеков —<br>получите отчёт<br>за 15 минут</div>
+  <div class="abs cta" id="c2"><span class="pill">30 документов бесплатно · без карты</span></div>
+  <div class="abs cta" id="c3">@NotaGetBot</div>
+  <div class="abs cta" id="c4">бот в Telegram</div>
+</div>
+<script>
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const easeOut = (x) => 1 - Math.pow(1 - x, 3), ease = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const env = (t, a, b, d = .4) => (t < a || t > b ? 0 : Math.min(easeOut(prog(t, a, a + d)), 1 - ease(prog(t, b - d, b))));
+function show(id, t, a, b, o = {}) {
+  const el = document.getElementById(id), e = env(t, a, b, o.d || .4), k = 1 - e;
+  el.style.opacity = e; el.style.visibility = e > 0.001 ? 'visible' : 'hidden';
+  el.style.transform = `translate(${(o.dx || 0) * k}px, ${(o.dy === undefined ? 36 : o.dy) * k}px) scale(${1 - (o.sc || 0) * k}) ${o.extra || ''}`;
+}
+window.render = function (t) {
+  const END = 99;
+  // 1–2: чат
+  show('h1a', t, 0.15, 3.6); show('h1b', t, 1.5, 3.6);
+  show('chat', t, 0.45, 6.8, { dy: 60 });
+  show('h2', t, 3.6, 6.8);
+  show('react', t, 3.75, 6.8, { dy: 0, sc: .35, d: .3 });
+  show('s2', t, 4.1, 6.8, { dy: 20 });
+  // 3–4: таблица
+  show('h3', t, 6.8, 10.8); show('h4', t, 10.8, 14.8);
+  show('sheet', t, 6.9, 14.8, { dy: 60 });
+  show('r14', t, 7.7, 99, { dy: -30, d: .45 });
+  const hl = env(t, 7.7, 10.6, .5); document.getElementById('r14').style.background = `rgba(18,163,107,${0.12 * hl})`;
+  show('s3', t, 7.2, 10.8, { dy: 20 }); show('s4', t, 12.4, 14.8, { dy: 20 });
+  // переснятый чек: прилетает справа, уменьшается и «падает» в таблицу
+  const din = easeOut(prog(t, 11.0, 11.6)), dout = ease(prog(t, 11.9, 12.4)), dup = document.getElementById('dup');
+  dup.style.opacity = t < 11.0 || t > 12.4 ? 0 : Math.min(din, 1 - dout * .9);
+  dup.style.transform = `translate(${(1 - din) * 420 - dout * 120}px, ${dout * 470}px) rotate(${-7 + dout * 7}deg) scale(${1 - dout * .7})`;
+  show('r15', t, 12.1, 99, { dy: -30, d: .45 });
+  const hl2 = env(t, 12.1, 14.8, .4); document.getElementById('r15').style.background = `rgba(232,80,28,${0.10 * hl2})`;
+  // 5: папка
+  show('h5', t, 14.8, 17.8); show('folder', t, 14.9, 17.8, { dy: 60 }); show('s5', t, 15.3, 17.8, { dy: 20 });
+  const pul = env(t, 15.6, 17.8, .35); document.getElementById('f14').style.transform = `scale(${1 + 0.06 * pul})`;
+  // 6: отчёт
+  show('h6', t, 17.8, 21.4); show('week', t, 18.0, 21.4, { dy: 140, d: .6 });
+  // 7: призыв
+  show('logo', t, 21.4, END, { dy: 20, sc: .1 }); show('c1', t, 21.65, END); show('c2', t, 22.1, END, { dy: 24 });
+  show('c3', t, 22.45, END, { dy: 24 }); show('c4', t, 22.6, END, { dy: 18 });
+};
+window.render(0);
+</script>
+</body></html>
