@@ -61,7 +61,17 @@ const jsonld = [
     <div class="wrap">
       <a class="logo-link" href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
       <nav aria-label="Разделы">{nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
-      <a class="btn btn--sm btn--dark" href={botLink('land10_header')}>Открыть в Telegram</a>
+      <!-- Языки (основатель, 19.11): пока только русский; EN и ID — «скоро», без перехода на пустую страницу -->
+      <div class="lang" role="group" aria-label="Язык сайта">
+        <button type="button" class="lang-b" aria-disabled="true" data-soon="Coming soon">EN</button>
+        <button type="button" class="lang-b" aria-disabled="true" data-soon="Segera hadir">ID</button>
+        <span class="lang-b on" aria-current="true">RU</span>
+      </div>
+      <details class="lang-m">
+        <summary aria-label="Язык сайта: русский">RU</summary>
+        <div class="lang-menu"><span>EN <small>Coming soon</small></span><span>ID <small>Segera hadir</small></span></div>
+      </details>
+      <a class="btn btn--sm btn--dark" href={botLink('land10_header')}><span class="hb-lg">Открыть в Telegram</span><span class="hb-sm">В Telegram</span></a>
     </div>
   </header>
 
