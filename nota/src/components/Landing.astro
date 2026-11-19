@@ -74,6 +74,7 @@ const jsonld = [
           <span class="hero-eyebrow">{hero.eyebrow}</span>
           <h1>{h1Cut[0]}<Pen u line id="h1">{h1Cut[1]}</Pen>{h1Cut[2]}</h1>
           <p class="lead">{hero.lead}</p>
+          <ul class="hero-list">{hero.docs.map((t) => <li><Icon name="check" size={20} /><span>{t}</span></li>)}</ul>
           <div class="num-group">
           <span class="num-dot" aria-hidden="true"><i data-n="1"></i></span>
           <div class="cta-row cta-row--qr">
