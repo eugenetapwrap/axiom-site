@@ -90,7 +90,7 @@ const jsonld = [
           <!-- «Как выгрузить архив» убрано в v11: инструкция — в боте (кнопка «Как собрать архив») -->
         </div>
         <figure class="hero-report in-flow">
-          <img src={hero.report.file} srcset={`${hero.report.file} 1x, ${hero.report.file2x} 2x`} alt="Пример отчёта Nota по архиву: 101,54 млн рупий, 27 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
+          <img src={hero.report.file} srcset={`${hero.report.file} 1x, ${hero.report.file2x} 2x`} alt="Пример отчёта Nota по архиву: 103,84 млн рупий, 28 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
           <figcaption>{hero.report.caption}</figcaption>
         </figure>
       </div>
@@ -140,7 +140,7 @@ const jsonld = [
           </div>
           {analytics.screens.map((sc, i) => (
             <div class:list={['an-panel', { on: i === 0 }]} role="tabpanel" id={`an-panel-${sc.id}`} aria-labelledby={`an-tab-${sc.id}`}>
-              <ScreenSlot file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={shotAlt[sc.id] ?? `Лист ${sc.tab} на тестовых данных`} w={sc.w} h={sc.h} mobile={sc.mobile} />
+              <ScreenSlot bar={false} file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={shotAlt[sc.id] ?? `Лист ${sc.tab} на тестовых данных`} w={sc.w} h={sc.h} mobile={sc.mobile} />
               <ul class="an-points">{sc.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
             </div>
           ))}

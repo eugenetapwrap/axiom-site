@@ -12,16 +12,19 @@ interface Props {
   w?: number;
   h?: number;
   mobile?: { file: string; w: number; h: number }; // фрагмент листа для телефона
+  bar?: boolean;  // шапка «Nota · Google Таблицы» над скриншотом; на главной (v11) убрана 19.11
 }
-const { file, tab, tabs, alt, w, h, mobile } = Astro.props;
+const { file, tab, tabs, alt, w, h, mobile, bar = true } = Astro.props;
 const exists = fs.existsSync(path.join(process.cwd(), 'public', file));
 ---
 <div class="shot">
-  <div class="shot-bar" aria-hidden="true">
-    <span class="shot-doc"></span>
-    <span class="shot-name">Nota · Google Таблицы</span>
-    <span class="shot-dots"><i></i><i></i><i></i></span>
-  </div>
+  {bar && (
+    <div class="shot-bar" aria-hidden="true">
+      <span class="shot-doc"></span>
+      <span class="shot-name">Nota · Google Таблицы</span>
+      <span class="shot-dots"><i></i><i></i><i></i></span>
+    </div>
+  )}
   <div class="shot-body">
     {exists ? (
       <a href={file} target="_blank" rel="noopener" title="Открыть в полном размере" aria-label={`${alt}: открыть в полном размере, в новой вкладке`}>

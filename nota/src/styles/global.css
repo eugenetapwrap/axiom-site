@@ -1061,3 +1061,9 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
   .v11 #send .send-head { gap: 8px; }
   .v11 #send .send-head h3 { font-size: 19px; }
 }
+/* v11, 19.11: пример отчёта короче — 1080 × 1238 (без имени файла и нижней строки «Подготовлено в Nota»); пропорции и высоты колонок под него */
+@media (min-width: 1000px) {
+  html:not([data-rep="plain"]) .v9.v11 .story-fig img { width: min(100%, calc((100vh - 150px) * 0.8724)); aspect-ratio: 1080 / 1238; }
+  html:not([data-rep="plain"]) .v9.v11 #result { min-height: calc(min(596px, 100vh - 150px) + 34px + 112px); }
+  .v10.v11 .hero-left { min-height: calc(min(596px, 100vh - 150px) + 34px); }
+}
