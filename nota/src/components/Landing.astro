@@ -54,6 +54,7 @@ const jsonld = [
     mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
   },
 ];
+const showReviews = false; // блок «Отзывы» (19.11: скрыт, пока нет настоящих отзывов)
 ---
 <Base title={meta.title} description={meta.description} noindex={noindex} og="/og-v10.png" selfFonts>
   <a class="skip" href="#main">К содержанию</a>
@@ -96,7 +97,7 @@ const jsonld = [
           </div>
           <!-- Под кнопкой — условия; «Кому подходит» убрано: аудиторию называет строка над заголовком, сферы — блок «Для кого» (основатель 15.11) -->
           <p class="cta-line">{hero.noteShort}</p>
-          <p class="phone-hint">{hero.phoneHint}</p>
+          <details class="phone-hint howto-mini"><summary>Как отправить с телефона?</summary><p>{hero.phoneHint}</p></details>
           </div>
           <!-- «Как выгрузить архив» убрано в v11: инструкция — в боте (кнопка «Как собрать архив») -->
         </div>
@@ -298,6 +299,8 @@ const jsonld = [
 
     <!-- После цен — по силе для продажи: отзывы → сравнение → ваши данные → вопросы → для кого -->
     <!-- Отзывы: тексты основателя (15.11), порядок как у основателя — первым реальный кейс со сговором; лентой -->
+    {/* Отзывы скрыты до настоящих (основатель 19.11): включить — showReviews = true в начале файла */}
+    {showReviews && (
     <section class="section section--paper" id="reviews">
       <div class="wrap">
         <!-- Лента отзывов (основатель 15.11): 3 на экране компьютера, 2 на планшете, 1 с краем следующего на телефоне; листается свайпом и стрелками, без автопрокрутки -->
@@ -338,9 +341,10 @@ const jsonld = [
         </script>
       </div>
     </section>
+    )}
 
-    <!-- 6. Сравнение: накладная в 9:41 -->
-    <section class="section">
+    <!-- 6. Сравнение: накладная в 9:41 (на телефоне скрыто, основатель 19.11) -->
+    <section class="section cmp-sec">
       <div class="wrap">
         <h2 class="cmp-title">{compare.title}</h2>
         <div class="cmp" role="table" aria-label="Сравнение: Nota, админ с Excel, приложение для расходов">
@@ -441,7 +445,7 @@ const jsonld = [
         <a href={botLink('land10_support')}>Поддержка в боте</a>
       </nav>
       <div class="op">{footer.operator} · © 2026</div>
-      <p class="foot-note">{footer.testData}<br /><span id="stats-note">*&nbsp;{footer.statsNote}</span></p>
+      <p class="foot-note">{footer.testData}</p>
     </div>
   </footer>
   <script is:inline>
@@ -471,4 +475,17 @@ const jsonld = [
     })();
   </script>
   <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+<script is:inline>
+  // Меню: подчёркнут раздел, который сейчас на экране (основатель 19.11); вне разделов меню — ничего
+  (function () {
+    var links = [].slice.call(document.querySelectorAll('.header nav a[href^="#"]'));
+    var map = links.map(function (a) { return [a, document.querySelector(a.getAttribute('href'))]; }).filter(function (x) { return x[1]; });
+    function update() {
+      var y = window.scrollY + window.innerHeight * 0.35, cur = null;
+      map.forEach(function (x) { var r = x[1].getBoundingClientRect(), top = r.top + window.scrollY; if (top <= y && y < top + r.height) cur = x[0]; });
+      links.forEach(function (a) { var on = a === cur; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });
+    }
+    window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update); update();
+  })();
+</script>
 </Base>
