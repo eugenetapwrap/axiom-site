@@ -26,8 +26,9 @@ f['I2'] = H + D + ('tot;IF(un<=0;0;IF(fr<=0;30;MAX(1;INT(un)-INT(fr)+1)));'
                'IF(plan="";"";IF(un<=0;' + L('Days left · no limit', 'Дней · без срока', 'Sisa hari · tanpa batas') +
                ';IF(exp;' + L('Plan ended ', 'Тариф истёк ', 'Paket berakhir ') + '&d;'
                'REPT("█";n)&IF(n>0;"  ";"")&' + L('Days left · to ', 'Дней · до ', 'Sisa hari · s/d ') + '&d))))')
-f['H3'] = H + ('IF(plan="";"";SWITCH(plan;"free";' + L('Free', 'Бесплатно', 'Gratis') + ';"start";' + L('Start', 'Старт', 'Start') +
-               ';"growth";' + L('Growth', 'Рост', 'Growth') + ';"scale";' + L('Scale', 'Масштаб', 'Scale') + ';plan)&" "))')
+# Тариф: «Growth plan» вместо «Growth» — чтобы не читалось как подпись к кнопке (основатель 20.11)
+f['H3'] = H + ('IF(plan="";"";SWITCH(plan;"free";' + L('Free plan', 'Бесплатный тариф', 'Paket Gratis') + ';"start";' + L('Start plan', 'Тариф Старт', 'Paket Start') +
+               ';"growth";' + L('Growth plan', 'Тариф Рост', 'Paket Growth') + ';"scale";' + L('Scale plan', 'Тариф Масштаб', 'Paket Scale') + ';plan)&" "))')
 # Кнопка: одна подпись для всех состояний (основатель 20.11), цвет меняет условное форматирование
 f['I3'] = H + 't;' + L('Payment', 'Оплата', 'Bayar') + '&"  ➜";IF(plan="";"";IF(url="";t;HYPERLINK(url;t))))'
 # Условное форматирование: другой лист — только через INDIRECT
