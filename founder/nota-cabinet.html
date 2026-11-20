@@ -1,0 +1,168 @@
+<title>Технический кабинет Nota</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: одна колонка-анкета, группы полей по месту использования; статус заполнения сверху */
+:root{
+  --bg:#f6f8f6; --card:#ffffff; --ink:#14201b; --muted:#5b6862; --line:#e1e7e3;
+  --accent:#0c7a4f; --accent-ink:#0a6b45; --soft:#e8f4ee; --warn:#b4400f; --warn-soft:#fdeee7;
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101614; --card:#17201c; --ink:#e7ede9; --muted:#9aa8a1; --line:#2a3631;
+  --accent:#3fbf86; --accent-ink:#5fd29e; --soft:#173a2a; --warn:#f2925f; --warn-soft:#3a2117; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101614; --card:#17201c; --ink:#e7ede9; --muted:#9aa8a1; --line:#2a3631;
+  --accent:#3fbf86; --accent-ink:#5fd29e; --soft:#173a2a; --warn:#f2925f; --warn-soft:#3a2117; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.5;margin:0}
+.wrap{max-width:780px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-size:28px;line-height:1.15;letter-spacing:-.015em;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:8px 0 0;max-width:62ch}
+.status{display:flex;align-items:center;gap:14px;margin-top:20px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;flex-wrap:wrap}
+.meter{flex:1;min-width:160px;height:8px;border-radius:8px;background:var(--line);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:8px;transition:width .3s}
+.status b{font-variant-numeric:tabular-nums}
+.note{font-size:13.5px;color:var(--muted)}
+.note.warn{color:var(--warn)}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:30px 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px}
+.row{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;padding:16px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.lbl{font-weight:600}
+.badge{font-size:12px;font-weight:600;padding:2px 9px;border-radius:20px;white-space:nowrap;background:var(--warn-soft);color:var(--warn)}
+.badge.ok{background:var(--soft);color:var(--accent-ink)}
+.badge.opt{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.where{font-size:13px;color:var(--muted)}
+.ctl{display:flex;gap:8px}
+.ctl input,.ctl textarea{flex:1;min-width:0;font:inherit;font-size:14.5px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.ctl textarea{min-height:76px;resize:vertical}
+.ctl input:focus,.ctl textarea:focus{outline:2px solid color-mix(in srgb,var(--accent) 45%,transparent);border-color:var(--accent)}
+.ctl input:disabled,.ctl textarea:disabled{opacity:.7}
+.btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:0 12px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.msg{font-size:12.5px;min-height:0}
+.msg.err{color:var(--warn)}
+.msg.ok{color:var(--accent-ink)}
+.foot{margin-top:28px;font-size:13.5px;color:var(--muted);max-width:62ch}
+@media (max-width:520px){.ctl{flex-direction:column}.btn{height:38px}h1{font-size:24px}}
+@media (prefers-reduced-motion:reduce){.meter i{transition:none}}
+</style>
+
+<div class="wrap">
+  <h1>Технический кабинет Nota</h1>
+  <p class="lead">Ссылки и контакты, которые нужны сайту, странице оплаты и таблице. Впишите значение — оно сохранится само, когда вы выйдете из поля. Потом Claude заберёт всё отсюда и поставит на сайт.</p>
+  <div class="status" id="status"><div class="meter" aria-hidden="true"><i id="bar" style="width:0"></i></div><span><b id="cnt">0 из 0</b> обязательных заполнено</span><span class="note" id="state">Загружаю сохранённое…</span></div>
+  <div id="groups"></div>
+  <p class="foot">Пустое поле — значит, на сайте пока стоит заглушка. Чтобы удалить значение, очистите поле и выйдите из него. Видеть и менять кабинет можете только вы.</p>
+</div>
+
+<script>
+(function(){
+  var FIELDS = [
+    ['Документы', [
+      ['terms', 'Пользовательское соглашение', 'Подвал сайта, страница оплаты, экран входа через Google. Сюда же — данные оператора', 'url', 'https://…', true],
+      ['privacy', 'Политика конфиденциальности', 'Подвал сайта, страница оплаты, раздел «Ваши данные», экран входа через Google', 'url', 'https://…', true],
+      ['refund', 'Правила возврата', 'Страница оплаты. Обычно её требует банк при подключении оплаты', 'url', 'https://…', true],
+      ['autorenew', 'Условия подписки и автопродления', 'Страница оплаты, рядом с галочкой «Продлевать автоматически». Можно указать раздел соглашения', 'url', 'https://…', false]
+    ]],
+    ['Контакты', [
+      ['supportEmail', 'Почта поддержки', 'Подвал сайта, страница оплаты, письма с чеками', 'email', 'support@…', true],
+      ['supportTg', 'Telegram для вопросов', 'Страница оплаты и сайт', 'text', '@…', true],
+      ['bot', 'Ссылка на бота', 'Все кнопки «Открыть в Telegram»', 'url', 'https://t.me/…', true]
+    ]],
+    ['Компания', [
+      ['legal', 'Юрлицо и реквизиты', 'Соглашение, счета с реквизитами по запросу, при необходимости — подвал', 'textarea', 'Название, страна, регистрационный номер, адрес', false]
+    ]],
+    ['Оплата', [
+      ['crypto', 'Страница оплаты криптовалютой', 'Кнопка «Криптовалюта» на странице оплаты (Tribute или другой сервис)', 'url', 'https://…', false]
+    ]],
+    ['Таблица', [
+      ['instruction', 'Инструкция', 'Ссылка «Instruction» в шапке таблицы клиента. Сейчас у неё нет адреса', 'url', 'https://…', true]
+    ]],
+    ['Сайт', [
+      ['domain', 'Адрес сайта', 'Основной адрес сайта и страницы оплаты', 'text', 'nota.axiomco.io', true],
+      ['analytics', 'Веб-аналитика', 'ID счётчика, если решите ставить: Plausible, Umami, Google Analytics или Метрика', 'text', 'например, G-XXXXXXX', false]
+    ]]
+  ];
+  var vals = {}, dirty = {}, db = null, canWrite = true;
+  var groups = document.getElementById('groups'), stateEl = document.getElementById('state');
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function build(){
+    groups.innerHTML = FIELDS.map(function(g){
+      return '<h2>' + g[0] + '</h2><div class="card">' + g[1].map(function(f){
+        var id = f[0], input = f[3] === 'textarea'
+          ? '<textarea id="f-' + id + '" data-id="' + id + '" placeholder="' + esc(f[4]) + '"></textarea>'
+          : '<input id="f-' + id + '" data-id="' + id + '" type="' + (f[3] === 'text' ? 'text' : f[3]) + '" placeholder="' + esc(f[4]) + '" autocomplete="off" spellcheck="false">';
+        return '<div class="row"><div class="top"><label class="lbl" for="f-' + id + '">' + f[1] + '</label><span class="badge" id="b-' + id + '"></span></div>' +
+          '<div class="where">' + f[2] + '</div><div class="ctl">' + input + '<button type="button" class="btn" data-copy="' + id + '">Копировать</button></div><div class="msg" id="m-' + id + '" role="status"></div></div>';
+      }).join('') + '</div>';
+    }).join('');
+  }
+  function all(){ var a = []; FIELDS.forEach(function(g){ a = a.concat(g[1]); }); return a; }
+  function paint(){
+    var req = 0, done = 0;
+    all().forEach(function(f){
+      var id = f[0], v = vals[id] || '', el = document.getElementById('f-' + id), b = document.getElementById('b-' + id);
+      if (el && !dirty[id] && document.activeElement !== el) el.value = v;
+      if (f[5]) { req++; if (v) done++; }
+      b.className = 'badge' + (v ? ' ok' : f[5] ? '' : ' opt');
+      b.textContent = v ? 'Заполнено' : f[5] ? 'Нужно' : 'По желанию';
+    });
+    document.getElementById('cnt').textContent = done + ' из ' + req;
+    document.getElementById('bar').style.width = (req ? Math.round(done / req * 100) : 0) + '%';
+  }
+  function check(f, v){
+    if (!v) return '';
+    if (f[3] === 'url' && !/^https?:\/\/\S+\.\S+/.test(v)) return 'Нужна полная ссылка, которая начинается с https://';
+    if (f[3] === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return 'Проверьте адрес почты';
+    return '';
+  }
+  function msg(id, text, kind){ var m = document.getElementById('m-' + id); m.textContent = text; m.className = 'msg' + (kind ? ' ' + kind : ''); }
+  var busy = {};
+  function save(id){
+    var f = all().filter(function(x){ return x[0] === id; })[0], el = document.getElementById('f-' + id);
+    var v = el.value.trim();
+    if (v === (vals[id] || '')) { dirty[id] = false; return; }
+    var err = check(f, v); if (err) { msg(id, err, 'err'); return; }
+    if (!db || !canWrite) { msg(id, 'Сохранение недоступно в этом просмотре', 'err'); return; }
+    if (busy[id]) return; busy[id] = true; msg(id, 'Сохраняю…');
+    var ref = db.collection('links').doc(id);
+    (v ? ref.set({ value: v, updatedAt: new Date().toISOString() }) : ref.delete()).then(function(){
+      vals[id] = v; dirty[id] = false; msg(id, v ? 'Сохранено' : 'Удалено', 'ok'); paint();
+      setTimeout(function(){ if (!dirty[id]) msg(id, ''); }, 2500);
+    }).catch(function(e){
+      if (e && e.code === 'invalid_argument') { canWrite = false; lock(); msg(id, 'Менять кабинет может только владелец', 'err'); }
+      else msg(id, 'Не сохранилось, попробуйте ещё раз', 'err');
+    }).then(function(){ busy[id] = false; });
+  }
+  function lock(){ Array.prototype.forEach.call(document.querySelectorAll('[data-id]'), function(el){ el.disabled = true; }); }
+
+  build(); paint();
+  groups.addEventListener('input', function(e){ var id = e.target.getAttribute('data-id'); if (id) { dirty[id] = true; msg(id, ''); } });
+  groups.addEventListener('focusout', function(e){ var id = e.target.getAttribute('data-id'); if (id) save(id); });
+  groups.addEventListener('keydown', function(e){ var id = e.target.getAttribute('data-id'); if (id && e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); save(id); } });
+  groups.addEventListener('click', function(e){
+    var id = e.target.getAttribute('data-copy'); if (!id) return;
+    var el = document.getElementById('f-' + id), v = el.value.trim(); if (!v) { msg(id, 'Поле пустое'); return; }
+    var done = function(){ msg(id, 'Скопировано', 'ok'); setTimeout(function(){ msg(id, ''); }, 1800); };
+    try { navigator.clipboard.writeText(v).then(done, function(){ el.select(); msg(id, 'Нажмите Ctrl+C, текст выделен'); }); }
+    catch (x) { el.select(); msg(id, 'Нажмите Ctrl+C, текст выделен'); }
+  });
+
+  var timer = setTimeout(function(){ stateEl.textContent = 'Сохранённые значения пока не загрузились. Проверьте интернет.'; stateEl.className = 'note warn'; }, 10000);
+  if (!window.claude || !window.claude.use) { clearTimeout(timer); stateEl.textContent = 'Сохранение работает только на странице в Claude.'; stateEl.className = 'note warn'; lock(); return; }
+  window.claude.use('user').then(function(u){ if (u && u.isOwner && !u.isOwner()) { canWrite = false; lock(); stateEl.textContent = 'Только просмотр: менять может владелец.'; } });
+  window.claude.use('db').then(function(d){
+    if (!d) { clearTimeout(timer); stateEl.textContent = 'Хранилище недоступно в этом просмотре. Откройте кабинет, войдя в Claude.'; stateEl.className = 'note warn'; lock(); return; }
+    db = d;
+    db.collection('links').onSnapshot(function(snap){
+      if (!snap.metadata.fromCache) { clearTimeout(timer); stateEl.textContent = 'Изменения сохраняются автоматически'; stateEl.className = 'note'; }
+      var next = {}; snap.docs.forEach(function(doc){ var x = doc.data(); if (x && typeof x.value === 'string') next[doc.id] = x.value; });
+      vals = next; paint();
+    }, function(){ clearTimeout(timer); stateEl.textContent = 'Связь с хранилищем прервалась. Обновите страницу.'; stateEl.className = 'note warn'; });
+  });
+})();
+</script>
