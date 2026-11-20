@@ -2,6 +2,7 @@
 // Страница оплаты Nota: /pay/<код таблицы>. Одна страница на все экраны (оплата, обработка, «Оплачено»,
 // «Оплата не прошла», «Ссылка не найдена», управление подпиской) — экран выбирает скрипт по адресу и ответу сервера.
 // Пока сервера нет (CONFIG.api = null), страница работает на тестовых данных и показывает сверху панель «Прототип».
+// Дизайн (основатель 20.11): чистая первая версия + от лендинга шапка с «таблеткой» языков, подписи тарифов, цвета; «Оплатить» — зелёная.
 // Договорённости основателя 20.11: оплата картой через Bank of Georgia с автопродлением + криптовалюта (разово);
 // смена тарифа сразу, неиспользованные дни идут в зачёт; пакет +50 = $10 до конца оплаченного срока, только при действующем тарифе;
 // цены как на сайте, налоги включены; счёт с реквизитами — по запросу в боте. Подробности для программиста — nota/PAY.md.
@@ -11,164 +12,182 @@ import Logo from '../../components/Logo.astro';
 <Base title="Оплата Nota" description="Оплата тарифа Nota" noindex selfFonts>
   <div class="pp">
     <div class="pp-demo" id="pp-demo" hidden></div>
-    <!-- Шапка — как на лендинге: логотип, переключатель языков-«таблетка» (на телефоне — меню), кнопка в Telegram -->
-    <header class="header">
-      <div class="wrap">
-        <a class="logo-link" href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
-        <div class="lang" role="group" aria-label="Язык" id="pp-lang">
-          <button type="button" class="lang-b" data-lang="ru">RU</button><button type="button" class="lang-b" data-lang="en">EN</button><button type="button" class="lang-b" data-lang="id">ID</button>
+    <header class="header pp-hd">
+      <div class="pp-in">
+        <a class="pp-logo" href="/" aria-label="Nota — на главную"><Logo height={28} /></a>
+        <div class="pp-tr">
+          <div class="lang" role="group" aria-label="Язык" id="pp-lang">
+            <button type="button" class="lang-b" data-lang="ru">RU</button><button type="button" class="lang-b" data-lang="en">EN</button><button type="button" class="lang-b" data-lang="id">ID</button>
+          </div>
+          <details class="lang-m" id="pp-lang-m">
+            <summary aria-label="Язык">RU</summary>
+            <div class="lang-menu"><button type="button" data-lang="ru">Русский <small>RU</small></button><button type="button" data-lang="en">English <small>EN</small></button><button type="button" data-lang="id">Bahasa Indonesia <small>ID</small></button></div>
+          </details>
+          <a class="pp-help" id="pp-help" href="https://t.me/NotaGetBot" target="_blank" rel="noopener">Помощь в Telegram</a>
         </div>
-        <details class="lang-m" id="pp-lang-m">
-          <summary aria-label="Язык">RU</summary>
-          <div class="lang-menu"><button type="button" data-lang="ru">Русский <small>RU</small></button><button type="button" data-lang="en">English <small>EN</small></button><button type="button" data-lang="id">Bahasa Indonesia <small>ID</small></button></div>
-        </details>
-        <a class="btn btn--sm btn--dark" id="pp-help" href="https://t.me/NotaGetBot" target="_blank" rel="noopener"><span class="hb-lg">Помощь в Telegram</span><span class="hb-sm">Помощь</span></a>
       </div>
     </header>
-    <main class="wrap pp-main" id="pp-app" aria-live="polite">
+    <main class="pp-main" id="pp-app" aria-live="polite">
       <noscript><p class="pp-note">Для оплаты включите JavaScript в браузере.</p></noscript>
     </main>
-    <footer class="footer">
-      <div class="wrap">
-        <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
-        <nav aria-label="Документы" id="pp-fnav"></nav>
-        <div class="op">© 2026</div>
-      </div>
-    </footer>
     <div class="pp-bar" id="pp-bar" hidden></div>
     <div class="pp-toast" id="pp-toast" role="status" hidden></div>
   </div>
 
   <style is:global>
-    /* Страница оплаты повторяет лендинг: те же шапка (.header, .lang), кнопки (.btn), переключатель срока (.bill),
-       карточки тарифов (.pa-c, .pa-v, .pa-p) и тёмный подвал (.footer) из global.css. Здесь — только то, чего на лендинге нет. */
-    .pp .header .btn--dark{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
-    .pp .header .btn--dark:hover{background:var(--ink);color:#fff;box-shadow:none}
-    .pp .lang-b{cursor:pointer}
+    .pp{min-height:100vh;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+    .pp *{box-sizing:border-box}
+    .pp button{font:inherit;color:inherit}
+    .pp-in{max-width:1120px;margin:0 auto;padding:0 24px}
+    /* Шапка — от лендинга: прозрачная липкая полоса (.header), логотип и «таблетка» языков (.lang); остальное — спокойнее лендинга */
+    .pp-hd .pp-in{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .pp-logo{display:flex;align-items:center}
+    .pp-tr{display:flex;align-items:center;gap:20px;font-size:14px;color:var(--muted)}
+    .pp .lang{margin-left:0}
+    .pp .lang-b{cursor:pointer;min-width:38px;height:32px;font-size:13.5px}
     .pp .lang-b:not(.on):hover{color:var(--ink)}
     .pp .lang-menu button{display:flex;justify-content:space-between;align-items:baseline;gap:12px;width:100%;padding:8px 10px;border:0;border-radius:8px;background:none;font:inherit;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;text-align:left}
     .pp .lang-menu button.on{color:var(--ink);background:var(--box)}
-    .pp-main{padding-top:36px;padding-bottom:80px}
-    .pp-h1{font-size:clamp(30px,3.4vw,42px);line-height:1.1;font-weight:700;letter-spacing:-.015em;margin:0 0 24px}
-    .pp-h2{font-size:19px;font-weight:700;line-height:1.3;margin:32px 0 14px}
-    .pp-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:32px;align-items:start}
-    .pp-card{background:#fff;border-radius:18px;padding:22px;box-shadow:inset 0 0 0 1px var(--line)}
+    .pp-help{color:var(--muted);text-decoration:none}
+    .pp-help:hover{color:var(--ink)}
+    .pp-main{max-width:1120px;margin:0 auto;padding:28px 24px 72px}
+    .pp-h1{font-size:28px;line-height:1.15;font-weight:700;letter-spacing:-.015em;margin:0 0 18px}
+    .pp-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:28px;align-items:start}
+    .pp-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px}
     .pp-ctx{display:flex;gap:14px;align-items:flex-start}
-    .pp-sh{width:36px;height:36px;border-radius:9px;background:#1e8e3e;flex:none;position:relative}
-    .pp-sh::after{content:"";position:absolute;inset:10px 9px;border:2px solid #fff;border-radius:2px;background:linear-gradient(#fff,#fff) 50% 0/2px 100% no-repeat,linear-gradient(#fff,#fff) 0 50%/100% 2px no-repeat}
-    .pp-nm{font-size:17px;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
-    .pp-ow{font-size:14px;color:var(--muted);margin-top:2px}
-    .pp-now{margin-top:16px;padding-top:16px;border-top:1px solid var(--line);font-size:15px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
+    .pp-sh{width:34px;height:34px;border-radius:8px;background:#1e8e3e;flex:none;position:relative}
+    .pp-sh::after{content:"";position:absolute;inset:9px 8px;border:2px solid #fff;border-radius:2px;background:linear-gradient(#fff,#fff) 50% 0/2px 100% no-repeat,linear-gradient(#fff,#fff) 0 50%/100% 2px no-repeat}
+    .pp-nm{font-size:16px;font-weight:700;overflow-wrap:anywhere}
+    .pp-ow{font-size:13.5px;color:var(--muted);margin-top:3px}
+    .pp-now{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
     .pp-now b{color:var(--ink)}
-    .pp .pp-link{color:var(--slate);font-weight:600;text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer;font:inherit;font-weight:600}
-    .pp .pp-link:hover{color:var(--ink)}
-    .pp-alert{margin-top:14px;padding:12px 14px;border-radius:12px;background:#fdece6;color:#9c3510;font-size:14.5px;line-height:1.45}
-    .pp .bill{flex-wrap:wrap}
-    .pp-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-    .pp .pp-pc{position:relative;text-align:left;font:inherit;color:inherit;border:0;cursor:pointer;width:100%;transition:box-shadow .15s ease}
-    .pp .pp-pc:hover{box-shadow:inset 0 0 0 1px #b9c4bd}
-    .pp .pp-pc[aria-checked="true"]{box-shadow:inset 0 0 0 2px var(--slate)}
-    .pp .pp-pc:focus-visible{outline:3px solid var(--slate);outline-offset:3px}
-    .pp-rd{position:absolute;right:20px;top:24px;width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 2px #c3ccc6}
-    .pp-pc[aria-checked="true"] .pp-rd{box-shadow:inset 0 0 0 6px var(--slate)}
-    .pp .pp-pc .pa-n{padding-right:28px}
-    .pp .pp-pc .pa-p{min-height:0}
-    .pp-tag{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;background:#dcefe4;color:var(--green-text);font-size:12.5px;font-weight:700;vertical-align:2px}
-    .pp-grp{display:flex;gap:8px;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:14px;color:var(--ink)}
-    .pp-grp svg,.pp-ck{color:var(--green);flex:none}
+    .pp .pp-link{color:var(--green-text);font-weight:600;text-decoration:none;background:none;border:0;padding:0;cursor:pointer;font-size:inherit}
+    .pp .pp-link:hover{text-decoration:underline}
+    .pp-alert{margin-top:12px;padding:10px 12px;border-radius:10px;background:#fdece6;color:#9c3510;font-size:13.5px;line-height:1.45}
+    .pp-lbl{font-size:12.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:24px 0 10px}
+    .pp-seg{display:inline-flex;background:#e9eeea;border-radius:11px;padding:4px;gap:4px;flex-wrap:wrap}
+    .pp-seg button{border:0;background:none;padding:9px 16px;border-radius:8px;font-size:14.5px;font-weight:600;color:var(--muted);cursor:pointer}
+    .pp-seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(20,32,27,.12)}
+    .pp-seg em{font-style:normal;color:var(--green);margin-left:6px}
+    .pp-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .pp-pl{position:relative;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:16px 16px 15px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+    .pp-pl:hover{border-color:#bcc7c0}
+    .pp-pl[aria-checked="true"]{border-color:var(--green);box-shadow:0 0 0 3px rgba(12,122,79,.13)}
+    .pp-rd{position:absolute;right:14px;top:16px;width:18px;height:18px;border-radius:50%;border:2px solid #c3ccc6}
+    .pp-pl[aria-checked="true"] .pp-rd{border:5.5px solid var(--green)}
+    .pp-pn{font-size:16px;font-weight:700;padding-right:26px}
+    .pp-pw{font-size:13px;color:var(--muted);margin-top:2px;line-height:1.35}
+    @media (min-width:641px){ .pp-pw{min-height:35px} } /* карточки ровные, даже если подпись в две строки */
+    .pp-pp{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-top:8px}
+    .pp-pp small{font-size:14px;font-weight:500;color:var(--muted);margin-left:3px}
+    .pp-pt{font-size:12.5px;color:var(--muted);margin-top:2px;min-height:17px}
+    .pp-pl ul{list-style:none;margin:10px 0 0;padding:0;font-size:13.5px;color:var(--muted);line-height:1.6}
+    .pp-tag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:20px;background:#eaf5ef;color:var(--green-text);font-size:12px;font-weight:600;vertical-align:2px}
     .pp-pack{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .pp-pack.low{background:#fff7f3;box-shadow:inset 0 0 0 1px #f6cdbb}
-    .pp-pack .t{font-size:17px;font-weight:700}
-    .pp-pack .d{font-size:14.5px;color:var(--muted);margin-top:3px;line-height:1.45}
-    .pp-step{display:flex;align-items:center;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);flex:none;padding:3px}
-    .pp-step button{width:38px;height:38px;border:0;border-radius:999px;background:none;cursor:pointer;font-size:18px;font-weight:600;color:var(--ink)}
-    .pp-step button:hover:not(:disabled){background:var(--box)}
-    .pp-step button:disabled{opacity:.3;cursor:default}
-    .pp-step span{min-width:34px;text-align:center;font-weight:700}
-    .pp-sum{position:sticky;top:92px}
-    .pp-sum .ttl{font-size:19px;font-weight:700;margin-bottom:10px}
-    .pp-ln{display:flex;justify-content:space-between;gap:12px;font-size:15px;padding:6px 0;color:var(--muted)}
+    .pp-pack.low{background:#fff7f3;border-color:#f6cdbb}
+    .pp-pack .t{font-size:15px;font-weight:700}
+    .pp-pack .d{font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+    .pp-step{display:flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:none;background:#fff}
+    .pp-step button{width:38px;height:38px;border:0;background:none;cursor:pointer;font-size:17px;color:var(--muted)}
+    .pp-step button:disabled{opacity:.35;cursor:default}
+    .pp-step span{width:42px;text-align:center;font-weight:700;border-left:1px solid var(--line);border-right:1px solid var(--line);line-height:38px}
+    .pp-sum{position:sticky;top:20px}
+    .pp-sum .ttl{font-size:17px;font-weight:700;margin-bottom:10px}
+    .pp-ln{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:6px 0;color:var(--muted)}
     .pp-ln b{color:var(--ink);font-weight:600;white-space:nowrap}
     .pp-ln.cr b{color:var(--green-text)}
-    .pp-tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);margin-top:10px;padding-top:14px}
-    .pp-tot span{font-size:16px;font-weight:600}
-    .pp-tot b{font-size:34px;line-height:1;color:var(--slate);letter-spacing:-.01em}
-    .pp-info{margin-top:12px;font-size:14px;line-height:1.5;color:var(--muted)}
+    .pp-tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);margin-top:8px;padding-top:12px}
+    .pp-tot span{font-size:15px;font-weight:600}
+    .pp-tot b{font-size:28px;letter-spacing:-.02em}
+    .pp-info{margin-top:10px;font-size:13px;line-height:1.5;color:var(--muted)}
     .pp-info b{color:var(--ink);font-weight:600}
-    .pp-fld{margin-top:18px}
-    .pp-fld .cap{display:block;font-size:13.5px;color:var(--muted);margin-bottom:8px}
-    .pp-fld input[type=email]{width:100%;height:46px;border:0;box-shadow:inset 0 0 0 1px #cfd6d1;border-radius:12px;padding:0 14px;font:inherit;font-size:16px;color:var(--ink);background:#fff}
-    .pp-fld input[type=email]:focus{outline:3px solid rgba(51,65,84,.25);box-shadow:inset 0 0 0 2px var(--slate)}
-    .pp-fld input.bad{box-shadow:inset 0 0 0 2px #d93025}
-    .pp-err{color:#c5221f;font-size:13px;margin-top:6px}
-    .pp-mail{font-size:14px;line-height:1.5;color:var(--muted)}
-    .pp-mail b{color:var(--ink);font-weight:600}
-    .pp .pp-fld .bill{display:flex;width:100%}
-    .pp .pp-fld .bill label{flex:1}
-    .pp .pp-fld .bill span{justify-content:center;padding:0 10px;font-size:15px;min-height:42px}
-    .pp-sub{margin-top:6px;font-size:13px;color:var(--muted)}
-    .pp-auto{display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:14px;line-height:1.45;color:var(--muted);cursor:pointer}
-    .pp-auto input{margin:3px 0 0;width:17px;height:17px;accent-color:var(--ink);flex:none}
+    .pp-fld{margin-top:16px}
+    .pp-fld label,.pp-fld .cap{display:block;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+    .pp-fld input[type=email]{width:100%;height:42px;border:1px solid #cfd6d1;border-radius:10px;padding:0 12px;font:inherit;font-size:15px;color:var(--ink);background:#fff}
+    .pp-fld input[type=email]:focus{outline:2px solid rgba(12,122,79,.35);border-color:var(--green)}
+    .pp-fld input.bad{border-color:#d93025}
+    .pp-err{color:#c5221f;font-size:12.5px;margin-top:5px}
+    .pp-mth{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .pp-mth button{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:9px 11px;cursor:pointer}
+    .pp-mth button[aria-checked="true"]{border-color:var(--green);box-shadow:0 0 0 3px rgba(12,122,79,.12)}
+    .pp-mth b{display:block;font-size:14px}
+    .pp-mth small{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+    .pp-auto{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:13px;line-height:1.45;color:var(--muted);cursor:pointer}
+    .pp-auto input{margin:2px 0 0;width:16px;height:16px;accent-color:var(--green);flex:none}
     .pp-auto b{color:var(--ink);font-weight:600}
-    .pp .pp-pay{width:100%;margin-top:18px;min-height:56px;font-size:19px;border:0;cursor:pointer;font-family:inherit}
-    .pp .btn:disabled{background:#c9d0cc;box-shadow:none;transform:none;cursor:default;color:#fff}
-    .pp-fine{margin-top:12px;font-size:13px;line-height:1.5;color:var(--muted)}
-    .pp-legal{margin-top:10px;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px}
-    .pp-legal a{color:var(--muted);text-underline-offset:2px}
-    .pp .footer nav a{text-decoration:none}
-    .pp .footer nav a:hover{color:#fff}
-    .pp-one{max-width:520px;margin:24px auto 0;text-align:center}
-    .pp-ic{width:72px;height:72px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;background:#dcefe4;color:var(--green)}
+    .pp-btn{display:flex;align-items:center;justify-content:center;width:100%;height:52px;margin-top:16px;border:0;border-radius:12px;background:var(--green);color:#fff!important;font-size:16.5px;font-weight:700;cursor:pointer;text-decoration:none}
+    .pp-btn:hover{background:#0a6943}
+    .pp-btn:disabled{background:#c9d3cd;cursor:default}
+    .pp-btn.sec{background:#fff;color:var(--ink)!important;border:1.5px solid var(--line)}
+    .pp-btn.sec:hover{background:var(--box)}
+    .pp-fine{margin-top:12px;font-size:12.5px;line-height:1.5;color:var(--muted)}
+    .pp-legal{margin-top:10px;font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px}
+    .pp-legal a,.pp-foot a{color:var(--muted);text-decoration:underline;text-decoration-color:#b9c2bd;text-underline-offset:2px}
+    .pp-legal a.miss,.pp-foot a.miss{text-decoration-style:dashed;opacity:.7}
+    .pp-mail{font-size:13.5px;line-height:1.5;color:var(--muted)}
+    .pp-mail b{color:var(--ink);font-weight:600}
+    .pp-sub{margin-top:6px;font-size:13px}
+    .pp-foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;gap:8px 20px;flex-wrap:wrap}
+    .pp-one{max-width:460px;margin:40px auto 0;text-align:center}
+    .pp-ic{width:66px;height:66px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;background:#eaf5ef;color:var(--green)}
     .pp-ic.bad{background:#fdece6;color:#c5221f}
     .pp-ic.nf{background:var(--box);color:var(--muted)}
-    .pp-one h1{font-size:clamp(28px,3vw,36px);line-height:1.15;margin:20px 0 0;letter-spacing:-.015em}
-    .pp-one p{font-size:17px;line-height:1.55;color:var(--muted);margin:12px 0 0}
+    .pp-one h1{font-size:26px;margin:18px 0 0;letter-spacing:-.015em}
+    .pp-one p{font-size:15px;line-height:1.55;color:var(--muted);margin:10px 0 0}
     .pp-one p b{color:var(--ink)}
-    .pp-acts1{display:grid;gap:10px;margin-top:26px}
-    .pp-acts1 .btn{width:100%;min-height:56px;font-size:18px;border:0;cursor:pointer;font-family:inherit}
-    .pp-spin{width:46px;height:46px;border-radius:50%;border:4px solid var(--box);border-top-color:var(--slate);animation:pp-r .9s linear infinite}
+    .pp-one .pp-btn{margin-top:22px}
+    .pp-one .pp-btn + .pp-btn{margin-top:10px}
+    .pp-spin{width:42px;height:42px;border-radius:50%;border:4px solid #d6e9de;border-top-color:var(--green);animation:pp-r 0.9s linear infinite}
     @keyframes pp-r{to{transform:rotate(360deg)}}
-    @media (prefers-reduced-motion:reduce){.pp-spin{animation-duration:3s}}
-    .pp-mg{max-width:680px;margin:0 auto}
-    .pp-back{display:inline-block;margin-bottom:16px;font-size:15px}
-    .pp-row{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-top:1px solid var(--line);font-size:15.5px}
-    .pp-row:first-child{border-top:0;padding-top:2px}
+    .pp-mg{max-width:620px;margin:0 auto}
+    .pp-back{display:inline-block;margin-bottom:14px;font-size:14px}
+    .pp-row{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid var(--line);font-size:14.5px}
+    .pp-row:first-of-type{border-top:0;padding-top:4px}
     .pp-row span{color:var(--muted)}
     .pp-row b{font-weight:600;text-align:right}
-    .pp-acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
-    .pp-acts .btn{min-height:46px;padding:0 18px;font-size:15.5px;border:0;cursor:pointer;font-family:inherit}
-    .pp-acts .btn--outline{background:transparent}
-    .pp-conf{margin-top:16px;padding:16px;border-radius:14px;background:#fff7f3;box-shadow:inset 0 0 0 1px #f6cdbb;font-size:15px;line-height:1.5}
-    .pp-note{font-size:14.5px;color:var(--muted);margin-top:16px;line-height:1.5}
-    .pp-demo{background:var(--dark);color:#dfe6e1;font-size:13px}
-    .pp-demo .wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:40px;padding-top:6px;padding-bottom:6px}
+    .pp-acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    .pp-acts .pp-btn{width:auto;height:42px;margin:0;padding:0 16px;font-size:14.5px}
+    .pp-conf{margin-top:14px;padding:14px;border-radius:12px;background:#fff7f3;border:1px solid #f6cdbb;font-size:14px;line-height:1.5}
+    .pp-hist{margin-top:22px}
+    .pp-hist .pp-row b{font-weight:500}
+    .pp-note{font-size:13.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+    .pp-demo{background:#14201b;color:#dfe6e1;font-size:13px}
+    .pp-demo .pp-in{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:40px;padding-top:6px;padding-bottom:6px}
     .pp-demo b{color:#fff}
-    .pp-demo select{font:inherit;font-size:13px;padding:4px 8px;border-radius:7px;border:0;background:#2a313a;color:#fff}
-    .pp-bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(251,252,250,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-left,0px)) calc(10px + env(safe-area-inset-bottom,0px))}
+    .pp-demo select{font:inherit;font-size:13px;padding:4px 8px;border-radius:7px;border:0;background:#2a3832;color:#fff}
+    .pp-bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(20,32,27,.06);padding:10px 16px calc(12px + env(safe-area-inset-bottom))}
     .pp-bar .in{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:640px;margin:0 auto}
-    .pp-bar .s1{font-size:12.5px;color:var(--muted);line-height:1.3}
-    .pp-bar .s1 b{display:block;font-size:20px;color:var(--ink)}
-    .pp-bar .btn{width:auto;min-height:50px;padding:0 22px;font-size:17px;border:0;cursor:pointer;font-family:inherit;white-space:nowrap}
-    .pp-toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:14px;padding:10px 16px;border-radius:10px;z-index:30;max-width:calc(100% - 32px)}
-    @media (max-width:1000px){ .pp-grid{grid-template-columns:1fr} .pp-sum{position:static} .pp-main{padding-bottom:120px} }
-    @media (max-width:760px){
-      .pp-main{padding-top:24px}
-      .pp-plans{grid-template-columns:1fr;gap:10px}
-      .pp .pp-pc{display:grid;grid-template-columns:1fr auto;column-gap:14px;align-items:center;padding:16px}
-      .pp-rd{display:none}
-      .pp .pp-pc .pa-n{padding-right:0;font-size:16px}
-      .pp .pp-pc .pa-w{font-size:13px;margin:0}
-      .pp .pp-pc .pa-v{display:none}
-      .pp .pp-pc .pa-p{grid-column:2;grid-row:1 / span 3;margin:0;font-size:26px;text-align:right}
-      .pp .pp-pc .pp-grp{grid-column:1;margin-top:6px;padding-top:0;border-top:0;font-size:13px;color:var(--muted)}
+    .pp-bar .s1{font-size:12px;color:var(--muted);line-height:1.3}
+    .pp-bar .s1 b{display:block;font-size:19px;color:var(--ink)}
+    .pp-bar .pp-btn{width:auto;height:44px;margin:0;padding:0 22px;font-size:15.5px}
+    .pp-toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#14201b;color:#fff;font-size:14px;padding:10px 16px;border-radius:10px;z-index:30;max-width:calc(100% - 32px)}
+    @media (max-width:900px){
+      .pp-grid{grid-template-columns:1fr}
+      .pp-sum{position:static}
+      .pp-main{padding-bottom:110px}
+    }
+    @media (max-width:640px){
+      .pp-in{padding:0 16px}
+      .pp-main{padding:20px 16px 110px}
+      .pp-h1{font-size:23px}
+      .pp-help{display:none}
+      .pp-plans{grid-template-columns:1fr;gap:8px}
+      .pp-pl{display:grid;grid-template-columns:1fr auto;align-items:center;padding:12px 14px;column-gap:12px}
+      .pp-pl .pp-rd{display:none}
+      .pp-pn{padding-right:0;font-size:15px}
+      .pp-pl ul{margin:2px 0 0;font-size:12.5px;line-height:1.45;grid-column:1}
+      .pp-pw{grid-column:1;font-size:12.5px}
+      .pp-pp{grid-column:2;grid-row:1 / span 3;margin:0;font-size:21px;text-align:right}
+      .pp-pt{grid-column:2;text-align:right;min-height:0}
+      .pp-seg{display:flex}
+      .pp-seg button{flex:1;padding:8px 6px;font-size:13px}
+      .pp-seg em{display:block;margin:0}
       .pp-pack{flex-direction:column;align-items:stretch}
       .pp-step{align-self:flex-start}
-      .pp-card{padding:18px}
-      .pp .bill{width:100%;display:flex}
-      .pp .bill label{flex:1}
-      .pp .bill span{justify-content:center;padding:0 8px;font-size:14px;flex-direction:column;gap:0;min-height:50px;line-height:1.2}
+      .pp-card{padding:14px 15px}
+      .pp-one{margin-top:24px}
     }
-    @media (min-width:1001px){ .pp-bar{display:none!important} }
+    @media (min-width:901px){ .pp-bar{display:none!important} }
   </style>
 
   <script is:inline>
@@ -230,9 +249,7 @@ import Logo from '../../components/Logo.astro';
         cardToast: 'Откроется страница банка, чтобы привязать новую карту.', procToast: 'Прототип: здесь откроется страница оплаты.',
         planLine: '{p} · {m}',
         who: { start: 'Один-два проекта', growth: 'Несколько проектов', scale: 'Девелопер, управляющая компания' },
-        helpShort: 'Помощь', support: 'Поддержка в боте', moreF: 'Больше 500 документов — обсудим', todo: 'ссылка',
-        mailAuto: 'Чек и уведомления о списаниях придут на <b>{e}</b> — почту аккаунта.', mailOther: 'Другая почта', mailBack: 'Почта аккаунта',
-        docsWord: 'документов в месяц'
+        todo: 'ссылка', mailAuto: 'Чек и уведомления о списаниях придут на <b>{e}</b> — почту аккаунта.', mailOther: 'Другая почта', mailBack: 'Почта аккаунта'
       },
       en: {
         title: 'Nota payment', help: 'Help in Telegram', sheet: 'Google Sheet', owner: 'owner',
@@ -274,9 +291,7 @@ import Logo from '../../components/Logo.astro';
         cardToast: 'The bank page will open to link a new card.', procToast: 'Prototype: the payment page opens here.',
         planLine: '{p} · {m}',
         who: { start: 'One or two projects', growth: 'Several projects', scale: 'Developers, management companies' },
-        helpShort: 'Help', support: 'Support in the bot', moreF: 'More than 500 documents — let’s talk', todo: 'link',
-        mailAuto: 'Receipts and charge notices go to <b>{e}</b>, your account email.', mailOther: 'Use another email', mailBack: 'Account email',
-        docsWord: 'documents a month'
+        todo: 'link', mailAuto: 'Receipts and charge notices go to <b>{e}</b>, your account email.', mailOther: 'Use another email', mailBack: 'Account email'
       },
       id: {
         title: 'Pembayaran Nota', help: 'Bantuan di Telegram', sheet: 'Google Sheet', owner: 'pemilik',
@@ -318,9 +333,7 @@ import Logo from '../../components/Logo.astro';
         cardToast: 'Halaman bank akan terbuka untuk menautkan kartu baru.', procToast: 'Prototipe: halaman pembayaran terbuka di sini.',
         planLine: '{p} · {m}',
         who: { start: 'Satu–dua proyek', growth: 'Beberapa proyek', scale: 'Developer, perusahaan pengelola' },
-        helpShort: 'Bantuan', support: 'Dukungan di bot', moreF: 'Lebih dari 500 dokumen — mari bicarakan', todo: 'tautan',
-        mailAuto: 'Struk dan pemberitahuan tagihan dikirim ke <b>{e}</b>, email akun Anda.', mailOther: 'Gunakan email lain', mailBack: 'Email akun',
-        docsWord: 'dokumen per bulan'
+        todo: 'tautan', mailAuto: 'Struk dan pemberitahuan tagihan dikirim ke <b>{e}</b>, email akun Anda.', mailOther: 'Gunakan email lain', mailBack: 'Email akun'
       }
     };
 
@@ -405,17 +418,13 @@ import Logo from '../../components/Logo.astro';
       return q;
     }
 
-    // ── Отрисовка (классы .bill, .pa-c, .btn, .footer — из стилей лендинга)
+    // ── Отрисовка
     var app = document.getElementById('pp-app'), bar = document.getElementById('pp-bar');
-    var CK = '<svg class="pp-ck" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-    function legal() {
-      var l = function (url, label) { return url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + label + '</a>' : '<span>' + label + ' <mark class="todo">' + t('todo') + '</mark></span>'; };
-      return '<div class="pp-legal">' + l(CONFIG.terms, t('terms')) + l(CONFIG.refund, t('refund')) + l(CONFIG.privacy, t('privacy')) + '</div>';
-    }
-    function footNav() {
-      var l = function (url, label) { return url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + label + '</a>' : '<a>' + label + ' <mark class="todo">' + t('todo') + '</mark></a>'; };
-      document.getElementById('pp-fnav').innerHTML = l(CONFIG.terms, t('terms')) + l(CONFIG.refund, t('refund')) + l(CONFIG.privacy, t('privacy')) +
-        l(CONFIG.bot, t('support')) + (CONFIG.supportEmail ? l('mailto:' + CONFIG.supportEmail, esc(CONFIG.supportEmail)) : l('', 'support@…')) + l(CONFIG.custom, t('moreF'));
+    function linkTag(url, label) { return url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + label + '</a>' : '<span>' + label + ' <mark class="todo">' + t('todo') + '</mark></span>'; }
+    function legal() { return '<div class="pp-legal">' + linkTag(CONFIG.terms, t('terms')) + '<span>·</span>' + linkTag(CONFIG.refund, t('refund')) + '<span>·</span>' + linkTag(CONFIG.privacy, t('privacy')) + '</div>'; }
+    function foot() {
+      var mail = CONFIG.supportEmail ? ' · <a href="mailto:' + esc(CONFIG.supportEmail) + '">' + esc(CONFIG.supportEmail) + '</a>' : ' · support@… <mark class="todo">' + t('todo') + '</mark>';
+      return '<footer class="pp-foot"><span>© 2026 Axiom Consulting</span><span>' + t('more') + ' <a href="' + esc(CONFIG.custom) + '" target="_blank" rel="noopener">' + t('moreL') + '</a></span><span>' + t('ask') + ' — <a href="' + esc(CONFIG.bot) + '" target="_blank" rel="noopener">@NotaGetBot</a>' + mail + '</span></footer>';
     }
     function ctx() {
       var d = S.d, h = '<div class="pp-card"><div class="pp-ctx"><span class="pp-sh" aria-hidden="true"></span><div><div class="pp-nm">' + esc(d.table) + '</div><div class="pp-ow">' + t('sheet') + ' · ' + t('owner') + ' ' + esc(d.owner) + '</div></div></div><div class="pp-now">';
@@ -428,24 +437,20 @@ import Logo from '../../components/Logo.astro';
       if (d.failed && !isActive(d)) h += '<div class="pp-alert">' + t('chargeFailed', { sum: money(d.failed.sum), d: fd(d.failed.date) }) + '</div>';
       return h + '</div>';
     }
-    function radios(name, items, cur) {
-      return '<fieldset class="bill"><legend class="sr-only">' + name + '</legend>' + items.map(function (it) {
-        return '<label><input type="radio" name="' + it.n + '" value="' + it.v + '"' + (String(cur) === String(it.v) ? ' checked' : '') + '><span><b>' + it.l + '</b>' + (it.e ? '<em>' + it.e + '</em>' : '') + '</span></label>';
-      }).join('') + '</fieldset>';
-    }
     function periods() {
-      return '<h2 class="pp-h2">' + t('period') + '</h2>' + radios(t('period'), [1, 3, 6].map(function (m) { return { n: 'pp-bill', v: m, l: t('m')[m], e: m === 3 ? '−10%' : m === 6 ? '−15%' : '' }; }), S.sel.period);
+      var h = '<div class="pp-lbl">' + t('period') + '</div><div class="pp-seg" role="group" aria-label="' + esc(t('period')) + '">';
+      [1, 3, 6].forEach(function (m) { h += '<button type="button" data-act="period" data-v="' + m + '" aria-pressed="' + (S.sel.period === m) + '">' + t('m')[m] + (m === 3 ? '<em>−10%</em>' : m === 6 ? '<em>−15%</em>' : '') + '</button>'; });
+      return h + '</div>';
     }
     function plans() {
-      var d = S.d, m = S.sel.period, h = '<h2 class="pp-h2">' + t('plan') + '</h2><div class="pp-plans" role="radiogroup" aria-label="' + esc(t('plan')) + '">';
+      var d = S.d, h = '<div class="pp-lbl">' + t('plan') + '</div><div class="pp-plans" role="radiogroup" aria-label="' + esc(t('plan')) + '">';
       ORDER.forEach(function (k) {
-        var p = PLANS[k], cur = d.plan === k;
-        h += '<button type="button" class="pa-c pp-pc" role="radio" data-act="plan" data-v="' + k + '" aria-checked="' + (S.sel.plan === k) + '"><span class="pp-rd" aria-hidden="true"></span>' +
-          '<span class="pa-n">' + pname(k) + (cur ? '<span class="pp-tag">' + t('yours') + '</span>' : '') + '</span>' +
-          '<span class="pa-w">' + t('who')[k] + '</span>' +
-          '<span class="pa-v"><b>' + p.docs + '</b><span>' + t('docsWord') + '</span></span>' +
-          '<span class="pa-p">' + money(p.pm[m]) + '<small> ' + t('perMo') + '</small>' + (m > 1 ? '<span class="pa-tot">' + t('forPeriod', { sum: money(p.total[m]), m: t('mGen')[m] }) + '</span>' : '') + '</span>' +
-          '<span class="pp-grp">' + CK + (p.groups ? t('groups', { n: p.groups }) : t('groupsAll')) + '</span></button>';
+        var p = PLANS[k], m = S.sel.period, cur = d.plan === k && d.plan !== 'free';
+        h += '<button type="button" class="pp-pl" role="radio" data-act="plan" data-v="' + k + '" aria-checked="' + (S.sel.plan === k) + '"><span class="pp-rd" aria-hidden="true"></span>' +
+          '<div class="pp-pn">' + pname(k) + (cur ? '<span class="pp-tag">' + t('yours') + '</span>' : '') + '</div>' + '<div class="pp-pw">' + t('who')[k] + '</div>' +
+          '<div class="pp-pp">' + money(p.pm[m]) + '<small>' + t('perMo') + '</small></div>' +
+          '<div class="pp-pt">' + (m > 1 ? t('forPeriod', { sum: money(p.total[m]), m: t('mGen')[m] }) : '') + '</div>' +
+          '<ul><li>' + t('docsMo', { n: p.docs }) + '</li><li>' + (p.groups ? t('groups', { n: p.groups }) : t('groupsAll')) + '</li></ul></button>';
       });
       return h + '</div>';
     }
@@ -453,14 +458,9 @@ import Logo from '../../components/Logo.astro';
       var d = S.d, act = isActive(d), low = act && (d.limit - d.used) <= d.limit / 10;
       if (!act) return '';
       var until = q ? q.packUntil : d.until;
-      return '<h2 class="pp-h2">' + t('packH') + '</h2><div class="pp-card pp-pack' + (low ? ' low' : '') + '"><div><div class="t">' + t('packT') + '</div><div class="d">' +
+      return '<div class="pp-lbl">' + t('packH') + '</div><div class="pp-card pp-pack' + (low ? ' low' : '') + '"><div><div class="t">' + t('packT') + '</div><div class="d">' +
         (low ? t('packLow', { n: Math.max(0, d.limit - d.used), l: d.limit }) : '') + t('packD', { d: fd(until) }) + '</div></div>' +
         '<div class="pp-step"><button type="button" data-act="pack" data-v="-1" aria-label="−"' + (S.sel.packs ? '' : ' disabled') + '>−</button><span>' + S.sel.packs + '</span><button type="button" data-act="pack" data-v="1" aria-label="+">+</button></div></div>';
-    }
-    function mailBlock() {
-      if (!S.customEmail && S.d.owner) return '<div class="pp-fld"><div class="pp-mail">' + t('mailAuto', { e: esc(S.d.owner) }) + ' <button type="button" class="pp-link" data-act="mail-edit">' + t('mailOther') + '</button></div></div>';
-      return '<div class="pp-fld"><label class="cap" for="pp-email">' + t('email') + '</label><input id="pp-email" type="email" inputmode="email" autocomplete="email" placeholder="you@company.com" value="' + esc(S.sel.email) + '"' + (S.emailBad ? ' class="bad" aria-invalid="true"' : '') + '>' +
-        (S.emailBad ? '<div class="pp-err">' + t('emailErr') + '</div>' : '') + (S.d.owner ? '<div class="pp-sub"><button type="button" class="pp-link" data-act="mail-back">← ' + t('mailBack') + '</button></div>' : '') + '</div>';
     }
     function summary(q) {
       var s = S.sel, h = '<aside class="pp-card pp-sum" aria-label="' + esc(t('sumH')) + '"><div class="ttl">' + t('sumH') + '</div>';
@@ -476,69 +476,73 @@ import Logo from '../../components/Logo.astro';
       if (q.kind === 'autorenew') h += '<div class="pp-info">' + t('sameAuto', { d: fd(q.start), sum: money(q.price) }) + '</div>';
       if (q.leftover) h += '<div class="pp-info">' + t('leftover', { sum: money(q.leftover) }) + '</div>';
       if (q.total > 0) {
-        h += mailBlock();
-        h += '<div class="pp-fld"><span class="cap">' + t('method') + '</span>' + radios(t('method'), [{ n: 'pp-mth', v: 'card', l: t('card') }, { n: 'pp-mth', v: 'crypto', l: t('crypto') }], s.method) +
-          '<div class="pp-sub">' + (s.method === 'card' ? t('cardSub') : t('cryptoSub')) + '</div></div>';
+        // Почта аккаунта подставляется сама; поле — только если человек хочет другую
+        if (!S.customEmail && S.d.owner) h += '<div class="pp-fld"><div class="pp-mail">' + t('mailAuto', { e: esc(S.d.owner) }) + ' <button type="button" class="pp-link" data-act="mail-edit">' + t('mailOther') + '</button></div></div>';
+        else h += '<div class="pp-fld"><label for="pp-email">' + t('email') + '</label><input id="pp-email" type="email" inputmode="email" autocomplete="email" placeholder="you@company.com" value="' + esc(s.email) + '"' + (S.emailBad ? ' class="bad" aria-invalid="true"' : '') + '>' + (S.emailBad ? '<div class="pp-err">' + t('emailErr') + '</div>' : '') +
+          (S.d.owner ? '<div class="pp-sub"><button type="button" class="pp-link" data-act="mail-back">← ' + t('mailBack') + '</button></div>' : '') + '</div>';
+        h += '<div class="pp-fld"><span class="cap">' + t('method') + '</span><div class="pp-mth" role="radiogroup">' +
+          '<button type="button" role="radio" data-act="method" data-v="card" aria-checked="' + (s.method === 'card') + '"><b>' + t('card') + '</b><small>' + t('cardSub') + '</small></button>' +
+          '<button type="button" role="radio" data-act="method" data-v="crypto" aria-checked="' + (s.method === 'crypto') + '"><b>' + t('crypto') + '</b><small>' + t('cryptoSub') + '</small></button></div></div>';
         if (q.kind !== 'autorenew') {
           if (s.method === 'card') h += '<label class="pp-auto"><input type="checkbox" data-act="auto"' + (s.auto ? ' checked' : '') + '><span><b>' + t('auto') + '</b><br>' + (s.auto ? t('autoText', { sum: money(q.price), every: t('every')[s.period], d: fd(q.nextDate) }) : t('oneTime', { d: fd(q.end) })) + '</span></label>';
           else h += '<div class="pp-info">' + t('oneTime', { d: fd(q.end) }) + '</div>';
         }
-        h += '<button type="button" class="btn pp-pay" data-act="pay">' + t('pay', { sum: money(q.total) }) + '</button>';
+        h += '<button type="button" class="pp-btn" data-act="pay">' + t('pay', { sum: money(q.total) }) + '</button>';
         h += '<div class="pp-fine">' + (s.method === 'card' ? t('fineCard') : t('fineCrypto')) + '</div>';
       } else {
-        h += '<button type="button" class="btn pp-pay" disabled>' + t('nothing') + '</button>';
+        h += '<button type="button" class="pp-btn" disabled>' + t('nothing') + '</button>';
       }
       return h + legal() + '<div class="pp-fine">' + t('invoice') + '</div></aside>';
     }
     function renderPay() {
       var q = quote();
-      app.innerHTML = '<h1 class="pp-h1">' + t('title') + '</h1><div class="pp-grid"><div>' + ctx() + periods() + plans() + pack(q) + '</div>' + summary(q) + '</div>';
+      app.innerHTML = '<h1 class="pp-h1">' + t('title') + '</h1><div class="pp-grid"><div>' + ctx() + periods() + plans() + pack(q) + '</div>' + summary(q) + '</div>' + foot();
       bar.hidden = !(q && q.total > 0);
-      bar.innerHTML = q ? '<div class="in"><div class="s1">' + t('planLine', { p: pname(S.sel.plan), m: t('m')[S.sel.period] }) + '<b>' + money(q.total) + '</b></div><button type="button" class="btn" data-act="pay">' + t('pay', { sum: money(q.total) }) + '</button></div>' : '';
+      bar.innerHTML = '<div class="in"><div class="s1">' + (q ? t('planLine', { p: pname(S.sel.plan), m: t('m')[S.sel.period] }) + '<b>' + money(q.total) + '</b>' : t('choose')) + '</div>' +
+        (q && q.total > 0 ? '<button type="button" class="pp-btn" data-act="pay">' + t('pay', { sum: money(q.total) }) + '</button>' : '<button type="button" class="pp-btn" disabled>' + (q ? t('nothing') : t('next')) + '</button>') + '</div>';
     }
-    var ICON_OK = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-    var ICON_X = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>';
-    var ICON_Q = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>';
+    var ICON_OK = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+    var ICON_X = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>';
+    var ICON_Q = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>';
     function renderOne(icon, cls, h, p, btns) {
       bar.hidden = true;
-      app.innerHTML = '<div class="pp-one"><div class="pp-ic ' + cls + '">' + icon + '</div><h1>' + h + '</h1>' + p + (btns ? '<div class="pp-acts1">' + btns + '</div>' : '') + '</div>';
+      app.innerHTML = '<div class="pp-one"><div class="pp-ic ' + cls + '">' + icon + '</div><h1>' + h + '</h1>' + p + (btns || '') + '</div>' + foot();
     }
-    function renderProcessing() { renderOne('<div class="pp-spin" aria-hidden="true"></div>', 'nf', t('procH'), '<p>' + t('procP') + '</p>'); }
+    function renderProcessing() { bar.hidden = true; app.innerHTML = '<div class="pp-one"><div class="pp-ic" style="background:none"><div class="pp-spin" aria-hidden="true"></div></div><h1>' + t('procH') + '</h1><p>' + t('procP') + '</p></div>' + foot(); }
     function renderSuccess() {
       // После оплаты в браузере — то, что выбрали; после возврата со страницы банка — свежие данные с сервера.
       var d = S.d, q = S.last || (d && d.plan && d.plan !== 'free' && d.until ? { plan: d.plan, period: d.period, end: d.until, auto: d.auto, price: PLANS[d.plan].total[d.period], nextDate: addDays(d.until, 1) }
         : { plan: 'growth', period: 1, end: endOf(TODAY, 1), auto: true, price: 35, nextDate: addMonths(TODAY, 1) });
       var p = '<p>' + t('okP', { p: pname(q.plan), d: fd(q.end), n: PLANS[q.plan].docs }) + (q.auto ? ' ' + t('okNext', { d: fd(q.nextDate), sum: money(q.price) }) : '') + '</p><p>' + t('okP2') + '</p>';
-      renderOne(ICON_OK, '', t('okH'), p, '<a class="btn" href="' + esc(S.d.sheetUrl || '#') + '" target="_blank" rel="noopener">' + t('openSheet') + '</a><a class="btn btn--outline" href="' + esc(CONFIG.bot) + '" target="_blank" rel="noopener">' + t('openBot') + '</a>');
+      renderOne(ICON_OK, '', t('okH'), p, '<a class="pp-btn" href="' + esc(S.d.sheetUrl || '#') + '" target="_blank" rel="noopener">' + t('openSheet') + '</a><a class="pp-btn sec" href="' + esc(CONFIG.bot) + '" target="_blank" rel="noopener">' + t('openBot') + '</a>');
     }
-    function renderFailed() { renderOne(ICON_X, 'bad', t('failH'), '<p>' + t('failP') + '</p>', '<button type="button" class="btn" data-act="retry">' + t('retry') + '</button><button type="button" class="btn btn--outline" data-act="retry-crypto">' + t('payCrypto') + '</button>'); }
-    function renderNotFound() { renderOne(ICON_Q, 'nf', t('nfH'), '<p>' + t('nfP') + '</p>', '<a class="btn" href="' + esc(CONFIG.bot) + '" target="_blank" rel="noopener">' + t('openBot') + '</a>'); }
+    function renderFailed() { renderOne(ICON_X, 'bad', t('failH'), '<p>' + t('failP') + '</p>', '<button type="button" class="pp-btn" data-act="retry">' + t('retry') + '</button><button type="button" class="pp-btn sec" data-act="retry-crypto">' + t('payCrypto') + '</button>'); }
+    function renderNotFound() { renderOne(ICON_Q, 'nf', t('nfH'), '<p>' + t('nfP') + '</p>', '<a class="pp-btn" href="' + esc(CONFIG.bot) + '" target="_blank" rel="noopener">' + t('openBot') + '</a>'); }
     function renderManage() {
       var d = S.d; bar.hidden = true;
-      var h = '<div class="pp-mg"><button type="button" class="pp-link pp-back" data-act="back">' + t('back') + '</button><h1 class="pp-h1">' + t('subH') + '</h1><div class="pp-card"><div>';
+      var h = '<div class="pp-mg"><button type="button" class="pp-link pp-back" data-act="back">' + t('back') + '</button><h1 class="pp-h1">' + t('subH') + '</h1><div class="pp-card">';
       h += '<div class="pp-row"><span>' + t('rPlan') + '</span><b>' + t('planLine', { p: pname(d.plan), m: t('m')[d.period] }) + ' · ' + money(PLANS[d.plan].total[d.period]) + '</b></div>';
       if (d.auto) h += '<div class="pp-row"><span>' + t('rNext') + '</span><b>' + fd(addDays(d.until, 1)) + ' · ' + money(PLANS[d.plan].total[d.period]) + '</b></div>';
       else h += '<div class="pp-row"><span>' + t('rUntil') + '</span><b>' + fd(d.until) + '</b></div>';
       if (d.card) h += '<div class="pp-row"><span>' + t('rCard') + '</span><b>•• ' + esc(d.card) + '</b></div>';
-      h += '</div><div class="pp-acts"><button type="button" class="btn btn--outline" data-act="back">' + t('changePlan') + '</button>' + (d.card ? '<button type="button" class="btn btn--outline" data-act="card">' + t('changeCard') + '</button>' : '') +
-        (d.auto ? (S.confirmOff ? '' : '<button type="button" class="btn btn--outline" data-act="off">' + t('autoOff') + '</button>') : (d.card ? '<button type="button" class="btn" data-act="on">' + t('autoOnBtn') + '</button>' : '')) + '</div>';
-      if (d.auto && S.confirmOff) h += '<div class="pp-conf">' + t('confirm', { d: fd(d.until) }) + '<div class="pp-acts"><button type="button" class="btn btn--dark" data-act="off-yes">' + t('yesOff') + '</button><button type="button" class="btn btn--outline" data-act="off-no">' + t('keep') + '</button></div></div>';
+      h += '<div class="pp-acts"><button type="button" class="pp-btn sec" data-act="back">' + t('changePlan') + '</button>' + (d.card ? '<button type="button" class="pp-btn sec" data-act="card">' + t('changeCard') + '</button>' : '') +
+        (d.auto ? (S.confirmOff ? '' : '<button type="button" class="pp-btn sec" data-act="off">' + t('autoOff') + '</button>') : (d.card ? '<button type="button" class="pp-btn" data-act="on">' + t('autoOnBtn') + '</button>' : '')) + '</div>';
+      if (d.auto && S.confirmOff) h += '<div class="pp-conf">' + t('confirm', { d: fd(d.until) }) + '<div class="pp-acts"><button type="button" class="pp-btn" style="background:#c5221f" data-act="off-yes">' + t('yesOff') + '</button><button type="button" class="pp-btn sec" data-act="off-no">' + t('keep') + '</button></div></div>';
       if (!d.auto) h += '<div class="pp-note">' + t('offState', { d: fd(d.until) }) + '</div>';
       h += '</div>';
       if (d.history && d.history.length) {
-        h += '<h2 class="pp-h2">' + t('hist') + '</h2><div class="pp-card"><div>';
+        h += '<div class="pp-lbl">' + t('hist') + '</div><div class="pp-card pp-hist">';
         d.history.forEach(function (r) { h += '<div class="pp-row"><span>' + fd(r[0]) + ' · ' + t('planLine', { p: pname(d.plan), m: t('m')[d.period] }) + '</span><b>' + money(r[1]) + (r[2] ? ' · <a class="pp-link" href="' + esc(r[2]) + '" target="_blank" rel="noopener">' + t('receipt') + '</a>' : CONFIG.api ? '' : ' · <a class="pp-link" href="#" data-act="receipt">' + t('receipt') + '</a>') + '</b></div>'; });
-        h += '</div></div>';
+        h += '</div>';
       }
       h += '<div class="pp-note">' + t('invoice') + '</div></div>';
-      app.innerHTML = h;
+      app.innerHTML = h + foot();
     }
     function render() {
       document.documentElement.lang = S.lang; document.title = t('title');
-      var hb = document.getElementById('pp-help'); hb.querySelector('.hb-lg').textContent = t('help'); hb.querySelector('.hb-sm').textContent = t('helpShort');
+      document.getElementById('pp-help').textContent = t('help');
       Array.prototype.forEach.call(document.querySelectorAll('[data-lang]'), function (b) { var on = b.getAttribute('data-lang') === S.lang; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
       document.querySelector('#pp-lang-m summary').textContent = S.lang.toUpperCase();
-      footNav();
       ({ pay: renderPay, processing: renderProcessing, success: renderSuccess, failed: renderFailed, notfound: renderNotFound, manage: renderManage }[S.screen] || renderPay)();
       renderDemo();
     }
@@ -547,7 +551,7 @@ import Logo from '../../components/Logo.astro';
     function renderDemo() {
       var el = document.getElementById('pp-demo'); if (CONFIG.api) { el.hidden = true; return; }
       el.hidden = false;
-      el.innerHTML = '<div class="wrap"><b>Прототип</b><span>на тестовых данных · экран:</span><select id="pp-demo-s" aria-label="Экран">' +
+      el.innerHTML = '<div class="pp-in"><b>Прототип</b><span>на тестовых данных · экран:</span><select id="pp-demo-s" aria-label="Экран">' +
         DEMO.map(function (x) { return '<option value="' + x[0] + '"' + (x[0] === S.demo ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('') + '</select></div>';
     }
     function loadDemo(kind) {
@@ -577,7 +581,7 @@ import Logo from '../../components/Logo.astro';
     function toast(msg) { var el = document.getElementById('pp-toast'); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { el.hidden = true; }, 2600); }
     function pay() {
       var q = quote(); if (!q || q.total <= 0) return;
-      // Почта аккаунта подставляется сама (сервер знает её целиком); проверяем, только если человек ввёл другую.
+      // Почта аккаунта (сервер знает её целиком) — email: null; проверяем, только если человек ввёл другую.
       var em = S.customEmail || !S.d.owner ? (S.sel.email || '').trim() : null;
       if (em !== null && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) { S.emailBad = true; render(); var i = document.getElementById('pp-email'); if (i) { i.focus(); i.scrollIntoView({ block: 'center' }); } return; }
       S.emailBad = false;
@@ -601,6 +605,7 @@ import Logo from '../../components/Logo.astro';
       if (a === 'period') S.sel.period = +v;
       else if (a === 'plan') S.sel.plan = v;
       else if (a === 'pack') S.sel.packs = Math.max(0, Math.min(20, S.sel.packs + (+v)));
+      else if (a === 'method') S.sel.method = v;
       else if (a === 'mail-edit') { S.customEmail = true; render(); var ie = document.getElementById('pp-email'); if (ie) ie.focus(); return; }
       else if (a === 'mail-back') { S.customEmail = false; S.emailBad = false; }
       else if (a === 'pay') return pay();
@@ -620,8 +625,6 @@ import Logo from '../../components/Logo.astro';
     });
     document.addEventListener('change', function (e) {
       if (e.target.id === 'pp-demo-s') return loadDemo(e.target.value);
-      if (e.target.name === 'pp-bill') { S.sel.period = +e.target.value; render(); return; }
-      if (e.target.name === 'pp-mth') { S.sel.method = e.target.value; render(); return; }
       if (e.target.getAttribute('data-act') === 'auto') { S.sel.auto = e.target.checked; render(); }
     });
     document.addEventListener('input', function (e) { if (e.target.id === 'pp-email') { S.sel.email = e.target.value; if (S.emailBad) { S.emailBad = false; e.target.classList.remove('bad'); } } });
