@@ -1,6 +1,6 @@
 # Собирает запрос batchUpdate для блока оплаты в шапке листа Payments (H1:J3). Сначала: python3 formulas.py -> f.json
 # Раскладка (основатель 20.11): строка 1 — тариф + кнопка «Payment ➜» (только I1, белый отступ со всех сторон),
-# строка 2 — документы, строка 3 — дни. Кнопка наверху, чтобы её отступ не задевал границу таблицы с заголовками.
+# строка 2 — документы, строка 3 — дни. Шрифт блока 8 (основатель уменьшил сам: блок служебный, тише аналитики), кнопка 9. Кнопка наверху, чтобы её отступ не задевал границу таблицы с заголовками.
 import json
 d = json.load(open('f.json')); f, cf = d['f'], d['cf']
 SID = 1239511210   # лист Payments в тестовой таблице; в другой таблице — свой sheetId
@@ -13,9 +13,9 @@ cell = lambda formula, fm: {'userEnteredValue': {'formulaValue': formula}, 'user
 blank = {'userEnteredFormat': {'backgroundColorStyle': c('ffffff')}}
 W = {'style': 'SOLID_THICK', 'colorStyle': c('ffffff')}; N = {'style': 'NONE'}
 rows = [
- {'values': [cell(f['H3'], fmt('RIGHT', 10, True, '5d6269')), cell(f['I3'], fmt('CENTER', 9, True, 'ffffff', '0c7a4f')), blank]},  # тариф + кнопка
- {'values': [cell(f['H1'], fmt('RIGHT', 10, True, '15181c')), cell(f['I1'], fmt('LEFT', 9, False, '5d6269')), blank]},             # документы
- {'values': [cell(f['H2'], fmt('RIGHT', 10, True, '15181c')), cell(f['I2'], fmt('LEFT', 9, False, '5d6269')), blank]},             # дни
+ {'values': [cell(f['H3'], fmt('RIGHT', 8, True, '5d6269')), cell(f['I3'], fmt('CENTER', 9, True, 'ffffff', '0c7a4f')), blank]},  # тариф + кнопка
+ {'values': [cell(f['H1'], fmt('RIGHT', 8, True, '15181c')), cell(f['I1'], fmt('LEFT', 8, False, '5d6269')), blank]},             # документы
+ {'values': [cell(f['H2'], fmt('RIGHT', 8, True, '15181c')), cell(f['I2'], fmt('LEFT', 8, False, '5d6269')), blank]},             # дни
 ]
 cust = lambda s: {'type': 'CUSTOM_FORMULA', 'values': [{'userEnteredValue': s}]}
 txt = lambda h: {'textFormat': {'foregroundColorStyle': c(h)}}
