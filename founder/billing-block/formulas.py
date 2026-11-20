@@ -28,12 +28,8 @@ f['I2'] = H + D + ('tot;IF(un<=0;0;IF(fr<=0;30;MAX(1;INT(un)-INT(fr)+1)));'
                'REPT("█";n)&IF(n>0;"  ";"")&' + L('Days left · to ', 'Дней · до ', 'Sisa hari · s/d ') + '&d))))')
 f['H3'] = H + ('IF(plan="";"";SWITCH(plan;"free";' + L('Free', 'Бесплатно', 'Gratis') + ';"start";' + L('Start', 'Старт', 'Start') +
                ';"growth";' + L('Growth', 'Рост', 'Growth') + ';"scale";' + L('Scale', 'Масштаб', 'Scale') + ';plan)&" "))')
-f['I3'] = H + ('t;IF(exp;' + L('Renew plan', 'Продлить тариф', 'Perpanjang paket') +
-               ';IF(NOT(paid);' + L('Choose a plan', 'Выбрать тариф', 'Pilih paket') +
-               ';IF(AND(lim>0;left<=lim/10);' + L('Add docs or upgrade', 'Докупить документы', 'Tambah dokumen') +
-               ';IF(dl<=3;' + L('Renew plan', 'Продлить тариф', 'Perpanjang paket') +
-               ';' + L('Renew or upgrade', 'Продлить тариф', 'Perpanjang paket') + '))))&"  ➜";'
-               'IF(plan="";"";IF(url="";t;HYPERLINK(url;t))))')
+# Кнопка: одна подпись для всех состояний (основатель 20.11), цвет меняет условное форматирование
+f['I3'] = H + 't;' + L('Payment', 'Оплата', 'Bayar') + '&"  ➜";IF(plan="";"";IF(url="";t;HYPERLINK(url;t))))'
 # Условное форматирование: другой лист — только через INDIRECT
 I = lambda x: f'INDEX(INDIRECT("References!V1:V100");MATCH("{x}";INDIRECT("References!U1:U100");0))'
 P = f'LOWER(IFERROR({I("Plan*")};""))'; Lm = f'IFERROR(VALUE({I("Docs limit*")});0)'; S = f'IFERROR(VALUE({I("Docs used*")});0)'
