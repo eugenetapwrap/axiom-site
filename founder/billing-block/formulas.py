@@ -30,7 +30,7 @@ f['I2'] = H + D + ('tot;IF(un<=0;0;IF(fr<=0;30;MAX(1;INT(un)-INT(fr)+1)));'
 f['H3'] = H + ('IF(plan="";"";SWITCH(plan;"free";' + L('Free plan', 'Бесплатный тариф', 'Paket Gratis') + ';"start";' + L('Start plan', 'Тариф Старт', 'Paket Start') +
                ';"growth";' + L('Growth plan', 'Тариф Рост', 'Paket Growth') + ';"scale";' + L('Scale plan', 'Тариф Масштаб', 'Paket Scale') + ';plan)&" "))')
 # Кнопка: одна подпись для всех состояний (основатель 20.11), цвет меняет условное форматирование
-f['I3'] = H + 't;' + L('Payment', 'Оплата', 'Bayar') + '&"  ➜";IF(plan="";"";IF(url="";t;HYPERLINK(url;t))))'
+f['I3'] = H + 't;' + L('Payment', 'Оплата', 'Bayar') + '&"  ➚";IF(plan="";"";IF(url="";t;HYPERLINK(url;t))))'
 # Условное форматирование: другой лист — только через INDIRECT
 I = lambda x: f'INDEX(INDIRECT("References!V1:V100");MATCH("{x}";INDIRECT("References!U1:U100");0))'
 P = f'LOWER(IFERROR({I("Plan*")};""))'; Lm = f'IFERROR(VALUE({I("Docs limit*")});0)'; S = f'IFERROR(VALUE({I("Docs used*")});0)'
