@@ -21,6 +21,7 @@ txt = lambda h, bold=None: {'textFormat': {'foregroundColorStyle': c(h), **({'bo
 req = [
  {'updateCells': {'range': gr(0, 3, 7, 10), 'fields': 'userEnteredValue,userEnteredFormat,textFormatRuns', 'rows': rows}},
  {'updateBorders': {'range': gr(2, 3, 8, 9), **{k: {'style': 'SOLID_THICK', 'colorStyle': W} for k in ('top', 'bottom', 'left', 'right')}}},  # кнопка только в I3, белый отступ со всех сторон
+ {'updateBorders': {'range': gr(2, 3, 0, 15), 'bottom': {'style': 'SOLID_THICK', 'colorStyle': W}}},  # та же белая линия по всей границе с заголовками (основатель 20.11): кнопка не «срезает» тёмную строку
  # index 0 каждый раз — значит, добавляем в обратном порядке приоритета
  rule(gr(2, 3, 8, 9), cust(cf['warn']), {'backgroundColorStyle': c('e84f1c'), **txt('ffffff')}),
  rule(gr(2, 3, 8, 9), cust(cf['crit']), {'backgroundColorStyle': c('d93025'), **txt('ffffff')}),
