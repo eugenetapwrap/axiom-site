@@ -197,7 +197,7 @@ import Logo from '../../components/Logo.astro';
       api: null,                                   // адрес сервера бота, например 'https://api.nota.axiomco.io'; null — прототип на тестовых данных
       bot: 'https://t.me/NotaGetBot',
       custom: 'https://t.me/NotaGetBot',          // «Больше 500 документов — обсудим»
-      terms: '', refund: '', privacy: '',          // условия использования, правила возврата, политика конфиденциальности
+      terms: '/terms', refund: '/refund', privacy: '/privacy', // страницы документов на сайте (тексты — src/pages/*.md)
       supportEmail: ''                             // почта поддержки
     };
     var PLANS = {

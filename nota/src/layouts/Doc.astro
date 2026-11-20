@@ -1,0 +1,72 @@
+---
+// Страница документа (/terms, /privacy, /refund): шапка и подвал как у лендинга, узкая колонка текста.
+// Текст документа вставляется в .md-файл страницы (Markdown). Пока текста нет, показывается заглушка с планом документа и жёлтой меткой.
+import Base from './Base.astro';
+import Logo from '../components/Logo.astro';
+const { frontmatter } = Astro.props;
+const { title, description = '', updated = '', plan = [] } = frontmatter;
+const html = await Astro.slots.render('default');
+const empty = !html.replace(/<!--[\s\S]*?-->/g, '').trim();
+const bot = 'https://t.me/NotaGetBot';
+---
+<Base title={`${title} — Nota`} description={description} noindex selfFonts>
+  <div class="doc">
+    <header class="header">
+      <div class="wrap">
+        <a class="logo-link" href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
+        <a class="btn btn--sm btn--dark" href={bot} target="_blank" rel="noopener"><span class="hb-lg">Открыть в Telegram</span><span class="hb-sm">В Telegram</span></a>
+      </div>
+    </header>
+    <main class="doc-main">
+      <div class="wrap doc-col">
+        <h1>{title}</h1>
+        <p class="doc-meta">{updated ? `Редакция от ${updated}` : <mark class="todo">текст появится</mark>}</p>
+        {empty ? (
+          <div class="doc-empty">
+            <p>Документ готовится. Здесь будет:</p>
+            <ul>{plan.map((x: string) => <li>{x}</li>)}</ul>
+            <p class="doc-q">Вопросы — в <a href={bot} target="_blank" rel="noopener">боте @NotaGetBot</a>.</p>
+          </div>
+        ) : (
+          <article class="doc-body" set:html={html} />
+        )}
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="wrap">
+        <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
+        <nav aria-label="Документы">
+          <a href="/terms">Пользовательское соглашение</a>
+          <a href="/privacy">Политика конфиденциальности</a>
+          <a href="/refund">Правила возврата</a>
+          <a href={bot} target="_blank" rel="noopener">Поддержка в боте</a>
+        </nav>
+        <div class="op">© 2026</div>
+      </div>
+    </footer>
+  </div>
+  <style is:global>
+    .doc .header .wrap { justify-content: space-between; }
+    .doc .header .btn--dark { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+    .doc .header .btn--dark:hover { background: var(--ink); color: #fff; box-shadow: none; }
+    .doc .footer nav a { text-decoration: none; }
+    .doc-main { padding: 48px 0 80px; }
+    .doc-col { max-width: 760px; }
+    .doc-col h1 { font-size: clamp(32px, 4vw, 44px); line-height: 1.12; letter-spacing: -0.015em; text-wrap: balance; }
+    .doc-meta { margin-top: 10px; font-size: 15px; color: var(--muted); }
+    .doc-empty { margin-top: 28px; padding: 22px 24px; border-radius: 18px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); font-size: 17px; }
+    .doc-empty ul { margin: 12px 0 0; padding-left: 22px; display: grid; gap: 6px; color: var(--ink); }
+    .doc-empty .doc-q { margin-top: 16px; font-size: 15px; color: var(--muted); }
+    .doc-body { margin-top: 28px; font-size: 17px; line-height: 1.65; }
+    .doc-body > * + * { margin-top: 14px; }
+    .doc-body h2 { font-size: 24px; line-height: 1.25; margin-top: 36px; }
+    .doc-body h3 { font-size: 19px; line-height: 1.3; margin-top: 26px; }
+    .doc-body ul, .doc-body ol { padding-left: 24px; }
+    .doc-empty ul, .doc-body ul { list-style: disc; }
+    .doc-body ol { list-style: decimal; }
+    .doc-body li + li { margin-top: 6px; }
+    .doc-body table { width: 100%; border-collapse: collapse; font-size: 15px; display: block; overflow-x: auto; }
+    .doc-body th, .doc-body td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+    @media (max-width: 760px) { .doc-main { padding: 32px 0 64px; } }
+  </style>
+</Base>
