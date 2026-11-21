@@ -277,6 +277,20 @@ f_hero = f"""<section class="hero mk-hero mk-hero--e mk-hero--f"><div class="wra
 </div></section>"""
 F = page('f', 'Вариант F — учёт расходов в Telegram, путь основателя', f_hero + E_REST)
 
-for name, html in (('a', A), ('b', B), ('c', C), ('d', D), ('e', E), ('f', F)):
+
+# ---------- Вариант G (21.11): два шага. Группа первой — по панели «сотрудники ничего не меняют» выиграл, «пересылайте сами» проиграл ----------
+G_CHIPS = '<span class="f-chips"><i>в рабочую группу</i><i>боту</i><i>архивом</i></span>'
+G_YOU = [
+    ('Присылайте документы', '', G_CHIPS + '<span class="f-d g-sub">сотрудники присылают чеки в группу как раньше</span>'),
+    ('Nota проверит расчёты, найдёт ошибки и дубли и запишет всё в Google-таблицу', '', ''),
+]
+g_flow = '<ol class="f-flow">' + ''.join(
+    f'<li><span class="e-n">{i}</span><div><b>{a}</b>{d}</div></li>' for i, (a, tag, d) in enumerate(G_YOU, 1)) + '</ol>' + \
+    '<div class="f-auto"><div class="f-auto-h">Готово</div><ol class="f-flow">' + ''.join(
+    f'<li><span class="e-n f-ok">{CHK}</span><div><b>{a}</b></div></li>' for a, d in F_AUTO) + '</ol></div>'
+g_hero = f_hero.replace(f_flow, g_flow)
+G = page('g', 'Вариант G — два шага, группа первой', g_hero + E_REST)
+
+for name, html in (('a', A), ('b', B), ('c', C), ('d', D), ('e', E), ('f', F), ('g', G)):
     (HERE / f'{name}.html').write_text(html)
 print('ok')

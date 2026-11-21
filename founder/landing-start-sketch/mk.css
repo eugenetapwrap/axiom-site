@@ -232,3 +232,5 @@
 .mk-hero--f .f-auto .f-flow li { padding-bottom: 14px; }
 .mk-hero--f .f-auto .f-flow li:last-child { padding-bottom: 0; }
 .mk-split--f .mk-report { margin-top: 6px; }
+.g-sub { margin-top: 10px; }
+.mk-g .f-flow b { line-height: 1.3; padding-top: 4px; }
