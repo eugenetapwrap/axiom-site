@@ -1,0 +1,13 @@
+{
+  "id": "P016",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The money is nothing to me, and I would like a cheap way to watch what my site staff spend while I'm abroad. But uploading a whole work-chat export to a Telegram bot and letting it write into my Google Drive is exactly the kind of access I don't hand to a tool I found while scrolling.",
+  "objection": "A bot reading my work group and getting into my Google account. On top of that, I expect it to misread faded or handwritten Indonesian nota, and then I'm the one fixing rows from abroad.",
+  "would_change_my_mind": "A free check I could run on a ZIP of receipts with no Google connection and no chat export, showing it catches real duplicates and reads handwritten nota correctly, plus a written explanation of exactly what Drive access it needs.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

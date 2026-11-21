@@ -1,0 +1,13 @@
+{
+  "id": "P028",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'm not adding some new bot into my work groups where every transfer screenshot and supplier bill sits, and then also signing it into my Google account. The receipts are a pain, but my manager and I sort them on a Sunday and it works well enough.",
+  "objection": "Who is behind this bot and will it still exist in a year? If it disappears or gets sold, it has already read all my business chats and has access to my Drive.",
+  "would_change_my_mind": "Seeing another café owner I know in Bali use it for a few months without problems, plus a clear way to cut its access and delete my data in one tap.",
+  "price_too_cheap": 3,
+  "price_cheap": 9,
+  "price_expensive": 25,
+  "price_too_expensive": 45
+}

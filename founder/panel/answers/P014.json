@@ -1,0 +1,13 @@
+{
+  "id": "P014",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I'm abroad half the year and only notice a problem on the build once money has already gone, so a sheet that fills itself and a Monday report I can send my partner is worth $19 to me without much thought. I'd run the free 40 on the old chat archive first, and if it catches one duplicate or a padded nota, I'm paying.",
+  "objection": "Is it actually better than Zoho or a sheet my manager could fill in? And do I want a bot I've never heard of reading every invoice and getting into my Google Drive?",
+  "would_change_my_mind": "If the trial on my old chat history misreads the handwritten Indonesian nota or misses the duplicates I already know about, I'm out.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

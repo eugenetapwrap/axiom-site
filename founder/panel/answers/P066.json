@@ -1,0 +1,13 @@
+{
+  "id": "P066",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I'm one investor watching a build from abroad, not a shop with staff spending cash every day. My volume is a few transfers and contractor notas a week, and I could wire up ChatGPT and a Google Sheet with n8n over a weekend if it ever got bad enough.",
+  "objection": "The contractors' notas are faded, handwritten, half in Indonesian. I expect the bot to misread amounts, and then I'm checking every row anyway, so what am I paying for?",
+  "would_change_my_mind": "Running the free 40 on my real chat history and seeing it read the handwritten notas and the duplicate transfer screenshots correctly, with no fixes needed, plus a flag when the contractor's claimed spend doesn't match what I transferred.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+import { meta } from '../data/content-v11';
+
+interface Props { title?: string; description?: string; noindex?: boolean; og?: string; ogAlt?: string; selfFonts?: boolean }
+const { title = meta.title, description = meta.description, noindex = false, og: ogPath = '/og-v10.png', ogAlt = meta.ogAlt, selfFonts = false } = Astro.props;
+// До запуска сайт закрыт от поисковиков. В день запуска (только по команде основателя) задать на хостинге PUBLIC_INDEX=1 и пересобрать.
+const closed = noindex || import.meta.env.PUBLIC_INDEX !== '1';
+// selfFonts: Inter с нашего сайта и с предзагрузкой — шрифт приходит до первой отрисовки, страница не прыгает (CLS).
+// Inter — лицензия SIL OFL, файлы в public/fonts (кириллица и латиница, вариативный 400–700).
+const interFace = `@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/inter-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/inter-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = new URL(ogPath, Astro.site);
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {closed && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#FBFCFA" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nota" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={og} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    {ogAlt && <meta property="og:image:alt" content={ogAlt} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    {selfFonts ? (
+      <>
+        <link rel="preload" href="/fonts/inter-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+        <style is:inline set:html={interFace} />
+      </>
+    ) : (
+      <>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=Caveat:wght@500;700&display=swap"
+        />
+      </>
+    )}
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

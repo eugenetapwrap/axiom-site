@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I make about a thousand dollars a month, so $19 is real money to me, and with all my clients the documents would pass 100 fast and push me to $45. My clients will not pay extra, and I bill by the hour, so saving time just means earning less unless I find new clients.",
+  "objection": "Who pays? I cannot put it on the client's bill, and I cannot eat $19 to $45 a month myself. Also only 5 groups per account, and I have more clients than that.",
+  "would_change_my_mind": "A price that fits a solo bookkeeper, around $5 a month for all my clients, or a way to bill it to the client as a small service they agree to pay.",
+  "price_too_cheap": 1,
+  "price_cheap": 3,
+  "price_expensive": 8,
+  "price_too_expensive": 15
+}

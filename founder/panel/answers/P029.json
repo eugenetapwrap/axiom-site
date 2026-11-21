@@ -1,0 +1,13 @@
+{
+  "id": "P029",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper already runs everything through Zoho Expense and it works well enough. I don't want a second system and a Google Sheet next to it, and a duplicate receipt is something I handle by talking to the foreman, not with another subscription.",
+  "objection": "It's one more tool on top of the one we already pay for. A duplicate is a people problem, and I don't see what this does that my current app and my bookkeeper don't already cover.",
+  "would_change_my_mind": "If it pushed straight into Zoho or Jurnal from the site Telegram groups, so my bookkeeper stopped chasing receipts in chats and nobody had to retype anything, I'd try it.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 30,
+  "price_too_expensive": 60
+}

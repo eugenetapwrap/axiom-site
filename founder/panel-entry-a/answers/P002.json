@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I would let my admin try the free 30 receipts, but 30 is gone in about a week at a café and then I am paying for something my staff may drop. She already has her Excel routine, even if it is always behind, and I am not paying monthly until I see it stick.",
+  "objection": "After the free part, me and my staff just go back to the old way and I am paying $19 or $35 every month for a bot nobody uses.",
+  "would_change_my_mind": "A full first month free, so my admin can stop typing receipts for four weeks and I actually get the weekly report on my phone without anyone chasing it.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 30,
+  "price_too_expensive": 50
+}

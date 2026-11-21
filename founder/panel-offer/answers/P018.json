@@ -1,0 +1,13 @@
+{
+  "id": "P018",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I already check every receipt myself since I caught someone inflating them, and most of what I pay for scooters is cash to mechanics with a scribbled nota or nothing at all. I might run the free check out of curiosity, but I don't see myself paying monthly for something I already do by hand.",
+  "objection": "If someone is cheating me, a bot flagging a duplicate doesn't fix it. I still have to confront the person. And the real tricks, a mechanic billing for a part he never fitted or a fuel price bumped up, look like perfectly normal receipts.",
+  "would_change_my_mind": "If the free check found something real in my old chats that I had missed, like money I actually lost, I would pay to keep it running.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 25,
+  "price_too_expensive": 45
+}

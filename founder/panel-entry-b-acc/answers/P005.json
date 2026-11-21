@@ -1,0 +1,13 @@
+{
+  "id": "P005",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Most of my clients live in WhatsApp, and I'm not moving thirty of them onto a Telegram bot because I want them to. My routine is messy but it works, and my real problem is chasing late and missing receipts, not typing them in.",
+  "objection": "It looks built for one business tracking its own spending, not for a bookkeeper with a separate chat for each client. Nothing here chases a client who hasn't sent anything, and I'd still have to forward everything over from WhatsApp myself.",
+  "would_change_my_mind": "If it worked inside the WhatsApp chats I already have, put each client into their own sheet, and nagged clients about missing receipts before month end.",
+  "price_too_cheap": 9,
+  "price_cheap": 25,
+  "price_expensive": 79,
+  "price_too_expensive": 150
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P016",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I would add the bot and use the 30 free documents, since it costs nothing. With receipts landing in three or four groups every day, those 30 are gone in about a week, and then I am paying another monthly bill for something my staff may already have stopped bothering with.",
+  "objection": "My staff and I are not sure we will keep using it after the free part. And with this many receipts I would probably go over 100 a month, so it is really $35, not $19.",
+  "would_change_my_mind": "If during the free part my staff kept sending receipts without me chasing them, and it caught a duplicate or a wrong total that saved me real money, I would pay the $19.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

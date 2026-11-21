@@ -1,0 +1,13 @@
+{
+  "id": "P060",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I'm abroad half the year and right now I only look at the Telegram receipts when something smells wrong, so a sheet that fills itself and a Monday report is exactly what I'm missing. I'd upload the old chat history first, and if it flags the doubles I already know about, $19 a month is nothing.",
+  "objection": "Will it really catch a receipt that someone re-photographed or a staff member sent twice from another phone, or is it just a receipt-to-table bot that I still have to check line by line myself?",
+  "would_change_my_mind": "If the free archive test misses duplicates I know are in there, or misreads the handwritten nota from my shop, I won't pay.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I earn maybe $1,800 a month, and my clients will not pay extra for this, so $19 or $45 comes straight out of my pocket. My clients also hand me a bag of crumpled nota at month end, not Telegram photos, so I would still be photographing everything myself and then retyping it into Jurnal.",
+  "objection": "Who pays? I cannot charge clients more for it, and with no export to Jurnal or Accurate it is just one more sheet I have to copy over by hand.",
+  "would_change_my_mind": "A direct import into Jurnal or Accurate, at a price per account under about $10 a month that covers all my clients, not per client.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

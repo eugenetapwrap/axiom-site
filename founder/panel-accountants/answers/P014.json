@@ -1,0 +1,13 @@
+{
+  "id": "P014",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Month end is killing me, and retyping receipts is the worst part. I won't put a bot in my clients' groups, but I can forward documents to it myself. So I'd burn through the 40 free documents, and if the sheet comes out clean I'd pay $45 without thinking twice.",
+  "objection": "Half my clients send things on WhatsApp, not Telegram, and I'm not adding a bot to anyone's group chat. If I end up forwarding everything by hand anyway, and the 5-group limit doesn't fit my client list, it only fixes part of my problem.",
+  "would_change_my_mind": "",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 150
+}

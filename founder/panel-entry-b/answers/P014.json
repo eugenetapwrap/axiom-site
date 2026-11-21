@@ -1,0 +1,13 @@
+{
+  "id": "P014",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The money is nothing to me and the receipt mess in Telegram is real, but I'm not connecting my Google account and dropping an unknown bot into the chats where my crew and I talk about suppliers, payments and clients. I'll keep scrolling back through the group when something smells wrong, like I do now.",
+  "objection": "Who is behind @NotaGetBot and what else can it see? Once it's in the work group and on my Google, it can read everything, and I have no idea where that data goes or who's looking at it.",
+  "would_change_my_mind": "A real company I can check, plus a clear guarantee that the bot only gets access to one sheet it creates, not my whole Google account, and only reads receipts in the chat, not our conversations. Better still if another Bali contractor I know is already using it.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 50,
+  "price_too_expensive": 120
+}

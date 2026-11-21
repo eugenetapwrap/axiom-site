@@ -1,0 +1,409 @@
+---
+// Версия 9 лендинга: v8 + новый первый экран и скользящая картинка отчёта (компьютер). Тексты: src/data/content-v9.ts.
+// Первый экран — только новый. Технический переключатель сверху: отчёт скользящий / как в v8; убрать перед запуском.
+// Решения — в founder/landing.md, разделы v7 и v8.
+import Base from '../../layouts/Base.astro';
+import Logo from '../../components/Logo.astro';
+import Icon from '../../components/Icon.astro';
+import ScreenSlot from '../../components/ScreenSlot.astro';
+import MiniReport from '../../components/MiniReport.astro';
+import Pen from '../../components/Pen.astro';
+import Reaction from '../../components/Reaction.astro';
+import { botLink } from '../../data/content';
+import { fmt } from '../../lib/fmt';
+import {
+  meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps, bar,
+} from '../../data/content-v9';
+
+// Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
+const cut = (text: string, word: string) => { const i = text.indexOf(word); return i < 0 ? [text, '', ''] : [text.slice(0, i), word, text.slice(i + word.length)]; };
+const h1Cut = cut(hero.title, '15\u00a0минут');
+
+// Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
+const site = 'https://nota.axiomco.io';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Nota',
+    url: `${site}/`,
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Telegram',
+    inLanguage: ['ru', 'en', 'id'],
+    description: meta.description,
+    publisher: { '@type': 'Organization', name: 'Axiom Consulting' },
+    offers: pricing.plans.map((p) => ({
+      '@type': 'Offer', name: p.name, price: p.month.price.replace('$', ''), priceCurrency: 'USD',
+      url: botLink(p.tag),
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={meta.title} description={meta.description} noindex og="/og-v8.png" selfFonts>
+  <!-- Технический переключатель: отчёт — скользящий / как в v8. Убрать перед запуском. -->
+  <a class="skip" href="#main">К содержанию</a>
+  <div class="techbar" role="group" aria-label="Варианты страницы">
+    <div class="wrap">
+      {(['rep'] as const).map((g) => (
+        <span class="tb-group" role="group" aria-label={bar[g].label}>
+          <span class="techbar-label">{bar[g].label}</span>
+          {bar[g].opts.map(([v, label], i) => <button type="button" data-g={g} data-v={v} aria-pressed={i === 0 ? 'true' : 'false'}>{label}</button>)}
+        </span>
+      ))}
+      <small>{bar.note}</small>
+    </div>
+  </div>
+  <script is:inline>
+    (function () {
+      var root = document.documentElement;
+      function set(g, v) {
+        var def = g === 'hero' ? 'new' : 'sticky';
+        if (v === def) root.removeAttribute('data-' + g); else root.setAttribute('data-' + g, v);
+        document.querySelectorAll('.techbar [data-g="' + g + '"]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === v ? 'true' : 'false'); });
+        window.dispatchEvent(new Event('resize'));
+      }
+      document.querySelectorAll('.techbar [data-g]').forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.g, b.dataset.v); }); });
+    })();
+  </script>
+  <header class="header">
+    <div class="wrap">
+      <a class="logo-link" href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
+      <nav aria-label="Разделы">{nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
+      <a class="btn btn--sm btn--dark" href={botLink('land9_header')}>Открыть в Telegram</a>
+    </div>
+  </header>
+
+  <main class="tight v7 v8 v9" id="main">
+    <div class="story">
+    <!-- 1. Первый экран: архив → отчёт за 15 минут, QR, пример отчёта -->
+    <section class="hero hero2 hero3">
+      <div class="wrap split hero-split">
+        <div>
+          <span class="hero-eyebrow">{hero.eyebrow}</span>
+          <h1>{h1Cut[0]}<Pen u id="h1">{h1Cut[1]}</Pen>{h1Cut[2]}</h1>
+          <p class="lead">{hero.lead}</p>
+          <div class="num-group">
+          <span class="num-dot" aria-hidden="true"><i>1</i></span>
+          <div class="cta-row cta-row--qr">
+            <a class="btn" href={botLink('land9_hero')}>{cta}</a>
+            <div class="cta-qr">
+              <img src="/screens/qr-bot-v9.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="60" height="60" />
+              <span>{hero.qr}</span>
+            </div>
+          </div>
+          <p class="cta-note">{hero.note}</p>
+          <details class="howto-mini">
+            <summary>{hero.howto.summary}</summary>
+            <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
+          </details>
+          </div>
+        </div>
+        <figure class="hero-report in-flow">
+          <img src={hero.report.file} alt="Пример отчёта Nota по архиву: 96,15 млн рупий, 37 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
+          <figcaption>{hero.report.caption}</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 2. Шаг 2: что покажет отчёт. Объединён с бывшим «Отчёт каждый понедельник»: слева карточка недельного
+         отчёта (на телефоне скрыта — там пример отчёта прямо над блоком), справа что в отчёте и как часто -->
+    <section class="section section--paper num-sec" id="result">
+      <div class="wrap">
+        <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i>2</i></span>{steps.report.title}</h2>
+        <div class="s2-split">
+          <MiniReport
+            title="Неделя · 3–9 ноя" period="Сравнение с прошлой неделей: +8%" total="21,70" sub="16 платежей"
+            marks={[{ n: '1', label: 'дубль', alert: true }, { n: '2', label: 'проверить', alert: true }, { n: '4', label: 'рукописных' }, { n: '0', label: 'не прочитано' }]}
+            bars={[3.1, 5.4, 2.2, 6.8, 2.9, 0.8, 0.5]}
+            cats={[['Материалы', '9 800 000', 45], ['Подрядчики', '6 200 000', 29], ['Без категории', '700 000', 3]]}
+          />
+          <div class="s2-text">
+            <ul class="check">{steps.report.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
+            <div class="sched">
+              <div class="sched-title">{steps.report.schedule.title}</div>
+              <dl>{steps.report.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
+            </div>
+            <div class="cta-row"><a class="btn" href={botLink('land9_result')}>{cta}</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Скользящая картинка отчёта (компьютер): слой поверх первого экрана и шага 2, картинка «липнет» и едет рядом с пунктами -->
+    <div class="story-media" aria-hidden="true">
+      <div class="wrap">
+        <figure class="hero-report story-fig">
+          <img src={hero.report.file} alt="" width={hero.report.w} height={hero.report.h} />
+          <figcaption>{hero.report.caption}</figcaption>
+        </figure>
+      </div>
+    </div>
+    </div>
+
+    <!-- 3. Шаг 3: подключите Google, и таблица будет вестись сама -->
+    <section class="section num-sec" id="analytics">
+      <div class="wrap">
+        <h2><span class="num-dot" aria-hidden="true"><i>3</i></span>{steps.table.title}</h2>
+        <p class="lead">{steps.table.lead}</p>
+        <div class="an" data-an>
+          <div class="an-pick" role="tablist" aria-label="Листы таблицы">
+            {analytics.screens.map((sc, i) => (
+              <button type="button" role="tab" class="an-btn" id={`an-tab-${sc.id}`} aria-controls={`an-panel-${sc.id}`} aria-selected={i === 0 ? 'true' : 'false'}>
+                <b>{sc.label}</b><small>{sc.tab}</small>
+              </button>
+            ))}
+          </div>
+          {analytics.screens.map((sc, i) => (
+            <div class:list={['an-panel', { on: i === 0 }]} role="tabpanel" id={`an-panel-${sc.id}`} aria-labelledby={`an-tab-${sc.id}`}>
+              <ScreenSlot file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={`Лист ${sc.tab} на тестовых данных`} w={sc.w} h={sc.h} mobile={sc.mobile} />
+              <ul class="an-points">{sc.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+        <script is:inline>
+          (function () {
+            var root = document.querySelector('[data-an]');
+            if (!root) return;
+            root.classList.add('js');
+            var tabs = root.querySelectorAll('[role="tab"]');
+            var panels = root.querySelectorAll('[role="tabpanel"]');
+            function show(i) {
+              tabs.forEach(function (t, k) { t.setAttribute('aria-selected', k === i ? 'true' : 'false'); t.tabIndex = k === i ? 0 : -1; });
+              panels.forEach(function (p, k) { p.classList.toggle('on', k === i); });
+            }
+            tabs.forEach(function (t, i) {
+              t.addEventListener('click', function () { show(i); });
+              t.addEventListener('keydown', function (e) {
+                if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+                var n = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+                show(n); tabs[n].focus();
+              });
+            });
+            show(0);
+          })();
+        </script>
+        {analytics.note && <p class="note">{analytics.note}</p>}
+      </div>
+    </section>
+
+    <!-- 4. Шаг 4: как присылать документы дальше, группа по желанию -->
+    <section class="section section--paper num-sec" id="send">
+      <div class="wrap">
+        <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i>4</i></span>{send.title}</h2>
+        <div class="grid g4" style="--min: 240px">
+          {send.items.map((c) => (
+            <div class="card send-card send-card--row">
+              <div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div>
+              <p>{c.text.split('{r}').map((part, i) => <>{i > 0 && <Reaction />}{part}</>)}</p>
+              {c.tag && <span class:list={['tag', `tag--${c.tone}`]}>{c.tag}</span>}
+            </div>
+          ))}
+        </div>
+        <p class="note">{send.seen.split('{r}').map((part, i) => <>{i > 0 && <Reaction />}{part}</>)}</p>
+      </div>
+    </section>
+
+    <!-- 5. Что Nota делает с каждым документом: список вместо серых карточек + цифра -->
+    <section class="section" id="what">
+      <div class="wrap">
+        <h2 class="h2-gap">{what.title}</h2>
+        <ul class="feat-list">
+          {what.items.map((c) => (
+            <li class:list={{ 'feat--accent': c.accent }}><span class="feat-icon"><Icon name={c.icon} /></span><div><h3>{c.title}</h3><p>{c.text}</p></div></li>
+          ))}
+        </ul>
+        <div class="proof-band"><b>{what.proof.value}</b><span>{what.proof.text}</span></div>
+      </div>
+    </section>
+
+    <!-- Цены сразу после «Что Nota делает» и цифры про дубли; дальше отзывы и «Ваши данные» -->
+    <section class="section section--paper" id="price" data-bill="month">
+      <div class="wrap">
+        <div class="price-head">
+          <div>
+            <h2>{pricing.title}</h2>
+            <p class="lead">{pricing.lead}</p>
+          </div>
+          <fieldset class="bill">
+            <legend class="sr-only">{pricing.billing.label}</legend>
+            {pricing.billing.opts.map((o, i) => (
+              <label><input type="radio" name="bill" value={o.v} checked={i === 0} /><span><b class="lg">{o.lg}</b><b class="sm">{o.sm}</b>{o.save && <em>{o.save}</em>}</span></label>
+            ))}
+          </fieldset>
+        </div>
+        <div class="grid plans" style="--min: 220px; gap: 24px">
+          {pricing.plans.map((p) => (
+            <div class:list={['plan', { 'plan--hl': p.highlight }]}>
+              <h3>{p.name}</h3>
+              <div class="plan-price">
+                <span class="pm">{p.month.price}</span><span class="p3">{p.q3.price}</span><span class="p6">{p.q6.price}</span><small> / мес</small>
+              </div>
+              <div class="plan-unit">
+                <span class="pm">{p.month.unit}</span><span class="p3">{p.q3.total} · {p.q3.unit}</span><span class="p6">{p.q6.total} · {p.q6.unit}</span>
+              </div>
+              <p><b>{p.docs}</b><br /><span class="muted">{p.who}</span></p>
+              <ul class="check">{[...p.feats, ...pricing.common].map((f) => <li><Icon name="check" size={20} />{f}</li>)}</ul>
+              <a class:list={['btn', 'btn--plan', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}</a>
+            </div>
+          ))}
+        </div>
+        <dl class="plan-facts3">
+          {pricing.facts.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
+        </dl>
+        <script is:inline>
+          (function () {
+            var sec = document.getElementById('price');
+            if (!sec) return;
+            sec.querySelectorAll('input[name="bill"]').forEach(function (r) {
+              r.addEventListener('change', function () { if (r.checked) sec.setAttribute('data-bill', r.value); });
+            });
+          })();
+        </script>
+      </div>
+    </section>
+
+    <!-- После цен — по силе для продажи: отзывы → сравнение → ваши данные → вопросы → для кого -->
+    <!-- Отзывы (заглушки до реальных текстов) -->
+    <section class="section">
+      <div class="wrap">
+        <h2 class="h2-gap">{reviews.title}</h2>
+        <div class="grid g4 reviews" style="--min: 250px">
+          {reviews.items.map((r) => (
+            <figure class="review">
+              <blockquote set:html={fmt(r.text)} />
+              <figcaption><b set:html={fmt(r.name)} /><span set:html={fmt(r.role)} /></figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Сравнение: накладная в 9:41 -->
+    <section class="section section--paper">
+      <div class="wrap">
+        <h2 class="cmp-title">{compare.title}</h2>
+        <div class="cmp" role="table" aria-label="Сравнение: Nota, админ с Excel, приложение для расходов">
+          <div class="cmp-row cmp-head" role="row">
+            <div class="cmp-q" role="columnheader"><span class="sr-only">Вопрос</span></div>
+            {compare.options.map((o) => (
+              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="columnheader">{o.nota ? <Logo height={24} /> : o.name}</div>
+            ))}
+          </div>
+          <div class="cmp-row cmp-when" role="row">
+            <div class="cmp-q" role="rowheader">{compare.whenLabel}</div>
+            {compare.options.map((o) => (
+              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="cell">
+                <span class="cmp-who">{o.short ?? o.name}</span><b>{o.when}</b><small>{o.whenNote}</small>
+              </div>
+            ))}
+          </div>
+          {compare.rows.map((q, i) => (
+            <div class="cmp-row" role="row">
+              <div class="cmp-q" role="rowheader">{q}</div>
+              {compare.options.map((o) => {
+                const [m, t] = o.cells[i];
+                return (
+                  <div class:list={['cmp-c', `m-${m}`, { 'cmp-c--nota': o.nota }]} role="cell">
+                    <span class="vs-mark"><Icon name={m === 'yes' ? 'check' : m === 'no' ? 'x' : 'minus'} size={16} /></span>
+                    <span class="cmp-who">{o.short ?? o.name}</span>
+                    <span class="cmp-t">{t}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Ваши данные и кто делает: снимают страх пустить бота в чаты и Google -->
+    <section class="section data-sec" id="data">
+      <div class="wrap">
+        <h2 class="h2-gap">{data.title}</h2>
+        <div class="grid g4" style="--min: 240px; gap: 36px">
+          {data.items.map((d) => (
+            <div class="dark-item"><Icon name={d.icon} /><div><h3>{d.title}</h3><p set:html={fmt(d.text)} /></div></div>
+          ))}
+        </div>
+        <div class="who"><span class="who-label">КТО ДЕЛАЕТ</span><p>{data.who}</p></div>
+      </div>
+    </section>
+
+    <!-- 12. Вопросы -->
+    <section class="section section--paper" id="faq">
+      <div class="wrap">
+        <h2 class="h2-gap">Вопросы</h2>
+        <div class="faq">{faq.map((f) => <details><summary>{f.q}</summary><p set:html={fmt(f.a)} /></details>)}</div>
+      </div>
+    </section>
+
+    <!-- 8. Для кого: компактный список вместо серых карточек -->
+    <section class="section">
+      <div class="wrap">
+        <h2 class="h2-gap">{segments.title}</h2>
+        <ul class="seg-list">{segments.items.map((c) => <li><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
+        <p class="note seg-note">{segments.note}</p>
+      </div>
+    </section>
+
+    <!-- Финал -->
+    <section class="section--dark final">
+      <div class="wrap">
+        <h2>{final.title}</h2>
+        <p>{final.lead}</p>
+        <div class="final-cta">
+          <a class="btn" href={botLink('land9_final')}>{cta}</a>
+          <div class="final-qr">
+            <img src="/screens/qr-bot-v9-dark.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
+            <span>Или наведите камеру телефона</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
+      <nav aria-label="Документы">
+        <a href={footer.terms}>Пользовательское соглашение <mark class="todo">ссылка</mark></a>
+        <a href={footer.privacy}>Политика конфиденциальности <mark class="todo">ссылка</mark></a>
+        <a href={botLink('land9_support')}>Поддержка в боте</a>
+      </nav>
+      <div class="op">{footer.operator} · © 2026</div>
+      <p class="foot-note">{footer.testData}</p>
+    </div>
+  </footer>
+  <script is:inline>
+    // Пунктир от цифры к цифре по левой полосе (только на компьютере; на телефоне цифры стоят у заголовков).
+    (function () {
+      var NS = 'http://www.w3.org/2000/svg', layer, timer;
+      function box(e) { var r = e.getBoundingClientRect(); return { t: r.top + scrollY, b: r.bottom + scrollY, cx: (r.left + r.right) / 2 + scrollX }; }
+      function add(d, cls) { var p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.setAttribute('class', cls); layer.appendChild(p); }
+      function draw() {
+        if (!layer) { layer = document.createElementNS(NS, 'svg'); layer.setAttribute('class', 'pen-layer'); layer.setAttribute('aria-hidden', 'true'); document.body.appendChild(layer); }
+        layer.innerHTML = ''; layer.setAttribute('width', 0); layer.setAttribute('height', 0);
+        if (innerWidth < 900) return;
+        layer.setAttribute('width', document.documentElement.scrollWidth); layer.setAttribute('height', document.documentElement.scrollHeight);
+        var dots = [].slice.call(document.querySelectorAll('.num-dot i')).map(box);
+        dots.forEach(function (d, i) {
+          var n = dots[i + 1]; if (!n) return;
+          var y1 = d.b + 8, y2 = n.t - 10;
+          add('M' + d.cx + ' ' + y1 + ' L' + d.cx + ' ' + y2, 'num-line');
+          add('M' + (d.cx - 6) + ' ' + (y2 - 8) + ' L' + d.cx + ' ' + y2 + ' L' + (d.cx + 6) + ' ' + (y2 - 8), 'num-head');
+        });
+      }
+      function later() { clearTimeout(timer); timer = setTimeout(draw, 120); }
+      window.addEventListener('resize', later);
+      if (window.ResizeObserver) new ResizeObserver(later).observe(document.body);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+      window.addEventListener('load', draw);
+    })();
+  </script>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+</Base>

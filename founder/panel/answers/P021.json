@@ -1,0 +1,13 @@
+{
+  "id": "P021",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I might use the 40 free documents to see what it catches, but I wouldn't pay yet. Most of what I pay mechanics is cash with a scribbled nota or nothing, and catching a duplicate photo doesn't stop someone writing a higher price on a fresh nota, which is how I actually got cheated.",
+  "objection": "It's a new little bot nobody I know uses. If it disappears in six months, my records are stuck halfway, and it can't tell whether a part really cost what the receipt says.",
+  "would_change_my_mind": "Another scooter or shop owner in Bali showing me it caught real padded or repeated claims from their staff over a few months, plus proof the bot has been running for a while.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

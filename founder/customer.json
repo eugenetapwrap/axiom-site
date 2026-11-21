@@ -1,0 +1,113 @@
+{
+  "business": "Nota (@NotaGetBot): a Telegram bot that collects receipts, invoices and handwritten delivery notes from work chats into the owner's Google Sheet and flags duplicates and arithmetic errors",
+  "target": "Owners of small businesses in Bali (5–50 people, no finance department) whose staff spend money on site and send receipts to Telegram work groups",
+  "where": "Bali, Indonesia (Canggu, Seminyak, Ubud, Uluwatu, Denpasar); Russian-speaking and international owners with local Indonesian staff",
+  "age": [
+    28,
+    55
+  ],
+  "segments": [
+    {
+      "name": "Construction / renovation contractor or developer",
+      "share": 0.3,
+      "income": [
+        40000,
+        250000
+      ]
+    },
+    {
+      "name": "Villa management company or villa rental operator",
+      "share": 0.25,
+      "income": [
+        30000,
+        150000
+      ]
+    },
+    {
+      "name": "Café / restaurant owner",
+      "share": 0.17,
+      "income": [
+        25000,
+        120000
+      ]
+    },
+    {
+      "name": "Shop or bike/scooter rental owner",
+      "share": 0.15,
+      "income": [
+        20000,
+        100000
+      ]
+    },
+    {
+      "name": "Remote investor in villas or a build, living abroad",
+      "share": 0.13,
+      "income": [
+        80000,
+        400000
+      ]
+    }
+  ],
+  "behaviours": [
+    {
+      "name": "Runs everything through chats",
+      "share": 0.22,
+      "how": "Receipts pile up in Telegram groups; nobody records them regularly; you check when something feels off."
+    },
+    {
+      "name": "Has an admin with Excel",
+      "share": 0.18,
+      "how": "An admin or manager types receipts into a spreadsheet once a week; it is always behind."
+    },
+    {
+      "name": "Already uses an app",
+      "share": 0.12,
+      "how": "You or your bookkeeper use Jurnal, Zoho Expense or a similar app and are reasonably happy with it."
+    },
+    {
+      "name": "Burned before",
+      "share": 0.12,
+      "how": "You have caught a staff member or contractor double-claiming or inflating receipts and now check closely."
+    },
+    {
+      "name": "Price-sensitive",
+      "share": 0.12,
+      "how": "Every subscription is questioned; you prefer free tools and cancel what you do not use weekly."
+    },
+    {
+      "name": "Privacy-wary",
+      "share": 0.1,
+      "how": "You do not like giving bots access to your Google account or your work chats."
+    },
+    {
+      "name": "Tech-savvy DIY",
+      "share": 0.08,
+      "how": "You or a friend could build a bot with n8n or ChatGPT and you know it."
+    },
+    {
+      "name": "Delegates to a bookkeeper",
+      "share": 0.06,
+      "how": "An outside bookkeeper handles documents monthly; you rarely look at receipts yourself."
+    }
+  ],
+  "objections": [
+    "I already have a free option: Zoho, KasKecil, Excel or a bot I could build myself",
+    "Will it really catch a duplicate, or is it just a receipt-to-table bot?",
+    "I do not want to give a bot access to my Google account and work chats",
+    "Recognition will make mistakes on faded or handwritten Indonesian receipts and I will have to fix it",
+    "My staff and I are not sure we will keep using it after the free part",
+    "$19 a month for something my admin already does",
+    "If I find a duplicate, it is a people problem, not a software problem",
+    "Will a new small product still be around in a year?"
+  ],
+  "habits": [
+    "you have 2–4 Telegram work groups where receipts and transfer screenshots land every day",
+    "you live in Bali part of the year and manage from abroad the rest",
+    "your Indonesian staff write handwritten nota from the building-supply shop",
+    "your accountant asks for documents at month end and half are missing",
+    "you pay contractors by bank transfer and send screenshots to the group",
+    "you check the group chat late at night to see what was spent",
+    "you share monthly spending with a partner or investor",
+    "you buy spare parts, fuel and repairs for a fleet of rental scooters and pay mechanics in cash"
+  ]
+}

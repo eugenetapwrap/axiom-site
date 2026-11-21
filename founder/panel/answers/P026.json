@@ -1,0 +1,13 @@
+{
+  "id": "P026",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "The money isn't the issue, $19 is nothing to me. But my admin already pulls the receipts together when I ask, and half of what goes out is cash to mechanics with no receipt at all, so a bot reading the chat would only see part of the picture.",
+  "objection": "It can only read what people actually send. The leaks I worry about are cash payments and inflated parts prices, and a tidy spreadsheet of the receipts that do show up won't catch those.",
+  "would_change_my_mind": "If I uploaded our old Telegram history on the free trial and it turned up real duplicates or totals that don't add up, money I didn't know I'd lost, I would pay without thinking about it.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

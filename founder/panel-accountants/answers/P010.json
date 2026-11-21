@@ -1,0 +1,13 @@
+{
+  "id": "P010",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Most of my clients send receipts on WhatsApp, not Telegram, and my WhatsApp routine is messy but it works. I might try the 40 free documents on my one or two Telegram clients, but I wouldn't move my clients over or pay for something that only covers part of my inbox and still makes me retype into Jurnal.",
+  "objection": "It only works in Telegram and doesn't export to Jurnal or Accurate, so I'd still be chasing WhatsApp receipts and copying rows from a sheet. That's just one more place to check, not fewer days at month end.",
+  "would_change_my_mind": "If it worked in WhatsApp groups too and gave me a file I could import straight into Jurnal or Accurate.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 50,
+  "price_too_expensive": 100
+}

@@ -1,0 +1,8 @@
+{
+  "name": "nota-report-cards",
+  "private": true,
+  "description": "Рендер карточек отчётов Nota в PNG: npm install && npx playwright install chromium, затем node render.cjs card.html card.png",
+  "dependencies": {
+    "playwright": "^1.63.0"
+  }
+}

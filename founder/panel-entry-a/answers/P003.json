@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "My boys bring handwritten nota from the toko bangunan, and I doubt a bot reads that scrawl correctly. The cheating I caught was inflated amounts the shop wrote down on request, not the same receipt sent twice, so duplicate-spotting alone doesn't catch my real problem. I'd run the free 30 and probably stop there, because I already check everything myself in Excel.",
+  "objection": "A duplicate checker doesn't help when the nota itself is inflated. It reads whatever number is written, and if that number is fake the report just looks clean. On top of that I'd be sending my whole work chat to a bot I know nothing about.",
+  "would_change_my_mind": "If the free 30 reads my actual handwritten nota without mistakes and flags something real I missed, like the same material bought at very different prices or a double claim, I'd pay $19 the same day.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

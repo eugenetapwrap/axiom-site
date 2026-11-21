@@ -1,0 +1,13 @@
+{
+  "id": "P019",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper already runs everything through our expense app and it works fine, so I'm not adding a second tool and another monthly bill just to get the same receipts into a Google Sheet. Half of what I spend is cash to mechanics with no receipt at all, so a receipt bot doesn't fix my real headache anyway.",
+  "objection": "I don't believe it really catches duplicates. Two mechanics send a photo of the same parts invoice, or someone sends a screenshot and then the paper copy. Does it actually spot that, or is it just a bot that turns a receipt into a table row?",
+  "would_change_my_mind": "If my bookkeeper ran the free 30 documents through it, it caught real duplicates and wrong totals our current app missed, and it pushed straight into Jurnal or Zoho instead of a separate sheet.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

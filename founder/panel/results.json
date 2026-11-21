@@ -1,0 +1,267 @@
+{
+ "business": "Nota (@NotaGetBot): a Telegram bot that collects receipts, invoices and handwritten delivery notes from work chats into the owner's Google Sheet and flags duplicates and arithmetic errors",
+ "seed": 843138,
+ "dealt": 100,
+ "answered": 100,
+ "skipped": [],
+ "buys": 21,
+ "passes": 79,
+ "buy_rate": 0.21,
+ "by_segment": [
+  [
+   "Construction / renovation contractor or developer",
+   30,
+   0.3333333333333333
+  ],
+  [
+   "Shop or bike/scooter rental owner",
+   15,
+   0.2
+  ],
+  [
+   "Villa management company or villa rental operator",
+   25,
+   0.2
+  ],
+  [
+   "Remote investor in villas or a build, living abroad",
+   13,
+   0.15384615384615385
+  ],
+  [
+   "Café / restaurant owner",
+   17,
+   0.058823529411764705
+  ]
+ ],
+ "by_behaviour": [
+  [
+   "Burned before",
+   12,
+   0.5
+  ],
+  [
+   "Runs everything through chats",
+   22,
+   0.4090909090909091
+  ],
+  [
+   "Has an admin with Excel",
+   18,
+   0.3333333333333333
+  ],
+  [
+   "Already uses an app",
+   12,
+   0.0
+  ],
+  [
+   "Tech-savvy DIY",
+   8,
+   0.0
+  ],
+  [
+   "Privacy-wary",
+   10,
+   0.0
+  ],
+  [
+   "Price-sensitive",
+   12,
+   0.0
+  ],
+  [
+   "Delegates to a bookkeeper",
+   6,
+   0.0
+  ]
+ ],
+ "by_income": [
+  [
+   "$124,000 and up",
+   34,
+   0.29411764705882354
+  ],
+  [
+   "$77,000 to $124,000",
+   33,
+   0.24242424242424243
+  ],
+  [
+   "under $77,000",
+   33,
+   0.09090909090909091
+  ]
+ ],
+ "why_not": [
+  [
+   "habit",
+   33,
+   [
+    "My admin already types the receipts into Excel every week. It's behind, sure, but it gets done, and I'm not paying a monthly fee and moving everything to Google Sheets to fix something that roughly works.",
+    "My bookkeeper already runs everything through Zoho and it works well enough. The missing documents are a staff discipline problem, and I'm not adding another tool and another login from overseas on the strength of a Telegram bot I've never heard of."
+   ],
+   [
+    "P001",
+    "P002"
+   ]
+  ],
+  [
+   "trust",
+   23,
+   [
+    "I might throw the 40 free documents at it out of curiosity, but I wouldn't pay. A brand-new bot from a team I've never heard of, sitting in my staff chats and my Google Drive, could vanish in six months, and I could put together something good enough with n8n and ChatGPT over a weekend.",
+    "I don't put an unknown bot in my staff chat or sign it into my Google account. It would read everything people write there, not only receipts. The missing papers at month end bother me, but not enough to hand that over to someone I don't know."
+   ],
+   [
+    "P003",
+    "P005"
+   ]
+  ],
+  [
+   "need",
+   15,
+   [
+    "My bookkeeper already collects everything once a month and I almost never look at receipts myself, so this solves a problem I mostly handed off already. I might let it run on the free 40, but I doubt I'd start paying for it.",
+    "My rental shop doesn't have that many receipts. Staff send them to the group, I look at them, and my partner and I go through the month together. A duplicate means I talk to the person, and a bot can't do that for me. I'd try the 40 free ones out of curiosity, but I wouldn't pay $19 a month for something I can do in an evening with a spreadsheet."
+   ],
+   [
+    "P007",
+    "P009"
+   ]
+  ],
+  [
+   "price",
+   4,
+   [
+    "I'd probably throw the free 40 at it to see if it can read my staff's handwritten nota, but after that $19 a month for something I can do in Excel on a Sunday is one more subscription I'd cancel. My expenses aren't big enough to need a bot watching them.",
+    "I'd probably throw my old chat in for the 40 free documents just to see, but $19 every month for something my Excel sheet and the bank screenshots already half do is hard for me to justify. My crews send maybe a few dozen receipts a week, so I'd blow past 100 and be looking at $45, and that's real money."
+   ],
+   [
+    "P006",
+    "P017"
+   ]
+  ],
+  [
+   "quality",
+   4,
+   [
+    "I'd burn the 40 free documents on my old chat archive just to see if it flags the re-photographed transfers, but I could wire up n8n plus ChatGPT to dump receipts into a Sheet in an afternoon. Unless the duplicate catching is clearly better than what I'd build, I'm not paying monthly for a receipt-to-table bot.",
+    "I'd burn the 40 free ones, sure, but my guys' nota from the supply shop are scribbled in Indonesian half the time and smudged with cement. If I'm checking every row by hand anyway, I'm not paying $45 a month for the privilege."
+   ],
+   [
+    "P012",
+    "P040"
+   ]
+  ]
+ ],
+ "why_yes": [
+  [
+   "need",
+   19,
+   [
+    "I'm abroad half the year and only notice a problem on the build once money has already gone, so a sheet that fills itself and a Monday report I can send my partner is worth $19 to me without much thought. I'd run the free 40 on the old chat archive first, and if it catches one duplicate or a padded nota, I'm paying.",
+    "My admin is always weeks behind on the supply-shop nota and I lose track of what the guys actually spent on site. The free 40 docs costs me nothing to test on old chat history, and if it reads the handwritten nota properly, $45 a month is nothing next to one double-paid material run."
+   ],
+   [
+    "P014",
+    "P015"
+   ]
+  ],
+  [
+   "convenience",
+   2,
+   [
+    "I already scroll the site chats at night trying to work out where the materials money went, so if it just sits in the group and fills a sheet without my foremen doing anything, $45 a month is nothing next to one duplicated cement receipt. I'd run the free 40 on my real chat history first and only pay if the sheet actually matches what I know was spent.",
+    "My admin is always a week behind on the receipt spreadsheet, and I'm reading the group chat at midnight trying to work out what got spent. If my guys just keep sending photos to the same chat and it lands in a sheet, $45 a month is nothing next to one double-paid supplier invoice."
+   ],
+   [
+    "P020",
+    "P051"
+   ]
+  ]
+ ],
+ "flip": [
+  "Seeing it catch real duplicates or mistakes in our own old chat history with the free 40 documents, and showing me money we were actually losing.",
+  "My bookkeeper telling me it pushes straight into Zoho or Jurnal and actually cuts the month-end chasing, ideally proven on the free 40 documents from our real chat history.",
+  "Proof it will last and that I can leave cleanly: a real company I can name, other Bali businesses that have used it for a year, and an annual plan or guarantee. The duplicate detection on re-photographed receipts would also have to beat my own DIY version in the free trial.",
+  "If the free trial showed it really nails the handwritten nota and catches duplicates my own bot would miss, and the price was closer to $5-10 a month for my volume.",
+  "If it could work only from receipts I forward myself, with no access to the group chat and only to one sheet it creates, not my whole Google account. And if my accountant or another shop owner here told me they use it safely.",
+  "If it caught a duplicate or padded nota in the free trial that actually saved me more than the monthly price, or if there was a cheap plan around $5-7 for a small café's volume.",
+  "If my bookkeeper said it cuts her monthly fee or her hours, and she'd actually work from the Google Sheet instead of the chat.",
+  "If my admin ran the free 40 on a real week of our chats and it saved her most of a day with almost no corrections, plus caught a duplicate payment we would have missed, I'd pay for it.",
+  "If the free trial found real money in my old chat history, like duplicates or overcharges I'd missed that add up to more than a few months of the fee.",
+  "If the free trial on my old chat history actually turned up a double-claim or an overpriced part my admin missed, I'd pay without thinking about it.",
+  "A local accountant or another villa operator I know using it for a few months, plus clear proof that it only reads receipts and can only access the one sheet and folder it creates, not my whole Drive.",
+  "The free trial on my real chat history catching duplicates I had missed, with a few false alarms at most.",
+  "My bookkeeper telling me it cuts her monthly hours and her fee, after testing it on our real messy site receipts from the Telegram groups.",
+  "A narrow Google permission limited to the one sheet and folder it creates, a clear data policy saying chat messages that aren't receipts are never stored, plus a free trial showing it reads my team's faded Indonesian nota correctly.",
+  "If the free trial actually caught a duplicate payment or a padded nota that cost me more than a few months of the fee, I'd pay, especially if there was a cheaper plan around $10.",
+  "If it flagged prices that look too high for the same part or repair against what I have paid before, and showed me which staff member each claim came from, I would pay for that.",
+  "Another scooter or shop owner in Bali showing me it caught real padded or repeated claims from their staff over a few months, plus proof the bot has been running for a while.",
+  "Another contractor I know in Bali using it for a few months and showing me it actually catches double receipts, plus a clear statement that it only touches documents and one sheet, not my whole Drive or the chat text.",
+  "If it pushed straight into Jurnal (or whatever my bookkeeper uses) and flagged the receipts it wasn't sure about instead of guessing, and the free 40 documents showed it handling our real handwritten nota correctly.",
+  "If I tried the free 40 on my old chat history and it found real money I missed, like double-paid invoices from a supplier, then I'd pay.",
+  "If I uploaded our old Telegram history on the free trial and it turned up real duplicates or totals that don't add up, money I didn't know I'd lost, I would pay without thinking about it.",
+  "Seeing another café owner I know in Bali use it for a few months without problems, plus a clear way to cut its access and delete my data in one tap.",
+  "If it pushed straight into Zoho or Jurnal from the site Telegram groups, so my bookkeeper stopped chasing receipts in chats and nobody had to retype anything, I'd try it.",
+  "If the free 40 documents caught duplicates or mistakes my admin missed, or my admin told me it saved her real hours each week, I would try the $19 plan.",
+  "If it chased staff for missing receipts, for example by flagging spending with no matching receipt and pinging the person in the chat, so my accountant actually gets a complete set at month end.",
+  "If it finds a real duplicate or a wrong total in my old chat archive during the free trial, I would pay the $19 the same day.",
+  "If my bookkeeper said it saves her real hours, it only read receipts and not the rest of the chat, and it could push straight into the app we already use instead of a separate Google Sheet.",
+  "If it exported straight into Jurnal or Zoho so my bookkeeper doesn't have to touch a second sheet, and I could see it has been running for a while with real Bali businesses using it.",
+  "If it caught a real duplicate or overcharge from the contractor during the free trial, enough to pay for a year on its own, or if there were a one-off price per project instead of a monthly fee.",
+  "If the free 40 come back with the handwritten supply-shop nota right, amounts and items, without me correcting them, I'd pay for the 300 plan.",
+  "If it pushed straight into Jurnal and I saw it correctly read a stack of our own faded handwritten nota during the free trial.",
+  "A clear, narrow permission scope (access only to the one sheet and folder it creates, not my whole Drive), a named company with a published data policy, and a real promise not to store chat messages that aren't receipts. Then I'd try it on the free 40 documents.",
+  "A setup where it only gets access to one sheet it creates, not my whole Google account, plus a known local company standing behind it that someone I trust already uses.",
+  "If the free trial on my old chats turned up a real duplicate or a padded material receipt worth more than a year of the subscription, I'd pay without arguing.",
+  "If the free trial showed it actually caught money leaking that I had missed, more than the $19 it costs each month.",
+  "If the free trial on my old chat history actually caught real money leaking, like duplicates or inflated nota adding up to more than the subscription, I'd pay.",
+  "If the free 40 included a pile of our real handwritten nota and it got nearly all the amounts and items right without me fixing anything.",
+  "If during the free documents it caught a duplicate or a padded handwritten nota from the building-supply shop, I would pay without thinking.",
+  "If during the free part it actually read my staff's handwritten Indonesian nota correctly and caught a duplicate or an overcharge my admin missed, so I could see it pays for itself.",
+  "Another rental owner I know using it for a year, plus a way to run it without handing over my Google login, for example just forwarding receipts to it privately.",
+  "If it only got access to the one sheet and folder it creates, not my whole Google account, and only read messages that are receipts, with a clear privacy policy and a real company I can check behind it.",
+  "If it only got access to the one sheet and folder it creates, never my whole Google account, and my accountant or another owner I know here told me they've used it for months.",
+  "If during the free trial it cleaned up our backlog from the group and caught real double payments my admin missed, so I could see it saves her hours every week.",
+  "If my accountant said they'd take the Google Sheet as-is and it cut their month-end chasing, or if it freed up enough of my admin's hours that I could see the savings myself.",
+  "If my bookkeeper said she wanted it and it saved her hours. Or if it caught a real duplicate or padded nota from the supply shop that cost me money.",
+  "If the free archive test reads my own old faded and handwritten nota correctly, totals and duplicates included, with almost nothing for me to fix.",
+  "If it caught real money I'd missed in my own old chat history during the free trial, like a double-paid invoice from my contractor.",
+  "If the free trial showed it saving my admin several hours at month end, or it chased staff for missing receipts automatically, I'd pay $19, but only if I could cancel any time.",
+  "If it pushed straight into Jurnal or Zoho, and my bookkeeper tried it on our old chat history and found duplicates she had missed, I'd think about it.",
+  "Letting it write only to one sheet it creates, with no wider Google access, plus seeing it catch a real duplicate from my own old chat history in the free trial.",
+  "Running the free 40 on my real chat history and seeing it read the handwritten notas and the duplicate transfer screenshots correctly, with no fixes needed, plus a flag when the contractor's claimed spend doesn't match what I transferred.",
+  "Running my own old chat archive through the free trial and seeing it get the handwritten supply-shop nota right, amounts and totals, with almost nothing for me to fix.",
+  "If it pushed straight into the app my bookkeeper uses and I could watch it flag a real duplicate from last month's chat history during the free trial.",
+  "My bookkeeper saying it saves her real hours and cuts her monthly fee, or it catching a double payment to a contractor that I would have missed.",
+  "Running my old group chat archive through the free tier and seeing it catch real duplicates my current setup missed, plus a clean export into Zoho so it adds to my stack instead of replacing it.",
+  "If it only got access to its own single sheet instead of my whole Google account, read only receipts I forward to it myself, and another café owner I know said they'd used it for months without trouble.",
+  "If the free trial actually caught a duplicate or padded receipt that my homemade setup would have missed, i.e. it saves me real money on a project, I'd pay without thinking.",
+  "If the free trial caught real duplicates or padded nota from my site crews that my admin missed, the money it saves would cover the fee and I'd pay without thinking twice.",
+  "If my admin tried the free 40 on our old chat history and it turned up money we actually lost or a week of her time saved, I'd pay the $19.",
+  "A local owner I know telling me it caught real duplicate or padded nota for them, and a clear way to use it without sign-in to my main Google account, like a separate account or forwarding only, with the bot unable to read anything except the receipts.",
+  "If my bookkeeper said it would cut her monthly fee or save her real hours, or if I found out mechanics were double-charging me on repairs.",
+  "Let me forward receipts privately with no Google login, just a file it sends back. And show me it reading a stack of my own faded handwritten notas correctly before I pay anything.",
+  "If the free trial actually caught a duplicate or padded invoice from my contractor that I'd missed, it would pay for itself and I'd stop arguing with myself about building my own.",
+  "If it could log a cash payment from a quick voice note or text message in the group, so the mechanic payments get recorded too, and the first month was free instead of 40 documents.",
+  "A version that only gets the receipts I forward to it privately, with access to one sheet only and not my whole Google account, plus a real company and people I can check, ideally one or two villa operators in Bali I know who already use it.",
+  "Running my old chat archive through the free tier and having it actually flag real duplicates or totals that don't add up that I hadn't caught.",
+  "Another contractor I know using it for a few months, plus Google permissions that are clearly limited to only the sheet and folder it creates. Then I'd try the free 40 on one site group.",
+  "Running it on our old chat archive for free and seeing it flag real duplicates my bookkeeper missed, plus it exporting cleanly into the app we already use instead of only a Google Sheet.",
+  "Another café owner I know using it for six months without problems, and a way to use it without giving it my whole Google account.",
+  "If during the free documents it caught a real duplicate or a padded contractor invoice that I would have missed and paid, I'd pay without thinking.",
+  "If the free trial caught an actual duplicate or padded nota that cost me money, I'd pay the $19 without thinking twice.",
+  "If the free trial on my old chat history caught duplicates or missing money my admin missed, enough to cover a year of the fee, I would pay.",
+  "If I ran the free 40 on our messiest handwritten site receipts and it got almost all of them right, and it could push into Jurnal instead of a separate Google Sheet.",
+  "If the free trial showed it caught duplicate or wrong receipts that cost me more than $19 a month, or if it let my admin spend her hours on something else.",
+  "If the free trial on my old chat history turned up a duplicate or a padded receipt that my admin and I missed, I'd pay for it that week.",
+  "My bookkeeper telling me this saves them real hours and cuts their monthly fee, with the Google Sheet staying ours if Nota shuts down.",
+  "If it pushed straight into Jurnal and I saw it catch a real double-submitted receipt from my own chat history during the free trial.",
+  "If the free archive upload actually found a real duplicate or a total that doesn't add up in our old chats, money I'd already lost without noticing.",
+  "If the free 40 documents caught a duplicate or a padded receipt my admin missed, I would see it pays for itself and sign up."
+ ],
+ "purchases_first_month_per_buyer": 1.0,
+ "price_answers": 100
+}

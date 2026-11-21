@@ -1,0 +1,13 @@
+{
+  "id": "P069",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "My site guys throw material nota into the Telegram group and nobody logs them, so I only find out about overspend when it's too late. If the free 40 handle our old chat history decently, $19 is less than one wasted bag of cement, so I'd pay for a month and see.",
+  "objection": "Half our receipts are handwritten nota from small building supply shops, faded or crumpled, in Indonesian. If it misreads the amounts and I have to check every row anyway, it's useless to me.",
+  "would_change_my_mind": "If it gets more than a couple of the handwritten nota in my free trial wrong, I cancel.",
+  "price_too_cheap": 3,
+  "price_cheap": 12,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

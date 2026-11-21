@@ -1,0 +1,13 @@
+{
+  "id": "P015",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "Receipts are my bookkeeper's job and I don't want to send my company's spending to a Telegram bot from some small outfit I've never heard of. The missing documents are a real headache, but if the guys never post the receipt in the chat, a bot reading the chat won't find it either.",
+  "objection": "Will this little bot still be running in a year, or will I move all my records into it, get my bookkeeper used to it, and then it disappears and I'm back where I started with my financial data sitting who knows where.",
+  "would_change_my_mind": "My bookkeeper telling me she already uses it with other clients and it actually cuts down what's missing at month end.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 200
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P006",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I bill by the hour, so sorting receipts is time I get paid for, and if the bot misreads a handwritten nota I still have to check every row because my name is on the books. Maybe I would try the free 40 documents on one client, but I would not pay yet.",
+  "objection": "If recognition is wrong, I am responsible for the books, so I end up checking everything anyway and saving nothing. And 5 groups per account is not enough when I have a chat with each client.",
+  "would_change_my_mind": "Seeing it run a full month on one of my real clients with almost no corrections, plus enough groups to cover all my clients so I can take on more of them.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

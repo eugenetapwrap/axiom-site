@@ -1,0 +1,13 @@
+{
+  "id": "P088",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I'm on the other side of the world from my build and I only look at the transfers when something feels off, so a Monday report and a sheet I didn't have to make is worth far more than $19 to me. I'd dump the old chat archive into the free 40 first, and if it flags even one double-paid invoice I'm paying.",
+  "objection": "Whether it actually catches a contractor sending the same invoice twice as a new screenshot or a slightly different photo, or if it's just a receipt-to-table bot that misses the duplicates I actually care about.",
+  "would_change_my_mind": "If the free trial on my old chat history finds nothing I didn't already know, or misreads the Indonesian handwritten notas, I wouldn't pay.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 200
+}

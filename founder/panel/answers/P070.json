@@ -1,0 +1,13 @@
+{
+  "id": "P070",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper already collects everything once a month and I barely look at receipts myself. Paying for a bot means changing how she works, and the chaos in the group chat isn't my problem, it's hers.",
+  "objection": "Who actually uses this, me or the bookkeeper? If she won't work from the Google Sheet it's just another $19 subscription doing what Excel and the group screenshots already do for free.",
+  "would_change_my_mind": "My bookkeeper saying it saves her real hours and cuts her monthly fee, or it catching a double payment to a contractor that I would have missed.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 30,
+  "price_too_expensive": 60
+}

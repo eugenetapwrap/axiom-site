@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "It wants my Google account and a seat in my work chat with the mechanics, and I don't let a bot I've never heard of into either. Most of what I pay is cash to mechanics and parts from small shops anyway, so a notebook and a photo folder do the job.",
+  "objection": "Who is behind this bot and what do they do with my receipts, my Google account and everything my staff say in that group? If it leaks or they sell it, I'm the one who pays for it.",
+  "would_change_my_mind": "If it worked without touching my Google account or joining the group chat, like I forward receipts myself and it gives me back a spreadsheet file, and a real local company I can find stands behind it.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 25
+}

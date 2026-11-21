@@ -1,0 +1,13 @@
+{
+  "id": "P074",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My admin already pulls the receipts out of the site groups into a sheet, and if I wanted it automated I'd have someone wire up n8n with an OCR step over a weekend. I might throw the free 40 at it out of curiosity, but I wouldn't pay for it.",
+  "objection": "It's a nice wrapper on something I can build myself, and I'm not handing my company's spending to a bot from someone I've never heard of when my admin is already doing the job.",
+  "would_change_my_mind": "If the free trial caught real duplicates or padded nota from my site crews that my admin missed, the money it saves would cover the fee and I'd pay without thinking twice.",
+  "price_too_cheap": 3,
+  "price_cheap": 9,
+  "price_expensive": 29,
+  "price_too_expensive": 60
+}

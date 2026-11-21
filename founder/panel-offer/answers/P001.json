@@ -1,0 +1,13 @@
+{
+  "id": "P001",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My admin already puts the receipts into Excel every week. It's late, but it gets done, and I'm not adding another monthly bill to replace a job I already pay someone for. I might upload a chat export for the free check out of curiosity, but I wouldn't pay after that.",
+  "objection": "$19 a month for something my admin already does. And I'm not sure I want a bot reading my work groups.",
+  "would_change_my_mind": "If the free check found real duplicate or padded receipts in my own chats, money I'd actually lost that my admin missed, I'd pay to keep it watching.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

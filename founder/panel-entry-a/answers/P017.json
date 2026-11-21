@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "You want me to export my whole work chat, with contractor bank details, guest names and everything else people say in there, and hand it to a bot I've never heard of, then link it to my Google account. No. And my admin already reconciles the transfer screenshots, so I'm not paying $19 a month to hand that risk to a stranger.",
+  "objection": "I have no idea who is behind @NotaGetBot or where my chat archive ends up. Once it's sent I can't take it back, and that chat holds far more than receipts.",
+  "would_change_my_mind": "A way to forward only the receipts myself, with no chat export and no adding the bot to the group, plus a named company I can check that promises in writing to delete the files after processing.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 20,
+  "price_too_expensive": 40
+}

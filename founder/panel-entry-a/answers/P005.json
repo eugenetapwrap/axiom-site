@@ -1,0 +1,13 @@
+{
+  "id": "P005",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I might throw a few old nota at the free tier out of curiosity, but I expect it to misread my guys' handwritten, faded shop receipts. If I end up fixing rows anyway, I'd rather wire up my own n8n plus ChatGPT flow that I can tweak myself.",
+  "objection": "Handwritten Indonesian nota from the building-supply shop, with smudged numbers and shop abbreviations, will get read wrong, and then I'm checking every row myself, so what am I paying for.",
+  "would_change_my_mind": "If the free 30 documents, run on my own real handwritten nota, came back with the amounts and items right with almost nothing to correct.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 25,
+  "price_too_expensive": 45
+}

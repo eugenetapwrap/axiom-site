@@ -1,0 +1,13 @@
+{
+  "id": "P095",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I've caught a guy re-sending the same receipt before, so a bot that flags re-photographed duplicates and gives my accountant one sheet with links to the originals hits exactly where it hurts. I'll burn the 40 free documents on last month's chat first, and if it catches anything I'll pay the $45 tier without much thought.",
+  "objection": "I could probably hack something together with Zoho or a sheet and a free bot, and I don't fully trust that it really catches a duplicate when someone crops or re-shoots the receipt, or that it reads handwritten nota from the market properly.",
+  "would_change_my_mind": "If the free trial on my old chat history misses a duplicate I already know about, or gets amounts wrong on handwritten nota, I'm out.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 120
+}

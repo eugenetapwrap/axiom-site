@@ -1,0 +1,13 @@
+{
+  "id": "P036",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper already runs everything through our expense app and it works well enough. Handwritten nota from the building-supply shop are a pain, but not bad enough to add a second tool and a separate Google Sheet next to what we already have.",
+  "objection": "It's a small Telegram bot. If it shuts down in a year, my records are split between two systems and I'd have to retrain everyone on something else.",
+  "would_change_my_mind": "If it exported straight into Jurnal or Zoho so my bookkeeper doesn't have to touch a second sheet, and I could see it has been running for a while with real Bali businesses using it.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

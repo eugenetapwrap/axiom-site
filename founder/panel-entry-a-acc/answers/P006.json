@@ -1,0 +1,13 @@
+{
+  "id": "P006",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I can't export my clients' chats with their receipts and bank transfers to a Telegram bot I've never heard of. If something leaks, I lose the client and I could be in trouble under UU PDP. And with 20 clients I'd be on the $79 plan, which is a lot of my monthly income for an app I don't trust yet.",
+  "objection": "Who is behind this, where is my clients' data stored, and who can see it? Also, I have 20 clients and each one has to stay separate, with their own sheet and report. Nothing here tells me it does that and doesn't just throw everyone into one sheet.",
+  "would_change_my_mind": "A clear privacy policy that says where data is stored and that it's deleted after processing and covered by UU PDP, plus proof that one account can keep 20 clients completely separate, each with its own sheet and report",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

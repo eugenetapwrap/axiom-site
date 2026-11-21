@@ -1,0 +1,13 @@
+{
+  "id": "P019",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper and I already run everything through our expense app and it works well enough. Half of what I spend is cash to mechanics with no proper receipt, so another $19 a month for a second tool that reads photos doesn't make sense for me.",
+  "objection": "I don't believe it really catches duplicates. Two invoices for the same spare part on different days look the same to a bot, and my cash payments to mechanics never show up in a chat anyway. Then I'm paying twice to do the same bookkeeping.",
+  "would_change_my_mind": "If I run my old chat through the free 30 documents and it finds a real double payment or a wrong amount that my current app and bookkeeper missed, worth more than a few months of the fee.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I'd probably throw the free 30 documents at it out of curiosity, but paying every month for this isn't happening yet. The mess only really hurts at month end, and then I just chase the staff in the chat like I always do. Plus in my head Zoho, Excel or a bot I build myself does the same thing for free.",
+  "objection": "Why pay $19 or $35 a month for something I think I could set up for free, and do I really want to send my whole work chat, with all our payments in it, to a bot I've never heard of?",
+  "would_change_my_mind": "If the free run on my own chat actually caught a duplicate payment or a wrong amount, or gave my accountant the month-end documents in a form she accepts without chasing me, I'd pay.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

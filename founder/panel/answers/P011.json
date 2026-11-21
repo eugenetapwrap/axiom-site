@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The month-end mess is real and my admin is always behind, but I'm not putting an unknown Telegram bot into my staff chats and signing it into my Google account. Those groups have guest details, payments and owner talk in them.",
+  "objection": "I don't know who is behind @NotaGetBot, what it reads in the group besides receipts, where my data goes, or what it can touch in my Google Drive once I sign in.",
+  "would_change_my_mind": "A local accountant or another villa operator I know using it for a few months, plus clear proof that it only reads receipts and can only access the one sheet and folder it creates, not my whole Drive.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

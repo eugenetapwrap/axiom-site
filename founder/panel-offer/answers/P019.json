@@ -1,0 +1,13 @@
+{
+  "id": "P019",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I've already caught someone double-claiming, so a free scan of my old group chats is worth uploading on its own. If it finds even one duplicate, $19 or $45 a month costs less than one inflated receipt, and I get my money back if it turns out to be useless.",
+  "objection": "I'm not sure my staff and I will keep using it once the free part is over. With 2-4 groups, I'll probably go past 100 receipts and end up on the $45 plan, and a spreadsheet nobody opens is just another thing I'm paying for.",
+  "would_change_my_mind": "If the free check finds nothing in my old chats, I won't pay. If it finds real duplicates, I'm in.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 50,
+  "price_too_expensive": 100
+}
