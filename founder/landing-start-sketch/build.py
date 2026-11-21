@@ -248,18 +248,21 @@ E = page('e', 'Вариант E — учёт расходов в Telegram', e_he
 CHIPS = '<span class="f-chips"><i>боту</i><i>в рабочую группу</i><i>архивом</i></span>'
 F_YOU = [
     ('Пришлите документы', '', CHIPS),
+    ('Nota проверит расчёты, найдёт ошибки и дубли', '', 'в каждом документе, сразу после отправки'),
     ('Документы записываются в Google-таблицу', '', 'Google подключается в боте одной кнопкой'),
-    ('Добавьте бота в рабочую группу', 'по желанию', 'чеки, которые сотрудники присылают в группу, тоже попадут в таблицу'),
+    ('Добавьте бота в рабочую группу', 'по желанию', 'чеки сотрудников из группы тоже попадут в таблицу'),
 ]
 F_AUTO = [
-    ('Таблица заполняется автоматически', 'каждый документ — новая строка, дубли отмечены'),
-    ('Отчёты приходят по расписанию', 'по понедельникам за неделю и 1-го числа за месяц'),
+    ('Таблица заполняется автоматически', ''),
+    ('Отчёты приходят по понедельникам и 1-го числа', ''),
+    ('Уведомления о дублях и ошибках — сразу', ''),
 ]
 CHK = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
 f_flow = '<ol class="f-flow">' + ''.join(
     f'<li><span class="e-n">{i}</span><div><b>{a}{f' <em>{tag}</em>' if tag else ""}</b><span class="f-d">{d}</span></div></li>' for i, (a, tag, d) in enumerate(F_YOU, 1)) + '</ol>' + \
     '<div class="f-auto"><div class="f-auto-h">Готово</div><ol class="f-flow">' + ''.join(
-    f'<li><span class="e-n f-ok">{CHK}</span><div><b>{a}</b><span class="f-d">{d}</span></div></li>' for a, d in F_AUTO) + '</ol></div>'
+    f'<li><span class="e-n f-ok">{CHK}</span><div><b>{a}</b>{f'<span class="f-d">{d}</span>' if d else ''}</div></li>' for a, d in F_AUTO) + '</ol></div>'
+REPORT_MONTH = '<figure class="mk-report"><img src="month-report.png" alt="Пример отчёта за месяц" width="1080" height="1265"><figcaption>Пример отчёта за месяц</figcaption></figure>'
 f_hero = f"""<section class="hero mk-hero mk-hero--e mk-hero--f"><div class="wrap">
 <span class="hero-eyebrow">Для тех, кому сотрудники присылают чеки</span>
 <h1 class="f-h1">Учёт расходов {u("в Telegram")}</h1>
@@ -269,7 +272,7 @@ f_hero = f"""<section class="hero mk-hero mk-hero--e mk-hero--f"><div class="wra
 <div class="cta-row cta-row--qr"><a class="btn" href="#">Начать бесплатно</a>{QR}</div>
 <p class="cta-line">30 документов бесплатно, без карты и регистрации</p>
 </div>
-{REPORT_IMG}
+{REPORT_MONTH}
 </div>
 </div></section>"""
 F = page('f', 'Вариант F — учёт расходов в Telegram, путь основателя', f_hero + E_REST)
