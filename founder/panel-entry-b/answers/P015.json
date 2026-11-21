@@ -1,0 +1,13 @@
+{
+  "id": "P015",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The missing receipts at month end are a real headache, and the price is nothing for my business. But I'm not hooking an unknown Telegram bot up to my Google account and my crews' chats on my own. I'd send it to my bookkeeper, and if she shrugs, it dies there.",
+  "objection": "Who's behind this and will it still exist next year? If it disappears in six months, my records are scattered between a bot and some sheet, and I'm back to chasing my guys for receipts.",
+  "would_change_my_mind": "My bookkeeper telling me she wants it and will set it up herself, ideally with another contractor I know saying they've used it for months without problems.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 70,
+  "price_too_expensive": 150
+}

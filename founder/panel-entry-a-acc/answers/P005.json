@@ -1,0 +1,13 @@
+{
+  "id": "P005",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My WhatsApp routine is messy, but it works and my clients know it. This bot fixes the retyping, but my days go into chasing the receipts that never arrive, and nothing here gets a client to send them. I might run the 30 free documents on one client, but I wouldn't pay this month.",
+  "objection": "These are my clients' financial and company papers. I'm not adding an unknown bot to their chats without asking them, and I can't tell if it keeps each of my 20-odd clients in a separate sheet or reads Indonesian receipts and rupiah amounts properly.",
+  "would_change_my_mind": "A test on one messy client's month that comes back with a separate sheet per client, correct rupiah amounts from Indonesian receipts, and a list of which receipts are still missing that I can send straight to the client.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I make about $1,400 a month and bill by the hour, so $19 a month comes out of my own pocket and saving time just means I bill less unless I get more clients. I might put one client's chat through the free 30 documents to see what it does, but I would not pay after that.",
+  "objection": "Who pays for it, me or the client? My villa and café clients will not accept a new $19 line on my invoice, and I would also have to explain why I am sending their receipts to a Telegram bot.",
+  "would_change_my_mind": "If I could put it on the client's bill, for example a cheap per-client price or a report with my name on it that I can sell as a monthly service, so it earns me money instead of costing me.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

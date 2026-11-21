@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "other",
+  "reason": "I'd forward a few nota to the free 30 to see if it reads them, but it sounds built for one business dumping everything into one sheet, and I have 20 clients whose receipts can never mix. With 20 clients I'm easily past 500 documents a month, so I'd be paying $79 out of maybe $1,600 I earn, and I still don't know if it separates anything.",
+  "objection": "One account, one Google Sheet. I have 20 clients and every one needs its own sheet and its own group, kept apart. If I have to sort the rows by hand afterwards I haven't saved anything.",
+  "would_change_my_mind": "A bookkeeper plan where each client's chat goes into that client's own sheet automatically, priced so I can pass the cost on to clients, like a few dollars per client a month.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 30,
+  "price_too_expensive": 60
+}

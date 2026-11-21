@@ -1,0 +1,13 @@
+{
+  "id": "P016",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I'd send the free 30 receipts to see the report, sure, it costs nothing. But paying $19 every month for something my staff and I might stop forwarding to after two weeks? No, I already see the receipts in the group and I cancel anything we don't use every week.",
+  "objection": "After the free part we'll just go back to how we do it now, and I'll be paying for a bot nobody remembers to use.",
+  "would_change_my_mind": "If the free report actually caught a duplicate payment or a wrong amount that cost me more than a few months of the fee, I'd pay for a month and see if it keeps finding things.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'm not sending my whole work chat to a bot I've never heard of, and I'm not putting it in our group or hooking it to my Google account. Half of what I spend is parts and fuel, and the mechanics get paid cash with no receipt at all, so a report built from chat receipts wouldn't show me much I can't see in a notebook.",
+  "objection": "Who is behind this bot and where do my chats and receipts end up? An export of the work group has my staff's messages, prices and supplier contacts in it, and the bot sitting in the group reads everything, not just receipts.",
+  "would_change_my_mind": "A version that works without my Google account and without joining the group, where I forward only the receipts I pick, from a known local company that deletes everything after processing and says so in writing.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 15,
+  "price_too_expensive": 25
+}

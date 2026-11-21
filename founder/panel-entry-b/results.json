@@ -1,0 +1,190 @@
+{
+ "business": "Nota (@NotaGetBot): a Telegram bot that collects receipts, invoices and handwritten delivery notes from work chats into the owner's Google Sheet and flags duplicates and arithmetic errors",
+ "seed": 843138,
+ "dealt": 20,
+ "answered": 20,
+ "skipped": [],
+ "buys": 4,
+ "passes": 16,
+ "buy_rate": 0.2,
+ "by_segment": [
+  [
+   "Café / restaurant owner",
+   3,
+   0.3333333333333333
+  ],
+  [
+   "Remote investor in villas or a build, living abroad",
+   3,
+   0.3333333333333333
+  ],
+  [
+   "Villa management company or villa rental operator",
+   5,
+   0.2
+  ],
+  [
+   "Construction / renovation contractor or developer",
+   6,
+   0.16666666666666666
+  ],
+  [
+   "Shop or bike/scooter rental owner",
+   3,
+   0.0
+  ]
+ ],
+ "by_behaviour": [
+  [
+   "Burned before",
+   2,
+   1.0
+  ],
+  [
+   "Has an admin with Excel",
+   4,
+   0.25
+  ],
+  [
+   "Runs everything through chats",
+   5,
+   0.2
+  ],
+  [
+   "Price-sensitive",
+   2,
+   0.0
+  ],
+  [
+   "Tech-savvy DIY",
+   2,
+   0.0
+  ],
+  [
+   "Already uses an app",
+   2,
+   0.0
+  ],
+  [
+   "Privacy-wary",
+   2,
+   0.0
+  ],
+  [
+   "Delegates to a bookkeeper",
+   1,
+   0.0
+  ]
+ ],
+ "by_income": [
+  [
+   "$88,000 to $104,000",
+   7,
+   0.2857142857142857
+  ],
+  [
+   "$104,000 and up",
+   7,
+   0.2857142857142857
+  ],
+  [
+   "under $88,000",
+   6,
+   0.0
+  ]
+ ],
+ "why_not": [
+  [
+   "habit",
+   7,
+   [
+    "I would let my admin try the free 30, but a café goes through 30 receipts in a few days, and that is too short to know if the staff will keep sending properly or if she will just go back to her Excel. I am not starting another monthly payment for something we might drop after two weeks.",
+    "My bookkeeper and I already run everything through Zoho Expense and it works well enough. Pulling receipts out of the Telegram groups is annoying, but not annoying enough to move our books into a Google Sheet run by a bot I've never heard of."
+   ],
+   [
+    "P002",
+    "P007"
+   ]
+  ],
+  [
+   "trust",
+   5,
+   [
+    "I might forward a few receipts to try it since it's free, but I'm not paying a bot I've never heard of or adding it to my work groups. I only dig into the receipts when something feels off, so this isn't urgent enough for me to trust a stranger with it.",
+    "It wants my Google account and a seat in my work chat with the mechanics, and I don't let a bot I've never heard of into either. Most of what I pay is cash to mechanics and parts from small shops anyway, so a notebook and a photo folder do the job."
+   ],
+   [
+    "P010",
+    "P011"
+   ]
+  ],
+  [
+   "quality",
+   2,
+   [
+    "I might throw the free 30 at it because there's no card, but half of what my staff send is crumpled nota from the warung or handwritten Bahasa notes, and if I end up fixing rows at midnight that's the same job I already avoid. $19 isn't the problem, the checking is.",
+    "My guys' nota are handwritten in Indonesian, half faded from sitting in a truck, and I don't believe a bot reads those right. I'd burn the 30 free ones to test it, and if I'm still fixing numbers I'll just wire up my own thing with n8n and ChatGPT for close to nothing."
+   ],
+   [
+    "P001",
+    "P005"
+   ]
+  ],
+  [
+   "need",
+   2,
+   [
+    "I might forward a few transfer screenshots to try the free 30, but my build doesn't make enough paperwork to justify another monthly bill. The screenshots already sit in the group chat, and I can copy the totals into my own sheet on a Sunday for free.",
+    "I might forward a handful of nota to the free tier out of curiosity, but my problem isn't getting receipts into a sheet, it's knowing whether the site is padding them, and a tidy row of a padded nota is still padded. When something feels off I scroll the Telegram group or have someone dump it into Excel, and that costs me nothing."
+   ],
+   [
+    "P004",
+    "P018"
+   ]
+  ]
+ ],
+ "why_yes": [
+  [
+   "need",
+   3,
+   [
+    "I already caught someone claiming the same nota twice, and I am tired of checking every supply receipt in Excel at night. With $19 a month and 30 free documents with no card, I will put my site team's real handwritten nota through it, and if it reads them properly and flags the repeats, I will pay. My volume will push me past 30 inside two weeks anyway.",
+    "I'm abroad and the build burns money every day, and my admin's spreadsheet is always a week behind, so seeing rows show up the same day for $35 a month is nothing to me. The 30 free documents with no card means I can test it on the site's real notas before I pay anything."
+   ],
+   [
+    "P003",
+    "P006"
+   ]
+  ],
+  [
+   "convenience",
+   1,
+   [
+    "Zoho and Excel are free, but they only work if somebody types the receipts in, and nobody here does. My staff already dump everything in the Telegram group, so a bot that turns that into a sheet my accountant can open is worth $19. With the villa receipts the free 30 will be gone in a week or two, and I'd pay before the next month end."
+   ],
+   [
+    "P008"
+   ]
+  ]
+ ],
+ "flip": [
+  "Seeing it get a week of my own staff's worst receipts right during the free 30, handwritten ones included, without me touching anything.",
+  "If after the free documents my admin tells me she did not have to type anything on Monday and the staff kept sending without me reminding them, then $19 is nothing.",
+  "Catching a real overcharge or double payment on my build during the free trial, one big enough to cover a year of the fee, and then paying per document only in the months I actually use it.",
+  "If the free 30 documents come back from my staff's real handwritten nota with the totals right and almost nothing for me to fix.",
+  "If it pushed the receipts from our Telegram groups straight into Zoho or Jurnal instead of a separate Google Sheet, and there was a real company with a track record behind it, I'd try it on one site.",
+  "Another villa operator I know in Bali using it for a few months, telling me the totals match and it caught a duplicate, plus a real company name I can look up.",
+  "If it worked without touching my Google account or joining the group chat, like I forward receipts myself and it gives me back a spreadsheet file, and a real local company I can find stands behind it.",
+  "My admin runs the free 30 on a real week of our scooter parts and fuel receipts, it gets them right without fixing, and it saves her hours so she can stop doing the Friday catch-up.",
+  "If the free 30 documents showed it reading the handwritten mechanic notes and fuel receipts correctly, and my admin actually stopped being a week behind without extra work from me.",
+  "A real company I can check, plus a clear guarantee that the bot only gets access to one sheet it creates, not my whole Google account, and only reads receipts in the chat, not our conversations. Better still if another Bali contractor I know is already using it.",
+  "My bookkeeper telling me she wants it and will set it up herself, ideally with another contractor I know saying they've used it for months without problems.",
+  "If during the free part my staff kept sending receipts without me chasing them, and it caught a duplicate or a wrong total that saved me real money, I would pay the $19.",
+  "A version that never touches my Google account or sits in the group: I forward only the receipts I choose and get a file back, plus a clear, named company with a written promise that nothing is stored after processing.",
+  "If during the free 30 it read my staff's actual handwritten nota correctly and flagged material prices well above normal Bali rates, or the same item bought twice at different shops, that would be worth paying for.",
+  "If my bookkeeper ran the free 30 documents through it, it caught real duplicates and wrong totals our current app missed, and it pushed straight into Jurnal or Zoho instead of a separate sheet.",
+  "If my homemade version kept getting the totals wrong on handwritten notes and bank screenshots, and Nota showed me it handles those properly. Some proof it will still be running in a year would help too, like a yearly plan or a way to export my setup."
+ ],
+ "purchases_first_month_per_buyer": 1.0,
+ "price_answers": 20
+}

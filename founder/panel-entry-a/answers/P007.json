@@ -1,0 +1,13 @@
+{
+  "id": "P007",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper and I already run everything through our expense app and it works well enough. I might drop one chat export in for the free 30 to see if it catches duplicates, but I'm not paying for a second tool that does half of what I already have.",
+  "objection": "It's a small bot from people I've never heard of. If it disappears in a year, my receipt records and the habit my site guys got used to go with it, and I'm back to sorting it out myself.",
+  "would_change_my_mind": "If it plugged straight into Jurnal or Zoho so it fed my current setup instead of replacing it, and the free run actually found real duplicate payments or wrong amounts in my site chats.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

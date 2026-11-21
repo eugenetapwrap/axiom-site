@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "convenience",
+  "reason": "Zoho and Excel are free, but they only work if somebody types the receipts in, and nobody here does. My staff already dump everything in the Telegram group, so a bot that turns that into a sheet my accountant can open is worth $19. With the villa receipts the free 30 will be gone in a week or two, and I'd pay before the next month end.",
+  "objection": "Will it actually read the handwritten nota from the warung and the rupiah transfer screenshots correctly? If I end up checking every row anyway, it's just another thing to babysit. I'm also not thrilled about plugging my Google account into a bot I've never heard of.",
+  "would_change_my_mind": "If during the free 30 it gets totals wrong on the handwritten or Indonesian receipts and I have to fix them by hand, I'd drop it and go back to scrolling the chat at month end.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

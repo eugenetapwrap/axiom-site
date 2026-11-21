@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "My clients would not want a bot sitting in their group chats, and the one thing I sell is that they deal with me, not a machine. I might forward a few receipts myself to try the free 30, but my clients together send far more than 100 documents a month, and $35 a month comes out of my own pocket on fixed fees I can't raise.",
+  "objection": "Putting a bot into my clients' chats looks unprofessional and makes them nervous about who sees their invoices and bank transfers. If one client complains, I lose a fee that's worth more than the tool.",
+  "would_change_my_mind": "If I could use it privately on my side, one sheet per client and no bot in their chats, at a price I could pass on to clients or under $10 a month.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 25
+}

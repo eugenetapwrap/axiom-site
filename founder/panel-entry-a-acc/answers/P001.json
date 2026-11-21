@@ -1,0 +1,13 @@
+{
+  "id": "P001",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My WhatsApp routine with clients already works, and everything has to land in Jurnal or Accurate anyway. A Google Sheet is just one more place my staff would have to copy from, so this adds a step instead of removing one.",
+  "objection": "It doesn't post into Jurnal or Accurate. I'd also be sending my clients' receipts and chats to a Telegram bot I know nothing about, and I'm the one answerable to them if that goes wrong.",
+  "would_change_my_mind": "A direct export or import file that posts the entries straight into Jurnal or Accurate per client, so my staff stop retyping receipts.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 49,
+  "price_too_expensive": 90
+}

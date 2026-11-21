@@ -1,0 +1,13 @@
+{
+  "id": "P020",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I'd run the free 30 receipts to see what it finds, but then I'd just wire up my own thing with n8n, ChatGPT and a Google Sheet over a weekend. For a small rental shop that's free, and $19 every month is real money for me.",
+  "objection": "It's a brand new little bot. If it disappears in six months my sheet stops updating and I'm back to scrolling the group chat at midnight, so why not build something I control myself?",
+  "would_change_my_mind": "If the free report actually caught duplicate payments or wrong amounts I'd missed, worth more than a month's fee, and there was a plan under 100 documents for around $9 that keeps my data in my own sheet if they shut down.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 25
+}

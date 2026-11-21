@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I have 20 clients and every one needs their own books. A single sheet with everyone's receipts mixed together is just another mess for me to sort out. And at my volume, easily 600-800 notas a month, I'm past the $79 plan, which is way too much on what I earn.",
+  "objection": "It looks built for one business owner, not a bookkeeper. I can't see how I'd keep 20 clients in separate sheets and reports, and most of what I get is crumpled paper nota I'd have to photograph first anyway.",
+  "would_change_my_mind": "A bookkeeper plan: one login, a separate sheet and report for each client, priced for my whole practice at around $25 a month, not per document.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 25,
+  "price_too_expensive": 45
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P018",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I might forward a handful of nota to the free tier out of curiosity, but my problem isn't getting receipts into a sheet, it's knowing whether the site is padding them, and a tidy row of a padded nota is still padded. When something feels off I scroll the Telegram group or have someone dump it into Excel, and that costs me nothing.",
+  "objection": "It turns a handwritten nota into a neat spreadsheet row, but it can't tell me the shop overcharged or the quantity was inflated. On top of that, I'm not keen on hooking my Google account up to a bot I've never heard of.",
+  "would_change_my_mind": "If during the free 30 it read my staff's actual handwritten nota correctly and flagged material prices well above normal Bali rates, or the same item bought twice at different shops, that would be worth paying for.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 50,
+  "price_too_expensive": 100
+}
