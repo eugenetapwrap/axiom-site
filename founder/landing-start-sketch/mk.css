@@ -179,3 +179,17 @@
   .d-arrow { display: none; }
   .mini-sheet td:nth-child(5), .mini-sheet th:nth-child(5) { display: none; }
 }
+
+/* E: что за продукт + 4 шага */
+.mk-hero--e { padding: 56px 0 72px; }
+.mk-hero--e h1 { margin-bottom: 30px; }
+.e-steps { list-style: none; margin: 0 0 34px; padding: 0; display: grid; gap: 0; position: relative; }
+.e-steps li { display: flex; gap: 16px; align-items: flex-start; position: relative; padding-bottom: 20px; }
+.e-steps li:last-child { padding-bottom: 0; }
+.e-steps li:not(:last-child)::before { content: ''; position: absolute; left: 16px; top: 36px; bottom: 2px; border-left: 2px dashed #b9c2bd; }
+.e-n { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--slate); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 16px; }
+.e-steps li:last-child .e-n { background: var(--orange); }
+.e-steps b { display: block; font-size: 21px; line-height: 1.25; }
+.e-steps li span:not(.e-n) { display: block; font-size: 17px; color: var(--muted); margin-top: 2px; }
+.mk-same--e { margin-left: 0; }
+@media (max-width: 900px) { .e-steps b { font-size: 19px; } .e-steps li span:not(.e-n) { font-size: 16px; } }

@@ -1,5 +1,5 @@
 # Эскизы первого экрана Nota для входа «Start → присылайте документы» (21.11.2026).
-# Собирает варианты a.html, b.html, c.html и d.html (A + шкала из C, заголовок «Учёт расходов ведётся сам», 21.11) на стилях текущего лендинга (site.css — копия из nota/dist).
+# Собирает варианты a–d (21.11) и e.html — простой первый экран «Учёт расходов в Telegram» (основатель, 21.11: что за продукт и путь в 4 шага, без переписок) на стилях текущего лендинга (site.css — копия из nota/dist).
 # Картинки и шрифты берутся с локального сервера nota/dist на :4321. Снимки — shots.cjs (node shots.cjs a b c d).
 # Блок «Подключите Google» и всё ниже остаются как на текущем лендинге: здесь показано только начало.
 import pathlib
@@ -222,6 +222,27 @@ d_report = step(3, 'Отчёт приходит сам', f"""<div class="mk-reps
 
 D = page('d', 'Вариант D — учёт расходов ведётся сам', d_hero + d_start + d_report + table_teaser(4))
 
-for name, html in (('a', A), ('b', B), ('c', C), ('d', D)):
+
+# ---------- Вариант E: что за продукт + путь в 4 шага (основатель, 21.11) ----------
+E_STEPS = [
+    ('Скидываете чеки', 'боту или в рабочую группу — чеки, счета, накладные'),
+    ('Получаете таблицу', 'каждый документ — строка в вашей Google-таблице'),
+    ('Получаете отчёт', 'куда ушли деньги и где дубли'),
+    ('Забываете', 'дальше всё само, сотрудникам ничего не нужно менять'),
+]
+e_hero = f"""<section class="hero mk-hero mk-hero--e"><div class="wrap mk-split">
+<div class="mk-left">
+<span class="hero-eyebrow">Для тех, кому сотрудники присылают чеки</span>
+<h1>Учёт расходов {u("в Telegram")}</h1>
+<ol class="e-steps">""" + ''.join(f'<li><span class="e-n">{i}</span><div><b>{a}</b><span>{b}</span></div></li>' for i, (a, b) in enumerate(E_STEPS, 1)) + f"""</ol>
+<div class="cta-row cta-row--qr"><a class="btn" href="#">Начать бесплатно</a>{QR}</div>
+<p class="cta-line">30 документов бесплатно, без карты и регистрации</p>
+</div>
+{REPORT_IMG}
+</div></section>"""
+E_REST = '<section class="section mk-sec mk-teaser"><div class="wrap"><div class="mk-same mk-same--e">Дальше — текущий лендинг: что покажет отчёт, таблица, как присылать, что делает Nota, для кого, цены, данные, вопросы</div></div></section>'
+E = page('e', 'Вариант E — учёт расходов в Telegram', e_hero + E_REST)
+
+for name, html in (('a', A), ('b', B), ('c', C), ('d', D), ('e', E)):
     (HERE / f'{name}.html').write_text(html)
 print('ok')
