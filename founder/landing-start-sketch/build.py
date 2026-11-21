@@ -1,6 +1,6 @@
 # Эскизы первого экрана Nota для входа «Start → присылайте документы» (21.11.2026).
-# Собирает три варианта (a.html, b.html, c.html) на стилях текущего лендинга (site.css — копия из nota/dist).
-# Картинки и шрифты берутся с локального сервера nota/dist на :4321. Снимки — shots.js.
+# Собирает варианты a.html, b.html, c.html и d.html (A + шкала из C, заголовок «Учёт расходов ведётся сам», 21.11) на стилях текущего лендинга (site.css — копия из nota/dist).
+# Картинки и шрифты берутся с локального сервера nota/dist на :4321. Снимки — shots.cjs (node shots.cjs a b c d).
 # Блок «Подключите Google» и всё ниже остаются как на текущем лендинге: здесь показано только начало.
 import pathlib
 
@@ -166,6 +166,62 @@ c_line = step(2, 'Как это идёт', '<ol class="mk-line">' + ''.join(f'<l
 
 C = page('c', 'Вариант C — лента от первого чека до отчёта', c_hero + c_line + table_teaser(3))
 
-for name, html in (('a', A), ('b', B), ('c', C)):
+
+# ---------- Вариант D: A + шкала из C. Заголовок — вариант 1 основателя (21.11) ----------
+def gmsg(who, color, doc=None, text='', time='10:41', react=True):
+    body = (doc or '') + (f'<div class="g-cap">{text}</div>' if text else '')
+    rx = '<span class="g-rx">✍</span>' if react else ''
+    return f'<div class="g-msg"><span class="g-ava" style="background:{color}">{who[0]}</span><div class="g-bub"><b style="color:{color}">{who}</b>{body}<span class="t">{time}</span></div>{rx}</div>'
+
+
+GROUP = f"""<div class="tg g-chat"><div class="tg-top"><span class="ava ava--grp">MV</span><div><b>Mangata Villas · закупки</b><small>6 участников, Nota</small></div></div><div class="tg-body">
+{gmsg('Ayu', '#c2410c', RECEIPT, 'paku + sekrup', '10:41')}
+{gmsg('Daniel', '#1d4ed8', HAND, 'semen 10 sak', '11:05')}
+{gmsg('Daniel', '#1d4ed8', None, 'Semen sudah sampai 👍', '11:06', react=False)}
+{gmsg('Ayu', '#c2410c', RECEIPT, 'nota kemarin', '16:20')}
+</div></div>"""
+
+ROWS = [('86', '2 ноя', '582 500', 'Sunrise Hardware', 'Материалы', 'ok'),
+        ('88', '4 ноя', '1 150 000', 'Toko Besi Jaya', 'Материалы', 'ok'),
+        ('89', '4 ноя', '582 500', 'Sunrise Hardware', 'Материалы', 'dbl')]
+SHEET = '<div class="mini-sheet"><div class="ms-top"><span class="ms-logo">Таблица расходов</span><span class="ms-tab">Все платежи</span></div><table><thead><tr><th>№</th><th>Дата</th><th class="r">Сумма, IDR</th><th>Поставщик</th><th>Категория</th><th>Проверка</th></tr></thead><tbody>' + ''.join(
+    f'<tr class="{st}"><td>{n}</td><td>{d}</td><td class="r">{a}</td><td>{who}</td><td>{cat}</td><td><span class="ms-{st}">{"OK" if st == "ok" else "Дубль"}</span></td></tr>' for n, d, a, who, cat, st in ROWS) + '</tbody></table></div>'
+
+ARROW = '<div class="d-arrow"><svg viewBox="0 0 90 150" aria-hidden="true"><path d="M18 8 C 62 30, 70 90, 44 140"/><path d="M38 124 L44 141 L58 129"/></svg><span>через минуту</span></div>'
+
+d_hero = f"""<section class="hero mk-hero"><div class="wrap mk-split mk-split--d">
+<div class="mk-left">
+<span class="hero-eyebrow">Для тех, кому сотрудники присылают чеки в Telegram</span>
+<h1>Учёт расходов ведётся {u("сам")}</h1>
+<p class="lead">Сотрудники присылают чеки, счета и накладные в рабочий чат как раньше. Через минуту каждый документ — строка в вашей Google-таблице: сумма, поставщик, категория, ссылка на оригинал. Дубли и ошибки в суммах видны сразу.</p>
+<ul class="hero-list">{HERO_LIST}</ul>
+<div class="cta-row cta-row--qr"><a class="btn" href="#">Начать учёт бесплатно</a>{QR}</div>
+<p class="cta-line">30 документов бесплатно, без карты и регистрации</p>
+</div>
+<figure class="d-vis">{GROUP}{ARROW}{SHEET}<figcaption>Nota берёт из группы только платёжные документы, ставит ✍ на записанный и в группу не пишет</figcaption></figure>
+</div></section>"""
+
+D_STOPS = [
+    ('Минута 1', 'Start и первый чек', 'Перешлите боту любой документ: через минуту он ответит, что в нём.'),
+    ('Чеки 2, 3, 4…', 'Проверьте на дубле', 'Пришлите тот же чек ещё раз — бот скажет, что такой уже был.'),
+    ('Когда готовы', 'Google и рабочая группа', 'Подключите таблицу — всё присланное ляжет в неё. Добавьте бота в группу — сотрудники ничего не меняют.'),
+    ('30-й документ', 'Первый отчёт', 'Куда ушли деньги, дубли, ошибки в суммах. Дальше — каждый понедельник.'),
+    ('Когда удобно', 'Архив за прошлые месяцы', 'ZIP рабочего чата — отчёт по всему, что было до бота.'),
+]
+D_REPLIES = f"""<div class="mk-three d-three">
+<div class="mk-r"><div class="mk-r-l">Чек</div>{chat([me(RECEIPT, '10:41'), bot('<div class="h">🧾 Sunrise Hardware</div><div class="sum">582 500 IDR</div><div class="m">2 ноя · Материалы</div>')], cls='tg--mini', title=False)}</div>
+<div class="mk-r"><div class="mk-r-l">Накладная от руки</div>{chat([me(HAND, '10:42'), bot('<div class="h">✍️ Toko Besi Jaya</div><div class="sum">1 150 000 IDR</div><div class="m">4 ноя · Цемент, 10 мешков</div>', time='10:42')], cls='tg--mini', title=False)}</div>
+<div class="mk-r"><div class="mk-r-l">Тот же чек ещё раз</div>{chat([me(RECEIPT, '10:43'), R3], cls='tg--mini', title=False)}</div>
+</div>"""
+
+d_start = step(2, 'С чего начать', '<ol class="mk-line">' + ''.join(f'<li class="{"alt" if i == 4 else ""}"><span class="dot"></span><small>{a}</small><b>{b}</b><p>{c}</p></li>' for i, (a, b, c) in enumerate(D_STOPS)) + '</ol>'
+               + '<h3 class="mk-h3">Так бот отвечает, пока вы пробуете</h3>' + D_REPLIES, paper=True)
+
+D_SCHED = sched([('На 30-м документе', 'первый отчёт'), ('Каждый понедельник', 'за неделю'), ('1-го числа', 'за месяц'), ('По архиву', 'за прошлые месяцы'), ('В любое время', 'по кнопке «Отчёт»')])
+d_report = step(3, 'Отчёт приходит сам', f"""<div class="mk-repsplit"><div><p class="mk-sub">По одному чеку отчёт не нужен: он приходит, когда документов набралось.</p><ul class="check">{POINTS}</ul>{D_SCHED}</div>{REPORT_IMG}</div>""")
+
+D = page('d', 'Вариант D — учёт расходов ведётся сам', d_hero + d_start + d_report + table_teaser(4))
+
+for name, html in (('a', A), ('b', B), ('c', C), ('d', D)):
     (HERE / f'{name}.html').write_text(html)
 print('ok')
