@@ -258,7 +258,7 @@ F_AUTO = [
 CHK = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
 f_flow = '<ol class="f-flow">' + ''.join(
     f'<li><span class="e-n">{i}</span><div><b>{a}{f' <em>{tag}</em>' if tag else ""}</b><span class="f-d">{d}</span></div></li>' for i, (a, tag, d) in enumerate(F_YOU, 1)) + '</ol>' + \
-    '<div class="f-auto"><div class="f-auto-h">Всё настроено</div><ol class="f-flow">' + ''.join(
+    '<div class="f-auto"><div class="f-auto-h">Готово</div><ol class="f-flow">' + ''.join(
     f'<li><span class="e-n f-ok">{CHK}</span><div><b>{a}</b><span class="f-d">{d}</span></div></li>' for a, d in F_AUTO) + '</ol></div>'
 f_hero = f"""<section class="hero mk-hero mk-hero--e mk-hero--f"><div class="wrap">
 <span class="hero-eyebrow">Для тех, кому сотрудники присылают чеки</span>
