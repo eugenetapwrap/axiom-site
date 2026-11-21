@@ -1,0 +1,13 @@
+{
+  "id": "P016",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd let it try the free 30, but with receipts landing in three or four groups every day that's gone in a few days, and then I'm at $35 or even $79 a month just to sort receipts. That's another subscription I'd question every month, so I'd stop at the free part.",
+  "objection": "Thirty documents isn't enough for me to know if it saves us real time before I have to pay, and at our volume the cheap $19 plan won't cover a month, so the real price is $35 to $79.",
+  "would_change_my_mind": "A full free month on all my groups, then one flat price under $20 that covers what a café actually sends.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 20,
+  "price_too_expensive": 40
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P007",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper and I already run everything through our expense app and it works well enough. I might let the bot read one group for the free 30 out of curiosity, but I'm not paying to move a whole year of site receipts into a new tool.",
+  "objection": "This is a small new bot. If it shuts down in six months, my records are scattered between a Google Sheet and my old app, and I have to retrain the site guys and the bookkeeper all over again.",
+  "would_change_my_mind": "If it sent clean data straight into Jurnal or Zoho, so it fills a gap instead of replacing my app, and I could see it had been running for other Bali contractors for a year or more.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

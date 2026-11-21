@@ -1,0 +1,13 @@
+{
+  "id": "P013",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My admin already types it all into Excel once a week. It's late, but it gets done and costs me nothing extra. Half my spending is cash to mechanics with no proper receipt anyway, so I might let it eat the free 30 out of curiosity, but I don't see myself paying monthly for something Excel or a bot I could build already does.",
+  "objection": "Most of my money goes out as cash to mechanics and fuel with no clean receipt, so a bot that reads receipts misses the part that actually leaks. And $19 to $35 a month, every month, for what a free spreadsheet does is hard to justify.",
+  "would_change_my_mind": "If during the free 30 it caught a duplicate or a padded mechanic bill and showed me cost per scooter without my admin touching it, I would pay $19.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 40
+}

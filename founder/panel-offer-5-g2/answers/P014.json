@@ -1,0 +1,13 @@
+{
+  "id": "P014",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The mess is real, my site receipts are scattered across Telegram and my partner asks about them every month. But I am not putting an unknown bot into groups where we talk about suppliers, cash and clients just because it says it only reads receipts.",
+  "objection": "It still sits in my work chats and touches my Google Drive. 'Only the sheet it creates' is a promise from a company I have never heard of, and if it leaks, my partner and my suppliers' numbers go with it.",
+  "would_change_my_mind": "Another contractor in Bali I know showing me it has run clean in his groups for a few months, or a way to just forward receipts to the bot myself without adding it to the group.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

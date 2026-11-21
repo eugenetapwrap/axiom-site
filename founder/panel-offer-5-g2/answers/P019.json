@@ -1,0 +1,13 @@
+{
+  "id": "P019",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper already puts everything into the app we use and it works well enough, and half my spending is cash to mechanics with no receipt anyway. I might throw the free 30 at it out of curiosity, but I'm not paying $19 a month for a second system that does what the first one mostly does.",
+  "objection": "I don't believe it really catches a duplicate when the same scooter part shows up once as a shop receipt and again as a transfer screenshot from a different guy. If it's just turning photos into rows, my bookkeeper already does that, and now I'd have a Google Sheet and Jurnal to keep in sync.",
+  "would_change_my_mind": "If the free 30 documents showed me a real double payment or padded receipt from my own staff that my current setup missed, and it could send the data into the app my bookkeeper already uses instead of a separate sheet.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 25
+}
