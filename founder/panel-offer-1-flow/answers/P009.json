@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Between the café and the scooters I get a flood of receipts in Telegram and I've already caught someone double-claiming, so a sheet that flags duplicates and wrong totals is exactly what I check by hand now. The rows sit in my own Google Sheet, so if they shut down I keep everything. I'd burn the 30 free in a week, test it hard, then pay the $19 tier.",
+  "objection": "My mechanics get paid cash against scribbled handwritten notes. Can it read those properly, and will it catch a padded amount or only an exact duplicate? And is this little bot still going to be here next year?",
+  "would_change_my_mind": "If it gets amounts wrong on the free 30 or misses a duplicate I send on purpose to test it, I'm out and I go back to checking by hand.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 70
+}

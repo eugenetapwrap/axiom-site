@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I might let it read the free 30 receipts out of curiosity, but my admin already does the spreadsheet in Excel every week, late or not, and I don't see us changing that and paying another monthly bill for it.",
+  "objection": "Once the free part runs out, my staff and I will probably drift back to how we always did it, and then I'm paying every month for a Google Sheet nobody looks at while my admin keeps her Excel.",
+  "would_change_my_mind": "If during the free 30 my admin told me herself that it caught up her backlog, got the numbers right, and that she would rather check the bot's sheet than keep typing.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P006",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I'm abroad and the admin's sheet is always a week behind, so at midnight I'm scrolling the group chat guessing what got spent on the build. The first 30 are free with no card, a build burns through 30 notas fast, and if it reads them decently, $35 a month is nothing next to finally seeing duplicates and wrong totals the same day.",
+  "objection": "Faded thermal paper and handwritten notas from the toko bangunan. If it misreads the amounts and my admin or I have to check every row against the photo anyway, it's just another thing to babysit, and a wrong number in my sheet is worse than no number.",
+  "would_change_my_mind": "If in the free 30 it gets more than a few handwritten Indonesian notas wrong on the amount, I don't pay and the admin keeps typing.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 120,
+  "price_too_expensive": 300
+}

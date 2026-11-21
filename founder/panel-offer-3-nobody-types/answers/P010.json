@@ -1,0 +1,13 @@
+{
+  "id": "P010",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'd probably forward it a few receipts on the free 30 to see what happens, but I'm not putting a bot from a company I've never heard of into my work groups and paying monthly for it in the first month. I only look at the receipts when something smells wrong, so nothing forces me to switch this week.",
+  "objection": "Will this little bot still be running in a year, and will it actually read the messy handwritten notas and transfer screenshots my staff send, or will I end up checking every row myself anyway?",
+  "would_change_my_mind": "Another villa operator in Bali I know telling me they've used it for months and it caught a duplicate or a padded receipt for them.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 50,
+  "price_too_expensive": 100
+}

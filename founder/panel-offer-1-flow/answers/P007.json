@@ -1,0 +1,13 @@
+{
+  "id": "P007",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper and I already run everything through Zoho/Jurnal and it works well enough. A Google Sheet next to that is a second system someone has to reconcile, not less work. I might forward a few receipts to see it work, but I wouldn't pay for it.",
+  "objection": "It's a small Telegram bot from a company I've never heard of, reading my supplier payments in my work groups. If it shuts down or stops working in six months I've moved my team's habits onto something that's gone, and I'm back to Zoho anyway.",
+  "would_change_my_mind": "If it pushed the rows straight into Jurnal or Zoho so my bookkeeper never retypes anything, and I could see a real company behind it that's been running for a while.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

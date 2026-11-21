@@ -1,0 +1,13 @@
+{
+  "id": "P019",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason": "My bookkeeper already puts everything into the expense app we use and it works well enough. I might throw a few scooter repair receipts at the free 30 to see what happens, but I wouldn't pay $19 a month for a second place for the same numbers.",
+  "reason_code": "habit",
+  "objection": "Half my spending is cash to mechanics with a scribbled note or no receipt at all, so I doubt a bot can tell a real duplicate from two identical tyre changes on two scooters. If it can't, it's just a receipt-to-table bot sitting next to the app I already have.",
+  "would_change_my_mind": "If it pushed straight into my existing expense app (or my bookkeeper's) instead of a separate Google sheet, and showed me in the free trial that it really caught a duplicate my staff sent twice.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

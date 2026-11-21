@@ -1,0 +1,13 @@
+{
+  "id": "P006",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I'm on the other side of the world scrolling the group chat at midnight trying to guess what got spent on the build, and my admin's sheet is always a week behind. The first 30 are free with no card, so I'll throw the bot in the group, and if the numbers hold up, $35 a month is nothing next to what a build leaks when nobody's watching.",
+  "objection": "Half of what comes through on a build is faded thermal paper and handwritten notas from the toko bangunan. If it reads 1.500.000 as 150.000 or makes up a supplier name, my admin ends up checking every row anyway, and I've paid to get a wrong sheet faster.",
+  "would_change_my_mind": "If the free 30 come back with handwritten notas misread and my admin has to fix more than a few rows, I'll cancel and stick with the spreadsheet.",
+  "price_too_cheap": 5,
+  "price_cheap": 20,
+  "price_expensive": 120,
+  "price_too_expensive": 300
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd throw it in the villa group and use up the free 30, sure, it costs nothing. But paying every month for something I keep telling myself I can rig with Excel or a quick bot of my own doesn't sit right, not this month.",
+  "objection": "This is a Google Sheet and a bot. Zoho and KasKecil are free, and I could build this in a weekend. Why pay rent on it?",
+  "would_change_my_mind": "If my accountant takes the sheet as is at month end and stops chasing me for missing receipts, then $19 is nothing next to that hassle and I'd pay.",
+  "price_too_cheap": 3,
+  "price_cheap": 9,
+  "price_expensive": 29,
+  "price_too_expensive": 59
+}

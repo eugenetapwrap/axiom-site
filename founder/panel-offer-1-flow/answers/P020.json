@@ -1,0 +1,13 @@
+{
+  "id": "P020",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd probably run the 30 free receipts to see how it copes, but I won't pay $19 a month forever when I or a friend could wire up the same thing with n8n and ChatGPT for a few dollars of API. It's a nice idea, but it's not hard to build, and that's exactly the kind of tool I make myself.",
+  "objection": "Will a new little bot still be here next year, or will I wake up one day and find my staff's receipts aren't going anywhere and I have to build my own anyway?",
+  "would_change_my_mind": "If the free trial showed it reading our messy handwritten notes and Indonesian transfer screenshots far better than anything I could hack together, plus a cheap yearly plan with a clear promise of what happens to my sheet if they shut down.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 29
+}

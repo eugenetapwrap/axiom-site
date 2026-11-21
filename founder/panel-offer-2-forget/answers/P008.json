@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I'd maybe forward a few receipts to see what it does, but forwarding things myself is exactly what nobody here does, so the free 30 would just sit there. Before I pay monthly I'd tell myself I can sort it with Excel or knock up my own bot, and I'd only look again at the next month-end mess.",
+  "objection": "The real problem is my staff, not me. Unless it sits in the work group and gets every receipt without anyone changing what they do, it's just another thing I have to remember. And I'm not sure it reads messy local nota and transfer screenshots well enough that I won't be checking every row anyway.",
+  "would_change_my_mind": "Seeing it run in our actual work group through one full month-end, so my accountant gets a complete set without me chasing anybody.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 70
+}

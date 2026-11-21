@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I pay the contractors myself by bank transfer, so my bank statement already is my expense list. I might forward a few screenshots to try the free 30, but I would not pay $19 a month for a sheet of payments I already made and can see.",
+  "objection": "If something is paid twice or a total is wrong, that is my site manager or the contractor cutting corners. A bot flagging it does not fix the people, and I still have to chase them myself from abroad.",
+  "would_change_my_mind": "If it caught the receipts my site manager pays in cash that never show up in my bank, and compared them against the build budget so I could see overspend before I send the next transfer.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

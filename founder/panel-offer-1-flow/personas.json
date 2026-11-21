@@ -1,0 +1,222 @@
+[
+ {
+  "id": "P001",
+  "name": "Ada",
+  "age": 48,
+  "segment": "Villa management company or villa rental operator",
+  "income": 91000,
+  "behaviour": "Runs everything through chats",
+  "behaviour_how": "Receipts pile up in Telegram groups; nobody records them regularly; you check when something feels off.",
+  "objection": "Recognition will make mistakes on faded or handwritten Indonesian receipts and I will have to fix it",
+  "habit": "you check the group chat late at night to see what was spent"
+ },
+ {
+  "id": "P002",
+  "name": "Lucia",
+  "age": 52,
+  "segment": "Café / restaurant owner",
+  "income": 88000,
+  "behaviour": "Has an admin with Excel",
+  "behaviour_how": "An admin or manager types receipts into a spreadsheet once a week; it is always behind.",
+  "objection": "My staff and I are not sure we will keep using it after the free part",
+  "habit": "you check the group chat late at night to see what was spent"
+ },
+ {
+  "id": "P003",
+  "name": "Sana",
+  "age": 45,
+  "segment": "Construction / renovation contractor or developer",
+  "income": 187000,
+  "behaviour": "Burned before",
+  "behaviour_how": "You have caught a staff member or contractor double-claiming or inflating receipts and now check closely.",
+  "objection": "I already have a free option: Zoho, KasKecil, Excel or a bot I could build myself",
+  "habit": "your Indonesian staff write handwritten nota from the building-supply shop"
+ },
+ {
+  "id": "P004",
+  "name": "Celine",
+  "age": 51,
+  "segment": "Remote investor in villas or a build, living abroad",
+  "income": 140000,
+  "behaviour": "Price-sensitive",
+  "behaviour_how": "Every subscription is questioned; you prefer free tools and cancel what you do not use weekly.",
+  "objection": "If I find a duplicate, it is a people problem, not a software problem",
+  "habit": "you pay contractors by bank transfer and send screenshots to the group"
+ },
+ {
+  "id": "P005",
+  "name": "Noor",
+  "age": 33,
+  "segment": "Construction / renovation contractor or developer",
+  "income": 43000,
+  "behaviour": "Tech-savvy DIY",
+  "behaviour_how": "You or a friend could build a bot with n8n or ChatGPT and you know it.",
+  "objection": "Recognition will make mistakes on faded or handwritten Indonesian receipts and I will have to fix it",
+  "habit": "your Indonesian staff write handwritten nota from the building-supply shop"
+ },
+ {
+  "id": "P006",
+  "name": "Luis",
+  "age": 33,
+  "segment": "Remote investor in villas or a build, living abroad",
+  "income": 345000,
+  "behaviour": "Has an admin with Excel",
+  "behaviour_how": "An admin or manager types receipts into a spreadsheet once a week; it is always behind.",
+  "objection": "Recognition will make mistakes on faded or handwritten Indonesian receipts and I will have to fix it",
+  "habit": "you check the group chat late at night to see what was spent"
+ },
+ {
+  "id": "P007",
+  "name": "Selin",
+  "age": 28,
+  "segment": "Construction / renovation contractor or developer",
+  "income": 77000,
+  "behaviour": "Already uses an app",
+  "behaviour_how": "You or your bookkeeper use Jurnal, Zoho Expense or a similar app and are reasonably happy with it.",
+  "objection": "Will a new small product still be around in a year?",
+  "habit": "you have 2–4 Telegram work groups where receipts and transfer screenshots land every day"
+ },
+ {
+  "id": "P008",
+  "name": "Arjun",
+  "age": 32,
+  "segment": "Villa management company or villa rental operator",
+  "income": 99000,
+  "behaviour": "Runs everything through chats",
+  "behaviour_how": "Receipts pile up in Telegram groups; nobody records them regularly; you check when something feels off.",
+  "objection": "I already have a free option: Zoho, KasKecil, Excel or a bot I could build myself",
+  "habit": "your accountant asks for documents at month end and half are missing"
+ },
+ {
+  "id": "P009",
+  "name": "Omar",
+  "age": 28,
+  "segment": "Café / restaurant owner",
+  "income": 95000,
+  "behaviour": "Burned before",
+  "behaviour_how": "You have caught a staff member or contractor double-claiming or inflating receipts and now check closely.",
+  "objection": "Will a new small product still be around in a year?",
+  "habit": "you buy spare parts, fuel and repairs for a fleet of rental scooters and pay mechanics in cash"
+ },
+ {
+  "id": "P010",
+  "name": "Caleb",
+  "age": 51,
+  "segment": "Villa management company or villa rental operator",
+  "income": 97000,
+  "behaviour": "Runs everything through chats",
+  "behaviour_how": "Receipts pile up in Telegram groups; nobody records them regularly; you check when something feels off.",
+  "objection": "Will a new small product still be around in a year?",
+  "habit": "you have 2–4 Telegram work groups where receipts and transfer screenshots land every day"
+ },
+ {
+  "id": "P011",
+  "name": "Liam",
+  "age": 43,
+  "segment": "Shop or bike/scooter rental owner",
+  "income": 46000,
+  "behaviour": "Privacy-wary",
+  "behaviour_how": "You do not like giving bots access to your Google account or your work chats.",
+  "objection": "I do not want to give a bot access to my Google account and work chats",
+  "habit": "you buy spare parts, fuel and repairs for a fleet of rental scooters and pay mechanics in cash"
+ },
+ {
+  "id": "P012",
+  "name": "Finn",
+  "age": 39,
+  "segment": "Construction / renovation contractor or developer",
+  "income": 99000,
+  "behaviour": "Has an admin with Excel",
+  "behaviour_how": "An admin or manager types receipts into a spreadsheet once a week; it is always behind.",
+  "objection": "$19 a month for something my admin already does",
+  "habit": "you buy spare parts, fuel and repairs for a fleet of rental scooters and pay mechanics in cash"
+ },
+ {
+  "id": "P013",
+  "name": "Ethan",
+  "age": 36,
+  "segment": "Villa management company or villa rental operator",
+  "income": 66000,
+  "behaviour": "Has an admin with Excel",
+  "behaviour_how": "An admin or manager types receipts into a spreadsheet once a week; it is always behind.",
+  "objection": "I already have a free option: Zoho, KasKecil, Excel or a bot I could build myself",
+  "habit": "you buy spare parts, fuel and repairs for a fleet of rental scooters and pay mechanics in cash"
+ },
+ {
+  "id": "P014",
+  "name": "Adrian",
+  "age": 50,
+  "segment": "Construction / renovation contractor or developer",
+  "income": 219000,
+  "behaviour": "Runs everything through chats",
+  "behaviour_how": "Receipts pile up in Telegram groups; nobody records them regularly; you check when something feels off.",
+  "objection": "I do not want to give a bot access to my Google account and work chats",
+  "habit": "you share monthly spending with a partner or investor"
+ },
+ {
+  "id": "P015",
+  "name": "Mateo",
+  "age": 48,
+  "segment": "Construction / renovation contractor or developer",
+  "income": 205000,
+  "behaviour": "Delegates to a bookkeeper",
+  "behaviour_how": "An outside bookkeeper handles documents monthly; you rarely look at receipts yourself.",
+  "objection": "Will a new small product still be around in a year?",
+  "habit": "your accountant asks for documents at month end and half are missing"
+ },
+ {
+  "id": "P016",
+  "name": "Raj",
+  "age": 47,
+  "segment": "Café / restaurant owner",
+  "income": 102000,
+  "behaviour": "Price-sensitive",
+  "behaviour_how": "Every subscription is questioned; you prefer free tools and cancel what you do not use weekly.",
+  "objection": "My staff and I are not sure we will keep using it after the free part",
+  "habit": "you have 2–4 Telegram work groups where receipts and transfer screenshots land every day"
+ },
+ {
+  "id": "P017",
+  "name": "Anya",
+  "age": 33,
+  "segment": "Villa management company or villa rental operator",
+  "income": 104000,
+  "behaviour": "Privacy-wary",
+  "behaviour_how": "You do not like giving bots access to your Google account or your work chats.",
+  "objection": "$19 a month for something my admin already does",
+  "habit": "you pay contractors by bank transfer and send screenshots to the group"
+ },
+ {
+  "id": "P018",
+  "name": "Rohan",
+  "age": 49,
+  "segment": "Remote investor in villas or a build, living abroad",
+  "income": 220000,
+  "behaviour": "Runs everything through chats",
+  "behaviour_how": "Receipts pile up in Telegram groups; nobody records them regularly; you check when something feels off.",
+  "objection": "I already have a free option: Zoho, KasKecil, Excel or a bot I could build myself",
+  "habit": "your Indonesian staff write handwritten nota from the building-supply shop"
+ },
+ {
+  "id": "P019",
+  "name": "Theo",
+  "age": 47,
+  "segment": "Shop or bike/scooter rental owner",
+  "income": 48000,
+  "behaviour": "Already uses an app",
+  "behaviour_how": "You or your bookkeeper use Jurnal, Zoho Expense or a similar app and are reasonably happy with it.",
+  "objection": "Will it really catch a duplicate, or is it just a receipt-to-table bot?",
+  "habit": "you buy spare parts, fuel and repairs for a fleet of rental scooters and pay mechanics in cash"
+ },
+ {
+  "id": "P020",
+  "name": "Nadia",
+  "age": 35,
+  "segment": "Shop or bike/scooter rental owner",
+  "income": 38000,
+  "behaviour": "Tech-savvy DIY",
+  "behaviour_how": "You or a friend could build a bot with n8n or ChatGPT and you know it.",
+  "objection": "Will a new small product still be around in a year?",
+  "habit": "you check the group chat late at night to see what was spent"
+ }
+]

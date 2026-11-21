@@ -1,0 +1,13 @@
+{
+  "id": "P016",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd let it read the groups for free, sure, but with receipts landing every day in three or four chats those 30 documents are gone in about a week, before I know if anyone opens the sheet. After that my volume means the $35 plan, and that's another monthly bill I'd have to justify for something I'm not sure we'd keep up with.",
+  "objection": "The free part runs out before we've built the habit of actually using the sheet, then I'm paying every month for photos turned into rows that nobody might look at after the first few weeks.",
+  "would_change_my_mind": "A full first month free covering all our groups instead of 30 documents, so I can see if we really use the sheet and the Monday report before I pay anything.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P012",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I already pay an admin to put receipts in Excel. She's behind, but it gets done, and I'm not adding another subscription for her job. Most of what I spend is cash to mechanics with no receipt anyway, so a bot reading receipts doesn't fix my real gap.",
+  "objection": "$19 a month for something my admin already does, and I'd still need her to chase the guys for the cash payments and check what the bot read.",
+  "would_change_my_mind": "If my admin tried the free 30 on a week of scooter parts and fuel and told me it cut her Excel day down to almost nothing, I'd pay without thinking about it.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 30,
+  "price_too_expensive": 60
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P015",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The missing receipts at month end are a real headache, but I don't touch receipts, my bookkeeper does, and I'm not moving my site crews onto some new Telegram bot that might be gone next year. At most I forward the link to my bookkeeper and forget about it.",
+  "objection": "Will this little bot still be running in a year? If I get thirty guys sending receipts to it and it shuts down or changes, I've made a mess for my bookkeeper and I'm back where I started.",
+  "would_change_my_mind": "My bookkeeper trying it on one site for a month and telling me it actually cut the missing documents, and that everything stays in my own Google sheet if the bot disappears.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

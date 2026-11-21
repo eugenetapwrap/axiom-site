@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Every month-end my accountant chases me and half the notas are buried somewhere in the Telegram groups, so if the free 30 actually turn our staff's photos into clean rows I'd pay the $19 or $35 without thinking. That's less than I lose in one evening of scrolling chats for receipts.",
+  "objection": "Honestly I keep thinking I could hack this together myself with Excel or a ChatGPT bot, and I don't trust it to read crumpled handwritten notas from the hardware shop in Bahasa or to keep villa owners' spending private once it's sitting in our work group.",
+  "would_change_my_mind": "If the free 30 come back with wrong amounts or messy suppliers on our handwritten notas, I'm out and back to Excel.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 50,
+  "price_too_expensive": 100
+}

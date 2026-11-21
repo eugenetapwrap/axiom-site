@@ -1,0 +1,13 @@
+{
+  "id": "P006",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I'm abroad and my admin's spreadsheet is always a week behind, so I end up scrolling the group chat at midnight trying to work out what was spent on the build. A sheet that fills itself and flags duplicates and wrong totals is exactly what I want, the price is nothing next to one padded invoice, and the 30 free documents cost me nothing to find out.",
+  "objection": "Half the receipts from site are faded thermal paper or handwritten nota from a local toko in Indonesian. If the bot misreads amounts on those, my admin still has to check every row and I'm paying for a second spreadsheet to fix.",
+  "would_change_my_mind": "If more than a few of the first 30 receipts from my own site come out with wrong amounts or suppliers, I drop it and stay with the admin.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 90,
+  "price_too_expensive": 200
+}

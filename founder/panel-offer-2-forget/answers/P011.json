@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The whole point only works once I connect my Google and drop the bot into the staff group, and that is exactly what I don't want a bot touching. Half of what I spend is cash to mechanics with no receipt anyway, so I'd be paying $19 a month to sort the easy half.",
+  "objection": "They say it only sees one sheet and folder, but I can't check that, and once it sits in my work group it reads everything my staff say in there. I don't know who is behind it or where my numbers end up.",
+  "would_change_my_mind": "A way to get the sheet without connecting Google at all, like a file it sends me every week, plus a clear name and company behind it that I can look up.",
+  "price_too_cheap": 2,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 25
+}

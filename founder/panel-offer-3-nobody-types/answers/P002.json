@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I would let it run on the free 30, but a café goes through 30 receipts in a week or two, and that is too short to know if my staff will keep sending properly or my admin will just go back to her Excel. I don't start a monthly bill for something we might drop after two weeks.",
+  "objection": "After the free part ends, will my people really keep using it, or will I be paying every month for a bot while my admin still types everything in on Friday?",
+  "would_change_my_mind": "A full free month, so I can see one whole month of the café in the sheet with my admin not typing anything, before I put in a card.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

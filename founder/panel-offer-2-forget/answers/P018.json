@@ -1,0 +1,13 @@
+{
+  "id": "P018",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The money isn't the issue, $19 is nothing next to what goes into the build. I'd forward a handful of old nota from the group to see what it does with them, but I wouldn't pay this month. I'm not convinced it can read my foreman's scrawl on a building-supply nota, and I'd also have to get the staff to use it in the work group.",
+  "objection": "A neat sheet of whatever my staff send me doesn't tell me if the nota is padded or if the cement was ever delivered. If it misreads handwritten Indonesian receipts, I end up with tidy wrong numbers that I trust more than the mess I have now, and I could put together a Zoho sheet or my own bot for free anyway.",
+  "would_change_my_mind": "Watching it get a batch of my real handwritten supply-shop nota right and catch an actual double-claimed or wrongly added receipt that I would have missed.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 59,
+  "price_too_expensive": 120
+}
