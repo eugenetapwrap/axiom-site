@@ -245,30 +245,32 @@ E = page('e', 'Вариант E — учёт расходов в Telegram', e_he
 
 
 # ---------- Вариант F: путь основателя (21.11). Вы делаете 1–4, дальше само 5–6. От вас — только чеки ----------
-CHIPS = '<span class="f-chips"><i>лично боту</i><i>в рабочей группе</i><i>архивом</i></span>'
+CHIPS = '<span class="f-chips"><i>боту</i><i>в рабочую группу</i><i>архивом</i></span>'
 F_YOU = [
     ('Пришлите документы', '', CHIPS),
     ('Документы записываются в Google-таблицу', '', 'Google подключается в боте одной кнопкой'),
-    ('Добавьте бота в рабочую группу', 'по желанию', 'сотрудники присылают чеки как раньше'),
+    ('Добавьте бота в рабочую группу', 'по желанию', 'чеки, которые сотрудники присылают в группу, тоже попадут в таблицу'),
 ]
 F_AUTO = [
-    ('Таблица заполняется автоматически', 'каждый документ — строка с суммой, поставщиком и категорией, дубли отмечены'),
-    ('Отчёты приходят по расписанию', 'каждый понедельник — за неделю, 1-го числа — за месяц'),
+    ('Таблица заполняется автоматически', 'каждый документ — новая строка, дубли отмечены'),
+    ('Отчёты приходят по расписанию', 'по понедельникам за неделю и 1-го числа за месяц'),
 ]
 CHK = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
 f_flow = '<ol class="f-flow">' + ''.join(
     f'<li><span class="e-n">{i}</span><div><b>{a}{f' <em>{tag}</em>' if tag else ""}</b><span class="f-d">{d}</span></div></li>' for i, (a, tag, d) in enumerate(F_YOU, 1)) + '</ol>' + \
-    '<div class="f-auto"><div class="f-auto-h">Больше ничего делать не нужно</div><ol class="f-flow">' + ''.join(
+    '<div class="f-auto"><div class="f-auto-h">Всё настроено</div><ol class="f-flow">' + ''.join(
     f'<li><span class="e-n f-ok">{CHK}</span><div><b>{a}</b><span class="f-d">{d}</span></div></li>' for a, d in F_AUTO) + '</ol></div>'
-f_hero = f"""<section class="hero mk-hero mk-hero--e"><div class="wrap mk-split mk-split--f">
-<div class="mk-left">
+f_hero = f"""<section class="hero mk-hero mk-hero--e mk-hero--f"><div class="wrap">
 <span class="hero-eyebrow">Для тех, кому сотрудники присылают чеки</span>
-<h1>Учёт расходов {u("в Telegram")}</h1>
+<h1 class="f-h1">Учёт расходов {u("в Telegram")}</h1>
+<div class="mk-split mk-split--f">
+<div class="mk-left">
 {f_flow}
 <div class="cta-row cta-row--qr"><a class="btn" href="#">Начать бесплатно</a>{QR}</div>
 <p class="cta-line">30 документов бесплатно, без карты и регистрации</p>
 </div>
 {REPORT_IMG}
+</div>
 </div></section>"""
 F = page('f', 'Вариант F — учёт расходов в Telegram, путь основателя', f_hero + E_REST)
 
