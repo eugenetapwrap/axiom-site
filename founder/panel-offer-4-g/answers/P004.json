@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I'm not running a team that buys things on site every day. I pay a handful of contractors by bank transfer and post the screenshot to the group, and my bank statement already shows what went out. Maybe I'd let it chew through the 30 free documents out of curiosity, but I wouldn't open it every week, so I'd never pay $19 a month.",
+  "objection": "If someone double-bills me, that's a contractor I need to talk to or replace, and a bot flagging it doesn't fix that. It's another subscription for a problem I can catch myself by checking transfers against the build budget once a month.",
+  "would_change_my_mind": "If my builder's staff started paying for materials in cash and sending dozens of receipts a week while I'm abroad, and it caught one real inflated or duplicated invoice during the free trial, the $19 would be easy to justify.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

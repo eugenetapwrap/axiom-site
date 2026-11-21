@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'm not putting a bot into my work group where my guys talk about cash, money and customers, and I'm not hooking it up to my Google account either. Most of what I pay is cash to mechanics and parts shops with handwritten notes, so I keep it in my own book and that works well enough.",
+  "objection": "They say it only reads payment documents and only sees one sheet, but I can't check that. Once it's in the group and connected to Google, I just have to take their word for it.",
+  "would_change_my_mind": "If I could use it without giving it my Google account or adding it to the work group, just forwarding receipts to it myself and getting the sheet back, and another scooter owner I know told me it read their handwritten cash notes correctly.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 25
+}

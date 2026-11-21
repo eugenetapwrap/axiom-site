@@ -1,0 +1,13 @@
+{
+  "id": "P010",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I might put the bot in one group to use up the free 30 and see what it does, but I won't put a card down and move all my villas' money onto a bot nobody's heard of. The way I do it now is messy, but I know it'll still work next year.",
+  "objection": "Will this little bot still be around in a year? I'd be letting it into the groups where all our transfer screenshots go, and if it disappears or starts charging more once I depend on it, I'm stuck cleaning up the mess.",
+  "would_change_my_mind": "Another villa operator I know telling me they've run it for a few months and it caught real duplicates or errors, so I know it works and the company is going to stick around.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

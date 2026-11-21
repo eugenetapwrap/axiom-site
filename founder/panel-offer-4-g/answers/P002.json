@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My admin already types the receipts into Excel every week. It's slow, but it's our system. I'd let the bot take the free 30, but I wouldn't start paying every month this month. I'd want to see first whether my admin and I actually use the sheet or just keep doing it the old way.",
+  "objection": "We try things for free, everyone is excited for a week, and then nobody opens it again. I'd end up paying $35 a month for something my admin works around while she keeps her own spreadsheet anyway.",
+  "would_change_my_mind": "If after the free 30 the Monday report matches what I see in the group chat at night, and my admin tells me herself that she stopped typing receipts.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}
