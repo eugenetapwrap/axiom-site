@@ -255,3 +255,26 @@
   .g-rep-card img { width: 100%; }
   .g-mark { left: -8px; transform: scale(.85); }
 }
+
+/* G: один отчёт едет с первого экрана в блок отчёта (компьютер) */
+.g-story { position: relative; }
+.g-fig { position: relative; margin: 0; width: 470px; }
+.g-fig img { width: 470px; height: auto; display: block; border-radius: 20px; box-shadow: 0 24px 60px -28px rgba(20, 32, 27, .4), 0 0 0 1px rgba(20, 32, 27, .06); }
+.g-fig figcaption { margin-top: 12px; text-align: center; font-size: 15px; color: var(--muted); }
+.g-rep-grid2 { grid-template-columns: minmax(0, 1fr) 470px; align-items: start; }
+.g-story-media { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.g-story-media .wrap { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 470px; gap: 56px; }
+.g-story-col { grid-column: 2; height: 100%; }
+.g-fig--sticky { position: sticky; top: 96px; }
+.g-fig--sticky .g-mark { opacity: 0; transform: scale(.6); transition: opacity .35s ease, transform .35s ease; }
+.g-fig--sticky.on .g-mark { opacity: 1; transform: none; }
+.g-fig--hero, .g-fig--rep { visibility: hidden; }
+.g-rep { padding-bottom: 96px; }
+@media (max-width: 900px) {
+  .g-story-media { display: none; }
+  .g-fig--hero { display: none; }
+  .g-fig--rep { visibility: visible; width: 100%; }
+  .g-fig--rep img { width: 100%; }
+  .g-rep-grid2 { grid-template-columns: 1fr; }
+}
+.g-fig-img { position: relative; }

@@ -297,7 +297,7 @@ G = page('g', 'Вариант G — два шага, группа первой',
 REP_W, REP_SCALE = 560, 560 / 1080          # позиции блоков в карточке 1080 px (замерены по month-report.html)
 REP_MARKS = [(1, 190), (2, 778), (3, 372)]   # порядок — по важности (основатель, 21.11): итог → категории и поставщики → что проверить
 REP_NOTES = [
-    ('Итог месяца', 'сколько потрачено, сколько в среднем за день и как это к прошлому месяцу'),
+    ('Итоги', 'сколько потрачено, сколько в среднем за день и как это к прошлой неделе или месяцу'),
     ('Категории и поставщики', 'на что и кому ушли деньги, что выросло и что снизилось'),
     ('Что проверить', 'документы, которые ждут проверки, и дубли, которые не вошли в итог'),
 ]
@@ -318,7 +318,32 @@ G_TABLE = f"""<section class="section mk-sec mk-teaser"><div class="wrap">
 <div class="mk-fade"><img src="{SRV}/screens/payments.webp" alt=""></div>
 <div class="mk-same mk-same--e">Дальше — текущий лендинг: таблица, как присылать, что делает Nota, для кого, цены, данные, вопросы</div>
 </div></section>"""
-G = page('g', 'Вариант G — два шага, группа первой', g_hero + g_report + G_TABLE)
+# Переход (21.11): на компьютере один отчёт едет с первого экрана в блок отчёта (sticky, как скользящий отчёт на текущем сайте),
+# в блоке на нём появляются цифры 1–3. Отчёт справа в обоих блоках; на телефоне — только в блоке отчёта, с цифрами.
+G_SCALE = 470 / 1080
+G_FIG = lambda cls, marks: (f'<figure class="g-fig {cls}"><div class="g-fig-img"><img src="month-report.png" alt="Пример отчёта за месяц" width="1080" height="1265">'
+    + (''.join(f'<span class="g-mark" style="top:calc({y / 1265 * 100:.2f}% - 15px)">{n}</span>' for n, y in REP_MARKS) if marks else '')
+    + '</div><figcaption>Пример отчёта за месяц</figcaption></figure>')
+g_hero2 = g_hero.replace(REPORT_MONTH, G_FIG('g-fig--hero', False))
+g_report2 = f"""<section class="section mk-sec section--paper g-rep" id="g-rep"><div class="wrap">
+<div class="mk-split g-rep-grid2">
+<div class="g-rep-text"><h2>Отчёт каждую неделю, каждый месяц и по запросу</h2><ol class="g-notes">""" + ''.join(
+    f'<li><span class="g-mark g-mark--s">{i}</span><div><b>{a}</b><span>{d}</span></div></li>' for i, (a, d) in enumerate(REP_NOTES, 1)) + f"""</ol>
+{G_SCHED}
+</div>
+{G_FIG('g-fig--rep', True)}
+</div></div></section>"""
+G_STORY_MEDIA = f"""<div class="g-story-media" aria-hidden="true"><div class="wrap"><div class="g-story-col">{G_FIG('g-fig--sticky', True)}</div></div></div>"""
+G_JS = """<script>
+(function () {
+  var story = document.querySelector('.g-story'), media = document.querySelector('.g-story-media'), hero = document.querySelector('.g-fig--hero'),
+      sticky = document.querySelector('.g-fig--sticky'), rep = document.getElementById('g-rep');
+  function place() { media.style.paddingTop = (hero.getBoundingClientRect().top - story.getBoundingClientRect().top) + 'px'; }
+  function marks() { sticky.classList.toggle('on', rep.getBoundingClientRect().top < innerHeight * 0.55); }
+  place(); marks(); addEventListener('resize', place); addEventListener('scroll', marks, { passive: true });
+})();
+</script>"""
+G = page('g', 'Вариант G — два шага, группа первой', '<div class="g-story">' + g_hero2 + g_report2 + G_STORY_MEDIA + '</div>' + G_TABLE + G_JS)
 
 for name, html in (('a', A), ('b', B), ('c', C), ('d', D), ('e', E), ('f', F), ('g', G)):
     (HERE / f'{name}.html').write_text(html)
