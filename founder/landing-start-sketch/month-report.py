@@ -2,11 +2,14 @@
 #   python3 month-report.py → month-report.html и month-report.png (2160 px по ширине) в этой папке
 # Карточку собирает генератор бота (../report-cards/generator/cards.py): отчёт по запросу за ноябрь на 25-е число,
 # сравнение с 1–25 октября. Как в примере для сайта (report-cards/site-example.py), убрана нижняя строка «Подготовлено в Nota».
-# Данные выдуманные: строительство вилл на Бали, рупии; поставщики — те же, что в примере архива и на скриншоте таблицы.
+# Данные выдуманные: строительство вилл на Бали; поставщики — те же, что в примере архива и на скриншоте таблицы.
+# Валюта — доллары (основатель, 21.11: «IDR может быть непонятно», итог около $11 тыс.): суммы в рупиях × RATE.
 import os, sys, random, subprocess, datetime as dt
 HERE = os.path.dirname(os.path.abspath(__file__))
 GEN = os.path.join(HERE, '..', 'report-cards', 'generator'); sys.path.insert(0, GEN)
 import cards as C
+
+CUR, RATE = 'USD', 1 / 9600      # итог месяца около $11 тыс.
 
 # поставщик, категория, тип документа, типичные суммы (тыс. рупий)
 SUP = [
@@ -24,7 +27,9 @@ def build():
     rnd = random.Random(11); rows = []
     def add(d, s, amount=None, **kw):
         payee, cat, typ, amts = s
-        rows.append(dict(date=d, amount=(amount or rnd.choice(amts)) * 1000, payee=payee, cat=cat, type=typ, check='OK', status='', **kw))
+        usd = (amount or rnd.choice(amts)) * 1000 * RATE
+        usd = round(usd / 5) * 5 if typ == 'Invoice' or payee == 'Бригада Wayan' else round(usd, 2)   # счета и зарплата — круглые
+        rows.append(dict(date=d, amount=usd, payee=payee, cat=cat, type=typ, check='OK', status='', **kw))
     d = dt.date(2026, 10, 1)
     while d <= dt.date(2026, 11, 25):
         for _ in range(rnd.choice([0, 1, 2, 2, 3])):
@@ -42,7 +47,7 @@ def build():
 
 if __name__ == '__main__':
     rows = build()
-    h = C.period_card(rows, dt.date(2026, 11, 1), dt.date(2026, 11, 30), 'month', 'Ваша компания', loc='ru', cur='IDR',
+    h = C.period_card(rows, dt.date(2026, 11, 1), dt.date(2026, 11, 30), 'month', 'Ваша компания', loc='ru', cur=CUR,
                       prev_rows=rows, report_date=dt.date(2026, 11, 25), client_start=dt.date(2026, 10, 1))
     i = h.find('Подготовлено в Nota'); a = h.rfind('<div style="padding-top: ', 0, i); b = h.find('</div>', h.find('@NotaGetBot', i)) + 6
     assert i > 0 and a > 0, 'не нашёл нижнюю строку'

@@ -222,3 +222,13 @@
   .f-flow b em { display: inline-block; margin: 4px 0 0; }
 }
 .f-auto .f-flow li { padding-bottom: 10px; }
+/* F, 21.11 вечер: свободнее */
+.mk-hero--f h1.f-h1 { margin-bottom: 40px; }
+.mk-hero--f .f-flow li { padding-bottom: 26px; }
+.mk-hero--f .f-chips { margin-top: 10px; }
+.mk-hero--f .f-auto { margin: 0 0 34px; padding: 20px 18px 22px 0; }
+.mk-hero--f .f-auto::before { height: 52px; }
+.mk-hero--f .f-auto-h { margin-bottom: 16px; }
+.mk-hero--f .f-auto .f-flow li { padding-bottom: 14px; }
+.mk-hero--f .f-auto .f-flow li:last-child { padding-bottom: 0; }
+.mk-split--f .mk-report { margin-top: 6px; }
