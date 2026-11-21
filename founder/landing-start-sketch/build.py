@@ -292,6 +292,35 @@ g_flow = '<ol class="f-flow">' + ''.join(
 g_hero = f_hero.replace(f_flow, g_flow)
 G = page('g', 'Вариант G — два шага, группа первой', g_hero + E_REST)
 
+
+# ---------- G: следующий блок — отчёт с пояснениями (21.11). Тот же отчёт, что справа на первом экране, крупнее и с цифрами ----------
+REP_W, REP_SCALE = 560, 560 / 1080          # позиции блоков в карточке 1080 px (замерены по month-report.html)
+REP_MARKS = [(1, 190), (2, 372), (3, 480), (4, 778)]
+REP_NOTES = [
+    ('Итог месяца', 'сколько потрачено, сколько в среднем за день и как это к прошлому месяцу'),
+    ('Что проверить', 'документы, которые ждут проверки, и дубли, которые не вошли в итог'),
+    ('По дням и крупные платежи', 'в какие дни ушло больше всего и кому'),
+    ('Категории и поставщики', 'на что и кому ушли деньги, что выросло и что снизилось'),
+]
+G_SCHED = sched([('Каждый понедельник', 'за неделю'), ('1-го числа', 'за месяц'), ('По запросу', 'в любой момент, кнопка «Отчёт»'), ('Первый', 'на 30-м документе')])
+g_report = f"""<section class="section mk-sec section--paper g-rep"><div class="wrap">
+<h2>Что в отчёте и когда он приходит</h2>
+<div class="g-rep-grid">
+<figure class="g-rep-card"><img src="month-report.png" alt="Отчёт за месяц с пояснениями" width="1080" height="1265">""" + ''.join(
+    f'<span class="g-mark" style="top:{round(y * REP_SCALE) - 15}px">{n}</span>' for n, y in REP_MARKS) + """<figcaption>Отчёт за ноябрь по запросу 25-го числа</figcaption></figure>
+<div class="g-rep-text"><ol class="g-notes">""" + ''.join(
+    f'<li><span class="g-mark g-mark--s">{i}</span><div><b>{a}</b><span>{d}</span></div></li>' for i, (a, d) in enumerate(REP_NOTES, 1)) + f"""</ol>
+{G_SCHED}
+</div></div></div></section>"""
+
+G_TABLE = f"""<section class="section mk-sec mk-teaser"><div class="wrap">
+<h2>Google-таблица, которая ведётся сама</h2>
+<p class="lead">Каждый документ — строка со ссылкой на оригинал. Листы с аналитикой пересчитываются сами.</p>
+<div class="mk-fade"><img src="{SRV}/screens/payments.webp" alt=""></div>
+<div class="mk-same mk-same--e">Дальше — текущий лендинг: таблица, как присылать, что делает Nota, для кого, цены, данные, вопросы</div>
+</div></section>"""
+G = page('g', 'Вариант G — два шага, группа первой', g_hero + g_report + G_TABLE)
+
 for name, html in (('a', A), ('b', B), ('c', C), ('d', D), ('e', E), ('f', F), ('g', G)):
     (HERE / f'{name}.html').write_text(html)
 print('ok')
