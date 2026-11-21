@@ -247,19 +247,18 @@ E = page('e', 'Вариант E — учёт расходов в Telegram', e_he
 # ---------- Вариант F: путь основателя (21.11). Вы делаете 1–4, дальше само 5–6. От вас — только чеки ----------
 CHIPS = '<span class="f-chips"><i>лично боту</i><i>в рабочей группе</i><i>архивом</i></span>'
 F_YOU = [
-    ('Нажимаете Start', 'один раз', 'в Telegram, без регистрации и карты'),
-    ('Присылаете документы', 'это всё, что нужно от вас', CHIPS),
-    ('Подключаете Google', 'один раз', 'таблица и папка — на вашем Google Диске'),
-    ('Добавляете бота в рабочую группу', 'по желанию', 'сотрудники присылают чеки как раньше'),
+    ('Присылайте документы', '', CHIPS),
+    ('Подключите Google', '', 'все документы будут автоматически записываться в вашу таблицу'),
+    ('Добавьте бота в рабочую группу', 'по желанию', 'сотрудники присылают чеки как раньше, бот забирает их сам'),
 ]
 F_AUTO = [
-    ('Ведётся таблица', 'каждый документ — строка через минуту, дубли отмечены'),
-    ('Приходят отчёты', 'на 30-м документе, по понедельникам и 1-го числа'),
+    ('Таблица заполняется автоматически', 'без вашего участия: каждый документ — строка с суммой, поставщиком и категорией'),
+    ('Отчёты приходят сами', 'каждый понедельник — за неделю, 1-го числа — за месяц'),
 ]
 CHK = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
 f_flow = '<ol class="f-flow">' + ''.join(
-    f'<li><span class="e-n">{i}</span><div><b>{a}{f' <em class="{"f-main" if i == 2 else ""}">{tag}</em>' if tag else ""}</b><span class="f-d">{d}</span></div></li>' for i, (a, tag, d) in enumerate(F_YOU, 1)) + '</ol>' + \
-    '<div class="f-auto"><div class="f-auto-h">Дальше — само, делать ничего не нужно</div><ol class="f-flow">' + ''.join(
+    f'<li><span class="e-n">{i}</span><div><b>{a}{f' <em>{tag}</em>' if tag else ""}</b><span class="f-d">{d}</span></div></li>' for i, (a, tag, d) in enumerate(F_YOU, 1)) + '</ol>' + \
+    '<div class="f-auto"><div class="f-auto-h">Дальше всё само</div><ol class="f-flow">' + ''.join(
     f'<li><span class="e-n f-ok">{CHK}</span><div><b>{a}</b><span class="f-d">{d}</span></div></li>' for a, d in F_AUTO) + '</ol></div>'
 f_hero = f"""<section class="hero mk-hero mk-hero--e"><div class="wrap mk-split mk-split--f">
 <div class="mk-left">
