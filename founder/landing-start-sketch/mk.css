@@ -193,3 +193,23 @@
 .e-steps li span:not(.e-n) { display: block; font-size: 17px; color: var(--muted); margin-top: 2px; }
 .mk-same--e { margin-left: 0; }
 @media (max-width: 900px) { .e-steps b { font-size: 19px; } .e-steps li span:not(.e-n) { font-size: 16px; } }
+
+/* F: путь основателя */
+.mk-split--f { align-items: start; }
+.mk-split--f .mk-report { margin-top: 40px; }
+.f-flow { list-style: none; margin: 0; padding: 0; }
+.f-flow li { display: flex; gap: 16px; align-items: flex-start; position: relative; padding-bottom: 16px; }
+.f-flow li:last-child { padding-bottom: 0; }
+.f-flow li:not(:last-child)::before { content: ''; position: absolute; left: 16px; top: 36px; bottom: 2px; border-left: 2px dashed #b9c2bd; }
+.f-flow b { display: block; font-size: 20px; line-height: 1.25; }
+.f-flow b em { font-style: normal; font-size: 13px; font-weight: 600; color: var(--muted); background: var(--box); border-radius: 999px; padding: 2px 9px; margin-left: 6px; vertical-align: 3px; white-space: nowrap; }
+.f-d { display: block; font-size: 16px; color: var(--muted); margin-top: 3px; }
+.f-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.f-chips i { font-style: normal; font-size: 15px; font-weight: 600; color: var(--green-text); background: #dcefe4; border-radius: 999px; padding: 4px 12px; }
+.f-auto { margin: 18px 0 30px; padding: 16px 18px 18px; background: #e8f3ec; border-radius: 16px; position: relative; }
+.f-auto::before { content: ''; position: absolute; left: 34px; top: -18px; height: 18px; border-left: 2px dashed #b9c2bd; }
+.f-auto-h { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+.f-ok { background: var(--green) !important; }
+.f-auto .f-flow li:not(:last-child)::before { border-left-color: #a9cdb7; }
+@media (max-width: 900px) { .f-flow b { font-size: 18px; } .f-flow b em { display: inline-block; margin: 4px 0 0; } .mk-split--f .mk-report { margin-top: 0; } }
+.f-flow b em.f-main { color: #b33d12; background: #fde7dc; }

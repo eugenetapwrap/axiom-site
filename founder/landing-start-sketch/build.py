@@ -1,5 +1,5 @@
 # Эскизы первого экрана Nota для входа «Start → присылайте документы» (21.11.2026).
-# Собирает варианты a–d (21.11) и e.html — простой первый экран «Учёт расходов в Telegram» (основатель, 21.11: что за продукт и путь в 4 шага, без переписок) на стилях текущего лендинга (site.css — копия из nota/dist).
+# Собирает варианты a–d (21.11) e.html — простой первый экран «Учёт расходов в Telegram», f.html — тот же экран с путём основателя: Start → документы → Google → группа → таблица → отчёты (21.11) на стилях текущего лендинга (site.css — копия из nota/dist).
 # Картинки и шрифты берутся с локального сервера nota/dist на :4321. Снимки — shots.cjs (node shots.cjs a b c d).
 # Блок «Подключите Google» и всё ниже остаются как на текущем лендинге: здесь показано только начало.
 import pathlib
@@ -243,6 +243,36 @@ e_hero = f"""<section class="hero mk-hero mk-hero--e"><div class="wrap mk-split"
 E_REST = '<section class="section mk-sec mk-teaser"><div class="wrap"><div class="mk-same mk-same--e">Дальше — текущий лендинг: что покажет отчёт, таблица, как присылать, что делает Nota, для кого, цены, данные, вопросы</div></div></section>'
 E = page('e', 'Вариант E — учёт расходов в Telegram', e_hero + E_REST)
 
-for name, html in (('a', A), ('b', B), ('c', C), ('d', D), ('e', E)):
+
+# ---------- Вариант F: путь основателя (21.11). Вы делаете 1–4, дальше само 5–6. От вас — только чеки ----------
+CHIPS = '<span class="f-chips"><i>лично боту</i><i>в рабочей группе</i><i>архивом</i></span>'
+F_YOU = [
+    ('Нажимаете Start', 'один раз', 'в Telegram, без регистрации и карты'),
+    ('Присылаете документы', 'это всё, что нужно от вас', CHIPS),
+    ('Подключаете Google', 'один раз', 'таблица и папка — на вашем Google Диске'),
+    ('Добавляете бота в рабочую группу', 'по желанию', 'сотрудники присылают чеки как раньше'),
+]
+F_AUTO = [
+    ('Ведётся таблица', 'каждый документ — строка через минуту, дубли отмечены'),
+    ('Приходят отчёты', 'на 30-м документе, по понедельникам и 1-го числа'),
+]
+CHK = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+f_flow = '<ol class="f-flow">' + ''.join(
+    f'<li><span class="e-n">{i}</span><div><b>{a}{f' <em class="{"f-main" if i == 2 else ""}">{tag}</em>' if tag else ""}</b><span class="f-d">{d}</span></div></li>' for i, (a, tag, d) in enumerate(F_YOU, 1)) + '</ol>' + \
+    '<div class="f-auto"><div class="f-auto-h">Дальше — само, делать ничего не нужно</div><ol class="f-flow">' + ''.join(
+    f'<li><span class="e-n f-ok">{CHK}</span><div><b>{a}</b><span class="f-d">{d}</span></div></li>' for a, d in F_AUTO) + '</ol></div>'
+f_hero = f"""<section class="hero mk-hero mk-hero--e"><div class="wrap mk-split mk-split--f">
+<div class="mk-left">
+<span class="hero-eyebrow">Для тех, кому сотрудники присылают чеки</span>
+<h1>Учёт расходов {u("в Telegram")}</h1>
+{f_flow}
+<div class="cta-row cta-row--qr"><a class="btn" href="#">Начать бесплатно</a>{QR}</div>
+<p class="cta-line">30 документов бесплатно, без карты и регистрации</p>
+</div>
+{REPORT_IMG}
+</div></section>"""
+F = page('f', 'Вариант F — учёт расходов в Telegram, путь основателя', f_hero + E_REST)
+
+for name, html in (('a', A), ('b', B), ('c', C), ('d', D), ('e', E), ('f', F)):
     (HERE / f'{name}.html').write_text(html)
 print('ok')
