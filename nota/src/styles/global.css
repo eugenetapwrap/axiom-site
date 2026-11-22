@@ -1190,3 +1190,8 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
   .v12 .an .an-btn b { font-size: 13.5px; line-height: 1.2; }
 }
 @media (prefers-reduced-motion: reduce) { .v12 .an .an-btn, .v12 .an .an-btn::before { transition: none; } }
+
+/* v12, новый вариант: у шагов 3 и 4 нет номеров, поэтому и отступа под номер слева нет — блоки «Google-таблица…»
+   и «Как присылать документы дальше» стоят по общему краю, как остальные (основатель 22.11: «ширина блоков разная»). */
+@media (min-width: 900px) { .v12s .num-sec .wrap > * { margin-left: 0; } }
+.v12s .num-sec h2 { padding-left: 0; }
