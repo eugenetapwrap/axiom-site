@@ -15,8 +15,8 @@ import Pen from './Pen.astro';
 import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
-  meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps, bar, shotAlt,
-  start, facts12,
+  meta, cta, nav, hero, result, analytics, send, what, compare as compareBase, segments, reviews, data, pricing, faq, final, footer, steps, bar, shotAlt,
+  start, facts12, compare12,
 } from '../data/content-v12';   // = content-v11 + тексты нового первого экрана (start)
 
 // Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
@@ -28,6 +28,7 @@ const h1Cut = cut(hero.title, '15\u00a0минут');
 interface Props { noindex?: boolean; variant?: 'archive' | 'start'; tag?: string; bar?: boolean; v12?: boolean }
 const { noindex = false, variant = 'archive', tag = 'land10_', bar: showBar = false, v12 = false } = Astro.props;
 const isStart = variant === 'start';
+const compare = v12 ? compare12 : compareBase;
 const link = (t: string) => botLink(t.replace('land10_', tag));
 const ctaText = isStart ? start.cta : cta;
 const sCut = cut(start.title, start.underline);

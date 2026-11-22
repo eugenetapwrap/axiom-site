@@ -5,7 +5,7 @@
 // Решения по start — founder/landing-start-sketch (эскиз G), тесты офферов — founder/panel-offer-compare.md,
 // разбор по Impeccable — founder/landing-v12-notes.md.
 export * from './content-v11';
-import { steps } from './content-v11';
+import { steps, compare } from './content-v11';
 
 export const start = {
   // Основатель 22.11: «Учёт расходов в Telegram» — неудачный заголовок, уходит в надзаголовок; заголовок — «чеки, таблица, проверено»
@@ -61,3 +61,12 @@ export const facts12 = [
   // Основатель 22.11: про автопродление не пишем — включить его или нет, человек выбирает сам на странице оплаты; «отмена» из заголовка ушла
   { q: 'Оплата', a: 'Visa, Mastercard или криптовалюта; российские карты пока не\u00a0принимаем.' },
 ];
+
+// Сравнение «накладная в 9:41»: основателю 22.11 не нравится «шлют» в «Нет, шлют в Telegram» — глагол как в первом экране
+export const compare12 = {
+  ...compare,
+  options: compare.options.map((o) => ({
+    ...o,
+    cells: o.cells.map(([m, t]) => [m, t === 'Нет, шлют в Telegram' ? 'Нет, присылают в\u00a0Telegram' : t] as [typeof m, string]),
+  })),
+};
