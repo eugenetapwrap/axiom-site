@@ -26,7 +26,6 @@ Nota is provided by Individual Entrepreneur Evgenii Popov, registered in Georgia
 - Identification number: 346999215.
 - Legal address: Entrance 1, Floor 6, 140-v Rustaveli Street, Kobuleti, Georgia.
 - Contact email: [to confirm: support email].
-- Phone: [to confirm: contact phone, if the bank requires one].
 - Bot: [@NotaGetBot](https://t.me/NotaGetBot).
 
 Below, the operator is "we" and the person or company using Nota is "you".
@@ -50,7 +49,7 @@ You may use Nota if you are at least 18 years old and authorised to act on behal
 - Reads the documents you send: directly to the bot, as a work chat archive, or in a work group.
 - Checks calculations and looks for duplicates and totals that don't add up.
 - Writes rows to your sheet and saves the originals to the folder on your Google Drive.
-- Sends reports — at the 30th document, on Mondays, on the 1st of each month and on request — and duplicate alerts.
+- Sends a report on the archive it has processed. With Google connected, it also sends reports at the 30th document, on Mondays, on the 1st of each month and on request, and alerts you to duplicates right away.
 
 In a work group, the bot takes only payment documents and does not post in the group: it reacts with ✍ to each document it accepts. Reports and questions go privately to the person who connected the bot.
 
@@ -59,6 +58,8 @@ Nota reads documents automatically and can make mistakes: misread an amount, a d
 ## 5. Free documents
 
 Nota processes your first 30 documents free of charge, with no card and no sign-up. If an archive has more than 30 documents, the report covers the first 30. After that you need a plan.
+
+Without Google connected, only the archive report works. The sheet, scheduled reports and duplicate alerts work once you connect Google.
 
 If you have not connected Google, the files you send are kept for 7 days and then deleted. See the [Privacy Policy](/en/privacy).
 
@@ -73,7 +74,7 @@ Prices are in US dollars and include taxes.
 | Scale | $79 | $213 | $402 | 500 | unlimited |
 
 - The document limit applies to each month of the paid period. Unused documents do not roll over to the next month.
-- When the limit runs out, Nota keeps recording documents, and the header of your sheet offers to buy a pack or upgrade. [to confirm: how many documents over the limit Nota records without payment]
+- When the limit runs out, the header of your sheet offers to buy a pack or upgrade.
 - **The +50 documents pack** costs $10 and can be bought only with an active plan. It is added to your limit immediately and lasts until the end of the paid period.
 
 We may change prices. New prices do not affect a period you have already paid for. We will notify you in the bot at least 14 days before an auto-renewal at a new price.
@@ -82,8 +83,8 @@ We may change prices. New prices do not affect a period you have already paid fo
 
 - You pay with the payment button in the header of your sheet: by Visa or Mastercard, or in cryptocurrency. Russian cards are not accepted at the moment.
 - Card payments are processed by Bank of Georgia. You enter your card details on the bank's page; we do not receive or store them.
-- Card payments are charged in Georgian lari (GEL) at the exchange rate on the day of payment. Your bank may convert the amount to your card currency at its own rate and charge a fee. [to confirm with Bank of Georgia: currency for displayed prices and exchange rate]
-- Cryptocurrency payments are processed by [to confirm: crypto service, e.g. Tribute]. A cryptocurrency payment is always one-off.
+- Card payments are charged in Georgian lari (GEL) at the exchange rate on the day of payment. Your bank may convert the amount to your card currency at its own rate and charge a fee.
+- Cryptocurrency payments are processed by an external payment service. A cryptocurrency payment is always one-off.
 - The plan period starts on the day of payment.
 - You can request an invoice for your accounting in the bot.
 
@@ -127,7 +128,7 @@ Nota can access only the sheet and folder it creates. Nota cannot see the rest o
 
 - We work to keep Nota running without interruption but do not guarantee it will always be available. There may be breaks for updates and outages at Telegram, Google and other providers.
 - The service is provided "as is". We are not liable for decisions you make based on data in the sheet and reports, or for lost profits.
-- Our total liability to you is limited to the amount you paid us in the last 3 months. [to confirm with a lawyer: period and amount]
+- Our total liability to you is limited to the amount you paid us in the last 3 months. <!-- lawyer: period and amount -->
 - These limits do not apply where the law does not allow them, or in case of our intent or gross negligence.
 
 ## 14. Intellectual property
@@ -140,10 +141,10 @@ We may change these Terms. We will notify you of material changes in the bot at 
 
 ## 16. Disputes
 
-If something goes wrong, write to the bot or to [to confirm: support email]. We will reply within [to confirm: response time, e.g. 3 business days].
+If something goes wrong, write to the bot or to the email in section 1. We will reply within 24 hours.
 
-These Terms are governed by the laws of Georgia. Disputes that cannot be settled by negotiation are heard by the court at the operator's place of registration. [to confirm with a lawyer: governing law and court, given customers in Indonesia] If the law of your country gives you more rights as a consumer, those rights still apply.
+These Terms are governed by the laws of Georgia. Disputes that cannot be settled by negotiation are heard by the court at the operator's place of registration. <!-- lawyer: governing law and court, given customers in Indonesia --> If the law of your country gives you more rights as a consumer, those rights still apply.
 
 ## 17. Languages
 
-These Terms are published in Russian, English and Indonesian. [to confirm with a lawyer: which version prevails in case of discrepancy]
+These Terms are published in Russian, English and Indonesian. <!-- lawyer: which version prevails -->

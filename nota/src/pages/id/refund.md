@@ -41,16 +41,16 @@ Jika Anda membayar paket dengan kartu dan ingin berhenti lebih awal, kami mengem
 
 ## 4. Kesalahan pembayaran
 
-Jika Anda ditagih dua kali, atau ditagih setelah mematikan perpanjangan otomatis, kami mengembalikan seluruh kelebihannya, termasuk untuk paket tambahan dan pembayaran kripto. [perlu dikonfirmasi: pengembalian kripto dalam koin dan jaringan yang sama?]
+Jika Anda ditagih dua kali, atau ditagih setelah mematikan perpanjangan otomatis, kami mengembalikan seluruh kelebihannya, termasuk untuk paket tambahan. Jika Anda membayar dengan kripto, cara pengembalian akan kami sepakati dengan Anda.
 
 ## 5. Cara mengajukan pengembalian dana
 
-Tulis ke bot [@NotaGetBot](https://t.me/NotaGetBot) atau ke [perlu dikonfirmasi: email dukungan]. Sertakan akun Telegram atau email Google yang Anda gunakan dengan Nota dan tanggal pembayaran.
+Tulis ke bot [@NotaGetBot](https://t.me/NotaGetBot) atau ke email di bagian 1 [Ketentuan Layanan](/id/terms). Sertakan akun Telegram atau email Google yang Anda gunakan dengan Nota dan tanggal pembayaran.
 
 ## 6. Kapan dan bagaimana dana dikembalikan
 
 - Kami memproses pengembalian dalam 5 hari kerja setelah permintaan.
-- Dana dikembalikan ke kartu yang digunakan untuk membayar. Bank biasanya mengkreditkannya dalam 10 hari kerja, kadang lebih lama. [perlu dikonfirmasi dengan Bank of Georgia]
+- Dana dikembalikan ke kartu yang digunakan untuk membayar. Lamanya tergantung bank Anda, biasanya hingga 10 hari kerja.
 - Pembayaran dan pengembalian dilakukan dalam lari Georgia (GEL). Jika kartu Anda dalam mata uang lain, bank Anda mengonversi jumlahnya dengan kursnya sendiri, sehingga bisa sedikit berbeda dari jumlah yang dibayar dalam dolar. Biaya bank Anda tidak kami kembalikan.
 
 ## 7. Perpanjangan otomatis gagal

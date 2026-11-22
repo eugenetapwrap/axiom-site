@@ -27,7 +27,6 @@ Nota disediakan oleh Individual Entrepreneur Evgenii Popov (pengusaha perorangan
 - Nomor identifikasi: 346999215.
 - Alamat resmi: Rustaveli Street 140-v, Entrance 1, Floor 6, Kobuleti, Georgia.
 - Email kontak: [perlu dikonfirmasi: email dukungan].
-- Telepon: [perlu dikonfirmasi: nomor telepon, jika diwajibkan bank].
 - Bot: [@NotaGetBot](https://t.me/NotaGetBot).
 
 Selanjutnya, operator disebut "kami", dan orang atau perusahaan yang menggunakan Nota disebut "Anda".
@@ -51,7 +50,7 @@ Anda boleh menggunakan Nota jika berusia minimal 18 tahun dan berwenang bertinda
 - Membaca dokumen yang Anda kirim: langsung ke bot, sebagai arsip chat kerja, atau di grup kerja.
 - Memeriksa perhitungan, mencari duplikat dan jumlah yang tidak cocok.
 - Mencatat baris di spreadsheet Anda dan menyimpan file asli ke folder di Google Drive Anda.
-- Mengirim laporan — pada dokumen ke-30, setiap Senin, setiap tanggal 1 dan atas permintaan — serta pemberitahuan duplikat.
+- Mengirim laporan atas arsip yang telah diproses. Jika Google terhubung, juga mengirim laporan pada dokumen ke-30, setiap Senin, setiap tanggal 1 dan atas permintaan, serta langsung memberi tahu tentang duplikat.
 
 Di grup kerja, bot hanya mengambil dokumen pembayaran dan tidak menulis di grup: bot memberi reaksi ✍ pada dokumen yang diterima. Laporan dan pertanyaan dikirim secara pribadi kepada orang yang menghubungkan bot.
 
@@ -60,6 +59,8 @@ Nota membaca dokumen secara otomatis dan bisa keliru: salah membaca jumlah, tang
 ## 5. Dokumen gratis
 
 Nota memproses 30 dokumen pertama Anda secara gratis, tanpa kartu dan tanpa pendaftaran. Jika arsip berisi lebih dari 30 dokumen, laporan mencakup 30 dokumen pertama. Setelah itu Anda memerlukan paket.
+
+Tanpa Google terhubung, hanya laporan arsip yang berfungsi. Spreadsheet, laporan terjadwal dan pemberitahuan duplikat berfungsi setelah Anda menghubungkan Google.
 
 Jika Anda belum menghubungkan Google, file yang dikirim disimpan selama 7 hari lalu dihapus. Lihat [Kebijakan Privasi](/id/privacy).
 
@@ -74,7 +75,7 @@ Harga dalam dolar AS, sudah termasuk pajak.
 | Scale | $79 | $213 | $402 | 500 | tanpa batas |
 
 - Kuota dokumen berlaku untuk setiap bulan dalam periode yang dibayar. Dokumen yang tidak terpakai tidak dipindahkan ke bulan berikutnya.
-- Jika kuota habis, Nota tetap mencatat dokumen, dan bagian atas spreadsheet menawarkan untuk membeli paket tambahan atau naik paket. [perlu dikonfirmasi: berapa dokumen di atas kuota yang dicatat tanpa pembayaran]
+- Jika kuota habis, bagian atas spreadsheet menawarkan untuk membeli paket tambahan atau naik paket.
 - **Paket tambahan +50 dokumen** seharga $10 dan hanya bisa dibeli jika paket Anda aktif. Paket tambahan langsung ditambahkan ke kuota dan berlaku hingga akhir periode yang dibayar.
 
 Kami dapat mengubah harga. Harga baru tidak berlaku untuk periode yang sudah dibayar. Kami akan memberi tahu di bot paling lambat 14 hari sebelum perpanjangan otomatis dengan harga baru.
@@ -83,8 +84,8 @@ Kami dapat mengubah harga. Harga baru tidak berlaku untuk periode yang sudah dib
 
 - Pembayaran dilakukan melalui tombol pembayaran di bagian atas spreadsheet Anda: dengan kartu Visa atau Mastercard, atau dengan mata uang kripto. Kartu Rusia saat ini tidak diterima.
 - Pembayaran kartu diproses oleh Bank of Georgia. Data kartu Anda dimasukkan di halaman bank; kami tidak menerima atau menyimpannya.
-- Pembayaran kartu ditagih dalam lari Georgia (GEL) dengan kurs pada hari pembayaran. Bank Anda dapat mengonversi jumlahnya ke mata uang kartu dengan kursnya sendiri dan mengenakan biaya. [perlu dikonfirmasi dengan Bank of Georgia: mata uang harga yang ditampilkan dan kurs]
-- Pembayaran kripto diproses oleh [perlu dikonfirmasi: layanan kripto, mis. Tribute]. Pembayaran kripto selalu sekali bayar.
+- Pembayaran kartu ditagih dalam lari Georgia (GEL) dengan kurs pada hari pembayaran. Bank Anda dapat mengonversi jumlahnya ke mata uang kartu dengan kursnya sendiri dan mengenakan biaya.
+- Pembayaran kripto diproses oleh layanan pembayaran eksternal. Pembayaran kripto selalu sekali bayar.
 - Periode paket dimulai pada hari pembayaran.
 - Invoice untuk pembukuan dapat diminta di bot.
 
@@ -128,7 +129,7 @@ Nota hanya dapat mengakses spreadsheet dan folder yang dibuatnya. Nota tidak dap
 
 - Kami berusaha agar Nota berjalan tanpa gangguan, tetapi tidak menjamin layanan selalu tersedia. Bisa terjadi jeda untuk pembaruan dan gangguan di Telegram, Google atau penyedia lain.
 - Layanan diberikan "sebagaimana adanya". Kami tidak bertanggung jawab atas keputusan yang Anda ambil berdasarkan data di spreadsheet dan laporan, atau atas kehilangan keuntungan.
-- Total tanggung jawab kami kepada Anda dibatasi pada jumlah yang Anda bayarkan kepada kami dalam 3 bulan terakhir. [perlu dikonfirmasi dengan pengacara]
+- Total tanggung jawab kami kepada Anda dibatasi pada jumlah yang Anda bayarkan kepada kami dalam 3 bulan terakhir. <!-- pengacara: jangka waktu dan jumlah -->
 - Batasan ini tidak berlaku jika hukum tidak mengizinkannya, atau jika ada kesengajaan atau kelalaian berat dari pihak kami.
 
 ## 14. Hak kekayaan intelektual
@@ -141,10 +142,10 @@ Kami dapat mengubah ketentuan ini. Kami akan memberi tahu perubahan penting di b
 
 ## 16. Sengketa
 
-Jika ada masalah, tulis ke bot atau ke [perlu dikonfirmasi: email dukungan]. Kami akan membalas dalam [perlu dikonfirmasi: mis. 3 hari kerja].
+Jika ada masalah, tulis ke bot atau ke email di bagian 1. Kami akan membalas dalam 24 jam.
 
-Ketentuan ini diatur oleh hukum Georgia. Sengketa yang tidak dapat diselesaikan melalui musyawarah diperiksa oleh pengadilan di tempat operator terdaftar. [perlu dikonfirmasi dengan pengacara: hukum dan pengadilan, mengingat pelanggan di Indonesia] Jika hukum negara Anda memberi Anda hak lebih sebagai konsumen, hak tersebut tetap berlaku.
+Ketentuan ini diatur oleh hukum Georgia. Sengketa yang tidak dapat diselesaikan melalui musyawarah diperiksa oleh pengadilan di tempat operator terdaftar. <!-- pengacara: hukum dan pengadilan --> Jika hukum negara Anda memberi Anda hak lebih sebagai konsumen, hak tersebut tetap berlaku.
 
 ## 17. Bahasa
 
-Ketentuan ini diterbitkan dalam bahasa Rusia, Inggris dan Indonesia. [perlu dikonfirmasi dengan pengacara: versi mana yang berlaku jika ada perbedaan]
+Ketentuan ini diterbitkan dalam bahasa Rusia, Inggris dan Indonesia. <!-- pengacara: versi mana yang berlaku -->

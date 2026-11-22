@@ -40,16 +40,16 @@ If you paid for a plan by card and want to stop using it early, we refund the un
 
 ## 4. Payment errors
 
-If you were charged twice, or charged after you turned off auto-renewal, we refund the full extra amount, including for a pack and for cryptocurrency payments. [to confirm: crypto refunds in the same coin and network?]
+If you were charged twice, or charged after you turned off auto-renewal, we refund the full extra amount, including for a pack. If you paid in cryptocurrency, we will agree the refund method with you.
 
 ## 5. How to request a refund
 
-Write to the bot [@NotaGetBot](https://t.me/NotaGetBot) or to [to confirm: support email]. Include the Telegram account or Google email you use with Nota and the date of payment.
+Write to the bot [@NotaGetBot](https://t.me/NotaGetBot) or to the email in section 1 of the [Terms of Service](/en/terms). Include the Telegram account or Google email you use with Nota and the date of payment.
 
 ## 6. When and how you get the money
 
 - We process the refund within 5 business days of your request.
-- The money goes back to the card you paid with. Banks usually credit it within 10 business days, sometimes longer. [to confirm with Bank of Georgia]
+- The money goes back to the card you paid with. How long it takes depends on your bank, usually up to 10 business days.
 - Payments and refunds are made in Georgian lari (GEL). If your card is in another currency, your bank converts the amount at its own rate, so it may differ slightly from the amount paid in dollars. We do not refund your bank's fees.
 
 ## 7. Failed auto-renewal charge

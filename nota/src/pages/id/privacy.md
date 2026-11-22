@@ -35,7 +35,7 @@ Untuk pertanyaan tentang data, tulis ke [perlu dikonfirmasi: email dukungan] ata
 - nama dan Telegram ID anggota grup yang mengirim dokumen;
 - pesan yang Anda kirim langsung ke bot.
 
-Di grup kerja, bot hanya mengambil dokumen pembayaran. Nota tidak menyimpan pesan grup lainnya. [perlu dikonfirmasi dengan developer]
+Di grup kerja, bot hanya mengambil dokumen pembayaran. Nota tidak menyimpan pesan grup lainnya.
 
 **Dokumen yang Anda kirim:** file struk, invoice, nota pengiriman, bukti transfer dan arsip chat, serta data yang dibaca Nota darinya: tanggal, jumlah, pemasok, detail pembayaran, rincian barang, kategori, proyek. Dokumen bisa berisi data orang lain: nama, nomor telepon, nomor rekening.
 
@@ -47,7 +47,7 @@ Di grup kerja, bot hanya mengambil dokumen pembayaran. Nota tidak menyimpan pesa
 
 **Data pembayaran:** paket, jumlah, tanggal dan status pembayaran, nomor transaksi di bank atau layanan kripto. Data kartu dimasukkan di halaman Bank of Georgia; kami tidak menerima atau menyimpannya.
 
-**Data teknis:** log server dan kesalahan; alamat IP dan browser saat Anda membuka situs atau halaman pembayaran. [perlu dikonfirmasi: apakah situs memakai analitik atau cookie]
+**Data teknis:** log server dan kesalahan; alamat IP dan jenis browser saat Anda membuka situs atau halaman pembayaran.
 
 ## 3. Untuk apa kami menggunakan data
 
@@ -59,7 +59,7 @@ Di grup kerja, bot hanya mengambil dokumen pembayaran. Nota tidak menyimpan pesa
 
 Dasar pemrosesan: pelaksanaan perjanjian dengan Anda ([Ketentuan Layanan](/id/terms)), persetujuan Anda (menghubungkan Google), kepentingan sah kami (keamanan layanan) dan kewajiban hukum (catatan pembayaran).
 
-Kami tidak menjual data Anda, tidak menampilkan iklan dan tidak menggunakan dokumen Anda untuk melatih model AI. [perlu dikonfirmasi: penyedia pengenalan dokumen juga tidak melatih model dengan data ini]
+Kami tidak menjual data Anda, tidak menampilkan iklan dan tidak menggunakan dokumen Anda untuk melatih model AI. Kami memilih layanan pengenalan dokumen yang tidak melatih model dengan data pelanggan.
 
 ## 4. Data dari Google
 
@@ -77,34 +77,39 @@ Anda dapat mencabut akses Nota kapan saja: Akun Google → Keamanan → Aplikasi
 
 Hanya kepada penyedia yang diperlukan agar layanan berjalan:
 
-| Siapa | Untuk apa | Di mana |
-|---|---|---|
-| Telegram | menerima dan mengirim pesan | [perlu dikonfirmasi] |
-| Google | spreadsheet dan folder Anda di Google Drive | sesuai pengaturan akun Anda |
-| [perlu dikonfirmasi: penyedia pengenalan dokumen] | membaca teks pada dokumen | [perlu dikonfirmasi] |
-| [perlu dikonfirmasi: hosting, mis. DigitalOcean] | server dan basis data | [perlu dikonfirmasi: Singapura?] |
-| Bank of Georgia | pembayaran kartu | Georgia |
-| [perlu dikonfirmasi: layanan kripto] | pembayaran kripto | [perlu dikonfirmasi] |
+- Telegram — menerima dan mengirim pesan;
+- Google — spreadsheet dan folder Anda di Google Drive;
+- hosting — server dan basis data Nota;
+- layanan pengenalan dokumen — membaca teks pada dokumen;
+- Bank of Georgia — pembayaran kartu;
+- layanan pembayaran kripto — pembayaran kripto.
+
+Daftar penyedia secara spesifik kami berikan atas permintaan.
 
 Kami juga dapat mengungkapkan data kepada otoritas negara jika diwajibkan hukum.
 
 ## 6. Transfer data ke luar negeri
 
-Server dan penyedia kami dapat berada di luar negara Anda, termasuk di luar Indonesia. Kami hanya mentransfer data kepada penyedia di atas dan mewajibkan mereka melindunginya setidaknya sesuai standar hukum, termasuk Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP). [perlu dikonfirmasi dengan pengacara: persyaratan transfer data ke luar Indonesia]
+Server dan penyedia kami dapat berada di luar negara Anda, termasuk di luar Indonesia. Kami hanya mentransfer data kepada penyedia di atas dan mewajibkan mereka melindunginya setidaknya sesuai standar hukum, termasuk Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP). <!-- pengacara: persyaratan transfer data ke luar Indonesia -->
 
 ## 7. Berapa lama data disimpan
 
 - **Tanpa Google terhubung**, file yang Anda kirim dan data yang dibaca darinya disimpan selama 7 hari. Jika Anda menghubungkan Google dalam waktu itu, semuanya dicatat ke spreadsheet. Jika tidak, data dihapus dan Anda tetap memiliki laporan di chat.
-- **Dengan Google terhubung**, file asli dan baris disimpan di spreadsheet dan folder di Google Drive Anda hingga Anda menghapusnya. Di servernya sendiri, Nota menyimpan [perlu dikonfirmasi dengan developer: apa saja] selama paket Anda aktif.
+- **Dengan Google terhubung**, file asli dan baris disimpan di spreadsheet dan folder di Google Drive Anda hingga Anda menghapusnya. Di servernya sendiri, Nota menyimpan catatan dokumen Anda, termasuk sidik digital (hash) untuk mendeteksi duplikat, selama paket Anda aktif.
 - **Setelah paket berakhir**, kami menyimpan data Anda selama 30 hari agar Anda bisa kembali tanpa kehilangan data, lalu menghapusnya.
-- **Catatan pembayaran** disimpan selama yang diwajibkan hukum pajak Georgia. [perlu dikonfirmasi: jangka waktu]
-- **Cadangan (backup)** dihapus sesuai siklusnya dalam [perlu dikonfirmasi] hari.
+- **Catatan pembayaran** disimpan selama yang diwajibkan hukum pajak Georgia.
 
 ## 8. Cara menghapus data
 
-Kirim perintah [perlu dikonfirmasi: nama perintah, mis. /delete] ke bot atau email ke [perlu dikonfirmasi: email dukungan]. Kami akan menghapus data Anda dari server kami dalam 30 hari dan mengonfirmasinya di bot atau melalui email.
+Kirim perintah hapus ke bot atau tulis ke email di bagian 1. Kami akan:
 
-Kami tidak menghapus spreadsheet dan folder di Google Drive Anda: itu milik Anda, dan hanya Anda yang dapat menghapusnya.
+- menghapus semua catatan dokumen Anda di basis data kami, termasuk sidik digital (hash);
+- memutus Nota dari Akun Google Anda;
+- mengeluarkan bot dari semua grup kerja Anda.
+
+Yang tersisa hanya username Telegram Anda dan catatan pembayaran yang wajib kami simpan menurut hukum. Penghapusan memakan waktu paling lama 30 hari, dan kami mengonfirmasinya di bot atau melalui email.
+
+Spreadsheet dan folder berisi file Anda tetap ada di Google Drive Anda: itu milik Anda, Nota hanya memutus akses darinya. Hanya Anda yang dapat menghapusnya.
 
 ## 9. Hak Anda
 
@@ -117,11 +122,11 @@ Anda berhak:
 - menolak atau membatasi pemrosesan;
 - mengajukan keluhan kepada otoritas pelindungan data di negara Anda.
 
-Untuk menggunakan hak tersebut, tulis ke [perlu dikonfirmasi: email dukungan]. Kami akan membalas dalam [perlu dikonfirmasi dengan pengacara: tenggat menurut UU PDP dan hukum Georgia].
+Untuk menggunakan hak tersebut, tulis ke bot atau ke email di bagian 1. Kami akan membalas dalam 24 jam dan memenuhi permintaan dalam batas waktu yang ditetapkan hukum.
 
 ## 10. Cara kami melindungi data
 
-Data dikirim melalui koneksi terenkripsi. Data setiap pelanggan disimpan terpisah. Hanya orang yang memerlukan akses server untuk pekerjaannya yang memilikinya. [perlu dikonfirmasi dengan developer]
+Data dikirim melalui koneksi terenkripsi. Data setiap pelanggan disimpan terpisah. Hanya orang yang memerlukan akses server untuk pekerjaannya yang memilikinya.
 
 Jika terjadi kebocoran yang menyangkut data Anda, kami akan memberi tahu Anda dan, jika diwajibkan hukum, regulator dalam batas waktu yang ditentukan.
 
