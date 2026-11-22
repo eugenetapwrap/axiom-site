@@ -120,23 +120,19 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
       </div>
     </section>
 
-    <!-- v12 start, 2. Отчёт с пояснениями. На компьютере справа — тот же скользящий отчёт, на нём появляются цифры 1–3;
-         на телефоне отчёт с цифрами стоит сразу после пояснений -->
-    <section class="section section--paper s-rep-sec" id="result">
+    <!-- v12 start, 2. Что покажет отчёт — как в варианте с архивом: список, расписание, кнопка; справа на компьютере — скользящий отчёт.
+         На телефоне отчёт стоит на первом экране под кнопкой, здесь только текст (как у варианта с архивом) -->
+    <section class="section section--paper" id="result">
       <div class="wrap">
-        <div class="s-rep">
-          <h2 class="h2-gap">{start.reportBlock.title}</h2>
-          <ol class="s-notes">{start.reportBlock.notes.map((n, i) => <li><span class="s-mark s-mark--s" aria-hidden="true">{i + 1}</span><div><b>{n.title}</b><span>{n.text}</span></div></li>)}</ol>
-          <figure class="s-fig-rep">
-            <span class="s-img">
-              <img src={start.report.file} srcset={`${start.report.file} 1x, ${start.report.file2x} 2x`} alt={start.report.alt} width={start.report.w} height={start.report.h} loading="lazy" />
-              {start.reportBlock.marks.map((m) => <span class={`s-mark s-mark--${m.side}`} style={`top: calc(${m.top}% - 16px)`} aria-hidden="true">{m.n}</span>)}
-            </span>
-            <figcaption>{start.report.caption}</figcaption>
-          </figure>
-          <div class="sched">
-            <div class="sched-title">{start.reportBlock.schedule.title}</div>
-            <dl>{start.reportBlock.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
+        <h2 class="h2-gap">{start.reportBlock.title}</h2>
+        <div class="s2-split">
+          <div class="s2-text">
+            <ul class="check">{start.reportBlock.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
+            <div class="sched">
+              <div class="sched-title">{start.reportBlock.schedule.title}</div>
+              <dl>{start.reportBlock.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
+            </div>
+            <div class="cta-row"><a class="btn" href={link('land10_result')}>{ctaText}</a></div>
           </div>
         </div>
       </div>
@@ -147,7 +143,6 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
         <figure class="hero-report story-fig s-story">
           <span class="s-img">
             <img src={start.report.file} srcset={`${start.report.file} 1x, ${start.report.file2x} 2x`} alt="" width={start.report.w} height={start.report.h} />
-            {start.reportBlock.marks.map((m) => <span class={`s-mark s-mark--${m.side}`} style={`top: calc(${m.top}% - 16px)`}>{m.n}</span>)}
           </span>
           <figcaption>{start.report.caption}</figcaption>
         </figure>
@@ -515,17 +510,13 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
   </script>
   {isStart && (
     <script is:inline>
-      // v12 start: скользящий отчёт начинается на уровне шагов (заголовок над ним во всю ширину);
-      // цифры 1–3 на нём появляются, когда блок отчёта дошёл до середины экрана. Без JS цифры видны сразу.
+      // v12 start: скользящий отчёт начинается на уровне шагов (заголовок над ним во всю ширину)
       (function () {
-        var root = document.documentElement, story = document.querySelector('.story'), split = document.querySelector('.s-split'),
-            wrap = document.querySelector('.v12s .story-media .wrap'), fig = document.querySelector('.s-story'), rep = document.getElementById('result');
-        if (!story || !split || !wrap || !fig || !rep) return;
-        root.classList.add('s-js');
+        var story = document.querySelector('.story'), split = document.querySelector('.s-split'), wrap = document.querySelector('.v12s .story-media .wrap');
+        if (!story || !split || !wrap) return;
         function place() { wrap.style.paddingTop = Math.round(split.getBoundingClientRect().top - story.getBoundingClientRect().top) + 'px'; }
-        function marks() { fig.classList.toggle('on', rep.getBoundingClientRect().top < innerHeight * 0.55); }
-        place(); marks();
-        addEventListener('resize', place); addEventListener('load', place); addEventListener('scroll', marks, { passive: true });
+        place();
+        addEventListener('resize', place); addEventListener('load', place);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
       })();
     </script>

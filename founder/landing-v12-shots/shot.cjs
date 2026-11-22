@@ -20,8 +20,8 @@ const dir = __dirname + '/';  // снимки кладёт рядом; нуже�
   await m.goto('http://localhost:4321/v12/', { waitUntil: 'networkidle' });
   await m.evaluate(() => document.fonts.ready);
   await m.screenshot({ path: dir + 'm0.png' });
-  const mi = await m.evaluate(() => { const btn = document.querySelector('.hero .btn').getBoundingClientRect(); const f = document.querySelector('.s-fig-rep').getBoundingClientRect(); return { btnBottom: Math.round(btn.bottom), fig: Math.round(f.top + scrollY), sw: document.documentElement.scrollWidth }; });
-  await m.evaluate((y) => window.scrollTo({ top: y, behavior: 'instant' }), mi.fig - 380);
+  const mi = await m.evaluate(() => { const btn = document.querySelector('.hero .btn').getBoundingClientRect(); const f = document.getElementById('result').getBoundingClientRect(); return { btnBottom: Math.round(btn.bottom), fig: Math.round(f.top + scrollY), sw: document.documentElement.scrollWidth }; });
+  await m.evaluate((y) => window.scrollTo({ top: y, behavior: 'instant' }), mi.fig - 420);
   await m.waitForTimeout(300);
   await m.screenshot({ path: dir + 'm1.png' });
   const a = await b.newPage({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: scale });
