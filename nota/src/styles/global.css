@@ -1107,8 +1107,19 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 .v12s .s-hero { padding: 32px 0 48px; }
 .v12s .s-lead h1 { font-size: clamp(32px, 3.8vw, 48px); line-height: 1.1; margin: 0 0 28px; }
 .v12s .s-split { align-items: start; }
-/* Левая колонка: подзаголовок, три пункта (как .hero-list у варианта с архивом), кнопка; по центру высоты отчёта */
-.v12s .s-left .lead { max-width: 560px; margin-top: 4px; }
+/* Левая колонка: путь из трёх строк одного вида — кружок, жирная строка, серые подписи; одна пунктирная линия.
+   Кружки 1–2 тёмные, «Готово» — зелёный с галочкой (основатель 22.11: без меток, ✍ и заливки — было перегружено) */
+.v12s .s-split { align-items: start; }
+.s-flow { list-style: none; margin: 4px 0 32px; padding: 0; }
+.s-flow > li { display: flex; gap: 16px; align-items: flex-start; position: relative; padding-bottom: 24px; }
+.s-flow > li:last-child { padding-bottom: 0; }
+.s-flow > li:not(:last-child)::before { content: ''; position: absolute; left: 16px; top: 36px; bottom: 2px; border-left: 2px dashed #c3cbc6; }
+.s-n { flex: none; position: relative; z-index: 1; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--slate); color: #fff; font-size: 16px; font-weight: 700; }
+.s-flow-ok .s-n { background: var(--green); }
+.s-n .icon { color: #fff; }
+.s-flow b { display: block; font-size: 20px; line-height: 1.3; padding-top: 4px; max-width: 560px; }
+.s-flow li span:not(.s-n) { display: block; font-size: 16px; line-height: 1.5; color: var(--muted); margin-top: 4px; max-width: 560px; }
+.s-flow-ok span:not(.s-n) + span { margin-top: 0; }
 /* Отчёт с пояснениями */
 .s-notes { list-style: none; margin: 4px 0 32px; padding: 0; display: grid; gap: 22px; }
 .s-notes li { display: flex; gap: 16px; align-items: flex-start; }
@@ -1153,7 +1164,10 @@ html.s-js .v12s .s-story.on .s-mark { opacity: 1; transform: none; }
   .v12s .s-hero { padding: 16px 0 32px; }
   .v12s .s-lead h1 { font-size: 30px; margin-bottom: 16px; }
   .v12s .s-lead .hero-eyebrow { margin-bottom: 10px; }
-  .v12s .s-left .lead { font-size: 17px; line-height: 1.45; margin-bottom: 18px; }
+  .s-flow { margin-bottom: 22px; }
+  .s-flow > li { gap: 12px; padding-bottom: 16px; }
+  .s-flow b { font-size: 18px; }
+  .s-flow li span:not(.s-n) { font-size: 15px; }
   .s-notes b { font-size: 19px; line-height: 28px; }
   .s-notes li span:not(.s-mark) { font-size: 16px; }
 }

@@ -87,7 +87,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
   <main class={isStart ? "tight v7 v8 v9 v10 v11 v12 v12s" : "tight v7 v8 v9 v10 v11"} id="main">
     <div class="story">
     {isStart ? (<>
-    <!-- v12 start, 1. Первый экран: «Чеки сотрудников — в таблицу. Проверено.», подзаголовок, три пункта, кнопка.
+    <!-- v12 start, 1. Первый экран: «Чеки сотрудников — в таблицу. Проверено.», путь из трёх строк (1, 2, «Готово»), кнопка.
          Справа на компьютере — скользящий отчёт за месяц (слой story-media ниже); здесь его копия для диктора -->
     <section class="hero s-hero">
       <div class="wrap">
@@ -97,8 +97,12 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
         </div>
         <div class="split hero-split s-split">
           <div class="s-left">
-            <p class="lead">{start.lead}</p>
-            <ul class="hero-list">{start.points.map((t) => <li><Icon name="check" size={20} /><span>{t}</span></li>)}</ul>
+            <ol class="s-flow">{start.flow.map((f) => (
+              <li class:list={{ 's-flow-ok': f.mark === 'ok' }}>
+                <span class="s-n" aria-hidden="true">{f.mark === 'ok' ? <Icon name="check" size={18} /> : f.mark}</span>
+                <div><b>{f.title}</b>{f.lines.map((l) => <span>{l}</span>)}</div>
+              </li>
+            ))}</ol>
             <div class="cta-row cta-row--qr">
               <a class="btn" href={link('land10_hero')}>{ctaText}</a>
               <div class="cta-qr">
