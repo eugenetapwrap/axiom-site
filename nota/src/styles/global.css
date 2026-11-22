@@ -606,6 +606,8 @@ html[data-variant="steps"] .v-plain, html[data-variant="numbers"] .v-plain, html
 .pen-svg { display: none; position: absolute; pointer-events: none; overflow: visible; }
 .pen-svg path, .pen-layer path { fill: none; stroke: var(--orange); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
 .pen-svg path { stroke-width: 2.6; vector-effect: non-scaling-stroke; }
+/* Вне анимации линия сплошная: с non-scaling-stroke Chrome меряет штрих в пикселях экрана (~194 px), и подчёркивание длиннее рвётся */
+.pen-svg:not(.pen-anim) path { stroke-dasharray: none; }
 .pen-circle { left: -0.3em; top: -0.22em; width: calc(100% + 0.6em); height: calc(100% + 0.42em); }
 .pen-under { left: -0.04em; bottom: -0.2em; width: calc(100% + 0.08em); height: 0.34em; }
 html[data-variant="circle"] .pen--c > .pen-circle,
@@ -1149,3 +1151,10 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 .vbar span { padding: 0 6px 0 8px; opacity: .7; }
 .vbar a { color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 999px; }
 .vbar a[aria-current="page"] { background: #fff; color: var(--ink); font-weight: 600; }
+
+/* v12, обе страницы (22.11): пояснения под тарифами светлее (4,8:1 на фоне, AA) и ближе к следующему блоку.
+   У секции цен и сравнения один фон, поэтому два отступа по 56 px читались как пустота. */
+.v12 .plan-facts3 dd { color: #68736d; }
+/* на телефоне сравнение скрыто, дальше серый блок «Ваши данные» — отступ нужен */
+.v12 #price { padding-bottom: 32px; }
+@media (min-width: 900px) { .v12 #price { padding-bottom: 16px; } }

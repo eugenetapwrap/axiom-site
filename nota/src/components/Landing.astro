@@ -16,7 +16,7 @@ import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
   meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps, bar, shotAlt,
-  start,
+  start, facts12,
 } from '../data/content-v12';   // = content-v11 + тексты нового первого экрана (start)
 
 // Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
@@ -24,8 +24,9 @@ const cut = (text: string, word: string) => { const i = text.indexOf(word); retu
 const h1Cut = cut(hero.title, '15\u00a0минут');
 
 // Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
-interface Props { noindex?: boolean; variant?: 'archive' | 'start'; tag?: string; bar?: boolean }
-const { noindex = false, variant = 'archive', tag = 'land10_', bar: showBar = false } = Astro.props;
+// v12 — правки 22.11 для обеих страниц /v12/ (короткие пояснения под ценами, отступы); на главной выключено
+interface Props { noindex?: boolean; variant?: 'archive' | 'start'; tag?: string; bar?: boolean; v12?: boolean }
+const { noindex = false, variant = 'archive', tag = 'land10_', bar: showBar = false, v12 = false } = Astro.props;
 const isStart = variant === 'start';
 const link = (t: string) => botLink(t.replace('land10_', tag));
 const ctaText = isStart ? start.cta : cta;
@@ -84,7 +85,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
     </div>
   </header>
 
-  <main class={isStart ? "tight v7 v8 v9 v10 v11 v12 v12s" : "tight v7 v8 v9 v10 v11"} id="main">
+  <main class={isStart ? "tight v7 v8 v9 v10 v11 v12 v12s" : v12 ? "tight v7 v8 v9 v10 v11 v12" : "tight v7 v8 v9 v10 v11"} id="main">
     <div class="story">
     {isStart ? (<>
     <!-- v12 start, 1. Первый экран: «Чеки сотрудников — в таблицу. Проверено.», путь из трёх строк (1, 2, «Готово»), кнопка.
@@ -355,7 +356,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
           ))}
         </div>
         <dl class="plan-facts3 g4">
-          {pricing.facts.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
+          {(v12 ? facts12 : pricing.facts).map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
         </dl>
         <script is:inline>
           (function () {
