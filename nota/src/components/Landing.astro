@@ -1,5 +1,8 @@
 ---
 // Лендинг Nota, версия 11 — главная страница сайта (src/pages/index.astro). Тексты: src/data/content-v11.ts.
+// v12 (22.11): тот же компонент с вариантом первого экрана — variant="archive" (как v11, по умолчанию; главная не меняется)
+// или variant="start" (новый: тексты start в src/data/content-v12.ts). Страницы v12: src/pages/v12/ (start) и v12/archive.astro.
+// tag — префикс меток ссылок на бота вместо land10_ (чтобы варианты различались в боте), bar — технический переключатель вариантов.
 // Прежние версии v1–v10 — в src/pages/_archive (папка с «_» не попадает на сайт).
 // Первый экран новый, отчёт на компьютере скользящий. На телефоне цифр шагов нет, внизу закреплённая кнопка.
 // Решения — в founder/landing.md, разделы v7 и v8.
@@ -13,15 +16,20 @@ import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
   meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps, bar, shotAlt,
-} from '../data/content-v11';
+  start,
+} from '../data/content-v12';   // = content-v11 + тексты нового первого экрана (start)
 
 // Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
 const cut = (text: string, word: string) => { const i = text.indexOf(word); return i < 0 ? [text, '', ''] : [text.slice(0, i), word, text.slice(i + word.length)]; };
 const h1Cut = cut(hero.title, '15\u00a0минут');
 
 // Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
-interface Props { noindex?: boolean }
-const { noindex = false } = Astro.props;
+interface Props { noindex?: boolean; variant?: 'archive' | 'start'; tag?: string; bar?: boolean }
+const { noindex = false, variant = 'archive', tag = 'land10_', bar: showBar = false } = Astro.props;
+const isStart = variant === 'start';
+const link = (t: string) => botLink(t.replace('land10_', tag));
+const ctaText = isStart ? start.cta : cta;
+const sCut = cut(start.title, start.underline);
 // Домен — один раз, в astro.config.mjs (site)
 const site = new URL('/', Astro.site).href;
 const jsonld = [
@@ -72,12 +80,92 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
         <summary aria-label="Язык сайта: русский">RU</summary>
         <div class="lang-menu"><span>EN <small>Coming soon</small></span><span>ID <small>Segera hadir</small></span></div>
       </details>
-      <a class="btn btn--sm btn--dark" href={botLink('land10_header')}><span class="hb-lg">Открыть в Telegram</span><span class="hb-sm">В Telegram</span></a>
+      <a class="btn btn--sm btn--dark" href={link('land10_header')}><span class="hb-lg">Открыть в Telegram</span><span class="hb-sm">В Telegram</span></a>
     </div>
   </header>
 
-  <main class="tight v7 v8 v9 v10 v11" id="main">
+  <main class={isStart ? "tight v7 v8 v9 v10 v11 v12 v12s" : "tight v7 v8 v9 v10 v11"} id="main">
     <div class="story">
+    {isStart ? (<>
+    <!-- v12 start, 1. Первый экран: «Чеки сотрудников — в таблицу. Проверено.», два шага, «Готово», кнопка.
+         Справа на компьютере — скользящий отчёт за месяц (слой story-media ниже); здесь его копия для диктора -->
+    <section class="hero s-hero">
+      <div class="wrap">
+        <div class="s-lead">
+          <span class="hero-eyebrow">{start.eyebrow}</span>
+          <h1>{sCut[0]}<Pen u line id="h1">{sCut[1]}</Pen>{sCut[2]}</h1>
+        </div>
+        <div class="split hero-split s-split">
+          <div class="s-left">
+            <ol class="s-flow">
+              <li>
+                <span class="s-n" aria-hidden="true">1</span>
+                <div>
+                  <b class="s-t">{start.send.title}</b>
+                  <ul class="s-ways">{start.send.ways.map((w) => <li>{w}{w === start.send.react && <span class="s-react" aria-hidden="true">✍️</span>}</li>)}</ul>
+                  <span class="s-d">{start.send.docs}</span>
+                </div>
+              </li>
+              <li>
+                <span class="s-n" aria-hidden="true">2</span>
+                <div><b class="s-t">{start.check.title}</b><span class="s-d">{start.check.note}</span></div>
+              </li>
+            </ol>
+            <div class="s-done">
+              <p class="s-done-h">{start.done.title}</p>
+              <ul>{start.done.items.map((t) => <li><span class="s-ok" aria-hidden="true"><Icon name="check" size={18} /></span><b>{t}</b></li>)}</ul>
+            </div>
+            <div class="cta-row cta-row--qr">
+              <a class="btn" href={link('land10_hero')}>{ctaText}</a>
+              <div class="cta-qr">
+                <img src="/screens/qr-bot-v10.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="54" height="54" />
+                <span>{hero.qr}</span>
+              </div>
+            </div>
+            <p class="cta-line">{start.ctaLine}</p>
+          </div>
+          <figure class="hero-report in-flow s-fig-hero">
+            <img src={start.report.file} srcset={`${start.report.file} 1x, ${start.report.file2x} 2x`} alt={start.report.alt} width={start.report.w} height={start.report.h} fetchpriority="high" />
+            <figcaption>{start.report.caption}</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- v12 start, 2. Отчёт с пояснениями. На компьютере справа — тот же скользящий отчёт, на нём появляются цифры 1–3;
+         на телефоне отчёт с цифрами стоит сразу после пояснений -->
+    <section class="section section--paper s-rep-sec" id="result">
+      <div class="wrap">
+        <div class="s-rep">
+          <h2 class="h2-gap">{start.reportBlock.title}</h2>
+          <ol class="s-notes">{start.reportBlock.notes.map((n, i) => <li><span class="s-mark s-mark--s" aria-hidden="true">{i + 1}</span><div><b>{n.title}</b><span>{n.text}</span></div></li>)}</ol>
+          <figure class="s-fig-rep">
+            <span class="s-img">
+              <img src={start.report.file} srcset={`${start.report.file} 1x, ${start.report.file2x} 2x`} alt={start.report.alt} width={start.report.w} height={start.report.h} loading="lazy" />
+              {start.reportBlock.marks.map((m) => <span class={`s-mark s-mark--${m.side}`} style={`top: calc(${m.top}% - 16px)`} aria-hidden="true">{m.n}</span>)}
+            </span>
+            <figcaption>{start.report.caption}</figcaption>
+          </figure>
+          <div class="sched">
+            <div class="sched-title">{start.reportBlock.schedule.title}</div>
+            <dl>{start.reportBlock.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="story-media" aria-hidden="true">
+      <div class="wrap">
+        <figure class="hero-report story-fig s-story">
+          <span class="s-img">
+            <img src={start.report.file} srcset={`${start.report.file} 1x, ${start.report.file2x} 2x`} alt="" width={start.report.w} height={start.report.h} />
+            {start.reportBlock.marks.map((m) => <span class={`s-mark s-mark--${m.side}`} style={`top: calc(${m.top}% - 16px)`}>{m.n}</span>)}
+          </span>
+          <figcaption>{start.report.caption}</figcaption>
+        </figure>
+      </div>
+    </div>
+    </>) : (<>
     <!-- 1. Первый экран: архив → отчёт за 15 минут, QR, пример отчёта -->
     <section class="hero hero2 hero3">
       <div class="wrap split hero-split">
@@ -89,7 +177,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
           <div class="num-group">
           <span class="num-dot" aria-hidden="true"><i data-n="1"></i></span>
           <div class="cta-row cta-row--qr">
-            <a class="btn" href={botLink('land10_hero')}>{cta}</a>
+            <a class="btn" href={link('land10_hero')}>{ctaText}</a>
             <div class="cta-qr">
               <img src="/screens/qr-bot-v10.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="54" height="54" />
               <span>{hero.qr}</span>
@@ -120,7 +208,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
               <div class="sched-title">{steps.report.schedule.title}</div>
               <dl>{steps.report.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
             </div>
-            <div class="cta-row"><a class="btn" href={botLink('land10_result')}>{cta}</a></div>
+            <div class="cta-row"><a class="btn" href={link('land10_result')}>{ctaText}</a></div>
           </div>
         </div>
       </div>
@@ -135,12 +223,13 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
         </figure>
       </div>
     </div>
+    </>)}
     </div>
 
     <!-- 3. Шаг 3: подключите Google, и таблица будет вестись сама -->
     <section class="section num-sec" id="analytics">
       <div class="wrap">
-        <h2><span class="num-dot" aria-hidden="true"><i data-n="3"></i></span>{steps.table.title}</h2>
+        <h2>{!isStart && <span class="num-dot" aria-hidden="true"><i data-n="3"></i></span>}{isStart ? start.tableTitle : steps.table.title}</h2>
         <p class="lead">{steps.table.lead}</p>
         <div class="an" data-an>
           <div class="an-pick" role="tablist" aria-label="Листы таблицы">
@@ -190,7 +279,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
     <!-- 4. Шаг 4: как присылать документы дальше, группа по желанию (v11: иконка меньше и в строку с названием) -->
     <section class="section section--paper num-sec" id="send">
       <div class="wrap">
-        <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i data-n="4"></i></span>{send.title}</h2>
+        <h2 class="h2-gap">{!isStart && <span class="num-dot" aria-hidden="true"><i data-n="4"></i></span>}{send.title}</h2>
         <div class="grid g4" style="--min: 240px">
           {send.items.map((c) => (
             <div class="card send-card send-card--row">
@@ -258,7 +347,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
                   </>
                 )}
               </div>
-              <div class="ptab-a" role="cell"><a class:list={['btn', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}<span class="sr-only"> — тариф {p.name}</span></a></div>
+              <div class="ptab-a" role="cell"><a class:list={['btn', { 'btn--outline': p.outline }]} href={link(p.tag)}>{p.cta}<span class="sr-only"> — тариф {p.name}</span></a></div>
             </div>
           ))}
         </div>
@@ -278,7 +367,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
               <ul class="pa-l">
                 {(p.services ?? [`Группы: ${p.groups}`, ...pricing.common.map((c) => c[0].toUpperCase() + c.slice(1))]).map((f) => <li><Icon name="check" size={18} />{f}</li>)}
               </ul>
-              <a class:list={['btn', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}<span class="sr-only"> — тариф {p.name}</span></a>
+              <a class:list={['btn', { 'btn--outline': p.outline }]} href={link(p.tag)}>{p.cta}<span class="sr-only"> — тариф {p.name}</span></a>
             </div>
           ))}
         </div>
@@ -408,7 +497,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
         <h2>{final.title}</h2>
         <p>{final.lead}</p>
         <div class="final-cta">
-          <a class="btn" href={botLink('land10_final')}>{cta}</a>
+          <a class="btn" href={link('land10_final')}>{ctaText}</a>
           <div class="final-qr">
             <img src="/screens/qr-bot-v10-final.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
             <span>Или наведите камеру телефона</span>
@@ -420,7 +509,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
 
   <!-- Телефон: кнопка внизу экрана — только когда первая кнопка уехала вверх и на экране нет ни одной другой оранжевой кнопки
        (шаг 2, тарифы, финал), чтобы две одинаковые кнопки не стояли рядом -->
-  <aside aria-label="Быстрый старт"><div class="sticky-cta" id="sticky-cta"><a class="btn" href={botLink('land10_sticky')}>{cta}</a></div></aside>
+  <aside aria-label="Быстрый старт"><div class="sticky-cta" id="sticky-cta"><a class="btn" href={link('land10_sticky')}>{ctaText}</a></div></aside>
   <script is:inline>
     (function () {
       var bar = document.getElementById('sticky-cta'), heroBtn = document.querySelector('.hero .btn');
@@ -436,6 +525,23 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
       others.forEach(function (b) { io.observe(b); });
     })();
   </script>
+  {isStart && (
+    <script is:inline>
+      // v12 start: скользящий отчёт начинается на уровне шагов (заголовок над ним во всю ширину);
+      // цифры 1–3 на нём появляются, когда блок отчёта дошёл до середины экрана. Без JS цифры видны сразу.
+      (function () {
+        var root = document.documentElement, story = document.querySelector('.story'), split = document.querySelector('.s-split'),
+            wrap = document.querySelector('.v12s .story-media .wrap'), fig = document.querySelector('.s-story'), rep = document.getElementById('result');
+        if (!story || !split || !wrap || !fig || !rep) return;
+        root.classList.add('s-js');
+        function place() { wrap.style.paddingTop = Math.round(split.getBoundingClientRect().top - story.getBoundingClientRect().top) + 'px'; }
+        function marks() { fig.classList.toggle('on', rep.getBoundingClientRect().top < innerHeight * 0.55); }
+        place(); marks();
+        addEventListener('resize', place); addEventListener('load', place); addEventListener('scroll', marks, { passive: true });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+      })();
+    </script>
+  )}
   <footer class="footer">
     <div class="wrap">
       <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
@@ -443,7 +549,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
         <a href={footer.terms}>Пользовательское соглашение</a>
         <a href={footer.privacy}>Политика конфиденциальности</a>
         <a href={footer.refund}>Правила возврата</a>
-        <a href={botLink('land10_support')}>Поддержка в боте</a>
+        <a href={link('land10_support')}>Поддержка в боте</a>
       </nav>
       <div class="op">© 2026</div>
       <p class="foot-note">{footer.testData}</p>
@@ -475,6 +581,13 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
       window.addEventListener('load', draw);
     })();
   </script>
+  {showBar && (
+    <nav class="vbar" aria-label="Технический переключатель вариантов (на сайт не пойдёт)">
+      <span>v12, технический переключатель:</span>
+      <a href="/v12/" aria-current={isStart ? 'page' : undefined}>Новый</a>
+      <a href="/v12/archive/" aria-current={!isStart ? 'page' : undefined}>С архивом</a>
+    </nav>
+  )}
   <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
 <script is:inline>
   // Меню: подчёркнут раздел, который сейчас на экране (основатель 19.11); вне разделов меню — ничего
