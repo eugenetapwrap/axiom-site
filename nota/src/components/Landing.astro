@@ -15,8 +15,8 @@ import Pen from './Pen.astro';
 import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
-  meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps, bar, shotAlt,
-  start,
+  meta, cta, nav, hero, result, analytics, send, what as whatBase, compare as compareBase, segments, reviews, data as dataBase, pricing, faq as faqBase, final, footer, steps, bar, shotAlt,
+  start, facts12, compare12, data12, faq12, what12, sched12,
 } from '../data/content-v12';   // = content-v11 + тексты нового первого экрана (start)
 
 // Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
@@ -24,9 +24,15 @@ const cut = (text: string, word: string) => { const i = text.indexOf(word); retu
 const h1Cut = cut(hero.title, '15\u00a0минут');
 
 // Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
-interface Props { noindex?: boolean; variant?: 'archive' | 'start'; tag?: string; bar?: boolean }
-const { noindex = false, variant = 'archive', tag = 'land10_', bar: showBar = false } = Astro.props;
+// v12 — правки 22.11 для обеих страниц /v12/ (короткие пояснения под ценами, отступы); на главной выключено
+interface Props { noindex?: boolean; variant?: 'archive' | 'start'; tag?: string; bar?: boolean; v12?: boolean }
+const { noindex = false, variant = 'archive', tag = 'land10_', bar: showBar = false, v12 = false } = Astro.props;
 const isStart = variant === 'start';
+const compare = v12 ? compare12 : compareBase;
+const data = v12 ? data12 : dataBase;
+const faq = v12 ? faq12 : faqBase;
+const what = v12 ? what12 : whatBase;
+const sched = v12 ? sched12 : steps.report.schedule;
 const link = (t: string) => botLink(t.replace('land10_', tag));
 const ctaText = isStart ? start.cta : cta;
 const sCut = cut(start.title, start.underline);
@@ -84,7 +90,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
     </div>
   </header>
 
-  <main class={isStart ? "tight v7 v8 v9 v10 v11 v12 v12s" : "tight v7 v8 v9 v10 v11"} id="main">
+  <main class={isStart ? "tight v7 v8 v9 v10 v11 v12 v12s" : v12 ? "tight v7 v8 v9 v10 v11 v12" : "tight v7 v8 v9 v10 v11"} id="main">
     <div class="story">
     {isStart ? (<>
     <!-- v12 start, 1. Первый экран: «Чеки сотрудников — в таблицу. Проверено.», путь из трёх строк (1, 2, «Готово»), кнопка.
@@ -120,23 +126,19 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
       </div>
     </section>
 
-    <!-- v12 start, 2. Отчёт с пояснениями. На компьютере справа — тот же скользящий отчёт, на нём появляются цифры 1–3;
-         на телефоне отчёт с цифрами стоит сразу после пояснений -->
-    <section class="section section--paper s-rep-sec" id="result">
+    <!-- v12 start, 2. Что покажет отчёт — как в варианте с архивом: список, расписание, кнопка; справа на компьютере — скользящий отчёт.
+         На телефоне отчёт стоит на первом экране под кнопкой, здесь только текст (как у варианта с архивом) -->
+    <section class="section section--paper" id="result">
       <div class="wrap">
-        <div class="s-rep">
-          <h2 class="h2-gap">{start.reportBlock.title}</h2>
-          <ol class="s-notes">{start.reportBlock.notes.map((n, i) => <li><span class="s-mark s-mark--s" aria-hidden="true">{i + 1}</span><div><b>{n.title}</b><span>{n.text}</span></div></li>)}</ol>
-          <figure class="s-fig-rep">
-            <span class="s-img">
-              <img src={start.report.file} srcset={`${start.report.file} 1x, ${start.report.file2x} 2x`} alt={start.report.alt} width={start.report.w} height={start.report.h} loading="lazy" />
-              {start.reportBlock.marks.map((m) => <span class={`s-mark s-mark--${m.side}`} style={`top: calc(${m.top}% - 16px)`} aria-hidden="true">{m.n}</span>)}
-            </span>
-            <figcaption>{start.report.caption}</figcaption>
-          </figure>
-          <div class="sched">
-            <div class="sched-title">{start.reportBlock.schedule.title}</div>
-            <dl>{start.reportBlock.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
+        <h2 class="h2-gap">{start.reportBlock.title}</h2>
+        <div class="s2-split">
+          <div class="s2-text">
+            <ul class="check">{start.reportBlock.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
+            <div class="sched">
+              <div class="sched-title">{sched12.title}</div>
+              <dl>{sched12.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
+            </div>
+            <div class="cta-row"><a class="btn" href={link('land10_result')}>{ctaText}</a></div>
           </div>
         </div>
       </div>
@@ -147,7 +149,6 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
         <figure class="hero-report story-fig s-story">
           <span class="s-img">
             <img src={start.report.file} srcset={`${start.report.file} 1x, ${start.report.file2x} 2x`} alt="" width={start.report.w} height={start.report.h} />
-            {start.reportBlock.marks.map((m) => <span class={`s-mark s-mark--${m.side}`} style={`top: calc(${m.top}% - 16px)`}>{m.n}</span>)}
           </span>
           <figcaption>{start.report.caption}</figcaption>
         </figure>
@@ -193,8 +194,8 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
           <div class="s2-text">
             <ul class="check">{steps.report.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
             <div class="sched">
-              <div class="sched-title">{steps.report.schedule.title}</div>
-              <dl>{steps.report.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
+              <div class="sched-title">{sched.title}</div>
+              <dl>{sched.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
             </div>
             <div class="cta-row"><a class="btn" href={link('land10_result')}>{ctaText}</a></div>
           </div>
@@ -360,7 +361,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
           ))}
         </div>
         <dl class="plan-facts3 g4">
-          {pricing.facts.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
+          {(v12 ? facts12 : pricing.facts).map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
         </dl>
         <script is:inline>
           (function () {
@@ -515,17 +516,13 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
   </script>
   {isStart && (
     <script is:inline>
-      // v12 start: скользящий отчёт начинается на уровне шагов (заголовок над ним во всю ширину);
-      // цифры 1–3 на нём появляются, когда блок отчёта дошёл до середины экрана. Без JS цифры видны сразу.
+      // v12 start: скользящий отчёт начинается на уровне шагов (заголовок над ним во всю ширину)
       (function () {
-        var root = document.documentElement, story = document.querySelector('.story'), split = document.querySelector('.s-split'),
-            wrap = document.querySelector('.v12s .story-media .wrap'), fig = document.querySelector('.s-story'), rep = document.getElementById('result');
-        if (!story || !split || !wrap || !fig || !rep) return;
-        root.classList.add('s-js');
+        var story = document.querySelector('.story'), split = document.querySelector('.s-split'), wrap = document.querySelector('.v12s .story-media .wrap');
+        if (!story || !split || !wrap) return;
         function place() { wrap.style.paddingTop = Math.round(split.getBoundingClientRect().top - story.getBoundingClientRect().top) + 'px'; }
-        function marks() { fig.classList.toggle('on', rep.getBoundingClientRect().top < innerHeight * 0.55); }
-        place(); marks();
-        addEventListener('resize', place); addEventListener('load', place); addEventListener('scroll', marks, { passive: true });
+        place();
+        addEventListener('resize', place); addEventListener('load', place);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
       })();
     </script>

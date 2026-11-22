@@ -6,6 +6,8 @@
 // Договорённости основателя 20.11: оплата картой через Bank of Georgia с автопродлением + криптовалюта (разово);
 // смена тарифа сразу, неиспользованные дни идут в зачёт; пакет +50 = $10 до конца оплаченного срока, только при действующем тарифе;
 // цены как на сайте, налоги включены; счёт с реквизитами — по запросу в боте. Подробности для программиста — nota/PAY.md.
+// 22.11 (основатель, документы /terms и /refund): у оплаченного картой тарифа переключатель автопродления — прямо в карточке
+// тарифа на этой странице (и на экране «Подписка»). Выключение — с подтверждением, тариф работает до конца срока; включение — сразу.
 import Base from '../../layouts/Base.astro';
 import Logo from '../../components/Logo.astro';
 ---
@@ -147,6 +149,18 @@ import Logo from '../../components/Logo.astro';
     .pp-row b{font-weight:600;text-align:right}
     .pp-acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
     .pp-acts .pp-btn{width:auto;height:42px;margin:0;padding:0 16px;font-size:14.5px}
+    /* Переключатель автопродления в карточке тарифа (22.11) */
+    .pp-ar{display:flex;align-items:flex-start;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+    .pp-sw{flex:none;position:relative;width:42px;height:24px;margin-top:1px;border-radius:12px;border:0;padding:0;background:#c3ccc6;cursor:pointer;transition:background .15s}
+    .pp-sw::before{content:"";position:absolute;inset:-10px}
+    .pp-sw::after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(20,32,27,.25);transition:transform .15s}
+    .pp-sw[aria-checked="true"]{background:var(--green)}
+    .pp-sw[aria-checked="true"]::after{transform:translateX(18px)}
+    .pp-sw:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+    .pp-ar label{display:block;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer}
+    .pp-ar .d{font-size:13.5px;color:var(--muted);margin-top:2px;line-height:1.45}
+    .pp-ar + .pp-conf{margin-top:12px}
+    @media (prefers-reduced-motion:reduce){ .pp-sw,.pp-sw::after{transition:none} }
     .pp-conf{margin-top:14px;padding:14px;border-radius:12px;background:#fff7f3;border:1px solid #f6cdbb;font-size:14px;line-height:1.5}
     .pp-hist{margin-top:22px}
     .pp-hist .pp-row b{font-weight:500}
@@ -212,7 +226,7 @@ import Logo from '../../components/Logo.astro';
       ru: {
         title: 'Оплата Nota', help: 'Помощь в Telegram', sheet: 'Google-таблица', owner: 'владелец',
         now: 'Сейчас: <b>тариф «{p}»</b>, до {d}', nowFree: 'Сейчас: <b>бесплатные документы</b>', nowEnded: 'Тариф «{p}» закончился {d}',
-        autoOn: 'Автопродление {d} — {sum}, карта •• {c}', manage: 'Управление подпиской',
+        manage: 'Управление подпиской',
         chargeFailed: 'Не удалось списать {sum} {d}: банк отклонил карту. Оплатите вручную или смените карту.',
         period: 'Срок', m: { 1: '1 месяц', 3: '3 месяца', 6: '6 месяцев' }, plan: 'Тариф',
         names: { free: 'Бесплатно', start: 'Старт', growth: 'Рост', scale: 'Масштаб' },
@@ -243,9 +257,11 @@ import Logo from '../../components/Logo.astro';
         retry: 'Попробовать ещё раз', payCrypto: 'Оплатить криптовалютой',
         nfH: 'Ссылка не найдена', nfP: 'Откройте ссылку из своей таблицы Nota — кнопка <b>Оплата</b> (в английской таблице — <b>Billing</b>) в шапке листа Payments.',
         back: '← К оплате', subH: 'Подписка', rPlan: 'Тариф', rNext: 'Следующее списание', rCard: 'Карта', rUntil: 'Действует до',
-        changeCard: 'Сменить карту', changePlan: 'Сменить тариф', autoOff: 'Отключить автопродление', autoOnBtn: 'Включить автопродление',
-        confirm: 'Отключить автопродление? Тариф будет работать до {d}, потом не продлится.', yesOff: 'Да, отключить', keep: 'Оставить',
-        offState: 'Автопродление выключено. Тариф действует до {d}.', hist: 'История платежей', receipt: 'Чек',
+        changeCard: 'Сменить карту', changePlan: 'Сменить тариф',
+        confirm: 'Отключить автопродление? Тариф будет работать до {d}, новых списаний не будет.', yesOff: 'Да, отключить', keep: 'Оставить',
+        arT: 'Автопродление', arOn: '{d} спишется {sum} с карты ••\u00a0{c}', arOff: 'Выключено: тариф действует до {d} и не продлится',
+        arNone: 'Без автопродления: тариф действует до {d}. Продлить можно здесь же.', onToast: 'Автопродление включено', offToast: 'Автопродление выключено',
+        hist: 'История платежей', receipt: 'Чек',
         cardToast: 'Откроется страница банка, чтобы привязать новую карту.', procToast: 'Прототип: здесь откроется страница оплаты.',
         planLine: '{p} · {m}',
         who: { start: 'Один-два проекта', growth: 'Несколько проектов', scale: 'Девелопер, управляющая компания' },
@@ -254,7 +270,7 @@ import Logo from '../../components/Logo.astro';
       en: {
         title: 'Nota billing', help: 'Help in Telegram', sheet: 'Google Sheet', owner: 'owner',
         now: 'Current plan: <b>{p}</b>, until {d}', nowFree: 'Current plan: <b>free documents</b>', nowEnded: 'Your {p} plan ended on {d}',
-        autoOn: 'Renews on {d} — {sum}, card •• {c}', manage: 'Manage subscription',
+        manage: 'Manage subscription',
         chargeFailed: 'We couldn’t charge {sum} on {d}: the bank declined the card. Pay manually or change the card.',
         period: 'Billing period', m: { 1: '1 month', 3: '3 months', 6: '6 months' }, plan: 'Plan',
         names: { free: 'Free', start: 'Start', growth: 'Growth', scale: 'Scale' },
@@ -285,9 +301,11 @@ import Logo from '../../components/Logo.astro';
         retry: 'Try again', payCrypto: 'Pay with crypto',
         nfH: 'Link not found', nfP: 'Open the link from your Nota sheet — the <b>Billing</b> button at the top of the Payments tab.',
         back: '← Back to payment', subH: 'Subscription', rPlan: 'Plan', rNext: 'Next charge', rCard: 'Card', rUntil: 'Active until',
-        changeCard: 'Change card', changePlan: 'Change plan', autoOff: 'Turn off auto-renewal', autoOnBtn: 'Turn on auto-renewal',
-        confirm: 'Turn off auto-renewal? Your plan stays active until {d} and won’t renew.', yesOff: 'Yes, turn off', keep: 'Keep it',
-        offState: 'Auto-renewal is off. Your plan is active until {d}.', hist: 'Payment history', receipt: 'Receipt',
+        changeCard: 'Change card', changePlan: 'Change plan',
+        confirm: 'Turn off auto-renewal? Your plan stays active until {d}; there will be no new charges.', yesOff: 'Yes, turn off', keep: 'Keep it',
+        arT: 'Auto-renewal', arOn: '{sum} will be charged to card ••\u00a0{c} on {d}', arOff: 'Off: your plan is active until {d} and won’t renew',
+        arNone: 'No auto-renewal: your plan is active until {d}. You can renew here.', onToast: 'Auto-renewal is on', offToast: 'Auto-renewal is off',
+        hist: 'Payment history', receipt: 'Receipt',
         cardToast: 'The bank page will open to link a new card.', procToast: 'Prototype: the payment page opens here.',
         planLine: '{p} · {m}',
         who: { start: 'One or two projects', growth: 'Several projects', scale: 'Developers, management companies' },
@@ -296,7 +314,7 @@ import Logo from '../../components/Logo.astro';
       id: {
         title: 'Tagihan Nota', help: 'Bantuan di Telegram', sheet: 'Google Sheet', owner: 'pemilik',
         now: 'Paket saat ini: <b>{p}</b>, sampai {d}', nowFree: 'Saat ini: <b>dokumen gratis</b>', nowEnded: 'Paket {p} berakhir pada {d}',
-        autoOn: 'Diperpanjang {d} — {sum}, kartu •• {c}', manage: 'Kelola langganan',
+        manage: 'Kelola langganan',
         chargeFailed: 'Tagihan {sum} pada {d} gagal: bank menolak kartu. Bayar manual atau ganti kartu.',
         period: 'Periode', m: { 1: '1 bulan', 3: '3 bulan', 6: '6 bulan' }, plan: 'Paket',
         names: { free: 'Gratis', start: 'Start', growth: 'Growth', scale: 'Scale' },
@@ -327,9 +345,11 @@ import Logo from '../../components/Logo.astro';
         retry: 'Coba lagi', payCrypto: 'Bayar dengan kripto',
         nfH: 'Tautan tidak ditemukan', nfP: 'Buka tautan dari tabel Nota Anda — tombol <b>Tagihan</b> di bagian atas lembar Payments.',
         back: '← Kembali ke pembayaran', subH: 'Langganan', rPlan: 'Paket', rNext: 'Tagihan berikutnya', rCard: 'Kartu', rUntil: 'Aktif sampai',
-        changeCard: 'Ganti kartu', changePlan: 'Ganti paket', autoOff: 'Matikan perpanjangan otomatis', autoOnBtn: 'Aktifkan perpanjangan otomatis',
-        confirm: 'Matikan perpanjangan otomatis? Paket tetap aktif sampai {d} dan tidak diperpanjang.', yesOff: 'Ya, matikan', keep: 'Batal',
-        offState: 'Perpanjangan otomatis mati. Paket aktif sampai {d}.', hist: 'Riwayat pembayaran', receipt: 'Struk',
+        changeCard: 'Ganti kartu', changePlan: 'Ganti paket',
+        confirm: 'Matikan perpanjangan otomatis? Paket tetap aktif sampai {d}, tidak ada tagihan baru.', yesOff: 'Ya, matikan', keep: 'Batal',
+        arT: 'Perpanjangan otomatis', arOn: '{sum} akan ditagih ke kartu ••\u00a0{c} pada {d}', arOff: 'Mati: paket aktif sampai {d} dan tidak diperpanjang',
+        arNone: 'Tanpa perpanjangan otomatis: paket aktif sampai {d}. Bisa diperpanjang di sini.', onToast: 'Perpanjangan otomatis aktif', offToast: 'Perpanjangan otomatis mati',
+        hist: 'Riwayat pembayaran', receipt: 'Struk',
         cardToast: 'Halaman bank akan terbuka untuk menautkan kartu baru.', procToast: 'Prototipe: halaman pembayaran terbuka di sini.',
         planLine: '{p} · {m}',
         who: { start: 'Satu–dua proyek', growth: 'Beberapa proyek', scale: 'Developer, perusahaan pengelola' },
@@ -368,7 +388,8 @@ import Logo from '../../components/Logo.astro';
 
     // ── Тестовые данные (пока нет сервера). Даты считаются от сегодняшнего дня.
     var DEMO = [
-      ['free', 'Бесплатные документы'], ['active', 'Тариф действует, автопродление'], ['manual', 'Тариф действует, без автопродления (крипто)'],
+      ['free', 'Бесплатные документы'], ['active', 'Тариф действует, автопродление'], ['off', 'Тариф действует, автопродление выключено (карта)'],
+      ['manual', 'Тариф действует, без автопродления (крипто)'],
       ['low', 'Мало документов'], ['expired', 'Срок истёк, списание не прошло'], ['processing', 'Оплата обрабатывается'],
       ['success', 'Оплачено'], ['failed', 'Оплата не прошла'], ['notfound', 'Ссылка не найдена'], ['manage', 'Управление подпиской']
     ];
@@ -380,6 +401,7 @@ import Logo from '../../components/Logo.astro';
       var hist = [[from, 35], [addMonths(from, -1), 35], [addMonths(from, -2), 35]];
       if (kind === 'free') return Object.assign(b, { plan: 'free', period: 0, paid: 0, limit: 30, used: 12, from: null, until: null, auto: false, method: null, card: null });
       if (kind === 'manual') return Object.assign(b, paid, { auto: false, method: 'crypto', card: null, history: hist.slice(0, 1) });
+      if (kind === 'off') return Object.assign(b, paid, { auto: false, history: hist });
       if (kind === 'low') return Object.assign(b, paid, { used: 194, history: hist });
       if (kind === 'expired') return Object.assign(b, paid, { from: addDays(TODAY, -36), until: addDays(TODAY, -6), used: 161, auto: false, failed: { date: addDays(TODAY, -5), sum: 35 }, history: hist.slice(1) });
       return Object.assign(b, paid, { history: hist });
@@ -391,7 +413,8 @@ import Logo from '../../components/Logo.astro';
     function defaultSel(d) {
       var keep = d.plan !== 'free';
       // На бесплатном сразу выбран «Рост» — его же выделяет лендинг; сумма видна сразу
-      return { plan: keep ? d.plan : 'growth', period: keep && d.period ? d.period : 1, packs: 0, method: 'card', auto: true, email: S.sel ? S.sel.email : (d.email || '') };
+      // Галочка автопродления включена по умолчанию; если у действующего тарифа с картой его выключили — остаётся выключенной
+      return { plan: keep ? d.plan : 'growth', period: keep && d.period ? d.period : 1, packs: 0, method: 'card', auto: !(isActive(d) && d.card && !d.auto), email: S.sel ? S.sel.email : (d.email || '') };
     }
 
     // ── Расчёт суммы: продление, смена тарифа с зачётом неиспользованных дней, пакеты
@@ -430,12 +453,22 @@ import Logo from '../../components/Logo.astro';
       var d = S.d, h = '<div class="pp-card"><div class="pp-ctx"><span class="pp-sh" aria-hidden="true"></span><div><div class="pp-nm">' + esc(d.table) + '</div><div class="pp-ow">' + t('sheet') + ' · ' + t('owner') + ' ' + esc(d.owner) + '</div></div></div><div class="pp-now">';
       if (d.plan === 'free') h += '<span>' + t('nowFree') + '</span>';
       else if (isActive(d)) {
-        h += '<span>' + t('now', { p: pname(d.plan), d: fd(d.until) }) + '</span>';
-        if (d.auto) h += '<span>' + t('autoOn', { d: fd(addDays(d.until, 1)), sum: money(PLANS[d.plan].total[d.period]), c: d.card }) + '</span><button type="button" class="pp-link" data-act="manage">' + t('manage') + '</button>';
+        h += '<span>' + t('now', { p: pname(d.plan), d: fd(d.until) }) + '</span><button type="button" class="pp-link" data-act="manage">' + t('manage') + '</button>';
       } else h += '<span>' + t('nowEnded', { p: pname(d.plan), d: fd(d.until) }) + '</span>';
       h += '</div>';
+      if (isActive(d)) h += autoRow();
       if (d.failed && !isActive(d)) h += '<div class="pp-alert">' + t('chargeFailed', { sum: money(d.failed.sum), d: fd(d.failed.date) }) + '</div>';
       return h + '</div>';
+    }
+    // Автопродление действующего тарифа: переключатель, если есть карта; без карты (крипто) — строка, что продлить можно здесь же
+    function autoRow() {
+      var d = S.d;
+      if (!d.card) return '<div class="pp-ar"><div class="d">' + t('arNone', { d: fd(d.until) }) + '</div></div>';
+      var h = '<div class="pp-ar"><button type="button" class="pp-sw" id="pp-sw" role="switch" aria-checked="' + !!d.auto + '" aria-describedby="pp-sw-d" data-act="' + (d.auto ? 'off' : 'on') + '"></button>' +
+        '<div><label for="pp-sw">' + t('arT') + '</label><div class="d" id="pp-sw-d">' +
+        (d.auto ? t('arOn', { d: fd(addDays(d.until, 1)), sum: money(PLANS[d.plan].total[d.period]), c: esc(d.card) }) : t('arOff', { d: fd(d.until) })) + '</div></div></div>';
+      if (d.auto && S.confirmOff) h += '<div class="pp-conf">' + t('confirm', { d: fd(d.until) }) + '<div class="pp-acts"><button type="button" class="pp-btn" style="background:#c5221f" data-act="off-yes">' + t('yesOff') + '</button><button type="button" class="pp-btn sec" data-act="off-no">' + t('keep') + '</button></div></div>';
+      return h;
     }
     function periods() {
       var h = '<div class="pp-lbl">' + t('period') + '</div><div class="pp-seg" role="group" aria-label="' + esc(t('period')) + '">';
@@ -525,10 +558,8 @@ import Logo from '../../components/Logo.astro';
       if (d.auto) h += '<div class="pp-row"><span>' + t('rNext') + '</span><b>' + fd(addDays(d.until, 1)) + ' · ' + money(PLANS[d.plan].total[d.period]) + '</b></div>';
       else h += '<div class="pp-row"><span>' + t('rUntil') + '</span><b>' + fd(d.until) + '</b></div>';
       if (d.card) h += '<div class="pp-row"><span>' + t('rCard') + '</span><b>•• ' + esc(d.card) + '</b></div>';
-      h += '<div class="pp-acts"><button type="button" class="pp-btn sec" data-act="back">' + t('changePlan') + '</button>' + (d.card ? '<button type="button" class="pp-btn sec" data-act="card">' + t('changeCard') + '</button>' : '') +
-        (d.auto ? (S.confirmOff ? '' : '<button type="button" class="pp-btn sec" data-act="off">' + t('autoOff') + '</button>') : (d.card ? '<button type="button" class="pp-btn" data-act="on">' + t('autoOnBtn') + '</button>' : '')) + '</div>';
-      if (d.auto && S.confirmOff) h += '<div class="pp-conf">' + t('confirm', { d: fd(d.until) }) + '<div class="pp-acts"><button type="button" class="pp-btn" style="background:#c5221f" data-act="off-yes">' + t('yesOff') + '</button><button type="button" class="pp-btn sec" data-act="off-no">' + t('keep') + '</button></div></div>';
-      if (!d.auto) h += '<div class="pp-note">' + t('offState', { d: fd(d.until) }) + '</div>';
+      h += autoRow();
+      h += '<div class="pp-acts"><button type="button" class="pp-btn sec" data-act="back">' + t('changePlan') + '</button>' + (d.card ? '<button type="button" class="pp-btn sec" data-act="card">' + t('changeCard') + '</button>' : '') + '</div>';
       h += '</div>';
       if (d.history && d.history.length) {
         h += '<div class="pp-lbl">' + t('hist') + '</div><div class="pp-card pp-hist">';
@@ -578,6 +609,7 @@ import Logo from '../../components/Logo.astro';
     }
 
     // ── Действия
+    function focusSw() { var s = document.getElementById('pp-sw'); if (s) s.focus(); }
     function toast(msg) { var el = document.getElementById('pp-toast'); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { el.hidden = true; }, 2600); }
     function pay() {
       var q = quote(); if (!q || q.total <= 0) return;
@@ -598,7 +630,7 @@ import Logo from '../../components/Logo.astro';
       setTimeout(function () { if (S.screen === 'processing') { S.screen = 'success'; S.demo = 'success'; render(); } }, 2200);
     }
     document.addEventListener('click', function (e) {
-      var lb = e.target.closest('[data-lang]'); if (lb) { var dm = document.getElementById('pp-lang-m'); if (dm) dm.open = false; S.lang = lb.getAttribute('data-lang'); if (!CONFIG.api) { var keep = S.sel; S.d = mock({ processing: 1, success: 1, failed: 1, notfound: 1, manage: 1 }[S.demo] ? 'active' : S.demo); S.sel = keep; } render(); try { localStorage.setItem('nota-lang', S.lang); } catch (x) {} return; }
+      var lb = e.target.closest('[data-lang]'); if (lb) { var dm = document.getElementById('pp-lang-m'); if (dm) dm.open = false; S.lang = lb.getAttribute('data-lang'); if (!CONFIG.api) { var keep = S.sel, ka = S.d && S.d.auto; S.d = mock({ processing: 1, success: 1, failed: 1, notfound: 1, manage: 1 }[S.demo] ? 'active' : S.demo); S.d.auto = ka; S.sel = keep; } render(); try { localStorage.setItem('nota-lang', S.lang); } catch (x) {} return; }
       var b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
       var a = b.getAttribute('data-act'), v = b.getAttribute('data-v');
       if (a === 'auto' || a === 'receipt') { if (a === 'receipt') e.preventDefault(); return; }
@@ -613,12 +645,13 @@ import Logo from '../../components/Logo.astro';
       else if (a === 'back') { S.screen = 'pay'; window.scrollTo(0, 0); }
       else if (a === 'retry') { S.screen = 'pay'; }
       else if (a === 'retry-crypto') { S.screen = 'pay'; S.sel.method = 'crypto'; }
-      else if (a === 'off') S.confirmOff = true;
-      else if (a === 'off-no') S.confirmOff = false;
+      else if (a === 'off') { S.confirmOff = true; render(); var y = document.querySelector('[data-act="off-yes"]'); if (y) y.focus(); return; }
+      else if (a === 'off-no') { S.confirmOff = false; render(); focusSw(); return; }
       else if (a === 'off-yes' || a === 'on') {
         var on = a === 'on';
-        if (CONFIG.api) { api('/autorenew', { on: on }).then(function () { S.d.auto = on; S.confirmOff = false; render(); }).catch(function () { toast(t('failH')); }); return; }
-        S.d.auto = on; S.confirmOff = false;
+        var done = function () { S.d.auto = on; S.sel.auto = on; S.confirmOff = false; render(); focusSw(); toast(t(on ? 'onToast' : 'offToast')); };
+        if (CONFIG.api) { api('/autorenew', { on: on }).then(done).catch(function () { toast(t('failH')); }); return; }
+        return done();
       }
       else if (a === 'card') { if (CONFIG.api) { api('/card', { lang: S.lang }).then(function (j) { location.href = j.redirect_url; }).catch(function () { toast(t('failH')); }); return; } toast(t('cardToast')); return; }
       render();

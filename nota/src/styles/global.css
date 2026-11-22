@@ -606,6 +606,8 @@ html[data-variant="steps"] .v-plain, html[data-variant="numbers"] .v-plain, html
 .pen-svg { display: none; position: absolute; pointer-events: none; overflow: visible; }
 .pen-svg path, .pen-layer path { fill: none; stroke: var(--orange); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
 .pen-svg path { stroke-width: 2.6; vector-effect: non-scaling-stroke; }
+/* Вне анимации линия сплошная: с non-scaling-stroke Chrome меряет штрих в пикселях экрана (~194 px), и подчёркивание длиннее рвётся */
+.pen-svg:not(.pen-anim) path { stroke-dasharray: none; }
 .pen-circle { left: -0.3em; top: -0.22em; width: calc(100% + 0.6em); height: calc(100% + 0.42em); }
 .pen-under { left: -0.04em; bottom: -0.2em; width: calc(100% + 0.08em); height: 0.34em; }
 html[data-variant="circle"] .pen--c > .pen-circle,
@@ -1120,45 +1122,19 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 .s-flow b { display: block; font-size: 20px; line-height: 1.3; padding-top: 4px; max-width: 560px; }
 .s-flow li span:not(.s-n) { display: block; font-size: 16px; line-height: 1.5; color: var(--muted); margin-top: 4px; max-width: 560px; }
 .s-flow-ok span:not(.s-n) + span { margin-top: 0; }
-/* Отчёт с пояснениями */
-.s-notes { list-style: none; margin: 4px 0 32px; padding: 0; display: grid; gap: 22px; }
-.s-notes li { display: flex; gap: 16px; align-items: flex-start; }
-.s-notes b { display: block; font-size: 21px; line-height: 32px; }
-.s-notes li span:not(.s-mark) { display: block; font-size: 17px; color: var(--muted); margin-top: 2px; }
-/* Цифры на отчёте: белый на оранжевом — только от 19 px жирным (DESIGN.md) */
-.s-mark { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--orange); color: #fff; font-size: 19px; font-weight: 700; line-height: 1; }
-.s-img .s-mark { position: absolute; box-shadow: 0 0 0 4px var(--paper); }
-.s-mark--l { left: -16px; }
-.s-mark--r { right: -16px; }
-.s-mark--s { flex: none; }
+/* Отчёт на скользящем слое (компьютер) и на первом экране (телефон) */
 .s-img { position: relative; display: block; }
 .s-img img { display: block; width: 100%; height: auto; border-radius: 18px; box-shadow: 0 1px 2px rgba(20, 32, 27, .06), 0 30px 60px rgba(20, 32, 27, .16); }
-.s-fig-rep { margin: 0 0 32px; }
-.s-fig-rep .s-img { margin: 0 26px; }
-.s-fig-rep .s-mark--l { left: -26px; }
-.s-fig-rep .s-mark--r { right: -26px; }
-.s-fig-rep figcaption, .s-story figcaption { margin-top: 12px; font-size: 14px; color: var(--muted); text-align: center; }
-.s-rep .sched { max-width: 560px; }
-/* Цифры на скользящем отчёте появляются, когда блок отчёта дошёл до середины экрана (ease-out, < 300 мс, без scale(0)) */
-html.s-js .v12s .s-story .s-mark { opacity: 0; transform: scale(.6); transition: opacity .26s cubic-bezier(.23, 1, .32, 1), transform .26s cubic-bezier(.23, 1, .32, 1); }
-html.s-js .v12s .s-story.on .s-mark { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) {
-  html.s-js .v12s .s-story .s-mark { transform: none; transition: opacity .2s linear; }
-}
+.s-story figcaption { margin-top: 12px; font-size: 14px; color: var(--muted); text-align: center; }
 /* Наведение у кнопок — только там, где есть мышь */
 @media (hover: none) { .v12s .btn:hover { transform: none; box-shadow: none; } }
 @media (min-width: 1000px) {
   .v12s .s-split { grid-template-columns: minmax(565px, 1fr) minmax(0, 1fr); column-gap: 48px; }
-  .v12s .s-rep { max-width: calc(100% - 520px - 48px); min-width: 565px; }
-  .v12s .s-fig-rep { display: none; }
   html:not([data-rep="plain"]) .v9.v12s .story-fig img { width: 100%; aspect-ratio: 1080 / 1265; }
   html:not([data-rep="plain"]) .v9.v12s .story-fig .s-img { width: min(100%, calc((100vh - 150px) * 0.8538)); margin: 0 auto; }
   html:not([data-rep="plain"]) .v9.v12s #result { min-height: calc(min(609px, 100vh - 150px) + 34px + 112px); }
   .v12s .story-media .wrap { padding-top: 120px; } /* до JS: примерно высота заголовка; скрипт ставит точно */
   .v12s .s-left { min-height: calc(min(609px, 100vh - 150px) + 34px); } /* первый экран высотой с отчёт: отчёт не свисает в следующий блок */
-}
-@media (max-width: 999px) {
-  .v12s .s-fig-hero { display: none; }
 }
 @media (max-width: 640px) {
   .v12s .s-hero { padding: 16px 0 32px; }
@@ -1168,8 +1144,6 @@ html.s-js .v12s .s-story.on .s-mark { opacity: 1; transform: none; }
   .s-flow > li { gap: 12px; padding-bottom: 16px; }
   .s-flow b { font-size: 18px; }
   .s-flow li span:not(.s-n) { font-size: 15px; }
-  .s-notes b { font-size: 19px; line-height: 28px; }
-  .s-notes li span:not(.s-mark) { font-size: 16px; }
 }
 
 /* Технический переключатель вариантов v12 (только на /v12/, на сайт не пойдёт) */
@@ -1177,3 +1151,11 @@ html.s-js .v12s .s-story.on .s-mark { opacity: 1; transform: none; }
 .vbar span { padding: 0 6px 0 8px; opacity: .7; }
 .vbar a { color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 999px; }
 .vbar a[aria-current="page"] { background: #fff; color: var(--ink); font-weight: 600; }
+
+/* v12, обе страницы (22.11): пояснения под тарифами светлее (4,8:1 на фоне, AA) и ближе к следующему блоку.
+   У секции цен и сравнения один фон, поэтому два отступа по 56 px читались как пустота. */
+.v12 .plan-facts3 dd { color: #68736d; }
+/* на телефоне сравнение скрыто, дальше серый блок «Ваши данные» — отступ нужен */
+.v12 #price { padding-bottom: 32px; }
+@media (min-width: 900px) { .v12 #price { padding-bottom: 16px; } }
+
