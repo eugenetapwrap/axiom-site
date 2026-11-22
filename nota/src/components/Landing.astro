@@ -16,7 +16,7 @@ import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
   meta, cta, nav, hero, result, analytics, send, what as whatBase, compare as compareBase, segments, reviews, data as dataBase, pricing, faq as faqBase, final, footer, steps, bar, shotAlt,
-  start, facts12, compare12, data12, faq12, what12,
+  start, facts12, compare12, data12, faq12, what12, sched12,
 } from '../data/content-v12';   // = content-v11 + тексты нового первого экрана (start)
 
 // Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
@@ -32,6 +32,7 @@ const compare = v12 ? compare12 : compareBase;
 const data = v12 ? data12 : dataBase;
 const faq = v12 ? faq12 : faqBase;
 const what = v12 ? what12 : whatBase;
+const sched = v12 ? sched12 : steps.report.schedule;
 const link = (t: string) => botLink(t.replace('land10_', tag));
 const ctaText = isStart ? start.cta : cta;
 const sCut = cut(start.title, start.underline);
@@ -134,8 +135,8 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
           <div class="s2-text">
             <ul class="check">{start.reportBlock.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
             <div class="sched">
-              <div class="sched-title">{start.reportBlock.schedule.title}</div>
-              <dl>{start.reportBlock.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
+              <div class="sched-title">{sched12.title}</div>
+              <dl>{sched12.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
             </div>
             <div class="cta-row"><a class="btn" href={link('land10_result')}>{ctaText}</a></div>
           </div>
@@ -193,8 +194,8 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
           <div class="s2-text">
             <ul class="check">{steps.report.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
             <div class="sched">
-              <div class="sched-title">{steps.report.schedule.title}</div>
-              <dl>{steps.report.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
+              <div class="sched-title">{sched.title}</div>
+              <dl>{sched.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
             </div>
             <div class="cta-row"><a class="btn" href={link('land10_result')}>{ctaText}</a></div>
           </div>
