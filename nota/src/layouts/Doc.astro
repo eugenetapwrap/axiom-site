@@ -1,31 +1,44 @@
 ---
-// Страница документа (/terms, /privacy, /refund): шапка и подвал как у лендинга, узкая колонка текста.
+// Страница документа (/terms, /privacy, /refund и их версии /en/…, /id/…): шапка и подвал как у лендинга, узкая колонка текста.
 // Текст документа вставляется в .md-файл страницы (Markdown). Пока текста нет, показывается заглушка с планом документа и жёлтой меткой.
 import Base from './Base.astro';
 import Logo from '../components/Logo.astro';
 const { frontmatter } = Astro.props;
-const { title, description = '', updated = '', plan = [] } = frontmatter;
+const { title, description = '', updated = '', plan = [], lang = 'ru', slug = '' } = frontmatter;
 const html = await Astro.slots.render('default');
 const empty = !html.replace(/<!--[\s\S]*?-->/g, '').trim();
 const bot = 'https://t.me/NotaGetBot';
+// Подписи шапки и подвала на языке документа. Русская версия — /terms, английская — /en/terms, индонезийская — /id/terms.
+const t = {
+  ru: { home: 'Nota — на главную', open: 'Открыть в Telegram', openSm: 'В Telegram', rev: 'Редакция от', soon: 'текст появится', draft: 'черновик', prep: 'Документ готовится. Здесь будет:', q: 'Вопросы — в', qBot: 'боте @NotaGetBot', docs: 'Документы', terms: 'Пользовательское соглашение', privacy: 'Политика конфиденциальности', refund: 'Правила возврата', support: 'Поддержка в боте', langs: 'Язык документа' },
+  en: { home: 'Nota — home', open: 'Open in Telegram', openSm: 'Telegram', rev: 'Version of', soon: 'coming soon', draft: 'draft', prep: 'This document is being prepared. It will cover:', q: 'Questions? Ask in', qBot: 'the @NotaGetBot bot', docs: 'Documents', terms: 'Terms of Service', privacy: 'Privacy Policy', refund: 'Refund Policy', support: 'Support in the bot', langs: 'Document language' },
+  id: { home: 'Nota — beranda', open: 'Buka di Telegram', openSm: 'Telegram', rev: 'Versi', soon: 'segera hadir', draft: 'draf', prep: 'Dokumen sedang disiapkan. Isinya:', q: 'Pertanyaan? Tanyakan di', qBot: 'bot @NotaGetBot', docs: 'Dokumen', terms: 'Ketentuan Layanan', privacy: 'Kebijakan Privasi', refund: 'Kebijakan Pengembalian Dana', support: 'Dukungan di bot', langs: 'Bahasa dokumen' },
+}[lang as 'ru' | 'en' | 'id'];
+const pre = lang === 'ru' ? '' : `/${lang}`;
+const langs = slug ? [['ru', 'RU', `/${slug}`], ['en', 'EN', `/en/${slug}`], ['id', 'ID', `/id/${slug}`]] : [];
 ---
-<Base title={`${title} — Nota`} description={description} noindex selfFonts>
+<Base title={`${title} — Nota`} description={description} noindex selfFonts lang={lang}>
   <div class="doc">
     <header class="header">
       <div class="wrap">
-        <a class="logo-link" href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
-        <a class="btn btn--sm btn--dark" href={bot} target="_blank" rel="noopener"><span class="hb-lg">Открыть в Telegram</span><span class="hb-sm">В Telegram</span></a>
+        <a class="logo-link" href="/" aria-label={t.home}><Logo height={30} /></a>
+        <a class="btn btn--sm btn--dark" href={bot} target="_blank" rel="noopener"><span class="hb-lg">{t.open}</span><span class="hb-sm">{t.openSm}</span></a>
       </div>
     </header>
     <main class="doc-main">
       <div class="wrap doc-col">
+        {langs.length > 0 && (
+          <nav class="doc-langs" aria-label={t.langs}>
+            {langs.map(([code, label, href]) => code === lang ? <span aria-current="true">{label}</span> : <a href={href} hreflang={code}>{label}</a>)}
+          </nav>
+        )}
         <h1>{title}</h1>
-        <p class="doc-meta">{updated ? `Редакция от ${updated}` : <mark class="todo">текст появится</mark>}</p>
+        <p class="doc-meta">{updated ? `${t.rev} ${updated}` : <mark class="todo">{empty ? t.soon : t.draft}</mark>}</p>
         {empty ? (
           <div class="doc-empty">
-            <p>Документ готовится. Здесь будет:</p>
+            <p>{t.prep}</p>
             <ul>{plan.map((x: string) => <li>{x}</li>)}</ul>
-            <p class="doc-q">Вопросы — в <a href={bot} target="_blank" rel="noopener">боте @NotaGetBot</a>.</p>
+            <p class="doc-q">{t.q} <a href={bot} target="_blank" rel="noopener">{t.qBot}</a>.</p>
           </div>
         ) : (
           <article class="doc-body" set:html={html} />
@@ -35,11 +48,11 @@ const bot = 'https://t.me/NotaGetBot';
     <footer class="footer">
       <div class="wrap">
         <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
-        <nav aria-label="Документы">
-          <a href="/terms">Пользовательское соглашение</a>
-          <a href="/privacy">Политика конфиденциальности</a>
-          <a href="/refund">Правила возврата</a>
-          <a href={bot} target="_blank" rel="noopener">Поддержка в боте</a>
+        <nav aria-label={t.docs}>
+          <a href={`${pre}/terms`}>{t.terms}</a>
+          <a href={`${pre}/privacy`}>{t.privacy}</a>
+          <a href={`${pre}/refund`}>{t.refund}</a>
+          <a href={bot} target="_blank" rel="noopener">{t.support}</a>
         </nav>
         <div class="op">© 2026</div>
       </div>
@@ -52,6 +65,10 @@ const bot = 'https://t.me/NotaGetBot';
     .doc .footer nav a { text-decoration: none; }
     .doc-main { padding: 48px 0 80px; }
     .doc-col { max-width: 760px; }
+    .doc-langs { display: flex; gap: 14px; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; margin-bottom: 18px; }
+    .doc-langs a { color: var(--muted); text-decoration: none; }
+    .doc-langs a:hover { color: var(--ink); }
+    .doc-langs span { color: var(--ink); box-shadow: inset 0 -2px 0 currentColor; }
     .doc-col h1 { font-size: clamp(32px, 4vw, 44px); line-height: 1.12; letter-spacing: -0.015em; text-wrap: balance; }
     .doc-meta { margin-top: 10px; font-size: 15px; color: var(--muted); }
     .doc-empty { margin-top: 28px; padding: 22px 24px; border-radius: 18px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); font-size: 17px; }

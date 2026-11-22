@@ -2,8 +2,9 @@
 import '../styles/global.css';
 import { meta } from '../data/content-v11';
 
-interface Props { title?: string; description?: string; noindex?: boolean; og?: string; ogAlt?: string; selfFonts?: boolean }
-const { title = meta.title, description = meta.description, noindex = false, og: ogPath = '/og-v10.png', ogAlt = meta.ogAlt, selfFonts = false } = Astro.props;
+interface Props { title?: string; description?: string; noindex?: boolean; og?: string; ogAlt?: string; selfFonts?: boolean; lang?: 'ru' | 'en' | 'id' }
+const { title = meta.title, description = meta.description, noindex = false, og: ogPath = '/og-v10.png', ogAlt = meta.ogAlt, selfFonts = false, lang = 'ru' } = Astro.props;
+const ogLocale = { ru: 'ru_RU', en: 'en_US', id: 'id_ID' }[lang];
 // До запуска сайт закрыт от поисковиков. В день запуска (только по команде основателя) задать на хостинге PUBLIC_INDEX=1 и пересобрать.
 const closed = noindex || import.meta.env.PUBLIC_INDEX !== '1';
 // selfFonts: Inter с нашего сайта и с предзагрузкой — шрифт приходит до первой отрисовки, страница не прыгает (CLS).
@@ -13,7 +14,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const og = new URL(ogPath, Astro.site);
 ---
 <!doctype html>
-<html lang="ru">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,7 +28,7 @@ const og = new URL(ogPath, Astro.site);
     <meta name="theme-color" content="#FBFCFA" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Nota" />
-    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:locale" content={ogLocale} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
