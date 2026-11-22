@@ -40,7 +40,7 @@ If you paid for a plan by card and want to stop using it early, we refund the un
 
 ## 4. Payment errors
 
-If you were charged twice, or charged after you turned off auto-renewal, we refund the full extra amount, including for a pack. If you paid in cryptocurrency, we will agree the refund method with you.
+If you were charged twice, or charged after you turned off auto-renewal, we refund the full extra amount, including for a pack.
 
 ## 5. How to request a refund
 

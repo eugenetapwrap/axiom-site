@@ -41,7 +41,7 @@ Jika Anda membayar paket dengan kartu dan ingin berhenti lebih awal, kami mengem
 
 ## 4. Kesalahan pembayaran
 
-Jika Anda ditagih dua kali, atau ditagih setelah mematikan perpanjangan otomatis, kami mengembalikan seluruh kelebihannya, termasuk untuk paket tambahan. Jika Anda membayar dengan kripto, cara pengembalian akan kami sepakati dengan Anda.
+Jika Anda ditagih dua kali, atau ditagih setelah mematikan perpanjangan otomatis, kami mengembalikan seluruh kelebihannya, termasuk untuk paket tambahan.
 
 ## 5. Cara mengajukan pengembalian dana
 

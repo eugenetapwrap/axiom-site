@@ -74,7 +74,7 @@ Prices are in US dollars and include taxes.
 | Scale | $79 | $213 | $402 | 500 | unlimited |
 
 - The document limit applies to each month of the paid period. Unused documents do not roll over to the next month.
-- When the limit runs out, the header of your sheet offers to buy a pack or upgrade.
+- When the limit runs out, Nota records another 50 documents free of charge, and the header of your sheet offers to buy a pack or upgrade.
 - **The +50 documents pack** costs $10 and can be bought only with an active plan. It is added to your limit immediately and lasts until the end of the paid period.
 
 We may change prices. New prices do not affect a period you have already paid for. We will notify you in the bot at least 14 days before an auto-renewal at a new price.
