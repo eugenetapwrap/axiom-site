@@ -72,7 +72,7 @@ Prices are in US dollars and include taxes.
 | Growth | $35 | $93 | $174 | 200 | up to 10 |
 | Scale | $79 | $213 | $402 | 500 | unlimited |
 
-- The document limit applies to each month of the paid period. Unused documents do not roll over to the next month. [to confirm]
+- The document limit applies to each month of the paid period. Unused documents do not roll over to the next month.
 - When the limit runs out, Nota keeps recording documents, and the header of your sheet offers to buy a pack or upgrade. [to confirm: how many documents over the limit Nota records without payment]
 - **The +50 documents pack** costs $10 and can be bought only with an active plan. It is added to your limit immediately and lasts until the end of the paid period.
 
@@ -90,7 +90,7 @@ We may change prices. New prices do not affect a period you have already paid fo
 ## 8. Auto-renewal
 
 - Auto-renewal is on by default for card payments. You can untick it when paying.
-- You can turn auto-renewal off at any time: [to confirm: where — in the bot, on the payment page or in the sheet]. The plan stays active until the end of the paid period, and no further charges are made.
+- You can turn auto-renewal off at any time on the payment page, which opens from the payment button in the header of your sheet. The plan stays active until the end of the paid period, and no further charges are made.
 - If auto-renewal is on, we charge the price of the same plan for the same period on the day after the period ends.
 - If a charge fails, we retry: 3 attempts over 3 days in total. If they all fail, the plan ends and the bot sends you a link to pay manually.
 

@@ -20,7 +20,7 @@ Nota processes your first 30 documents free of charge, with no card, so you can 
 
 ## 1. Turning off auto-renewal
 
-You can turn auto-renewal off at any time: [to confirm: where — in the bot, on the payment page or in the sheet]. The current period is not refunded; the plan stays active until the end of the paid period, and no further charges are made.
+You can turn auto-renewal off at any time on the payment page, which opens from the payment button in the header of your sheet. The current period is not refunded; the plan stays active until the end of the paid period, and no further charges are made.
 
 ## 2. Cancelling a plan with a refund for unused days
 

@@ -21,7 +21,7 @@ Nota memproses 30 dokumen pertama Anda secara gratis, tanpa kartu, sehingga Anda
 
 ## 1. Mematikan perpanjangan otomatis
 
-Anda dapat mematikan perpanjangan otomatis kapan saja: [perlu dikonfirmasi: di mana — di bot, di halaman pembayaran atau di spreadsheet]. Periode berjalan tidak dikembalikan; paket tetap aktif hingga akhir periode yang dibayar, dan tidak ada tagihan baru.
+Anda dapat mematikan perpanjangan otomatis kapan saja di halaman pembayaran, yang dibuka melalui tombol pembayaran di bagian atas spreadsheet Anda. Periode berjalan tidak dikembalikan; paket tetap aktif hingga akhir periode yang dibayar, dan tidak ada tagihan baru.
 
 ## 2. Membatalkan paket dengan pengembalian dana untuk hari yang belum terpakai
 

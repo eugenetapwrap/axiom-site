@@ -73,7 +73,7 @@ Harga dalam dolar AS, sudah termasuk pajak.
 | Growth | $35 | $93 | $174 | 200 | hingga 10 |
 | Scale | $79 | $213 | $402 | 500 | tanpa batas |
 
-- Kuota dokumen berlaku untuk setiap bulan dalam periode yang dibayar. Dokumen yang tidak terpakai tidak dipindahkan ke bulan berikutnya. [perlu dikonfirmasi]
+- Kuota dokumen berlaku untuk setiap bulan dalam periode yang dibayar. Dokumen yang tidak terpakai tidak dipindahkan ke bulan berikutnya.
 - Jika kuota habis, Nota tetap mencatat dokumen, dan bagian atas spreadsheet menawarkan untuk membeli paket tambahan atau naik paket. [perlu dikonfirmasi: berapa dokumen di atas kuota yang dicatat tanpa pembayaran]
 - **Paket tambahan +50 dokumen** seharga $10 dan hanya bisa dibeli jika paket Anda aktif. Paket tambahan langsung ditambahkan ke kuota dan berlaku hingga akhir periode yang dibayar.
 
@@ -91,7 +91,7 @@ Kami dapat mengubah harga. Harga baru tidak berlaku untuk periode yang sudah dib
 ## 8. Perpanjangan otomatis
 
 - Untuk pembayaran kartu, perpanjangan otomatis aktif secara default. Anda dapat menghapus centangnya saat membayar.
-- Anda dapat mematikan perpanjangan otomatis kapan saja: [perlu dikonfirmasi: di mana — di bot, di halaman pembayaran atau di spreadsheet]. Paket tetap aktif hingga akhir periode yang dibayar, dan tidak ada tagihan baru.
+- Anda dapat mematikan perpanjangan otomatis kapan saja di halaman pembayaran, yang dibuka melalui tombol pembayaran di bagian atas spreadsheet Anda. Paket tetap aktif hingga akhir periode yang dibayar, dan tidak ada tagihan baru.
 - Jika perpanjangan otomatis aktif, sehari setelah periode berakhir kami menagih harga paket yang sama untuk periode yang sama.
 - Jika penagihan gagal, kami mencoba lagi: total 3 kali dalam 3 hari. Jika semuanya gagal, paket berakhir dan bot mengirim tautan untuk membayar secara manual.
 
