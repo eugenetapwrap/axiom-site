@@ -87,7 +87,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
   <main class={isStart ? "tight v7 v8 v9 v10 v11 v12 v12s" : "tight v7 v8 v9 v10 v11"} id="main">
     <div class="story">
     {isStart ? (<>
-    <!-- v12 start, 1. Первый экран: «Чеки сотрудников — в таблицу. Проверено.», два шага, «Готово», кнопка.
+    <!-- v12 start, 1. Первый экран: «Чеки сотрудников — в таблицу. Проверено.», подзаголовок, три пункта, кнопка.
          Справа на компьютере — скользящий отчёт за месяц (слой story-media ниже); здесь его копия для диктора -->
     <section class="hero s-hero">
       <div class="wrap">
@@ -97,24 +97,8 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
         </div>
         <div class="split hero-split s-split">
           <div class="s-left">
-            <ol class="s-flow">
-              <li>
-                <span class="s-n" aria-hidden="true">1</span>
-                <div>
-                  <b class="s-t">{start.send.title}</b>
-                  <ul class="s-ways">{start.send.ways.map((w) => <li>{w}{w === start.send.react && <span class="s-react" aria-hidden="true">✍️</span>}</li>)}</ul>
-                  <span class="s-d">{start.send.docs}</span>
-                </div>
-              </li>
-              <li>
-                <span class="s-n" aria-hidden="true">2</span>
-                <div><b class="s-t">{start.check.title}</b><span class="s-d">{start.check.note}</span></div>
-              </li>
-            </ol>
-            <div class="s-done">
-              <p class="s-done-h">{start.done.title}</p>
-              <ul>{start.done.items.map((t) => <li><span class="s-ok" aria-hidden="true"><Icon name="check" size={18} /></span><b>{t}</b></li>)}</ul>
-            </div>
+            <p class="lead">{start.lead}</p>
+            <ul class="hero-list">{start.points.map((t) => <li><Icon name="check" size={20} /><span>{t}</span></li>)}</ul>
             <div class="cta-row cta-row--qr">
               <a class="btn" href={link('land10_hero')}>{ctaText}</a>
               <div class="cta-qr">
