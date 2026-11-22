@@ -96,6 +96,7 @@ Server dan penyedia kami dapat berada di luar negara Anda, termasuk di luar Indo
 
 - **Tanpa Google terhubung**, file yang Anda kirim dan data yang dibaca darinya disimpan selama 7 hari. Jika Anda menghubungkan Google dalam waktu itu, semuanya dicatat ke spreadsheet. Jika tidak, data dihapus dan Anda tetap memiliki laporan di chat.
 - **Dengan Google terhubung**, file asli dan baris disimpan di spreadsheet dan folder di Google Drive Anda hingga Anda menghapusnya. Di servernya sendiri, Nota menyimpan catatan dokumen Anda, termasuk sidik digital (hash) untuk mendeteksi duplikat, selama paket Anda aktif.
+- **Dokumen di atas kuota** menunggu dalam antrean selama 7 hari sejak dokumen pertama masuk.
 - **Setelah paket berakhir**, kami menyimpan data Anda selama 30 hari agar Anda bisa kembali tanpa kehilangan data, lalu menghapusnya.
 - **Catatan pembayaran** disimpan selama yang diwajibkan hukum pajak Georgia.
 

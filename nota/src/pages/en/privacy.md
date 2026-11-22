@@ -96,6 +96,7 @@ Our servers and providers may be located outside your country, including outside
 
 - **Without Google connected**, the files you send and the data read from them are kept for 7 days. If you connect Google within that time, everything is written to your sheet. If not, it is deleted, and you keep the report in the chat.
 - **With Google connected**, originals and rows are kept in your sheet and folder on your Google Drive until you delete them. On its own servers, Nota keeps records of your documents, including their fingerprints (hashes) for duplicate detection, while your plan is active.
+- **Documents over the limit** wait in a queue for 7 days from the date the first document entered it.
 - **After your plan ends**, we keep your data for 30 days so you can come back without losing anything, then delete it.
 - **Payment records** are kept for as long as Georgian tax law requires.
 

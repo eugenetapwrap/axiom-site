@@ -75,7 +75,7 @@ Harga dalam dolar AS, sudah termasuk pajak.
 | Scale | $79 | $213 | $402 | 500 | tanpa batas |
 
 - Kuota dokumen berlaku untuk setiap bulan dalam periode yang dibayar. Dokumen yang tidak terpakai tidak dipindahkan ke bulan berikutnya.
-- Jika kuota habis, Nota tetap mencatat 50 dokumen lagi tanpa biaya, dan bagian atas spreadsheet menawarkan untuk membeli paket tambahan atau naik paket.
+- Jika kuota habis, bagian atas spreadsheet menawarkan untuk membeli paket tambahan atau naik paket. Nota memasukkan hingga 50 dokumen di atas kuota ke dalam antrean; dokumen tersebut tidak dicatat ke spreadsheet. Antrean disimpan selama 7 hari sejak dokumen pertama masuk.
 - **Paket tambahan +50 dokumen** seharga $10 dan hanya bisa dibeli jika paket Anda aktif. Paket tambahan langsung ditambahkan ke kuota dan berlaku hingga akhir periode yang dibayar.
 
 Kami dapat mengubah harga. Harga baru tidak berlaku untuk periode yang sudah dibayar. Kami akan memberi tahu di bot paling lambat 14 hari sebelum perpanjangan otomatis dengan harga baru.
