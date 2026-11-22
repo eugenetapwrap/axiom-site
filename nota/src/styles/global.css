@@ -1163,20 +1163,20 @@ html:not([data-hero="old"]) .v10 .cta-qr, .v10 .cta-qr { max-width: 200px; }
 /* v12: переключатель листов — вкладки на рамке скриншота (основатель 22.11, вариант 1 из макетов).
    Выбранная вкладка белая и переходит в картинку, остальные серые. Нижняя полоска листов внутри рамки скрыта — вторые вкладки ни к чему. */
 .v12 .an-pick { display: flex; gap: 4px; padding: 0 10px; margin: 0; background: none; border-radius: 0; position: relative; z-index: 1; }
-.v12 .an .an-btn { flex: none; display: grid; gap: 1px; justify-content: start; align-items: start; text-align: left; padding: 8px 18px 7px; border-radius: 12px 12px 0 0; background: var(--box); color: var(--muted); box-shadow: inset 0 -1px 0 var(--line); transition: background .15s ease, color .15s ease; }
-.v12 .an .an-btn b { font-size: 16px; line-height: 1.3; margin: 0; color: inherit; }
+.v12 .an .an-btn { flex: none; display: grid; gap: 1px; justify-content: start; align-items: start; text-align: left; padding: 10px 20px 9px; border-radius: 12px 12px 0 0; background: #e6ebe7; color: #3d4943; box-shadow: inset 0 -1px 0 var(--line); transition: background .15s ease, color .15s ease; }
+.v12 .an .an-btn b { font-size: 17px; line-height: 1.3; margin: 0; color: inherit; }
 /* английские названия листов не дублируем (основатель 22.11) */
 .v12 .an .an-btn small { display: none; }
 .v12 #analytics .lead { margin-bottom: 16px; }
-@media (hover: hover) { .v12 .an .an-btn:hover:not([aria-selected="true"]) { background: #e3e8e4; color: var(--ink); box-shadow: inset 0 -1px 0 var(--line); } }
+@media (hover: hover) { .v12 .an .an-btn:hover:not([aria-selected="true"]) { background: #dce3de; color: var(--ink); box-shadow: inset 0 -1px 0 var(--line); } }
 .v12 .an .an-btn[aria-selected="true"] { background: #fff; color: var(--ink); box-shadow: 0 -1px 0 var(--line), 1px 0 0 var(--line), -1px 0 0 var(--line), inset 0 3px 0 var(--green-sheet); }
 .v12 .an .an-btn[aria-selected="true"] b { color: var(--ink); }
 .v12 .an .shot { box-shadow: 0 0 0 1px var(--line), 0 18px 40px rgba(20, 32, 27, .1); }
 .v12 .an .shot-tabs { display: none; }
 @media (max-width: 640px) {
   .v12 .an-pick { padding: 0 4px; gap: 3px; }
-  .v12 .an .an-btn { flex: 1 1 0; min-width: 0; padding: 7px 6px 6px; align-content: center; }
+  .v12 .an .an-btn { flex: 1 1 0; min-width: 0; padding: 8px 6px 7px; align-content: center; }
   .v12 #analytics .lead { margin-bottom: 12px; }
-  .v12 .an .an-btn b { font-size: 13.5px; line-height: 1.2; }
+  .v12 .an .an-btn b { font-size: 14px; line-height: 1.2; }
 }
 @media (prefers-reduced-motion: reduce) { .v12 .an .an-btn { transition: none; } }
