@@ -103,7 +103,7 @@ Kebijakan Privasi ini (selanjutnya disebut "Kebijakan") menetapkan data apa yang
 
 ## 8. Penghapusan Data
 
-8.1. Untuk menghapus data, Pengguna mengirim perintah hapus ke bot atau permintaan melalui email yang tercantum dalam butir 1.2. Atas permintaan tersebut Operator:
+8.1. Untuk menghapus data, Pengguna mengirim perintah /delete_all ke bot @NotaGetBot atau permintaan melalui email yang tercantum dalam butir 1.2. Atas permintaan tersebut Operator:
 
 - menghapus semua catatan Dokumen Pengguna di basis data, termasuk sidik digital (hash);
 - memutus Layanan dari Akun Google Pengguna;

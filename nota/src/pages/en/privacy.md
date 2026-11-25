@@ -103,7 +103,7 @@ This Privacy Policy (the "Policy") sets out what data the Nota service processes
 
 ## 8. Deletion
 
-8.1. To delete their data, the User sends the bot the delete command or a request by email to the address in clause 1.2. Upon such request the Operator:
+8.1. To delete their data, the User sends the /delete_all command to the bot @NotaGetBot or a request by email to the address in clause 1.2. Upon such request the Operator:
 
 - deletes all records of the User's Documents in its database, including fingerprints (hashes);
 - disconnects the Service from the User's Google Account;
