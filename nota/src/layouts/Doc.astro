@@ -17,12 +17,13 @@ const t = {
 }[lang as 'ru' | 'en' | 'id'];
 const pre = lang === 'ru' ? '' : `/${lang}`;
 const langs = slug ? [['ru', 'RU', `/${slug}`], ['en', 'EN', `/en/${slug}`], ['id', 'ID', `/id/${slug}`]] : [];
+import { homePath, type Lang } from '../data/landing-i18n';   // главная своего языка (25.11: английская — на /)
 ---
 <Base title={`${title} — Nota`} description={description} noindex selfFonts lang={lang}>
   <div class="doc">
     <header class="header">
       <div class="wrap">
-        <a class="logo-link" href={`${pre}/`} aria-label={t.home}><Logo height={30} /></a>
+        <a class="logo-link" href={homePath[lang as Lang]} aria-label={t.home}><Logo height={30} /></a>
         <a class="btn btn--sm btn--dark" href={bot} target="_blank" rel="noopener"><span class="hb-lg">{t.open}</span><span class="hb-sm">{t.openSm}</span></a>
       </div>
     </header>

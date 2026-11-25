@@ -6,7 +6,8 @@ import id from './i18n/id.json';
 
 export type Lang = 'ru' | 'en' | 'id';
 export const bundles = { en, id } as const;
-export const homePath: Record<Lang, string> = { ru: '/', en: '/en/', id: '/id/' };
+// 25.11, основатель: «основная версия на англ» — английская на /, русская на /ru/, индонезийская на /id/ (старый /en/ → / в public/_redirects)
+export const homePath: Record<Lang, string> = { en: '/', ru: '/ru/', id: '/id/' };
 
 export const UI = {
   ru: {

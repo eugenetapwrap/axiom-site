@@ -1,7 +1,7 @@
 ---
-// Главная: лендинг v12, новый вариант (основатель 25.11: «главное — V12 без архива»).
-// Разметка — src/components/Landing.astro (ветка isStart), тексты — src/data/content-v12.ts поверх content-v11.ts.
-// Метки ссылок на бота — land12s_*. Вариант с архивом — отдельная страница /archive/.
+// Главная: лендинг v12, новый вариант, на английском (основатель 25.11: «основная версия на англ»).
+// Тексты — src/data/i18n/en.json (перевод русских из content-v12.ts), метки ссылок на бота — land12en_*.
+// Русская — /ru/ (src/pages/ru/index.astro), индонезийская — /id/, вариант с архивом (по-русски) — /archive/.
 import Landing from '../components/Landing.astro';
 ---
-<Landing variant="start" tag="land12s_" v12 />
+<Landing variant="start" tag="land12en_" v12 lang="en" />
