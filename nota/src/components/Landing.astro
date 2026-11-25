@@ -1,7 +1,7 @@
 ---
 // Лендинг Nota, версия 11 — главная страница сайта (src/pages/index.astro). Тексты: src/data/content-v11.ts.
 // v12 (22.11): тот же компонент с вариантом первого экрана — variant="archive" (как v11, по умолчанию; главная не меняется)
-// или variant="start" (новый: тексты start в src/data/content-v12.ts). Страницы v12: src/pages/v12/ (start) и v12/archive.astro.
+// или variant="start" (новый: тексты start в src/data/content-v12.ts). Страницы: src/pages/index.astro (start, главная) и src/pages/archive.astro (archive).
 // tag — префикс меток ссылок на бота вместо land10_ (чтобы варианты различались в боте), bar — технический переключатель вариантов.
 // Прежние версии v1–v10 — в src/pages/_archive (папка с «_» не попадает на сайт).
 // Первый экран новый, отчёт на компьютере скользящий. На телефоне цифр шагов нет, внизу закреплённая кнопка.
@@ -24,10 +24,11 @@ const cut = (text: string, word: string) => { const i = text.indexOf(word); retu
 const h1Cut = cut(hero.title, '15\u00a0минут');
 
 // Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
-// v12 — правки 22.11 для обеих страниц /v12/ (короткие пояснения под ценами, отступы); на главной выключено
+// v12 — правки 22.11 для обеих страниц v12 (/ и /archive/) (короткие пояснения под ценами, отступы); на главной выключено
 interface Props { noindex?: boolean; variant?: 'archive' | 'start'; tag?: string; bar?: boolean; v12?: boolean }
 const { noindex = false, variant = 'archive', tag = 'land10_', bar: showBar = false, v12 = false } = Astro.props;
 const isStart = variant === 'start';
+const m = isStart ? start.meta : { ...meta, og: '/og-v10.png' };
 const compare = v12 ? compare12 : compareBase;
 const data = v12 ? data12 : dataBase;
 const faq = v12 ? faq12 : faqBase;
@@ -49,7 +50,7 @@ const jsonld = [
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Telegram',
     inLanguage: ['ru', 'en', 'id'],
-    description: meta.description,
+    description: m.description,
     image: new URL('/og-v10.png', Astro.site).href,
     screenshot: new URL(hero.report.file2x, Astro.site).href,
     publisher: { '@type': 'Organization', name: 'Axiom Consulting' }, // url и юрлицо — после ответа основателя (аудит 15.11, вопрос 42)
@@ -70,7 +71,7 @@ const jsonld = [
 ];
 const showReviews = false; // блок «Отзывы» (19.11: скрыт, пока нет настоящих отзывов)
 ---
-<Base title={meta.title} description={meta.description} noindex={noindex} og="/og-v10.png" selfFonts>
+<Base title={m.title} description={m.description} noindex={noindex} og={m.og} ogAlt={m.ogAlt} selfFonts>
   <a class="skip" href="#main">К содержанию</a>
   <header class="header">
     <div class="wrap">
@@ -534,7 +535,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
         <a href={footer.terms}>Пользовательское соглашение</a>
         <a href={footer.privacy}>Политика конфиденциальности</a>
         <a href={footer.refund}>Правила возврата</a>
-        <a href={link('land10_support')}>Поддержка в боте</a>
+        <a href="https://t.me/NotaSuppBot" target="_blank" rel="noopener">Поддержка в боте</a>
       </nav>
       <div class="op">© 2026</div>
       <p class="foot-note">{footer.testData}</p>
@@ -569,8 +570,8 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
   {showBar && (
     <nav class="vbar" aria-label="Технический переключатель вариантов (на сайт не пойдёт)">
       <span>v12, технический переключатель:</span>
-      <a href="/v12/" aria-current={isStart ? 'page' : undefined}>Новый</a>
-      <a href="/v12/archive/" aria-current={!isStart ? 'page' : undefined}>С архивом</a>
+      <a href="/" aria-current={isStart ? 'page' : undefined}>Новый</a>
+      <a href="/archive/" aria-current={!isStart ? 'page' : undefined}>С архивом</a>
     </nav>
   )}
   <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />

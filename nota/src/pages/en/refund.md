@@ -2,7 +2,7 @@
 layout: ../../layouts/Doc.astro
 title: Refund Policy
 description: Refund Policy for Nota plans.
-updated: ''
+updated: '25 November 2026'
 lang: en
 slug: refund
 plan:
@@ -11,10 +11,6 @@ plan:
   - how to request a refund;
   - when and how the money is returned.
 ---
-<!--
-DRAFT 22.11, translated from the Russian version (src/pages/refund.md). Not legal advice: have a lawyer review before publishing.
-"[to confirm: …]" marks open questions, also listed in founder/legal-docs-questions.md.
--->
 
 This Refund Policy (the "Policy") sets out the procedure for cancelling a Plan and refunding payments. The Policy forms an integral part of the [Terms of Service](/en/terms); terms have the meanings given in the Terms.
 

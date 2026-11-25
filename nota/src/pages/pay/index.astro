@@ -25,7 +25,7 @@ import Logo from '../../components/Logo.astro';
             <summary aria-label="Язык">RU</summary>
             <div class="lang-menu"><button type="button" data-lang="ru">Русский <small>RU</small></button><button type="button" data-lang="en">English <small>EN</small></button><button type="button" data-lang="id">Bahasa Indonesia <small>ID</small></button></div>
           </details>
-          <a class="pp-help" id="pp-help" href="https://t.me/NotaGetBot" target="_blank" rel="noopener">Помощь в Telegram</a>
+          <a class="pp-help" id="pp-help" href="https://t.me/NotaSuppBot" target="_blank" rel="noopener">Помощь в Telegram</a>
         </div>
       </div>
     </header>
@@ -168,7 +168,7 @@ import Logo from '../../components/Logo.astro';
     .pp-demo{background:#14201b;color:#dfe6e1;font-size:13px}
     .pp-demo .pp-in{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:40px;padding-top:6px;padding-bottom:6px}
     .pp-demo b{color:#fff}
-    .pp-demo select{font:inherit;font-size:13px;padding:4px 8px;border-radius:7px;border:0;background:#2a3832;color:#fff}
+    .pp-demo select{font:inherit;font-size:13px;padding:4px 8px;border-radius:7px;border:0;background:#2a3832;color:#fff;max-width:100%;min-width:0}
     .pp-bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(20,32,27,.06);padding:10px 16px calc(12px + env(safe-area-inset-bottom))}
     .pp-bar .in{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:640px;margin:0 auto}
     .pp-bar .s1{font-size:12px;color:var(--muted);line-height:1.3}
@@ -208,11 +208,12 @@ import Logo from '../../components/Logo.astro';
   (function () {
     // ── Настройки. Ссылки и почту заполняет основатель в «Техническом кабинете»; пустые ссылки показаны пунктиром.
     var CONFIG = {
-      api: null,                                   // адрес сервера бота, например 'https://api.nota.axiomco.io'; null — прототип на тестовых данных
+      api: null,                                   // адрес сервера бота, например 'https://api.notagetbot.com'; null — прототип на тестовых данных
       bot: 'https://t.me/NotaGetBot',
+      support: 'https://t.me/NotaSuppBot',         // бот поддержки (основатель 25.11)
       custom: 'https://t.me/NotaGetBot',          // «Больше 500 документов — обсудим»
       terms: '/terms', refund: '/refund', privacy: '/privacy', // страницы документов на сайте (тексты — src/pages/*.md)
-      supportEmail: ''                             // почта поддержки
+      supportEmail: 'support@notagetbot.com'       // почта поддержки (основатель 25.11)
     };
     var PLANS = {
       start:  { docs: 100, groups: 5,  total: { 1: 19, 3: 51,  6: 96 },  pm: { 1: 19, 3: 17, 6: 16 } },
@@ -447,7 +448,7 @@ import Logo from '../../components/Logo.astro';
     function legal() { return '<div class="pp-legal">' + linkTag(CONFIG.terms, t('terms')) + '<span>·</span>' + linkTag(CONFIG.refund, t('refund')) + '<span>·</span>' + linkTag(CONFIG.privacy, t('privacy')) + '</div>'; }
     function foot() {
       var mail = CONFIG.supportEmail ? ' · <a href="mailto:' + esc(CONFIG.supportEmail) + '">' + esc(CONFIG.supportEmail) + '</a>' : ' · support@… <mark class="todo">' + t('todo') + '</mark>';
-      return '<footer class="pp-foot"><span>© 2026 Axiom Consulting</span><span>' + t('more') + ' <a href="' + esc(CONFIG.custom) + '" target="_blank" rel="noopener">' + t('moreL') + '</a></span><span>' + t('ask') + ' — <a href="' + esc(CONFIG.bot) + '" target="_blank" rel="noopener">@NotaGetBot</a>' + mail + '</span></footer>';
+      return '<footer class="pp-foot"><span>© 2026 Axiom Consulting</span><span>' + t('more') + ' <a href="' + esc(CONFIG.custom) + '" target="_blank" rel="noopener">' + t('moreL') + '</a></span><span>' + t('ask') + ' — <a href="' + esc(CONFIG.support) + '" target="_blank" rel="noopener">@NotaSuppBot</a>' + mail + '</span></footer>';
     }
     function ctx() {
       var d = S.d, h = '<div class="pp-card"><div class="pp-ctx"><span class="pp-sh" aria-hidden="true"></span><div><div class="pp-nm">' + esc(d.table) + '</div><div class="pp-ow">' + t('sheet') + ' · ' + t('owner') + ' ' + esc(d.owner) + '</div></div></div><div class="pp-now">';

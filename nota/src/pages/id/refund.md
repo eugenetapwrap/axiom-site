@@ -2,7 +2,7 @@
 layout: ../../layouts/Doc.astro
 title: Kebijakan Pengembalian Dana
 description: Kebijakan pengembalian dana untuk paket Nota.
-updated: ''
+updated: '25 November 2026'
 lang: id
 slug: refund
 plan:
@@ -11,11 +11,6 @@ plan:
   - cara mengajukan pengembalian dana;
   - kapan dan bagaimana dana dikembalikan.
 ---
-<!--
-DRAF 22.11, terjemahan dari versi Rusia (src/pages/refund.md). Bukan nasihat hukum: periksa dengan pengacara sebelum dipublikasikan.
-Teks perlu diperiksa penutur asli bahasa Indonesia.
-"[perlu dikonfirmasi: …]" — pertanyaan terbuka, juga ada di founder/legal-docs-questions.md.
--->
 
 Kebijakan Pengembalian Dana ini (selanjutnya disebut "Kebijakan") menetapkan tata cara pembatalan Paket dan pengembalian dana. Kebijakan ini merupakan bagian tidak terpisahkan dari [Ketentuan Layanan](/id/terms); istilah yang digunakan memiliki arti sebagaimana ditetapkan dalam Ketentuan.
 

@@ -70,7 +70,8 @@ const langs = slug ? [['ru', 'RU', `/${slug}`], ['en', 'EN', `/en/${slug}`], ['i
     .doc-langs a { color: var(--muted); text-decoration: none; }
     .doc-langs a:hover { color: var(--ink); }
     .doc-langs span { color: var(--ink); box-shadow: inset 0 -2px 0 currentColor; }
-    .doc-col h1 { font-size: clamp(32px, 4vw, 44px); line-height: 1.12; letter-spacing: -0.015em; text-wrap: balance; }
+    .doc-col h1 { font-size: clamp(32px, 4vw, 44px); line-height: 1.12; letter-spacing: -0.015em; text-wrap: balance; overflow-wrap: break-word; }
+    @media (max-width: 360px) { .doc-col h1 { font-size: 26px; } } /* «конфиденциальности» не влезала в 320 px */
     .doc-meta { margin-top: 10px; font-size: 15px; color: var(--muted); }
     .doc-empty { margin-top: 28px; padding: 22px 24px; border-radius: 18px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); font-size: 17px; }
     .doc-empty ul { margin: 12px 0 0; padding-left: 22px; display: grid; gap: 6px; color: var(--ink); }

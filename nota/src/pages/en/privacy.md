@@ -2,7 +2,7 @@
 layout: ../../layouts/Doc.astro
 title: Privacy Policy
 description: Privacy Policy for Nota.
-updated: ''
+updated: '25 November 2026'
 lang: en
 slug: privacy
 plan:
@@ -12,11 +12,6 @@ plan:
   - who data is shared with;
   - how to delete your data and contact us.
 ---
-<!--
-DRAFT 22.11, translated from the Russian version (src/pages/privacy.md). Not legal advice: have a lawyer review before publishing.
-"[to confirm: …]" marks open questions, also listed in founder/legal-docs-questions.md.
-This is the page to link in Google Cloud Console → OAuth consent screen.
--->
 
 This Privacy Policy (the "Policy") sets out what data the Nota service processes, for what purposes, how long it is kept and how the User can delete it. Terms have the meanings given in the [Terms of Service](/en/terms).
 
@@ -92,7 +87,7 @@ This Privacy Policy (the "Policy") sets out what data the Nota service processes
 
 ## 6. International Transfers
 
-6.1. The Operator's servers and providers may be located outside the User's country, including outside Indonesia. The Operator transfers data only to the providers listed in section 5 and requires them to protect it to at least the standard required by law, including Indonesian Law No. 27 of 2022 on Personal Data Protection (UU PDP). <!-- lawyer: requirements for transfers out of Indonesia -->
+6.1. The Operator's servers and providers may be located outside the User's country, including outside Indonesia. The Operator transfers data only to the providers listed in section 5 and requires them to protect it to at least the standard required by law, including Indonesian Law No. 27 of 2022 on Personal Data Protection (UU PDP).
 
 ## 7. Retention
 

@@ -2,7 +2,7 @@
 layout: ../../layouts/Doc.astro
 title: Kebijakan Privasi
 description: Kebijakan Privasi Nota.
-updated: ''
+updated: '25 November 2026'
 lang: id
 slug: privacy
 plan:
@@ -12,11 +12,6 @@ plan:
   - kepada siapa data dibagikan;
   - cara menghapus data dan menghubungi kami.
 ---
-<!--
-DRAF 22.11, terjemahan dari versi Rusia (src/pages/privacy.md). Bukan nasihat hukum: periksa dengan pengacara sebelum dipublikasikan.
-Teks perlu diperiksa penutur asli bahasa Indonesia.
-"[perlu dikonfirmasi: …]" — pertanyaan terbuka, juga ada di founder/legal-docs-questions.md.
--->
 
 Kebijakan Privasi ini (selanjutnya disebut "Kebijakan") menetapkan data apa yang diproses layanan Nota, untuk tujuan apa, berapa lama disimpan dan bagaimana Pengguna dapat menghapusnya. Istilah yang digunakan memiliki arti sebagaimana ditetapkan dalam [Ketentuan Layanan](/id/terms).
 
@@ -92,7 +87,7 @@ Kebijakan Privasi ini (selanjutnya disebut "Kebijakan") menetapkan data apa yang
 
 ## 6. Transfer Data Lintas Negara
 
-6.1. Server dan penyedia Operator dapat berada di luar negara Pengguna, termasuk di luar Indonesia. Operator hanya mentransfer data kepada penyedia yang tercantum dalam bagian 5 dan mewajibkan mereka melindunginya setidaknya sesuai standar hukum, termasuk Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP). <!-- pengacara: persyaratan transfer data ke luar Indonesia -->
+6.1. Server dan penyedia Operator dapat berada di luar negara Pengguna, termasuk di luar Indonesia. Operator hanya mentransfer data kepada penyedia yang tercantum dalam bagian 5 dan mewajibkan mereka melindunginya setidaknya sesuai standar hukum, termasuk Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP).
 
 ## 7. Jangka Waktu Penyimpanan
 

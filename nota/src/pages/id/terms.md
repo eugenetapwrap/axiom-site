@@ -2,7 +2,7 @@
 layout: ../../layouts/Doc.astro
 title: Ketentuan Layanan
 description: Ketentuan Layanan Nota.
-updated: ''
+updated: '25 November 2026'
 lang: id
 slug: terms
 plan:
@@ -12,11 +12,6 @@ plan:
   - perpanjangan otomatis dan cara mematikannya;
   - tanggung jawab dan penyelesaian sengketa.
 ---
-<!--
-DRAF 22.11, terjemahan dari versi Rusia (src/pages/terms.md). Bukan nasihat hukum: periksa dengan pengacara sebelum dipublikasikan.
-Teks perlu diperiksa penutur asli bahasa Indonesia.
-"[perlu dikonfirmasi: …]" — pertanyaan terbuka, juga ada di founder/legal-docs-questions.md.
--->
 
 Ketentuan Layanan ini (selanjutnya disebut "Ketentuan") mengatur hubungan antara Operator dan Pengguna dalam penggunaan layanan Nota.
 
@@ -152,7 +147,7 @@ Ketentuan Layanan ini (selanjutnya disebut "Ketentuan") mengatur hubungan antara
 
 13.2. Layanan diberikan "sebagaimana adanya". Operator tidak bertanggung jawab atas keputusan yang diambil Pengguna berdasarkan data Spreadsheet dan laporan, atau atas kehilangan keuntungan dan kerugian tidak langsung.
 
-13.3. Total tanggung jawab Operator kepada Pengguna dibatasi pada jumlah yang dibayarkan Pengguna dalam 3 bulan sebelum peristiwa yang menimbulkan tanggung jawab. <!-- pengacara: jangka waktu dan jumlah -->
+13.3. Total tanggung jawab Operator kepada Pengguna dibatasi pada jumlah yang dibayarkan Pengguna dalam 3 bulan sebelum peristiwa yang menimbulkan tanggung jawab.
 
 13.4. Batasan tanggung jawab tidak berlaku jika tidak diizinkan oleh hukum, atau dalam hal kesengajaan atau kelalaian berat Operator.
 
@@ -172,10 +167,10 @@ Ketentuan Layanan ini (selanjutnya disebut "Ketentuan") mengatur hubungan antara
 
 16.1. Keluhan disampaikan kepada Operator melalui bot dukungan atau email yang tercantum dalam butir 1.3. Operator membalas dalam 24 jam.
 
-16.2. Ketentuan ini diatur oleh hukum Georgia. Sengketa yang tidak dapat diselesaikan melalui musyawarah diperiksa oleh pengadilan di tempat Operator terdaftar. <!-- pengacara: hukum dan pengadilan -->
+16.2. Ketentuan ini diatur oleh hukum Georgia. Sengketa yang tidak dapat diselesaikan melalui musyawarah diperiksa oleh pengadilan di tempat Operator terdaftar.
 
 16.3. Ketentuan ini tidak membatasi hak Pengguna sebagai konsumen menurut hukum negara tempat tinggalnya.
 
 ## 17. Ketentuan Penutup
 
-17.1. Ketentuan ini diterbitkan dalam bahasa Rusia, Inggris dan Indonesia. <!-- pengacara: versi mana yang berlaku -->
+17.1. Ketentuan ini diterbitkan dalam bahasa Rusia, Inggris dan Indonesia.

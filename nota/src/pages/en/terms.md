@@ -2,7 +2,7 @@
 layout: ../../layouts/Doc.astro
 title: Terms of Service
 description: Terms of Service for Nota.
-updated: ''
+updated: '25 November 2026'
 lang: en
 slug: terms
 plan:
@@ -12,10 +12,6 @@ plan:
   - auto-renewal and how to turn it off;
   - liability and disputes.
 ---
-<!--
-DRAFT 22.11, translated from the Russian version (src/pages/terms.md). Not legal advice: have a lawyer review before publishing.
-"[to confirm: …]" marks open questions, also listed in founder/legal-docs-questions.md.
--->
 
 These Terms of Service (the "Terms") govern the relationship between the Operator and the User in connection with the use of the Nota service.
 
@@ -151,7 +147,7 @@ These Terms of Service (the "Terms") govern the relationship between the Operato
 
 13.2. The Service is provided "as is". The Operator is not liable for decisions made by the User on the basis of data in the Sheet and reports, or for lost profits and indirect losses.
 
-13.3. The Operator's total liability to the User is limited to the amount paid by the User in the 3 months preceding the event giving rise to liability. <!-- lawyer: period and amount -->
+13.3. The Operator's total liability to the User is limited to the amount paid by the User in the 3 months preceding the event giving rise to liability.
 
 13.4. The limitations of liability do not apply where not permitted by law or in the event of the Operator's wilful misconduct or gross negligence.
 
@@ -171,10 +167,10 @@ These Terms of Service (the "Terms") govern the relationship between the Operato
 
 16.1. Claims shall be sent to the Operator via the support bot or to the email specified in clause 1.3. The Operator responds within 24 hours.
 
-16.2. These Terms are governed by the laws of Georgia. Disputes not settled by negotiation shall be heard by the court at the Operator's place of registration. <!-- lawyer: governing law and court, given customers in Indonesia -->
+16.2. These Terms are governed by the laws of Georgia. Disputes not settled by negotiation shall be heard by the court at the Operator's place of registration.
 
 16.3. Nothing in these Terms limits the rights granted to the User as a consumer by the laws of their country of residence.
 
 ## 17. Final Provisions
 
-17.1. These Terms are published in Russian, English and Indonesian. <!-- lawyer: which version prevails -->
+17.1. These Terms are published in Russian, English and Indonesian.
