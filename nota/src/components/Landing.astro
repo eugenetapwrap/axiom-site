@@ -537,10 +537,21 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
   {isStart && (
     <script is:inline>
       // v12 start: скользящий отчёт начинается на уровне шагов (заголовок над ним во всю ширину)
+      // 25.11: отчёт высотой с текст слева — под кнопкой нет пустоты, отчёт не свисает в следующий блок (тексты на трёх языках разной длины)
       (function () {
         var story = document.querySelector('.story'), split = document.querySelector('.s-split'), wrap = document.querySelector('.v12s .story-media .wrap');
+        var left = document.querySelector('.v12s .s-left'), img = document.querySelector('.v12s .s-story .s-img');
         if (!story || !split || !wrap) return;
-        function place() { wrap.style.paddingTop = Math.round(split.getBoundingClientRect().top - story.getBoundingClientRect().top) + 'px'; }
+        function place() {
+          wrap.style.paddingTop = Math.round(split.getBoundingClientRect().top - story.getBoundingClientRect().top) + 'px';
+          if (!left || !img) return;
+          if (innerWidth < 1000) { img.style.width = ''; left.style.minHeight = ''; return; }
+          var col = img.parentElement.getBoundingClientRect().width;
+          var text = left.lastElementChild.getBoundingClientRect().bottom - split.getBoundingClientRect().top;
+          var h = Math.max(460, Math.min(text, innerHeight - 150));
+          img.style.width = Math.round(Math.min(col, h * 1080 / 1265)) + 'px';
+          left.style.minHeight = Math.round(Math.max(text, img.getBoundingClientRect().height)) + 'px';
+        }
         place();
         addEventListener('resize', place); addEventListener('load', place);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
