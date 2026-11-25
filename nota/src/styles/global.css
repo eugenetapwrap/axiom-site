@@ -1209,3 +1209,5 @@ a.lang-b { color: var(--muted); text-decoration: none; cursor: pointer; }
 .lang-menu a { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 10px; border-radius: 8px; font-size: 14px; font-weight: 700; color: var(--ink); text-decoration: none; }
 @media (hover: hover) { .lang-menu a:hover { background: var(--box); } }
 .lang-menu a small { color: var(--muted); }
+/* Индонезийский заголовок на самых узких телефонах: подчёркнутое «dalam satu spreadsheet» не переносится и не влезало в 320 px */
+@media (max-width: 360px) { html[lang="id"] .v12s .s-lead h1 { font-size: 25px; } }

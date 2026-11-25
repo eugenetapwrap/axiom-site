@@ -1,107 +1,107 @@
 {
   "meta": {
-    "title": "Nota — все расходы команды в одной Google-таблице",
-    "description": "Учёт расходов в Telegram. Присылайте чеки, счета и накладные лично, архивом или в рабочей группе: Nota проверит расчёты, найдёт дубли и запишет всё в вашу Google-таблицу. Отчёты каждую неделю и месяц. 30 документов бесплатно.",
-    "ogAlt": "Nota: все расходы команды — в одной таблице. Пример отчёта за месяц: 10 996 долларов, 2 дубля исключены",
-    "og": "/og-v12.png"
+    "title": "Nota — all your team's expenses in one Google Sheet",
+    "description": "Expense tracking in Telegram. Send receipts, invoices and delivery notes to the bot directly, as an archive or in a work group. Nota checks the math, finds duplicates and writes everything into your Google Sheet. Weekly and monthly reports. 30 documents free.",
+    "ogAlt": "Nota: all your team's expenses in one sheet. Sample monthly report: $10,996, 2 duplicates excluded",
+    "og": "/og-v12-en.png"
   },
   "start": {
-    "eyebrow": "Учёт расходов в Telegram",
-    "title": "Все расходы команды — в одной таблице",
-    "underline": "в одной таблице",
-    "cta": "Начать бесплатно",
+    "eyebrow": "Expense tracking in Telegram",
+    "title": "All your team's expenses in one sheet",
+    "underline": "in one sheet",
+    "cta": "Start for free",
     "flow": [
       {
         "mark": "1",
-        "title": "Присылайте документы лично, архивом или в рабочей группе",
+        "title": "Send documents to the bot directly, as an archive or in a work group",
         "lines": [
-          "Чеки, счета, накладные от руки — любые документы, где есть дата, сумма и описание"
+          "Receipts, invoices, handwritten delivery notes: any document with a date, an amount and a description"
         ]
       },
       {
         "mark": "2",
-        "title": "Nota проверит расчёты, найдёт дубли и ошибки",
+        "title": "Nota checks the math and finds duplicates and errors",
         "lines": [
-          "Неразборчивое не угадывает, а отмечает для проверки"
+          "If something is unreadable, it flags it for review instead of guessing"
         ]
       },
       {
         "mark": "ok",
-        "title": "Готово: всё в вашей Google‑таблице",
+        "title": "Done: it's all in your Google Sheet",
         "lines": [
-          "Таблица заполняется автоматически",
-          "Уведомления о дублях и ошибках — сразу"
+          "The sheet fills in automatically",
+          "You get duplicate and error alerts right away"
         ]
       },
       {
         "mark": "ok",
-        "title": "Отчёты по расписанию",
+        "title": "Scheduled reports",
         "lines": [
-          "Каждую неделю, каждый месяц и по запросу"
+          "Every week, every month and on request"
         ]
       }
     ],
-    "ctaLine": "Откроется бот в Telegram. 30 документов бесплатно, без карты",
+    "ctaLine": "The bot opens in Telegram. 30 documents free, no card needed",
     "report": {
-      "file": "/screens/report-month-1080.webp",
-      "file2x": "/screens/report-month-2160.webp",
+      "file": "/screens/report-month-en-1080.webp",
+      "file2x": "/screens/report-month-en-2160.webp",
       "w": 1080,
       "h": 1265,
-      "alt": "Пример отчёта Nota за месяц: потрачено 10 996 долларов, 354 доллара ждут проверки, 2 дубля исключены, расходы по категориям и поставщикам",
-      "caption": "Пример отчёта за месяц"
+      "alt": "Sample Nota monthly report: $10,996 spent, $354 awaiting review, 2 duplicates excluded, spending by category and supplier",
+      "caption": "Sample monthly report"
     },
     "reportBlock": {
-      "title": "Что покажет отчёт",
+      "title": "What the report shows",
       "points": [
-        "Сколько всего потрачено за период и сколько было платежей",
-        "На что и кому ушли деньги: категории расходов, главные поставщики, крупные платежи",
-        "Где возможны дубли и ошибки в документах: такие платежи стоит проверить",
-        "Как это к прошлой неделе или месяцу"
+        "Total spending for the period and the number of payments",
+        "Where the money went and who got it: expense categories, top suppliers, large payments",
+        "Possible duplicates and errors in documents: payments worth checking",
+        "How it compares with last week or last month"
       ]
     },
-    "tableTitle": "Google-таблица, которая ведётся сама"
+    "tableTitle": "A Google Sheet that keeps itself up to date"
   },
   "hero": {
-    "qr": "Или камерой телефона"
+    "qr": "Or scan with your phone camera"
   },
   "nav": [
     {
       "href": "#result",
-      "label": "Отчёт"
+      "label": "Report"
     },
     {
       "href": "#analytics",
-      "label": "Таблица"
+      "label": "Sheet"
     },
     {
       "href": "#price",
-      "label": "Цены"
+      "label": "Pricing"
     },
     {
       "href": "#data",
-      "label": "Данные"
+      "label": "Data"
     },
     {
       "href": "#faq",
-      "label": "Вопросы"
+      "label": "FAQ"
     }
   ],
-  "tableLead": "Nota создаст на вашем Google Диске таблицу и папку и перенесёт туда всё, что вы прислали: первые 30 документов бесплатно, остальные — по тарифу. Дальше таблица ведётся сама: каждый новый чек становится строкой, а листы с аналитикой пересчитываются. Доступ у Nota — только к этой таблице и папке.",
+  "tableLead": "Nota creates a sheet and a folder in your Google Drive and moves everything you've sent into them: the first 30 documents are free, the rest are covered by your plan. From then on, the sheet keeps itself up to date: each new receipt becomes a row, and the analytics tabs recalculate. Nota has access only to this sheet and folder.",
   "analytics": {
     "screens": [
       {
         "id": "payments",
         "tab": "Payments",
-        "label": "Все платежи",
-        "short": "Строка на каждый документ",
+        "label": "All payments",
+        "short": "One row per document",
         "file": "/screens/payments.webp",
         "w": 1787,
         "h": 809,
         "points": [
-          "Каждый документ — отдельная строка в таблице",
-          "Дубли и строки, которые стоит проверить, видны сразу",
-          "В каждой строке — ссылка на оригинал",
-          "Статус, аккаунт и Business Unit можно назначить вручную"
+          "Each document is a separate row in the sheet",
+          "You spot duplicates and rows worth checking at a glance",
+          "Each row links to the original",
+          "You can set the status, account and Business Unit manually"
         ],
         "mobile": {
           "file": "/screens/payments-mobile.webp",
@@ -112,16 +112,16 @@
       {
         "id": "monthly",
         "tab": "Monthly spend",
-        "label": "Расходы по месяцам",
-        "short": "Категории по месяцам",
+        "label": "Spending by month",
+        "short": "Categories by month",
         "file": "/screens/monthly-spend.webp",
         "w": 1345,
         "h": 695,
         "points": [
-          "Сводная таблица ваших расходов",
-          "Каждая категория по месяцам и её доля",
-          "Расходы месяца и накопленный итог",
-          "Фильтры по Business Unit и статусу"
+          "A summary table of your expenses",
+          "Each category by month and its share",
+          "Monthly spending and the running total",
+          "Filters by Business Unit and status"
         ],
         "mobile": {
           "file": "/screens/monthly-mobile.webp",
@@ -132,16 +132,16 @@
       {
         "id": "insights",
         "tab": "Insights",
-        "label": "Что требует внимания",
-        "short": "Что требует внимания",
+        "label": "What needs attention",
+        "short": "What needs attention",
         "file": "/screens/insights.webp",
         "w": 1242,
         "h": 792,
         "points": [
-          "Платежи в разы больше обычного",
-          "Счета к оплате по срокам",
-          "Дубли, которые ещё стоят «к оплате»",
-          "Расходы по сотрудникам и контрагентам"
+          "Payments several times larger than usual",
+          "Invoices to pay, by due date",
+          "Duplicates still marked “To pay”",
+          "Spending by employee and counterparty"
         ],
         "mobile": {
           "file": "/screens/insights-mobile.webp",
@@ -159,453 +159,453 @@
     "note": ""
   },
   "shotAlt": {
-    "payments": "Google-таблица Nota, лист Payments: строка на каждый платёж, итоги сверху, отметки OK, DBL и Review (тестовые данные)",
-    "monthly": "Лист Monthly spend: расходы месяца и разница с прошлым, каждая категория по месяцам и её доля (тестовые данные)",
-    "insights": "Лист Insights: платежи в разы больше обычного, счета к оплате по срокам, дубли «к оплате» (тестовые данные)"
+    "payments": "Nota Google Sheet, Payments tab: one row per payment, totals at the top, OK, DBL and Review flags (test data)",
+    "monthly": "Monthly spend tab: spending for the month and the change from last month, each category by month and its share (test data)",
+    "insights": "Insights tab: payments several times larger than usual, invoices to pay by due date, duplicates marked “To pay” (test data)"
   },
   "send": {
-    "title": "Как присылать документы дальше",
+    "title": "How to send documents from now on",
     "items": [
       {
         "icon": "archive",
-        "title": "Архивом",
-        "text": "Документы за прошлые месяцы одним файлом. Команда в WhatsApp? Выгружайте чат, когда удобно.",
-        "tag": "Быстрый старт",
+        "title": "As an archive",
+        "text": "Documents from past months in one file. Is your team on WhatsApp? Export the chat whenever it suits you.",
+        "tag": "Quick start",
         "tone": "green"
       },
       {
         "icon": "receipt",
-        "title": "Лично боту",
-        "text": "Сфотографировали чек, через минуту он в таблице."
+        "title": "Directly to the bot",
+        "text": "Take a photo of a receipt, and a minute later it's in the sheet."
       },
       {
         "icon": "forward",
-        "title": "Пересылкой",
-        "text": "Из рабочих чатов, WhatsApp или почты."
+        "title": "By forwarding",
+        "text": "From work chats, WhatsApp or email."
       },
       {
         "icon": "chat-people",
-        "title": "В рабочей группе",
-        "text": "Nota берёт только платёжные документы, в группу не пишет, ставит ✍ на записанный чек.",
-        "tag": "По желанию",
+        "title": "In a work group",
+        "text": "Nota picks up only payment documents, doesn't post in the group and marks each recorded receipt with ✍.",
+        "tag": "Optional",
         "tone": "yellow"
       }
     ]
   },
   "what": {
-    "title": "Что Nota делает с каждым документом",
+    "title": "What Nota does with each document",
     "items": [
       {
         "icon": "table",
-        "title": "Записывает в таблицу",
-        "text": "Каждый документ — строка в вашей Google‑таблице: дата, сумма, поставщик, категория и другие данные.",
+        "title": "Records it in the sheet",
+        "text": "Each document becomes a row in your Google Sheet: date, amount, supplier, category and other details.",
         "accent": false
       },
       {
         "icon": "copy",
-        "title": "Находит дубли",
-        "text": "Тот же чек от двоих или переснятый. Nota отметит дубль, чтобы один счёт не оплатили дважды.",
+        "title": "Finds duplicates",
+        "text": "The same receipt sent by two people or photographed again. Nota flags the duplicate so no invoice gets paid twice.",
         "accent": false
       },
       {
         "icon": "calc",
-        "title": "Сверяет суммы",
-        "text": "Пересчитывает позиции, замечает исправления и суммы в разы больше обычных.",
+        "title": "Checks the amounts",
+        "text": "Recalculates line items and spots corrections and amounts several times larger than usual.",
         "accent": false
       },
       {
         "icon": "folder",
-        "title": "Ведёт архив документов",
-        "text": "Каждый файл сохраняется в папку на вашем Google Диске под номером строки. Не нужно листать чат: оригинал открывается из таблицы в один клик.",
+        "title": "Keeps a document archive",
+        "text": "Nota saves each file to a folder in your Google Drive under its row number. No need to scroll through the chat: you open the original from the sheet in one click.",
         "accent": false
       },
       {
         "icon": "globe",
-        "title": "Считает в вашей валюте",
-        "text": "Платежи в других валютах пересчитывает по курсу центрального банка на дату платежа. Валюту можно сменить в любой момент.",
+        "title": "Works in your currency",
+        "text": "Converts payments in other currencies at the central bank rate on the payment date. You can change the currency at any time.",
         "accent": false
       },
       {
         "icon": "review",
-        "title": "Не угадывает молча",
-        "text": "Если сомневается, отмечает строку как Review и пишет причину.",
+        "title": "No silent guessing",
+        "text": "When in doubt, it marks the row Review and gives the reason.",
         "accent": false
       }
     ]
   },
   "segments": {
-    "title": "Для кого",
+    "title": "Who it's for",
     "items": [
       {
-        "title": "Стройка и ремонт",
-        "text": "Рукописные накладные, переводы подрядчикам, несколько объектов."
+        "title": "Construction and renovation",
+        "text": "Handwritten delivery notes, transfers to contractors, multiple sites."
       },
       {
-        "title": "Виллы и управляющие компании",
-        "text": "Ремонт, уборка, коммунальные платежи по каждой вилле."
+        "title": "Villas and property management companies",
+        "text": "Repairs, cleaning and utility bills for each villa."
       },
       {
-        "title": "Магазины и прокат",
-        "text": "Закупки, запчасти, топливо, оплата мастерам."
+        "title": "Shops and rentals",
+        "text": "Purchases, spare parts, fuel, payments to technicians."
       },
       {
-        "title": "Владельцы на расстоянии",
-        "text": "Видите расходы, даже когда вы в другой стране."
+        "title": "Remote owners",
+        "text": "See your expenses even when you're in another country."
       },
       {
-        "title": "Бухгалтеры",
-        "text": "Документы всех клиентов в одной таблице, с разбивкой по каждому."
+        "title": "Accountants",
+        "text": "All your clients' documents in one sheet, broken down by client."
       },
       {
-        "title": "Любой другой бизнес",
-        "text": "Где расходы подтверждают чеками, счетами и накладными.",
+        "title": "Any other business",
+        "text": "Where expenses are backed by receipts, invoices and delivery notes.",
         "any": true
       }
     ]
   },
   "pricing": {
-    "title": "Цены",
-    "lead": "Первые 30 документов бесплатно. Дальше платите за документы, а не за сотрудников.",
+    "title": "Pricing",
+    "lead": "The first 30 documents are free. After that, you pay per document, not per employee.",
     "billing": {
-      "label": "Период оплаты",
+      "label": "Billing period",
       "opts": [
         {
           "v": "month",
-          "lg": "Помесячно",
-          "sm": "1 мес"
+          "lg": "Monthly",
+          "sm": "1 mo"
         },
         {
           "v": "q3",
-          "lg": "3 месяца",
-          "sm": "3 мес",
+          "lg": "3 months",
+          "sm": "3 mo",
           "save": "−10%"
         },
         {
           "v": "q6",
-          "lg": "6 месяцев",
-          "sm": "6 мес",
+          "lg": "6 months",
+          "sm": "6 mo",
           "save": "−15%"
         }
       ]
     },
     "common": [
-      "отчёты",
-      "без ограничения сотрудников",
-      "дубли не тратят лимит"
+      "reports",
+      "unlimited team members",
+      "duplicates don't count toward your limit"
     ],
     "plans": [
       {
-        "name": "Старт",
+        "name": "Start",
         "vol": "100",
-        "groups": "до 5",
-        "docs": "До 100 документов в месяц",
-        "who": "Один-два проекта",
+        "groups": "up to 5",
+        "docs": "Up to 100 documents a month",
+        "who": "One or two projects",
         "month": {
           "price": "$19",
-          "unit": "≈ $0,19 за документ"
+          "unit": "≈ $0.19 per document"
         },
         "q3": {
           "price": "$17",
-          "unit": "≈ $0,17 за документ",
-          "total": "$51 за 3 месяца"
+          "unit": "≈ $0.17 per document",
+          "total": "$51 for 3 months"
         },
         "q6": {
           "price": "$16",
-          "unit": "≈ $0,16 за документ",
-          "total": "$96 за 6 месяцев"
+          "unit": "≈ $0.16 per document",
+          "total": "$96 for 6 months"
         },
         "tag": "land10_price_start",
-        "cta": "Начать бесплатно"
+        "cta": "Start for free"
       },
       {
-        "name": "Рост",
+        "name": "Growth",
         "vol": "200",
-        "groups": "до 10",
-        "docs": "До 200 документов в месяц",
-        "who": "Несколько проектов",
+        "groups": "up to 10",
+        "docs": "Up to 200 documents a month",
+        "who": "Several projects",
         "month": {
           "price": "$35",
-          "unit": "≈ $0,18 за документ"
+          "unit": "≈ $0.18 per document"
         },
         "q3": {
           "price": "$31",
-          "unit": "≈ $0,16 за документ",
-          "total": "$93 за 3 месяца"
+          "unit": "≈ $0.16 per document",
+          "total": "$93 for 3 months"
         },
         "q6": {
           "price": "$29",
-          "unit": "≈ $0,15 за документ",
-          "total": "$174 за 6 месяцев"
+          "unit": "≈ $0.15 per document",
+          "total": "$174 for 6 months"
         },
         "tag": "land10_price_business",
-        "cta": "Начать бесплатно",
+        "cta": "Start for free",
         "highlight": true
       },
       {
-        "name": "Масштаб",
+        "name": "Scale",
         "vol": "500",
-        "groups": "без ограничений",
-        "docs": "До 500 документов в месяц",
-        "who": "Девелопер, управляющая компания",
+        "groups": "unlimited",
+        "docs": "Up to 500 documents a month",
+        "who": "Developers and property managers",
         "month": {
           "price": "$79",
-          "unit": "≈ $0,16 за документ"
+          "unit": "≈ $0.16 per document"
         },
         "q3": {
           "price": "$71",
-          "unit": "≈ $0,14 за документ",
-          "total": "$213 за 3 месяца"
+          "unit": "≈ $0.14 per document",
+          "total": "$213 for 3 months"
         },
         "q6": {
           "price": "$67",
-          "unit": "≈ $0,13 за документ",
-          "total": "$402 за 6 месяцев"
+          "unit": "≈ $0.13 per document",
+          "total": "$402 for 6 months"
         },
         "tag": "land10_price_dev",
-        "cta": "Начать бесплатно"
+        "cta": "Start for free"
       },
       {
-        "name": "Индивидуально",
+        "name": "Custom",
         "vol": "500+",
-        "groups": "без ограничений",
-        "docs": "Более 500 документов в месяц",
-        "who": "Система учёта от Axiom Consulting",
-        "custom": "По запросу",
+        "groups": "unlimited",
+        "docs": "Over 500 documents a month",
+        "who": "Accounting system by Axiom Consulting",
+        "custom": "On request",
         "services": [
-          "Постановка управленческого учёта",
-          "Подбор и внедрение системы: CRM, ERP",
-          "Отчётность для собственников и партнёров",
-          "Сопровождение команды Axiom Consulting"
+          "Setting up management accounting",
+          "Choosing and implementing a system: CRM, ERP",
+          "Reporting for owners and partners",
+          "Support from the Axiom Consulting team"
         ],
         "tag": "land10_price_custom",
-        "cta": "Обсудить",
+        "cta": "Let's talk",
         "outline": true
       }
     ]
   },
   "facts": [
     {
-      "q": "Что считается документом",
-      "a": "Чек, счёт или накладная, ставшие строкой в таблице; в PDF — каждая страница. Дубли и неплатёжные файлы не считаются. Документы сверх лимита можно докупить."
+      "q": "What counts as a document",
+      "a": "A receipt, invoice or delivery note that becomes a row in the sheet. In a PDF, each page counts. Duplicates and non-payment files don't count. You can buy extra documents beyond your limit."
     },
     {
-      "q": "Что такое группа",
-      "a": "Рабочий чат сотрудников в Telegram. Каждая группа — свой Business Unit (Проект)."
+      "q": "What is a group",
+      "a": "Your team's work chat in Telegram. Each group is its own Business Unit (Project)."
     },
     {
-      "q": "Сколько нужно документов",
-      "a": "Стройка трёх вилл — около 70 документов в месяц: хватит «Старта»."
+      "q": "How many documents you need",
+      "a": "Building three villas takes about 70 documents a month, so “Start” is enough."
     },
     {
-      "q": "Оплата",
-      "a": "Visa, Mastercard или криптовалюта; российские карты пока не принимаем."
+      "q": "Payment",
+      "a": "Visa, Mastercard or cryptocurrency. We don't accept Russian cards yet."
     }
   ],
   "sched": {
-    "title": "Когда приходит отчёт",
+    "title": "When reports arrive",
     "rows": [
       [
-        "Первый",
-        "по архиву или на 30‑м документе"
+        "First",
+        "from your archive or at the 30th document"
       ],
       [
-        "Каждый понедельник",
-        "за неделю"
+        "Every Monday",
+        "for the week"
       ],
       [
-        "1-го числа",
-        "за месяц"
+        "On the 1st",
+        "for the month"
       ],
       [
-        "В любое время",
-        "по кнопке «Отчёт»"
+        "Any time",
+        "with the “Report” button"
       ]
     ]
   },
   "compare": {
-    "title": "Сотрудник прислал накладную в 9:41. Когда она окажется в таблице?",
-    "whenLabel": "Накладная в таблице",
+    "title": "An employee sent a delivery note at 9:41. When will it be in the sheet?",
+    "whenLabel": "Delivery note in the sheet",
     "rows": [
-      "Кто вносит в таблицу",
-      "Сотрудникам нужно новое приложение?",
-      "Рукописная накладная",
-      "Где найти оригинал",
-      "За что платите"
+      "Who enters it in the sheet",
+      "Does your team need a new app?",
+      "Handwritten delivery note",
+      "Where to find the original",
+      "What you pay for"
     ],
     "mobileHide": [
-      "Сотрудникам нужно новое приложение?",
-      "Где найти оригинал"
+      "Does your team need a new app?",
+      "Where to find the original"
     ],
     "options": [
       {
         "name": "Nota",
-        "when": "В 9:42",
-        "whenNote": "через минуту, без вас",
+        "when": "At 9:42",
+        "whenNote": "a minute later, without you",
         "nota": true,
         "cells": [
           [
             "yes",
-            "Без вас"
+            "Done without you"
           ],
           [
             "yes",
-            "Нет, присылают в Telegram"
+            "No, they send via Telegram"
           ],
           [
             "yes",
-            "Читает"
+            "Reads it"
           ],
           [
             "yes",
-            "Ссылка в каждой строке"
+            "Link in every row"
           ],
           [
             "yes",
-            "За документы"
+            "Per document"
           ]
         ]
       },
       {
-        "name": "Админ с Excel",
-        "when": "В пятницу",
-        "whenNote": "когда дойдут руки",
+        "name": "Admin with Excel",
+        "when": "On Friday",
+        "whenNote": "when they get around to it",
         "cells": [
           [
             "no",
-            "Админ, каждую строку вручную"
+            "Admin, every row by hand"
           ],
           [
             "yes",
-            "Нет"
+            "No"
           ],
           [
             "no",
-            "Админ разбирает вручную"
+            "Admin deciphers it by hand"
           ],
           [
             "no",
-            "Искать в чате"
+            "Search the chat"
           ],
           [
             "no",
-            "Зарплата админа"
+            "Admin's salary"
           ]
         ]
       },
       {
-        "name": "Приложение для расходов",
-        "short": "Приложение",
-        "when": "Когда заполнят",
-        "whenNote": "сотрудник вносит сам",
+        "name": "Expense app",
+        "short": "App",
+        "when": "When filled in",
+        "whenNote": "the employee enters it",
         "cells": [
           [
             "no",
-            "Сотрудник заполняет форму"
+            "Employee fills in a form"
           ],
           [
             "no",
-            "Да: установить и войти"
+            "Yes: install and sign in"
           ],
           [
             "mid",
-            "Часто правят руками"
+            "Often fixed by hand"
           ],
           [
             "yes",
-            "В приложении"
+            "In the app"
           ],
           [
             "mid",
-            "За каждого сотрудника"
+            "Per employee"
           ]
         ]
       }
     ]
   },
   "data": {
-    "title": "Ваши данные",
+    "title": "Your data",
     "items": [
       {
         "icon": "key",
-        "title": "Доступ только к таблице и папке",
-        "text": "Их Nota создаёт сама на вашем Google Диске."
+        "title": "Access to the sheet and folder only",
+        "text": "Nota creates them itself in your Google Drive."
       },
       {
         "icon": "table",
-        "title": "Документы остаются у вас",
-        "text": "Таблица и оригиналы лежат на вашем Google Диске."
+        "title": "Your documents stay with you",
+        "text": "The sheet and the originals are stored in your Google Drive."
       },
       {
         "icon": "lock",
-        "title": "У нас только отпечатки",
-        "text": "Храним только отпечатки файлов, чтобы находить дубли. Документы — лишь на время обработки, неплатёжные файлы отбрасываем сразу. ИИ на документах не обучаем."
+        "title": "We keep only fingerprints",
+        "text": "We store only file fingerprints, to find duplicates. We keep documents only while processing them and discard non-payment files right away. We don't train AI on your documents."
       },
       {
         "icon": "trash",
-        "title": "Удаление одной командой",
-        "text": "Стираем отпечатки документов и историю, отключаемся от Google, бот выходит из всех групп. Остаются только ваше имя пользователя в Telegram и данные об оплатах. Таблица, папка и документы остаются у вас."
+        "title": "Delete with one command",
+        "text": "We erase document fingerprints and history, disconnect from Google, and the bot leaves all groups. Only your Telegram username and payment records remain. The sheet, folder and documents stay with you."
       }
     ],
-    "who": "В основе Nota — более 15 лет опыта Axiom Consulting в финансовом контроле для бизнеса в СНГ и Юго-Восточной Азии."
+    "who": "Nota is built on more than 15 years of Axiom Consulting's experience in financial control for businesses in the CIS and Southeast Asia."
   },
   "faq": [
     {
-      "q": "Какие документы читает Nota?",
-      "a": "Любые платёжные: чеки из магазинов, счета и инвойсы, накладные, в том числе мятые и рукописные, скриншоты банковских переводов. PDF и фото, на любом языке; многостраничный PDF разбирается постранично. Неплатёжные файлы, например договоры, паспорта или фото объекта, бот пропускает, и лимит они не тратят."
+      "q": "What documents does Nota read?",
+      "a": "Any payment document: store receipts, bills and invoices, delivery notes (including crumpled and handwritten ones), and screenshots of bank transfers. PDFs and photos, in any language; a multi-page PDF is read page by page. The bot skips non-payment files such as contracts, passports or site photos, and they don't count toward your limit."
     },
     {
-      "q": "Счёт и скриншот оплаты по нему — это две строки?",
-      "a": "Если скриншот подтверждает оплату уже записанного счёта, Nota спросит, что с ним сделать: записать отдельной строкой или пропустить. Выбор можно сохранить по умолчанию, и бот больше не будет спрашивать."
+      "q": "An invoice and a screenshot of its payment: is that two rows?",
+      "a": "If the screenshot confirms payment of an invoice that's already recorded, Nota asks what to do with it: add it as a separate row or skip it. You can save your choice as the default, and the bot won't ask again."
     },
     {
-      "q": "Когда придёт первый отчёт?",
-      "a": "По архиву до 30 документов — около 15 минут, бот сразу ответит, что архив в работе. Если пересылаете чеки по одному, бот записывает их, а первый отчёт придёт сам после 30 документов. Получить отчёт можно и раньше, в любое время, кнопкой «Отчёт»."
+      "q": "When will I get the first report?",
+      "a": "For an archive of up to 30 documents, in about 15 minutes. The bot tells you right away that the archive is being processed. If you forward receipts one at a time, the bot records them, and the first report arrives on its own after 30 documents. You can also get a report earlier, at any time, with the “Report” button."
     },
     {
-      "q": "А если не подключать Google?",
-      "a": "Без Google придёт только отчёт по архиву. Таблица, уведомления о дублях и отчёты по расписанию работают с Google. Всё, что вы прислали, бот хранит 7 дней: подключите Google за это время — и архив вместе с отдельными файлами запишется в таблицу. Если не подключить, через 7 дней данные удалятся, у вас останется отчёт."
+      "q": "What if I don't connect Google?",
+      "a": "Without Google, you get only the archive report. The sheet, duplicate alerts and scheduled reports need Google. The bot keeps everything you've sent for 7 days: connect Google within that time, and the archive and any separate files go into the sheet. If you don't connect it, the data is deleted after 7 days, and you keep the report."
     },
     {
-      "q": "Что будет после 30 бесплатных документов?",
-      "a": "Nota пришлёт отчёт по первым 30 документам, даже если в архиве их больше: на них уже видно, как бот читает ваши чеки и накладные. Дальше тариф выбирается и оплачивается по кнопке оплаты в шапке вашей таблицы. Всё, что уже записано в таблицу, остаётся на вашем Google Диске вместе с папкой оригиналов, даже если вы не оплатите."
+      "q": "What happens after the 30 free documents?",
+      "a": "Nota sends a report on the first 30 documents, even if your archive has more. They already show you how the bot reads your receipts and delivery notes. After that, you choose and pay for a plan using the payment button at the top of your sheet. Everything already in the sheet stays in your Google Drive, along with the folder of originals, even if you don't pay."
     },
     {
-      "q": "Nota читает переписку в группе?",
-      "a": "Нет. Бот обрабатывает только сообщения с файлами, текстовые сообщения пропускает. Из файлов берёт только платёжные документы, неплатёжные отбрасывает сразу. В группу бот не пишет, только ставит ✍ под записанным чеком, а о дублях сообщает вам в личку. Группа необязательна: чеки можно пересылать боту в личку."
+      "q": "Does Nota read messages in the group?",
+      "a": "No. The bot processes only messages with files and skips text messages. From those files, it takes only payment documents and discards non-payment ones right away. The bot doesn't post in the group. It only marks each recorded receipt with ✍ and tells you about duplicates in a private chat. The group is optional: you can forward receipts to the bot in a private chat."
     },
     {
-      "q": "Команда работает в WhatsApp. Подойдёт?",
-      "a": "Да. Сам бот работает в Telegram, а архив WhatsApp можно выгрузить прямо с телефона: чат → «Экспорт чата» с медиафайлами. Присылайте архив боту, когда удобно, или пересылайте чеки по одному."
+      "q": "My team uses WhatsApp. Will it work?",
+      "a": "Yes. The bot itself runs in Telegram, but you can export a WhatsApp archive right from your phone: chat → “Export chat”, with media. Send the archive to the bot whenever it suits you, or forward receipts one at a time."
     },
     {
-      "q": "Я бухгалтер, у меня несколько клиентов. Как работать?",
-      "a": "Один тариф и одна таблица на всех. Заведите в Telegram группу на каждого клиента и пересылайте туда его чеки: Nota запишет их на нужного клиента в колонке Business Unit. Таблицу можно скачать в Excel или CSV."
+      "q": "I'm an accountant with several clients. How should I use it?",
+      "a": "One plan and one sheet for all of them. Create a Telegram group for each client and forward that client's receipts there: Nota records them under the right client in the Business Unit column. You can download the sheet as Excel or CSV."
     },
     {
-      "q": "На каком языке таблица?",
-      "a": "Таблица на английском. Бот говорит по-русски, по-английски и по-индонезийски, а документы понимает на любом языке. Платежи в других валютах пересчитывает в вашу по курсу центрального банка на дату платежа."
+      "q": "What language is the sheet in?",
+      "a": "The sheet is in English. The bot speaks Russian, English and Indonesian, and understands documents in any language. It converts payments in other currencies into yours at the central bank rate on the payment date."
     },
     {
-      "q": "Откуда Nota знает, что оплачено?",
-      "a": "Статус «Paid» ставится, если документ сам подтверждает оплату: например, чек магазина или платёжка. «To pay» отмечаете вы. Счета к оплате видны на листе Insights по срокам."
+      "q": "How does Nota know what's been paid?",
+      "a": "Nota sets the “Paid” status when the document itself confirms payment, such as a store receipt or a payment slip. You mark “To pay” yourself. Invoices to pay appear on the Insights tab by due date."
     },
     {
-      "q": "Это бухгалтерия? Подойдёт нашему бухгалтеру?",
-      "a": "Это не бухгалтерия: Nota показывает, куда и кому уходят деньги, и отмечает дубли и странные суммы. Налоги и отчётность остаются бухгалтеру, а ему пригодится готовая таблица со ссылками на оригиналы. Её можно скачать в Excel или CSV и загрузить в Jurnal, Zoho или другую систему, прямой выгрузки пока нет."
+      "q": "Is this accounting software? Will it work for our accountant?",
+      "a": "It's not accounting software. Nota shows where the money goes and who gets it, and flags duplicates and unusual amounts. Taxes and reporting stay with your accountant, who will find a ready-made sheet with links to the originals useful. You can download it as Excel or CSV and import it into Jurnal, Zoho or another system. There's no direct export yet."
     },
     {
-      "q": "Чего Nota не видит?",
-      "a": "Наличные без чека, траты, на которые нет документа, и выданные авансы прорабу. Рыночных цен Nota не знает, но платёж в разы больше обычного отметит на листе Insights."
+      "q": "What can't Nota see?",
+      "a": "Cash without a receipt, spending with no document, and advances paid to the foreman. Nota doesn't know market prices, but it flags a payment several times larger than usual on the Insights tab."
     }
   ],
   "final": {
-    "title": "Пришлите архив чеков",
-    "lead": "Выгрузите рабочий чат и пришлите архив боту. Через 15 минут увидите, на что ушли деньги и есть ли дубли. 30 документов бесплатно, без карты, без регистрации."
+    "title": "Send an archive of your receipts",
+    "lead": "Export your work chat and send the archive to the bot. In 15 minutes, you'll see where the money went and whether there are duplicates. 30 documents free, no card, no sign-up."
   },
   "footer": {
-    "terms": "/terms",
-    "privacy": "/privacy",
-    "refund": "/refund",
-    "testData": "Примеры отчёта и таблицы — на тестовых данных."
+    "terms": "/en/terms",
+    "privacy": "/en/privacy",
+    "refund": "/en/refund",
+    "testData": "The sample report and sheet use test data."
   }
 }

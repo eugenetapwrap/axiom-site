@@ -1,107 +1,107 @@
 {
   "meta": {
-    "title": "Nota — все расходы команды в одной Google-таблице",
-    "description": "Учёт расходов в Telegram. Присылайте чеки, счета и накладные лично, архивом или в рабочей группе: Nota проверит расчёты, найдёт дубли и запишет всё в вашу Google-таблицу. Отчёты каждую неделю и месяц. 30 документов бесплатно.",
-    "ogAlt": "Nota: все расходы команды — в одной таблице. Пример отчёта за месяц: 10 996 долларов, 2 дубля исключены",
-    "og": "/og-v12.png"
+    "title": "Nota — semua pengeluaran tim dalam satu spreadsheet Google Sheets",
+    "description": "Pencatatan pengeluaran di Telegram. Kirim struk, invoice, dan nota langsung ke bot, sebagai arsip, atau di grup kerja: Nota memeriksa perhitungan, menemukan duplikat, dan mencatat semuanya ke spreadsheet Google Sheets Anda. Laporan setiap minggu dan setiap bulan. 30 dokumen gratis.",
+    "ogAlt": "Nota: semua pengeluaran tim dalam satu spreadsheet. Contoh laporan bulanan: 10.996 dolar, 2 duplikat dikecualikan",
+    "og": "/og-v12-id.png"
   },
   "start": {
-    "eyebrow": "Учёт расходов в Telegram",
-    "title": "Все расходы команды — в одной таблице",
-    "underline": "в одной таблице",
-    "cta": "Начать бесплатно",
+    "eyebrow": "Pencatatan pengeluaran di Telegram",
+    "title": "Semua pengeluaran tim dalam satu spreadsheet",
+    "underline": "dalam satu spreadsheet",
+    "cta": "Mulai gratis",
     "flow": [
       {
         "mark": "1",
-        "title": "Присылайте документы лично, архивом или в рабочей группе",
+        "title": "Kirim dokumen langsung ke bot, sebagai arsip, atau di grup kerja",
         "lines": [
-          "Чеки, счета, накладные от руки — любые документы, где есть дата, сумма и описание"
+          "Struk, invoice, nota tulisan tangan — dokumen apa pun yang memuat tanggal, jumlah, dan keterangan"
         ]
       },
       {
         "mark": "2",
-        "title": "Nota проверит расчёты, найдёт дубли и ошибки",
+        "title": "Nota memeriksa perhitungan, menemukan duplikat dan kesalahan",
         "lines": [
-          "Неразборчивое не угадывает, а отмечает для проверки"
+          "Yang tidak terbaca tidak ditebak, tetapi ditandai untuk diperiksa"
         ]
       },
       {
         "mark": "ok",
-        "title": "Готово: всё в вашей Google‑таблице",
+        "title": "Selesai: semua ada di spreadsheet Google Sheets Anda",
         "lines": [
-          "Таблица заполняется автоматически",
-          "Уведомления о дублях и ошибках — сразу"
+          "Spreadsheet terisi otomatis",
+          "Pemberitahuan duplikat dan kesalahan dikirim langsung"
         ]
       },
       {
         "mark": "ok",
-        "title": "Отчёты по расписанию",
+        "title": "Laporan terjadwal",
         "lines": [
-          "Каждую неделю, каждый месяц и по запросу"
+          "Setiap minggu, setiap bulan, dan atas permintaan"
         ]
       }
     ],
-    "ctaLine": "Откроется бот в Telegram. 30 документов бесплатно, без карты",
+    "ctaLine": "Bot akan terbuka di Telegram. 30 dokumen gratis, tanpa kartu pembayaran",
     "report": {
-      "file": "/screens/report-month-1080.webp",
-      "file2x": "/screens/report-month-2160.webp",
+      "file": "/screens/report-month-id-1080.webp",
+      "file2x": "/screens/report-month-id-2160.webp",
       "w": 1080,
       "h": 1265,
-      "alt": "Пример отчёта Nota за месяц: потрачено 10 996 долларов, 354 доллара ждут проверки, 2 дубля исключены, расходы по категориям и поставщикам",
-      "caption": "Пример отчёта за месяц"
+      "alt": "Contoh laporan bulanan Nota: total pengeluaran 10.996 dolar, 354 dolar menunggu diperiksa, 2 duplikat dikecualikan, pengeluaran per kategori dan pemasok",
+      "caption": "Contoh laporan bulanan"
     },
     "reportBlock": {
-      "title": "Что покажет отчёт",
+      "title": "Apa yang ditunjukkan laporan",
       "points": [
-        "Сколько всего потрачено за период и сколько было платежей",
-        "На что и кому ушли деньги: категории расходов, главные поставщики, крупные платежи",
-        "Где возможны дубли и ошибки в документах: такие платежи стоит проверить",
-        "Как это к прошлой неделе или месяцу"
+        "Total pengeluaran selama periode dan jumlah pembayaran",
+        "Untuk apa dan ke siapa uang keluar: kategori pengeluaran, pemasok utama, pembayaran besar",
+        "Kemungkinan duplikat dan kesalahan dalam dokumen: pembayaran seperti ini sebaiknya diperiksa",
+        "Perbandingan dengan minggu atau bulan lalu"
       ]
     },
-    "tableTitle": "Google-таблица, которая ведётся сама"
+    "tableTitle": "Spreadsheet Google Sheets yang terisi sendiri"
   },
   "hero": {
-    "qr": "Или камерой телефона"
+    "qr": "Atau pindai dengan kamera ponsel"
   },
   "nav": [
     {
       "href": "#result",
-      "label": "Отчёт"
+      "label": "Laporan"
     },
     {
       "href": "#analytics",
-      "label": "Таблица"
+      "label": "Spreadsheet"
     },
     {
       "href": "#price",
-      "label": "Цены"
+      "label": "Harga"
     },
     {
       "href": "#data",
-      "label": "Данные"
+      "label": "Data"
     },
     {
       "href": "#faq",
-      "label": "Вопросы"
+      "label": "FAQ"
     }
   ],
-  "tableLead": "Nota создаст на вашем Google Диске таблицу и папку и перенесёт туда всё, что вы прислали: первые 30 документов бесплатно, остальные — по тарифу. Дальше таблица ведётся сама: каждый новый чек становится строкой, а листы с аналитикой пересчитываются. Доступ у Nota — только к этой таблице и папке.",
+  "tableLead": "Nota membuat spreadsheet Google Sheets dan folder di Google Drive Anda, lalu memasukkan semua yang Anda kirim ke sana: 30 dokumen pertama gratis, sisanya sesuai paket. Selanjutnya spreadsheet terisi sendiri: setiap struk baru menjadi satu baris, dan lembar analitik dihitung ulang. Nota hanya memiliki akses ke spreadsheet dan folder ini.",
   "analytics": {
     "screens": [
       {
         "id": "payments",
         "tab": "Payments",
-        "label": "Все платежи",
-        "short": "Строка на каждый документ",
+        "label": "Semua pembayaran",
+        "short": "Satu baris per dokumen",
         "file": "/screens/payments.webp",
         "w": 1787,
         "h": 809,
         "points": [
-          "Каждый документ — отдельная строка в таблице",
-          "Дубли и строки, которые стоит проверить, видны сразу",
-          "В каждой строке — ссылка на оригинал",
-          "Статус, аккаунт и Business Unit можно назначить вручную"
+          "Setiap dokumen menjadi baris tersendiri di spreadsheet",
+          "Duplikat dan baris yang perlu diperiksa langsung terlihat",
+          "Setiap baris berisi tautan ke dokumen asli",
+          "Status, akun, dan Business Unit bisa diatur manual"
         ],
         "mobile": {
           "file": "/screens/payments-mobile.webp",
@@ -112,16 +112,16 @@
       {
         "id": "monthly",
         "tab": "Monthly spend",
-        "label": "Расходы по месяцам",
-        "short": "Категории по месяцам",
+        "label": "Pengeluaran per bulan",
+        "short": "Kategori per bulan",
         "file": "/screens/monthly-spend.webp",
         "w": 1345,
         "h": 695,
         "points": [
-          "Сводная таблица ваших расходов",
-          "Каждая категория по месяцам и её доля",
-          "Расходы месяца и накопленный итог",
-          "Фильтры по Business Unit и статусу"
+          "Tabel ringkasan pengeluaran Anda",
+          "Setiap kategori per bulan beserta porsinya",
+          "Pengeluaran bulanan dan total kumulatif",
+          "Filter berdasarkan Business Unit dan status"
         ],
         "mobile": {
           "file": "/screens/monthly-mobile.webp",
@@ -132,16 +132,16 @@
       {
         "id": "insights",
         "tab": "Insights",
-        "label": "Что требует внимания",
-        "short": "Что требует внимания",
+        "label": "Yang perlu diperhatikan",
+        "short": "Yang perlu diperhatikan",
         "file": "/screens/insights.webp",
         "w": 1242,
         "h": 792,
         "points": [
-          "Платежи в разы больше обычного",
-          "Счета к оплате по срокам",
-          "Дубли, которые ещё стоят «к оплате»",
-          "Расходы по сотрудникам и контрагентам"
+          "Pembayaran yang berkali lipat lebih besar dari biasanya",
+          "Invoice yang harus dibayar, menurut jatuh tempo",
+          "Duplikat yang masih berstatus \"harus dibayar\"",
+          "Pengeluaran per karyawan dan per rekanan"
         ],
         "mobile": {
           "file": "/screens/insights-mobile.webp",
@@ -159,453 +159,453 @@
     "note": ""
   },
   "shotAlt": {
-    "payments": "Google-таблица Nota, лист Payments: строка на каждый платёж, итоги сверху, отметки OK, DBL и Review (тестовые данные)",
-    "monthly": "Лист Monthly spend: расходы месяца и разница с прошлым, каждая категория по месяцам и её доля (тестовые данные)",
-    "insights": "Лист Insights: платежи в разы больше обычного, счета к оплате по срокам, дубли «к оплате» (тестовые данные)"
+    "payments": "Spreadsheet Google Sheets Nota, lembar Payments: satu baris per pembayaran, total di bagian atas, tanda OK, DBL, dan Review (data uji)",
+    "monthly": "Lembar Monthly spend: pengeluaran bulanan dan selisihnya dengan bulan sebelumnya, setiap kategori per bulan beserta porsinya (data uji)",
+    "insights": "Lembar Insights: pembayaran yang berkali lipat lebih besar dari biasanya, invoice yang harus dibayar menurut jatuh tempo, duplikat berstatus \"harus dibayar\" (data uji)"
   },
   "send": {
-    "title": "Как присылать документы дальше",
+    "title": "Cara mengirim dokumen selanjutnya",
     "items": [
       {
         "icon": "archive",
-        "title": "Архивом",
-        "text": "Документы за прошлые месяцы одним файлом. Команда в WhatsApp? Выгружайте чат, когда удобно.",
-        "tag": "Быстрый старт",
+        "title": "Sebagai arsip",
+        "text": "Dokumen bulan-bulan sebelumnya dalam satu file. Tim Anda memakai WhatsApp? Ekspor chat kapan pun Anda sempat.",
+        "tag": "Mulai cepat",
         "tone": "green"
       },
       {
         "icon": "receipt",
-        "title": "Лично боту",
-        "text": "Сфотографировали чек, через минуту он в таблице."
+        "title": "Langsung ke bot",
+        "text": "Struk difoto, semenit kemudian sudah masuk spreadsheet."
       },
       {
         "icon": "forward",
-        "title": "Пересылкой",
-        "text": "Из рабочих чатов, WhatsApp или почты."
+        "title": "Diteruskan",
+        "text": "Dari chat kerja, WhatsApp, atau email."
       },
       {
         "icon": "chat-people",
-        "title": "В рабочей группе",
-        "text": "Nota берёт только платёжные документы, в группу не пишет, ставит ✍ на записанный чек.",
-        "tag": "По желанию",
+        "title": "Di grup kerja",
+        "text": "Nota hanya mengambil dokumen pembayaran, tidak menulis di grup, dan menandai struk yang sudah dicatat dengan ✍.",
+        "tag": "Opsional",
         "tone": "yellow"
       }
     ]
   },
   "what": {
-    "title": "Что Nota делает с каждым документом",
+    "title": "Yang dilakukan Nota pada setiap dokumen",
     "items": [
       {
         "icon": "table",
-        "title": "Записывает в таблицу",
-        "text": "Каждый документ — строка в вашей Google‑таблице: дата, сумма, поставщик, категория и другие данные.",
+        "title": "Mencatat ke spreadsheet",
+        "text": "Setiap dokumen menjadi satu baris di spreadsheet Google Sheets Anda: tanggal, jumlah, pemasok, kategori, dan data lainnya.",
         "accent": false
       },
       {
         "icon": "copy",
-        "title": "Находит дубли",
-        "text": "Тот же чек от двоих или переснятый. Nota отметит дубль, чтобы один счёт не оплатили дважды.",
+        "title": "Menemukan duplikat",
+        "text": "Struk yang sama dari dua orang, atau yang difoto ulang. Nota menandai duplikat agar satu invoice tidak dibayar dua kali.",
         "accent": false
       },
       {
         "icon": "calc",
-        "title": "Сверяет суммы",
-        "text": "Пересчитывает позиции, замечает исправления и суммы в разы больше обычных.",
+        "title": "Mencocokkan jumlah",
+        "text": "Menghitung ulang setiap item, mendeteksi koreksi, serta jumlah yang berkali lipat lebih besar dari biasanya.",
         "accent": false
       },
       {
         "icon": "folder",
-        "title": "Ведёт архив документов",
-        "text": "Каждый файл сохраняется в папку на вашем Google Диске под номером строки. Не нужно листать чат: оригинал открывается из таблицы в один клик.",
+        "title": "Menyimpan arsip dokumen",
+        "text": "Setiap file disimpan ke folder di Google Drive Anda dengan nomor barisnya. Tidak perlu menggulir chat: dokumen asli terbuka dari spreadsheet dengan sekali klik.",
         "accent": false
       },
       {
         "icon": "globe",
-        "title": "Считает в вашей валюте",
-        "text": "Платежи в других валютах пересчитывает по курсу центрального банка на дату платежа. Валюту можно сменить в любой момент.",
+        "title": "Menghitung dalam mata uang Anda",
+        "text": "Pembayaran dalam mata uang lain dikonversi dengan kurs bank sentral pada tanggal pembayaran. Mata uang bisa diganti kapan saja.",
         "accent": false
       },
       {
         "icon": "review",
-        "title": "Не угадывает молча",
-        "text": "Если сомневается, отмечает строку как Review и пишет причину.",
+        "title": "Tidak menebak diam-diam",
+        "text": "Jika ragu, Nota menandai baris sebagai Review dan menuliskan alasannya.",
         "accent": false
       }
     ]
   },
   "segments": {
-    "title": "Для кого",
+    "title": "Untuk siapa",
     "items": [
       {
-        "title": "Стройка и ремонт",
-        "text": "Рукописные накладные, переводы подрядчикам, несколько объектов."
+        "title": "Konstruksi dan renovasi",
+        "text": "Nota tulisan tangan, transfer ke kontraktor, beberapa lokasi proyek."
       },
       {
-        "title": "Виллы и управляющие компании",
-        "text": "Ремонт, уборка, коммунальные платежи по каждой вилле."
+        "title": "Vila dan perusahaan pengelola",
+        "text": "Perbaikan, kebersihan, tagihan utilitas untuk setiap vila."
       },
       {
-        "title": "Магазины и прокат",
-        "text": "Закупки, запчасти, топливо, оплата мастерам."
+        "title": "Toko dan rental",
+        "text": "Pembelian barang, suku cadang, bahan bakar, pembayaran tukang."
       },
       {
-        "title": "Владельцы на расстоянии",
-        "text": "Видите расходы, даже когда вы в другой стране."
+        "title": "Pemilik jarak jauh",
+        "text": "Anda tetap bisa melihat pengeluaran, bahkan saat berada di negara lain."
       },
       {
-        "title": "Бухгалтеры",
-        "text": "Документы всех клиентов в одной таблице, с разбивкой по каждому."
+        "title": "Akuntan",
+        "text": "Dokumen semua klien dalam satu spreadsheet, dengan rincian per klien."
       },
       {
-        "title": "Любой другой бизнес",
-        "text": "Где расходы подтверждают чеками, счетами и накладными.",
+        "title": "Bisnis lainnya",
+        "text": "Yang pengeluarannya dibuktikan dengan struk, invoice, dan nota.",
         "any": true
       }
     ]
   },
   "pricing": {
-    "title": "Цены",
-    "lead": "Первые 30 документов бесплатно. Дальше платите за документы, а не за сотрудников.",
+    "title": "Harga",
+    "lead": "30 dokumen pertama gratis. Selanjutnya Anda membayar berdasarkan jumlah dokumen, bukan jumlah karyawan.",
     "billing": {
-      "label": "Период оплаты",
+      "label": "Periode pembayaran",
       "opts": [
         {
           "v": "month",
-          "lg": "Помесячно",
-          "sm": "1 мес"
+          "lg": "Bulanan",
+          "sm": "1 bln"
         },
         {
           "v": "q3",
-          "lg": "3 месяца",
-          "sm": "3 мес",
+          "lg": "3 bulan",
+          "sm": "3 bln",
           "save": "−10%"
         },
         {
           "v": "q6",
-          "lg": "6 месяцев",
-          "sm": "6 мес",
+          "lg": "6 bulan",
+          "sm": "6 bln",
           "save": "−15%"
         }
       ]
     },
     "common": [
-      "отчёты",
-      "без ограничения сотрудников",
-      "дубли не тратят лимит"
+      "laporan",
+      "karyawan tanpa batas",
+      "duplikat tidak memakai kuota"
     ],
     "plans": [
       {
-        "name": "Старт",
+        "name": "Start",
         "vol": "100",
-        "groups": "до 5",
-        "docs": "До 100 документов в месяц",
-        "who": "Один-два проекта",
+        "groups": "hingga 5",
+        "docs": "Hingga 100 dokumen per bulan",
+        "who": "Satu–dua proyek",
         "month": {
           "price": "$19",
-          "unit": "≈ $0,19 за документ"
+          "unit": "≈ $0,19 per dokumen"
         },
         "q3": {
           "price": "$17",
-          "unit": "≈ $0,17 за документ",
-          "total": "$51 за 3 месяца"
+          "unit": "≈ $0,17 per dokumen",
+          "total": "$51 untuk 3 bulan"
         },
         "q6": {
           "price": "$16",
-          "unit": "≈ $0,16 за документ",
-          "total": "$96 за 6 месяцев"
+          "unit": "≈ $0,16 per dokumen",
+          "total": "$96 untuk 6 bulan"
         },
         "tag": "land10_price_start",
-        "cta": "Начать бесплатно"
+        "cta": "Mulai gratis"
       },
       {
-        "name": "Рост",
+        "name": "Growth",
         "vol": "200",
-        "groups": "до 10",
-        "docs": "До 200 документов в месяц",
-        "who": "Несколько проектов",
+        "groups": "hingga 10",
+        "docs": "Hingga 200 dokumen per bulan",
+        "who": "Beberapa proyek",
         "month": {
           "price": "$35",
-          "unit": "≈ $0,18 за документ"
+          "unit": "≈ $0,18 per dokumen"
         },
         "q3": {
           "price": "$31",
-          "unit": "≈ $0,16 за документ",
-          "total": "$93 за 3 месяца"
+          "unit": "≈ $0,16 per dokumen",
+          "total": "$93 untuk 3 bulan"
         },
         "q6": {
           "price": "$29",
-          "unit": "≈ $0,15 за документ",
-          "total": "$174 за 6 месяцев"
+          "unit": "≈ $0,15 per dokumen",
+          "total": "$174 untuk 6 bulan"
         },
         "tag": "land10_price_business",
-        "cta": "Начать бесплатно",
+        "cta": "Mulai gratis",
         "highlight": true
       },
       {
-        "name": "Масштаб",
+        "name": "Scale",
         "vol": "500",
-        "groups": "без ограничений",
-        "docs": "До 500 документов в месяц",
-        "who": "Девелопер, управляющая компания",
+        "groups": "tanpa batas",
+        "docs": "Hingga 500 dokumen per bulan",
+        "who": "Developer, perusahaan pengelola",
         "month": {
           "price": "$79",
-          "unit": "≈ $0,16 за документ"
+          "unit": "≈ $0,16 per dokumen"
         },
         "q3": {
           "price": "$71",
-          "unit": "≈ $0,14 за документ",
-          "total": "$213 за 3 месяца"
+          "unit": "≈ $0,14 per dokumen",
+          "total": "$213 untuk 3 bulan"
         },
         "q6": {
           "price": "$67",
-          "unit": "≈ $0,13 за документ",
-          "total": "$402 за 6 месяцев"
+          "unit": "≈ $0,13 per dokumen",
+          "total": "$402 untuk 6 bulan"
         },
         "tag": "land10_price_dev",
-        "cta": "Начать бесплатно"
+        "cta": "Mulai gratis"
       },
       {
-        "name": "Индивидуально",
+        "name": "Kustom",
         "vol": "500+",
-        "groups": "без ограничений",
-        "docs": "Более 500 документов в месяц",
-        "who": "Система учёта от Axiom Consulting",
-        "custom": "По запросу",
+        "groups": "tanpa batas",
+        "docs": "Lebih dari 500 dokumen per bulan",
+        "who": "Sistem akuntansi dari Axiom Consulting",
+        "custom": "Atas permintaan",
         "services": [
-          "Постановка управленческого учёта",
-          "Подбор и внедрение системы: CRM, ERP",
-          "Отчётность для собственников и партнёров",
-          "Сопровождение команды Axiom Consulting"
+          "Penyusunan akuntansi manajemen",
+          "Pemilihan dan penerapan sistem: CRM, ERP",
+          "Laporan untuk pemilik dan mitra",
+          "Pendampingan oleh tim Axiom Consulting"
         ],
         "tag": "land10_price_custom",
-        "cta": "Обсудить",
+        "cta": "Mari bicarakan",
         "outline": true
       }
     ]
   },
   "facts": [
     {
-      "q": "Что считается документом",
-      "a": "Чек, счёт или накладная, ставшие строкой в таблице; в PDF — каждая страница. Дубли и неплатёжные файлы не считаются. Документы сверх лимита можно докупить."
+      "q": "Apa yang dihitung sebagai dokumen",
+      "a": "Struk, invoice, atau nota yang menjadi baris di spreadsheet; untuk PDF, setiap halaman. Duplikat dan file selain dokumen pembayaran tidak dihitung. Dokumen di atas kuota bisa dibeli tambahan."
     },
     {
-      "q": "Что такое группа",
-      "a": "Рабочий чат сотрудников в Telegram. Каждая группа — свой Business Unit (Проект)."
+      "q": "Apa itu grup",
+      "a": "Chat kerja karyawan di Telegram. Setiap grup menjadi Business Unit (Proyek) tersendiri."
     },
     {
-      "q": "Сколько нужно документов",
-      "a": "Стройка трёх вилл — около 70 документов в месяц: хватит «Старта»."
+      "q": "Berapa dokumen yang dibutuhkan",
+      "a": "Pembangunan tiga vila — sekitar 70 dokumen per bulan: paket \"Start\" sudah cukup."
     },
     {
-      "q": "Оплата",
-      "a": "Visa, Mastercard или криптовалюта; российские карты пока не принимаем."
+      "q": "Pembayaran",
+      "a": "Visa, Mastercard, atau kripto; kartu Rusia untuk saat ini belum diterima."
     }
   ],
   "sched": {
-    "title": "Когда приходит отчёт",
+    "title": "Kapan laporan dikirim",
     "rows": [
       [
-        "Первый",
-        "по архиву или на 30‑м документе"
+        "Pertama",
+        "atas arsip atau di dokumen ke-30"
       ],
       [
-        "Каждый понедельник",
-        "за неделю"
+        "Setiap Senin",
+        "mingguan"
       ],
       [
-        "1-го числа",
-        "за месяц"
+        "Tanggal 1",
+        "bulanan"
       ],
       [
-        "В любое время",
-        "по кнопке «Отчёт»"
+        "Kapan saja",
+        "lewat tombol \"Laporan\""
       ]
     ]
   },
   "compare": {
-    "title": "Сотрудник прислал накладную в 9:41. Когда она окажется в таблице?",
-    "whenLabel": "Накладная в таблице",
+    "title": "Karyawan mengirim nota pukul 9:41. Kapan nota itu masuk spreadsheet?",
+    "whenLabel": "Nota masuk spreadsheet",
     "rows": [
-      "Кто вносит в таблицу",
-      "Сотрудникам нужно новое приложение?",
-      "Рукописная накладная",
-      "Где найти оригинал",
-      "За что платите"
+      "Siapa yang mengisi spreadsheet",
+      "Karyawan perlu aplikasi baru?",
+      "Nota tulisan tangan",
+      "Di mana dokumen aslinya",
+      "Anda membayar untuk apa"
     ],
     "mobileHide": [
-      "Сотрудникам нужно новое приложение?",
-      "Где найти оригинал"
+      "Karyawan perlu aplikasi baru?",
+      "Di mana dokumen aslinya"
     ],
     "options": [
       {
         "name": "Nota",
-        "when": "В 9:42",
-        "whenNote": "через минуту, без вас",
+        "when": "Pukul 9:42",
+        "whenNote": "semenit kemudian, tanpa Anda",
         "nota": true,
         "cells": [
           [
             "yes",
-            "Без вас"
+            "Tanpa Anda"
           ],
           [
             "yes",
-            "Нет, присылают в Telegram"
+            "Tidak, mereka kirim lewat Telegram"
           ],
           [
             "yes",
-            "Читает"
+            "Bisa dibaca"
           ],
           [
             "yes",
-            "Ссылка в каждой строке"
+            "Tautan di setiap baris"
           ],
           [
             "yes",
-            "За документы"
+            "Untuk dokumen"
           ]
         ]
       },
       {
-        "name": "Админ с Excel",
-        "when": "В пятницу",
-        "whenNote": "когда дойдут руки",
+        "name": "Admin dengan Excel",
+        "when": "Hari Jumat",
+        "whenNote": "kalau sempat",
         "cells": [
           [
             "no",
-            "Админ, каждую строку вручную"
+            "Admin, setiap baris secara manual"
           ],
           [
             "yes",
-            "Нет"
+            "Tidak"
           ],
           [
             "no",
-            "Админ разбирает вручную"
+            "Admin membacanya manual"
           ],
           [
             "no",
-            "Искать в чате"
+            "Cari di chat"
           ],
           [
             "no",
-            "Зарплата админа"
+            "Gaji admin"
           ]
         ]
       },
       {
-        "name": "Приложение для расходов",
-        "short": "Приложение",
-        "when": "Когда заполнят",
-        "whenNote": "сотрудник вносит сам",
+        "name": "Aplikasi pengeluaran",
+        "short": "Aplikasi",
+        "when": "Setelah diisi",
+        "whenNote": "karyawan mengisi sendiri",
         "cells": [
           [
             "no",
-            "Сотрудник заполняет форму"
+            "Karyawan mengisi formulir"
           ],
           [
             "no",
-            "Да: установить и войти"
+            "Ya: instal dan login"
           ],
           [
             "mid",
-            "Часто правят руками"
+            "Sering dikoreksi manual"
           ],
           [
             "yes",
-            "В приложении"
+            "Di aplikasi"
           ],
           [
             "mid",
-            "За каждого сотрудника"
+            "Untuk setiap karyawan"
           ]
         ]
       }
     ]
   },
   "data": {
-    "title": "Ваши данные",
+    "title": "Data Anda",
     "items": [
       {
         "icon": "key",
-        "title": "Доступ только к таблице и папке",
-        "text": "Их Nota создаёт сама на вашем Google Диске."
+        "title": "Akses hanya ke spreadsheet dan folder",
+        "text": "Keduanya dibuat sendiri oleh Nota di Google Drive Anda."
       },
       {
         "icon": "table",
-        "title": "Документы остаются у вас",
-        "text": "Таблица и оригиналы лежат на вашем Google Диске."
+        "title": "Dokumen tetap di tangan Anda",
+        "text": "Spreadsheet dan dokumen asli tersimpan di Google Drive Anda."
       },
       {
         "icon": "lock",
-        "title": "У нас только отпечатки",
-        "text": "Храним только отпечатки файлов, чтобы находить дубли. Документы — лишь на время обработки, неплатёжные файлы отбрасываем сразу. ИИ на документах не обучаем."
+        "title": "Kami hanya menyimpan sidik digital",
+        "text": "Kami hanya menyimpan sidik digital file untuk menemukan duplikat. Dokumen hanya disimpan selama diproses, dan file selain dokumen pembayaran langsung dibuang. Kami tidak melatih AI dengan dokumen."
       },
       {
         "icon": "trash",
-        "title": "Удаление одной командой",
-        "text": "Стираем отпечатки документов и историю, отключаемся от Google, бот выходит из всех групп. Остаются только ваше имя пользователя в Telegram и данные об оплатах. Таблица, папка и документы остаются у вас."
+        "title": "Hapus dengan satu perintah",
+        "text": "Kami menghapus sidik digital dokumen dan riwayat, memutus koneksi dari Google, dan bot keluar dari semua grup. Yang tersisa hanya username Telegram Anda dan data pembayaran. Spreadsheet, folder, dan dokumen tetap di tangan Anda."
       }
     ],
-    "who": "В основе Nota — более 15 лет опыта Axiom Consulting в финансовом контроле для бизнеса в СНГ и Юго-Восточной Азии."
+    "who": "Nota dibangun dari pengalaman Axiom Consulting selama lebih dari 15 tahun di bidang pengendalian keuangan untuk bisnis di negara-negara CIS dan Asia Tenggara."
   },
   "faq": [
     {
-      "q": "Какие документы читает Nota?",
-      "a": "Любые платёжные: чеки из магазинов, счета и инвойсы, накладные, в том числе мятые и рукописные, скриншоты банковских переводов. PDF и фото, на любом языке; многостраничный PDF разбирается постранично. Неплатёжные файлы, например договоры, паспорта или фото объекта, бот пропускает, и лимит они не тратят."
+      "q": "Dokumen apa saja yang bisa dibaca Nota?",
+      "a": "Semua dokumen pembayaran: struk toko, faktur dan invoice, nota, termasuk yang kusut dan tulisan tangan, serta screenshot transfer bank. PDF dan foto, dalam bahasa apa pun; PDF berhalaman banyak dibaca per halaman. File selain dokumen pembayaran, misalnya kontrak, paspor, atau foto lokasi proyek, dilewati bot dan tidak memakai kuota."
     },
     {
-      "q": "Счёт и скриншот оплаты по нему — это две строки?",
-      "a": "Если скриншот подтверждает оплату уже записанного счёта, Nota спросит, что с ним сделать: записать отдельной строкой или пропустить. Выбор можно сохранить по умолчанию, и бот больше не будет спрашивать."
+      "q": "Invoice dan screenshot pembayarannya dicatat jadi dua baris?",
+      "a": "Jika screenshot membuktikan pembayaran invoice yang sudah dicatat, Nota akan bertanya apa yang harus dilakukan: mencatatnya sebagai baris terpisah atau melewatinya. Pilihan ini bisa disimpan sebagai default, dan bot tidak akan bertanya lagi."
     },
     {
-      "q": "Когда придёт первый отчёт?",
-      "a": "По архиву до 30 документов — около 15 минут, бот сразу ответит, что архив в работе. Если пересылаете чеки по одному, бот записывает их, а первый отчёт придёт сам после 30 документов. Получить отчёт можно и раньше, в любое время, кнопкой «Отчёт»."
+      "q": "Kapan laporan pertama dikirim?",
+      "a": "Untuk arsip hingga 30 dokumen, sekitar 15 menit. Bot langsung membalas bahwa arsip sedang diproses. Jika Anda meneruskan struk satu per satu, bot mencatatnya, dan laporan pertama dikirim otomatis setelah 30 dokumen. Anda juga bisa mendapatkan laporan lebih awal, kapan saja, lewat tombol \"Laporan\"."
     },
     {
-      "q": "А если не подключать Google?",
-      "a": "Без Google придёт только отчёт по архиву. Таблица, уведомления о дублях и отчёты по расписанию работают с Google. Всё, что вы прислали, бот хранит 7 дней: подключите Google за это время — и архив вместе с отдельными файлами запишется в таблицу. Если не подключить, через 7 дней данные удалятся, у вас останется отчёт."
+      "q": "Bagaimana jika Google tidak dihubungkan?",
+      "a": "Tanpa Google, Anda hanya menerima laporan atas arsip. Spreadsheet, pemberitahuan duplikat, dan laporan terjadwal berfungsi jika Google terhubung. Bot menyimpan semua yang Anda kirim selama 7 hari: hubungkan Google dalam waktu tersebut, maka arsip beserta file yang dikirim terpisah akan dicatat ke spreadsheet. Jika tidak dihubungkan, data dihapus setelah 7 hari dan laporannya tetap ada pada Anda."
     },
     {
-      "q": "Что будет после 30 бесплатных документов?",
-      "a": "Nota пришлёт отчёт по первым 30 документам, даже если в архиве их больше: на них уже видно, как бот читает ваши чеки и накладные. Дальше тариф выбирается и оплачивается по кнопке оплаты в шапке вашей таблицы. Всё, что уже записано в таблицу, остаётся на вашем Google Диске вместе с папкой оригиналов, даже если вы не оплатите."
+      "q": "Apa yang terjadi setelah 30 dokumen gratis?",
+      "a": "Nota mengirim laporan untuk 30 dokumen pertama, meskipun arsip berisi lebih banyak: dari situ sudah terlihat bagaimana bot membaca struk dan nota Anda. Selanjutnya paket dipilih dan dibayar lewat tombol pembayaran di bagian atas spreadsheet Anda. Semua yang sudah dicatat di spreadsheet tetap ada di Google Drive Anda bersama folder dokumen asli, meskipun Anda tidak membayar."
     },
     {
-      "q": "Nota читает переписку в группе?",
-      "a": "Нет. Бот обрабатывает только сообщения с файлами, текстовые сообщения пропускает. Из файлов берёт только платёжные документы, неплатёжные отбрасывает сразу. В группу бот не пишет, только ставит ✍ под записанным чеком, а о дублях сообщает вам в личку. Группа необязательна: чеки можно пересылать боту в личку."
+      "q": "Apakah Nota membaca percakapan di grup?",
+      "a": "Tidak. Bot hanya memproses pesan yang berisi file dan melewati pesan teks. Dari file, bot hanya mengambil dokumen pembayaran; file lain langsung dibuang. Bot tidak menulis di grup, hanya menandai struk yang sudah dicatat dengan ✍, dan memberi tahu Anda soal duplikat lewat chat pribadi. Grup tidak wajib: struk bisa diteruskan ke bot lewat chat pribadi."
     },
     {
-      "q": "Команда работает в WhatsApp. Подойдёт?",
-      "a": "Да. Сам бот работает в Telegram, а архив WhatsApp можно выгрузить прямо с телефона: чат → «Экспорт чата» с медиафайлами. Присылайте архив боту, когда удобно, или пересылайте чеки по одному."
+      "q": "Tim saya memakai WhatsApp. Apakah bisa?",
+      "a": "Bisa. Botnya sendiri berjalan di Telegram, sedangkan arsip WhatsApp bisa diekspor langsung dari ponsel: chat → \"Ekspor chat\" dengan media. Kirim arsip ke bot kapan pun Anda sempat, atau teruskan struk satu per satu."
     },
     {
-      "q": "Я бухгалтер, у меня несколько клиентов. Как работать?",
-      "a": "Один тариф и одна таблица на всех. Заведите в Telegram группу на каждого клиента и пересылайте туда его чеки: Nota запишет их на нужного клиента в колонке Business Unit. Таблицу можно скачать в Excel или CSV."
+      "q": "Saya akuntan dan punya beberapa klien. Bagaimana cara memakainya?",
+      "a": "Satu paket dan satu spreadsheet untuk semua klien. Buat grup Telegram untuk setiap klien dan teruskan struk klien tersebut ke grupnya: Nota mencatatnya ke klien yang tepat di kolom Business Unit. Spreadsheet bisa diunduh dalam format Excel atau CSV."
     },
     {
-      "q": "На каком языке таблица?",
-      "a": "Таблица на английском. Бот говорит по-русски, по-английски и по-индонезийски, а документы понимает на любом языке. Платежи в других валютах пересчитывает в вашу по курсу центрального банка на дату платежа."
+      "q": "Spreadsheet-nya dalam bahasa apa?",
+      "a": "Spreadsheet dalam bahasa Inggris. Bot bisa berbahasa Rusia, Inggris, dan Indonesia, dan memahami dokumen dalam bahasa apa pun. Pembayaran dalam mata uang lain dikonversi ke mata uang Anda dengan kurs bank sentral pada tanggal pembayaran."
     },
     {
-      "q": "Откуда Nota знает, что оплачено?",
-      "a": "Статус «Paid» ставится, если документ сам подтверждает оплату: например, чек магазина или платёжка. «To pay» отмечаете вы. Счета к оплате видны на листе Insights по срокам."
+      "q": "Bagaimana Nota tahu apa yang sudah dibayar?",
+      "a": "Status \"Paid\" diberikan jika dokumen itu sendiri membuktikan pembayaran, misalnya struk toko atau bukti transfer. \"To pay\" Anda tandai sendiri. Invoice yang harus dibayar terlihat di lembar Insights menurut jatuh tempo."
     },
     {
-      "q": "Это бухгалтерия? Подойдёт нашему бухгалтеру?",
-      "a": "Это не бухгалтерия: Nota показывает, куда и кому уходят деньги, и отмечает дубли и странные суммы. Налоги и отчётность остаются бухгалтеру, а ему пригодится готовая таблица со ссылками на оригиналы. Её можно скачать в Excel или CSV и загрузить в Jurnal, Zoho или другую систему, прямой выгрузки пока нет."
+      "q": "Apakah ini sistem akuntansi? Cocok untuk akuntan kami?",
+      "a": "Ini bukan sistem akuntansi: Nota menunjukkan ke mana dan kepada siapa uang keluar, serta menandai duplikat dan jumlah yang janggal. Pajak dan pelaporan tetap menjadi tugas akuntan, dan spreadsheet siap pakai dengan tautan ke dokumen asli akan berguna baginya. Spreadsheet bisa diunduh dalam format Excel atau CSV lalu diimpor ke Jurnal, Zoho, atau sistem lain; ekspor langsung belum tersedia."
     },
     {
-      "q": "Чего Nota не видит?",
-      "a": "Наличные без чека, траты, на которые нет документа, и выданные авансы прорабу. Рыночных цен Nota не знает, но платёж в разы больше обычного отметит на листе Insights."
+      "q": "Apa yang tidak terlihat oleh Nota?",
+      "a": "Pembayaran tunai tanpa struk, pengeluaran tanpa dokumen, dan uang muka yang diberikan ke mandor. Nota tidak tahu harga pasar, tetapi pembayaran yang berkali lipat lebih besar dari biasanya akan ditandai di lembar Insights."
     }
   ],
   "final": {
-    "title": "Пришлите архив чеков",
-    "lead": "Выгрузите рабочий чат и пришлите архив боту. Через 15 минут увидите, на что ушли деньги и есть ли дубли. 30 документов бесплатно, без карты, без регистрации."
+    "title": "Kirim arsip struk Anda",
+    "lead": "Ekspor chat kerja dan kirim arsipnya ke bot. Dalam 15 menit Anda akan melihat untuk apa uang dipakai dan apakah ada duplikat. 30 dokumen gratis, tanpa kartu pembayaran, tanpa pendaftaran."
   },
   "footer": {
-    "terms": "/terms",
-    "privacy": "/privacy",
-    "refund": "/refund",
-    "testData": "Примеры отчёта и таблицы — на тестовых данных."
+    "terms": "/id/terms",
+    "privacy": "/id/privacy",
+    "refund": "/id/refund",
+    "testData": "Contoh laporan dan spreadsheet menggunakan data uji."
   }
 }
