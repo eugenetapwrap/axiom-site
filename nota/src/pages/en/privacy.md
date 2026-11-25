@@ -24,7 +24,7 @@ This Privacy Policy (the "Policy") sets out what data the Nota service processes
 
 1.1. The data controller is Individual Entrepreneur Evgenii Popov, Georgia, identification number 346999215, legal address: Rustaveli Street, Kobuleti, Georgia (the "Operator").
 
-1.2. Requests concerning data processing shall be sent to the Telegram bot [@NotaGetBot](https://t.me/NotaGetBot) or by email to [to confirm: support email].
+1.2. Requests concerning data processing shall be sent to the support Telegram bot [@NotaSuppBot](https://t.me/NotaSuppBot) or by email to support@notagetbot.com.
 
 ## 2. Data Processed
 
@@ -129,7 +129,7 @@ This Privacy Policy (the "Policy") sets out what data the Nota service processes
 - object to or request restriction of processing;
 - lodge a complaint with the data protection authority in their country.
 
-9.2. Requests shall be sent to the bot or to the email in clause 1.2. The Operator responds within 24 hours and fulfils the request within the period set by law.
+9.2. Requests shall be sent to the support bot or to the email in clause 1.2. The Operator responds within 24 hours and fulfils the request within the period set by law.
 
 ## 10. Data Security
 

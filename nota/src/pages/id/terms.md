@@ -26,7 +26,7 @@ Ketentuan Layanan ini (selanjutnya disebut "Ketentuan") mengatur hubungan antara
 
 1.2. Nomor identifikasi: 346999215. Alamat resmi: Rustaveli Street, Kobuleti, Georgia.
 
-1.3. Kontak Operator: bot Telegram [@NotaGetBot](https://t.me/NotaGetBot), email [perlu dikonfirmasi: email dukungan].
+1.3. Kontak Operator: bot Telegram dukungan [@NotaSuppBot](https://t.me/NotaSuppBot), email support@notagetbot.com.
 
 ## 2. Definisi
 
@@ -170,7 +170,7 @@ Ketentuan Layanan ini (selanjutnya disebut "Ketentuan") mengatur hubungan antara
 
 ## 16. Penyelesaian Sengketa
 
-16.1. Keluhan disampaikan kepada Operator melalui bot atau email yang tercantum dalam butir 1.3. Operator membalas dalam 24 jam.
+16.1. Keluhan disampaikan kepada Operator melalui bot dukungan atau email yang tercantum dalam butir 1.3. Operator membalas dalam 24 jam.
 
 16.2. Ketentuan ini diatur oleh hukum Georgia. Sengketa yang tidak dapat diselesaikan melalui musyawarah diperiksa oleh pengadilan di tempat Operator terdaftar. <!-- pengacara: hukum dan pengadilan -->
 

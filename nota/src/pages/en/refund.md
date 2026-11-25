@@ -55,7 +55,7 @@ This Refund Policy (the "Policy") sets out the procedure for cancelling a Plan a
 
 ## 6. How to Request a Refund
 
-6.1. Refund requests shall be sent to the Telegram bot [@NotaGetBot](https://t.me/NotaGetBot) or to the email specified in clause 1.3 of the [Terms of Service](/en/terms).
+6.1. Refund requests shall be sent to the support Telegram bot [@NotaSuppBot](https://t.me/NotaSuppBot) or to the email specified in clause 1.3 of the [Terms of Service](/en/terms).
 
 6.2. The request shall state the Telegram account or Google Account email used with the Service and the payment date.
 

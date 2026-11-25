@@ -24,7 +24,7 @@ Kebijakan Privasi ini (selanjutnya disebut "Kebijakan") menetapkan data apa yang
 
 1.1. Pengendali data adalah Individual Entrepreneur Evgenii Popov (pengusaha perorangan), Georgia, nomor identifikasi 346999215, alamat resmi: Rustaveli Street, Kobuleti, Georgia (selanjutnya disebut "Operator").
 
-1.2. Permintaan terkait pemrosesan data disampaikan melalui bot Telegram [@NotaGetBot](https://t.me/NotaGetBot) atau email [perlu dikonfirmasi: email dukungan].
+1.2. Permintaan terkait pemrosesan data disampaikan melalui bot Telegram dukungan [@NotaSuppBot](https://t.me/NotaSuppBot) atau email support@notagetbot.com.
 
 ## 2. Data yang Diproses
 
@@ -129,7 +129,7 @@ Kebijakan Privasi ini (selanjutnya disebut "Kebijakan") menetapkan data apa yang
 - menolak pemrosesan atau meminta pembatasannya;
 - mengajukan keluhan kepada otoritas pelindungan data di negaranya.
 
-9.2. Permintaan disampaikan melalui bot atau email yang tercantum dalam butir 1.2. Operator membalas dalam 24 jam dan memenuhi permintaan dalam jangka waktu yang ditetapkan hukum.
+9.2. Permintaan disampaikan melalui bot dukungan atau email yang tercantum dalam butir 1.2. Operator membalas dalam 24 jam dan memenuhi permintaan dalam jangka waktu yang ditetapkan hukum.
 
 ## 10. Keamanan Data
 

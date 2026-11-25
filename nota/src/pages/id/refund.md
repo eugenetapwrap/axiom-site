@@ -56,7 +56,7 @@ Kebijakan Pengembalian Dana ini (selanjutnya disebut "Kebijakan") menetapkan tat
 
 ## 6. Tata Cara Pengajuan
 
-6.1. Permintaan pengembalian dana disampaikan melalui bot Telegram [@NotaGetBot](https://t.me/NotaGetBot) atau email yang tercantum dalam butir 1.3 [Ketentuan Layanan](/id/terms).
+6.1. Permintaan pengembalian dana disampaikan melalui bot Telegram dukungan [@NotaSuppBot](https://t.me/NotaSuppBot) atau email yang tercantum dalam butir 1.3 [Ketentuan Layanan](/id/terms).
 
 6.2. Permintaan mencantumkan akun Telegram atau email Akun Google yang digunakan dengan Layanan dan tanggal pembayaran.
 

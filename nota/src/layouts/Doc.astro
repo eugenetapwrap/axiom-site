@@ -8,6 +8,7 @@ const { title, description = '', updated = '', plan = [], lang = 'ru', slug = ''
 const html = await Astro.slots.render('default');
 const empty = !html.replace(/<!--[\s\S]*?-->/g, '').trim();
 const bot = 'https://t.me/NotaGetBot';
+const supportBot = 'https://t.me/NotaSuppBot';
 // Подписи шапки и подвала на языке документа. Русская версия — /terms, английская — /en/terms, индонезийская — /id/terms.
 const t = {
   ru: { home: 'Nota — на главную', open: 'Открыть в Telegram', openSm: 'В Telegram', rev: 'Редакция от', soon: 'текст появится', draft: 'черновик', prep: 'Документ готовится. Здесь будет:', q: 'Вопросы — в', qBot: 'боте @NotaGetBot', docs: 'Документы', terms: 'Пользовательское соглашение', privacy: 'Политика конфиденциальности', refund: 'Правила возврата', support: 'Поддержка в боте', langs: 'Язык документа' },
@@ -52,7 +53,7 @@ const langs = slug ? [['ru', 'RU', `/${slug}`], ['en', 'EN', `/en/${slug}`], ['i
           <a href={`${pre}/terms`}>{t.terms}</a>
           <a href={`${pre}/privacy`}>{t.privacy}</a>
           <a href={`${pre}/refund`}>{t.refund}</a>
-          <a href={bot} target="_blank" rel="noopener">{t.support}</a>
+          <a href={supportBot} target="_blank" rel="noopener">{t.support}</a>
         </nav>
         <div class="op">© 2026</div>
       </div>

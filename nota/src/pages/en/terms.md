@@ -25,7 +25,7 @@ These Terms of Service (the "Terms") govern the relationship between the Operato
 
 1.2. Identification number: 346999215. Legal address: Rustaveli Street, Kobuleti, Georgia.
 
-1.3. Operator contacts: Telegram bot [@NotaGetBot](https://t.me/NotaGetBot), email [to confirm: support email].
+1.3. Operator contacts: support Telegram bot [@NotaSuppBot](https://t.me/NotaSuppBot), email support@notagetbot.com.
 
 ## 2. Definitions
 
@@ -169,7 +169,7 @@ These Terms of Service (the "Terms") govern the relationship between the Operato
 
 ## 16. Dispute Resolution
 
-16.1. Claims shall be sent to the Operator via the bot or to the email specified in clause 1.3. The Operator responds within 24 hours.
+16.1. Claims shall be sent to the Operator via the support bot or to the email specified in clause 1.3. The Operator responds within 24 hours.
 
 16.2. These Terms are governed by the laws of Georgia. Disputes not settled by negotiation shall be heard by the court at the Operator's place of registration. <!-- lawyer: governing law and court, given customers in Indonesia -->
 
