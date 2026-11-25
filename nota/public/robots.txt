@@ -4,4 +4,4 @@ Allow: /
 # Яндекс: адреса с UTM-метками — та же страница
 Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term /
 
-Sitemap: https://nota.axiomco.io/sitemap.xml
+Sitemap: https://notagetbot.com/sitemap.xml

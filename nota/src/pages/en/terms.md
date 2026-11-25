@@ -29,7 +29,7 @@ These Terms of Service (the "Terms") govern the relationship between the Operato
 
 ## 2. Definitions
 
-2.1. **Service** means the Telegram bot @NotaGetBot, the website nota.axiomco.io and the payment page.
+2.1. **Service** means the Telegram bot @NotaGetBot, the website notagetbot.com and the payment page.
 
 2.2. **User** means an individual, sole proprietor or organisation using the Service.
 

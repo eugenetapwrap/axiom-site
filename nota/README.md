@@ -1,4 +1,4 @@
-# Лендинг Nota — nota.axiomco.io
+# Лендинг Nota — notagetbot.com
 
 Отдельный сайт на [Astro](https://astro.build), одна страница на русском. Структура и тексты — `../founder/landing.md`, макет — холст «Nota, эскизы», страница «Лендинг».
 
@@ -23,13 +23,14 @@ npm run build    # готовый сайт в nota/dist/
 
 Каждая кнопка ведёт в бота с меткой источника: `t.me/NotaGetBot?start=land_hero`, `land_offer`, `land_price_start` и т. д. Бот должен записывать этот параметр, чтобы было видно, какой блок приводит людей.
 
-## Публикация на nota.axiomco.io
+## Публикация на notagetbot.com
 
 Vercel (или Cloudflare Pages):
 1. Import project → репозиторий `axiom-site`.
 2. **Root Directory: `nota`**. Фреймворк Astro определится сам.
-3. Domains → добавить `nota.axiomco.io`.
-4. У регистратора axiomco.io добавить DNS-запись **CNAME `nota` → адрес, который покажет Vercel** (обычно `cname.vercel-dns.com`).
+3. Domains → добавить `notagetbot.com` и `www.notagetbot.com`.
+4. У регистратора notagetbot.com добавить DNS-записи, которые покажет Vercel (обычно A-запись `@` → `76.76.21.21` и CNAME `www` → `cname.vercel-dns.com`).
+5. Переадресация на `notagetbot.com`: `notagetbot.app` и `nota.axiomco.io` (если адрес уже где-то давали) — добавить их в Domains и выбрать Redirect.
 
 ## Перед запуском
 

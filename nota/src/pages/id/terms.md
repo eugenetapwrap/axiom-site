@@ -30,7 +30,7 @@ Ketentuan Layanan ini (selanjutnya disebut "Ketentuan") mengatur hubungan antara
 
 ## 2. Definisi
 
-2.1. **Layanan** adalah bot Telegram @NotaGetBot, situs nota.axiomco.io dan halaman pembayaran.
+2.1. **Layanan** adalah bot Telegram @NotaGetBot, situs notagetbot.com dan halaman pembayaran.
 
 2.2. **Pengguna** adalah perorangan, pengusaha perorangan atau organisasi yang menggunakan Layanan.
 

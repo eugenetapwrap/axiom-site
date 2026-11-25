@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://nota.axiomco.io',
+  site: 'https://notagetbot.com',
   build: { inlineStylesheets: 'always' },
 });
