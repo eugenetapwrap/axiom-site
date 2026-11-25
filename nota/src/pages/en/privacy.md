@@ -84,7 +84,7 @@ This Privacy Policy (the "Policy") sets out what data the Nota service processes
 - the hosting provider — hosting the Service's server and database;
 - a recognition service — extracting text from Documents;
 - Bank of Georgia — accepting card payments;
-- a payment service — accepting cryptocurrency payments.
+- other payment services — accepting payments by methods available on the payment page.
 
 5.2. A list of specific providers is available on request.
 

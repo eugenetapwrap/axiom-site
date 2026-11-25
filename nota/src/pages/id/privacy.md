@@ -84,7 +84,7 @@ Kebijakan Privasi ini (selanjutnya disebut "Kebijakan") menetapkan data apa yang
 - penyedia hosting — menempatkan server dan basis data Layanan;
 - layanan pengenalan — mengambil teks dari Dokumen;
 - Bank of Georgia — menerima pembayaran kartu;
-- layanan pembayaran — menerima pembayaran kripto.
+- layanan pembayaran lain — menerima pembayaran dengan cara yang tersedia di halaman pembayaran.
 
 5.2. Daftar penyedia secara spesifik tersedia atas permintaan.
 

@@ -45,7 +45,7 @@ This Refund Policy (the "Policy") sets out the procedure for cancelling a Plan a
 4.1. No refund is made:
 
 - for the additional pack of 50 Documents;
-- for cryptocurrency payments;
+- for payments made by any method other than a card;
 - for a period that has expired;
 - for a period for which the Operator terminated access due to a breach of the [Terms of Service](/en/terms).
 

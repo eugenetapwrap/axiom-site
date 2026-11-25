@@ -93,13 +93,13 @@ Ketentuan Layanan ini (selanjutnya disebut "Ketentuan") mengatur hubungan antara
 
 ## 7. Pembayaran
 
-7.1. Pembayaran dilakukan melalui tombol pembayaran di Spreadsheet dengan kartu Visa atau Mastercard, atau dengan mata uang kripto. Kartu yang diterbitkan bank Rusia tidak diterima.
+7.1. Pembayaran dilakukan melalui tombol pembayaran di Spreadsheet dengan kartu Visa atau Mastercard, atau dengan cara lain yang tersedia di halaman pembayaran. Kartu yang diterbitkan bank Rusia tidak diterima.
 
 7.2. Pembayaran kartu diproses oleh Bank of Georgia. Data kartu dimasukkan di halaman bank; Operator tidak menerima atau menyimpannya.
 
 7.3. Pembayaran kartu ditagih dalam lari Georgia (GEL) dengan kurs pada tanggal pembayaran. Bank Pengguna dapat menerapkan kurs konversi dan biayanya sendiri.
 
-7.4. Pembayaran kripto diproses oleh layanan pembayaran pihak ketiga. Pembayaran kripto selalu bersifat sekali bayar.
+7.4. Pembayaran dengan cara lain diproses oleh layanan pembayaran pihak ketiga. Pembayaran tersebut selalu bersifat sekali bayar.
 
 7.5. Periode Paket dimulai pada tanggal pembayaran.
 

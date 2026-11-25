@@ -46,7 +46,7 @@ Kebijakan Pengembalian Dana ini (selanjutnya disebut "Kebijakan") menetapkan tat
 4.1. Pengembalian dana tidak dilakukan:
 
 - untuk paket tambahan 50 Dokumen;
-- untuk pembayaran dengan mata uang kripto;
+- untuk pembayaran dengan cara apa pun selain kartu;
 - untuk periode yang telah berakhir;
 - untuk periode yang aksesnya dihentikan Operator karena pelanggaran [Ketentuan Layanan](/id/terms).
 

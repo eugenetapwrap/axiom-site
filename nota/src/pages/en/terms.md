@@ -92,13 +92,13 @@ These Terms of Service (the "Terms") govern the relationship between the Operato
 
 ## 7. Payment
 
-7.1. Payment is made via the payment button in the Sheet by Visa or Mastercard, or in cryptocurrency. Cards issued by Russian banks are not accepted.
+7.1. Payment is made via the payment button in the Sheet by Visa or Mastercard, or by another method available on the payment page. Cards issued by Russian banks are not accepted.
 
 7.2. Card payments are processed by Bank of Georgia. Card details are entered on the bank's page; the Operator does not receive or store them.
 
 7.3. Card payments are charged in Georgian lari (GEL) at the exchange rate on the payment date. The User's bank may apply its own conversion rate and fees.
 
-7.4. Cryptocurrency payments are processed by a third-party payment service. Cryptocurrency payments are always one-off.
+7.4. Payments by other methods are processed by third-party payment services. Such payments are always one-off.
 
 7.5. The Plan period starts on the payment date.
 
