@@ -2,8 +2,8 @@
 import '../styles/global.css';
 import { meta } from '../data/content-v11';
 
-interface Props { title?: string; description?: string; noindex?: boolean; og?: string; ogAlt?: string; selfFonts?: boolean; lang?: 'ru' | 'en' | 'id' }
-const { title = meta.title, description = meta.description, noindex = false, og: ogPath = '/og-v10.png', ogAlt = meta.ogAlt, selfFonts = false, lang = 'ru' } = Astro.props;
+interface Props { title?: string; description?: string; noindex?: boolean; og?: string; ogAlt?: string; selfFonts?: boolean; lang?: 'ru' | 'en' | 'id'; alternates?: { lang: string; href: string }[] }
+const { title = meta.title, description = meta.description, noindex = false, og: ogPath = '/og-v10.png', ogAlt = meta.ogAlt, selfFonts = false, lang = 'ru', alternates } = Astro.props;
 const ogLocale = { ru: 'ru_RU', en: 'en_US', id: 'id_ID' }[lang];
 // До запуска сайт закрыт от поисковиков. В день запуска (только по команде основателя) задать на хостинге PUBLIC_INDEX=1 и пересобрать.
 const closed = noindex || import.meta.env.PUBLIC_INDEX !== '1';
@@ -22,6 +22,8 @@ const og = new URL(ogPath, Astro.site);
     <meta name="description" content={description} />
     {closed && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
+    {alternates && alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={new URL(a.href, Astro.site).href} />)}
+    {alternates && <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).href} />}
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

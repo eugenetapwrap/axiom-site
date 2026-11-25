@@ -22,7 +22,7 @@ const langs = slug ? [['ru', 'RU', `/${slug}`], ['en', 'EN', `/en/${slug}`], ['i
   <div class="doc">
     <header class="header">
       <div class="wrap">
-        <a class="logo-link" href="/" aria-label={t.home}><Logo height={30} /></a>
+        <a class="logo-link" href={`${pre}/`} aria-label={t.home}><Logo height={30} /></a>
         <a class="btn btn--sm btn--dark" href={bot} target="_blank" rel="noopener"><span class="hb-lg">{t.open}</span><span class="hb-sm">{t.openSm}</span></a>
       </div>
     </header>

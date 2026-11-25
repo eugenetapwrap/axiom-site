@@ -45,12 +45,27 @@ def build():
     src = nov[30]; rows.append(dict(src, date=src['date'], check='DBL'))
     return rows
 
+# Языки примера (25.11, сайт на EN и ID): python3 month-report.py en → month-report-en.png
+NAMES = {
+    'en': {'Материалы': 'Materials', 'Инструменты': 'Tools', 'Подрядчики': 'Contractors', 'Зарплаты': 'Wages', 'Топливо': 'Fuel',
+           'Электрика': 'Electrical', 'Аренда': 'Rent', 'Бригада Wayan': 'Wayan crew', 'Ваша компания': 'Your company'},
+    'id': {'Материалы': 'Material', 'Инструменты': 'Peralatan', 'Подрядчики': 'Kontraktor', 'Зарплаты': 'Gaji', 'Топливо': 'BBM',
+           'Электрика': 'Listrik', 'Аренда': 'Sewa', 'Бригада Wayan': 'Tim Wayan', 'Ваша компания': 'Perusahaan Anda'},
+}
+FOOT = {'ru': 'Подготовлено в Nota', 'en': 'Made with Nota', 'id': 'Dibuat dengan Nota'}
+
 if __name__ == '__main__':
+    loc = sys.argv[1] if len(sys.argv) > 1 else 'ru'
     rows = build()
-    h = C.period_card(rows, dt.date(2026, 11, 1), dt.date(2026, 11, 30), 'month', 'Ваша компания', loc='ru', cur=CUR,
+    N = NAMES.get(loc, {})
+    if N:
+        for r in rows:
+            r['cat'] = N.get(r['cat'], r['cat']); r['payee'] = N.get(r['payee'], r['payee'])
+    h = C.period_card(rows, dt.date(2026, 11, 1), dt.date(2026, 11, 30), 'month', N.get('Ваша компания', 'Ваша компания'), loc=loc, cur=CUR,
                       prev_rows=rows, report_date=dt.date(2026, 11, 25), client_start=dt.date(2026, 10, 1))
-    i = h.find('Подготовлено в Nota'); a = h.rfind('<div style="padding-top: ', 0, i); b = h.find('</div>', h.find('@NotaGetBot', i)) + 6
+    i = h.find(FOOT[loc]); a = h.rfind('<div style="padding-top: ', 0, i); b = h.find('</div>', h.find('@NotaGetBot', i)) + 6
     assert i > 0 and a > 0, 'не нашёл нижнюю строку'
     h = h[:a] + h[b:]
-    p = os.path.join(HERE, 'month-report.html'); open(p, 'w', encoding='utf-8').write(h)
+    suf = '' if loc == 'ru' else '-' + loc
+    p = os.path.join(HERE, f'month-report{suf}.html'); open(p, 'w', encoding='utf-8').write(h)
     subprocess.run(['node', os.path.join(GEN, 'render.cjs'), p, p[:-5] + '.png', '2'], check=True)

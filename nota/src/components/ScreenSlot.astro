@@ -13,8 +13,11 @@ interface Props {
   h?: number;
   mobile?: { file: string; w: number; h: number }; // фрагмент листа для телефона
   bar?: boolean;  // шапка «Nota · Google Таблицы» над скриншотом; на главной (v11) убрана 19.11
+  lang?: 'ru' | 'en' | 'id'; // язык подписей ссылки «открыть в полном размере» (25.11)
 }
-const { file, tab, tabs, alt, w, h, mobile, bar = true } = Astro.props;
+import { UI } from '../data/landing-i18n';
+const { file, tab, tabs, alt, w, h, mobile, bar = true, lang = 'ru' } = Astro.props;
+const u = UI[lang];
 const exists = fs.existsSync(path.join(process.cwd(), 'public', file));
 ---
 <div class="shot">
@@ -27,7 +30,7 @@ const exists = fs.existsSync(path.join(process.cwd(), 'public', file));
   )}
   <div class="shot-body">
     {exists ? (
-      <a href={file} target="_blank" rel="noopener" title="Открыть в полном размере" aria-label={`${alt}: открыть в полном размере, в новой вкладке`}>
+      <a href={file} target="_blank" rel="noopener" title={u.shotOpen} aria-label={`${alt}: ${u.shotOpenNew}`}>
         {mobile ? (
           <picture>
             <source media="(max-width: 640px)" srcset={mobile.file} width={mobile.w} height={mobile.h} />

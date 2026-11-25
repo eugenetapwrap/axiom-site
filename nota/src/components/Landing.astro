@@ -15,32 +15,50 @@ import Pen from './Pen.astro';
 import { botLink } from '../data/content';
 import { fmt } from '../lib/fmt';
 import {
-  meta, cta, nav, hero, result, analytics, send, what as whatBase, compare as compareBase, segments, reviews, data as dataBase, pricing, faq as faqBase, final, footer, steps, bar, shotAlt,
-  start, facts12, compare12, data12, faq12, what12, sched12,
+  meta, cta, nav as navRu, hero as heroRu, result, analytics as analyticsRu, send as sendRu, what as whatBase, compare as compareBase, segments as segmentsRu, reviews, data as dataBase, pricing as pricingRu, faq as faqBase, final as finalRu, footer as footerRu, steps, bar, shotAlt as shotAltRu,
+  start as startRu, facts12, compare12, data12, faq12, what12, sched12 as sched12Ru,
 } from '../data/content-v12';   // = content-v11 + тексты нового первого экрана (start)
+import { bundles, UI, homePath, type Lang } from '../data/landing-i18n';   // EN и ID (25.11): тексты — src/data/i18n/*.json
 
 // Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
 const cut = (text: string, word: string) => { const i = text.indexOf(word); return i < 0 ? [text, '', ''] : [text.slice(0, i), word, text.slice(i + word.length)]; };
-const h1Cut = cut(hero.title, '15\u00a0минут');
+const h1Cut = cut(heroRu.title, '15\u00a0минут');   // первый экран варианта с архивом — только по-русски
 
 // Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
 // v12 — правки 22.11 для обеих страниц v12 (/ и /archive/) (короткие пояснения под ценами, отступы); на главной выключено
-interface Props { noindex?: boolean; variant?: 'archive' | 'start'; tag?: string; bar?: boolean; v12?: boolean }
-const { noindex = false, variant = 'archive', tag = 'land10_', bar: showBar = false, v12 = false } = Astro.props;
+interface Props { noindex?: boolean; variant?: 'archive' | 'start'; tag?: string; bar?: boolean; v12?: boolean; lang?: Lang }
+const { noindex = false, variant = 'archive', tag = 'land10_', bar: showBar = false, v12 = false, lang = 'ru' } = Astro.props;
+// Язык: ru — исходные тексты; en/id — бандл того же устройства (только новый вариант главной)
+const B: any = lang === 'ru' ? null : bundles[lang];
+const u = UI[lang];
+const start = B ? { ...B.start, meta: B.meta } : startRu;
+const hero = B ? { ...heroRu, qr: B.hero.qr } : heroRu;
+const nav = B ? B.nav : navRu;
+const analytics = B ? B.analytics : analyticsRu;
+const shotAlt: Record<string, string> = B ? B.shotAlt : shotAltRu;
+const send = B ? B.send : sendRu;
+const segments = B ? B.segments : segmentsRu;
+const pricing = B ? { ...pricingRu, ...B.pricing } : pricingRu;
+const final = B ? B.final : finalRu;
+const footer = B ? B.footer : footerRu;
+const sched12 = B ? B.sched : sched12Ru;
+const tableLead = B ? B.tableLead : steps.table.lead;
+const facts = B ? B.facts : (v12 ? facts12 : pricingRu.facts);
 const isStart = variant === 'start';
 const m = isStart ? start.meta : { ...meta, og: '/og-v10.png' };
-const compare = v12 ? compare12 : compareBase;
-const data = v12 ? data12 : dataBase;
-const faq = v12 ? faq12 : faqBase;
-const what = v12 ? what12 : whatBase;
+const compare = B ? B.compare : v12 ? compare12 : compareBase;
+const data = B ? B.data : v12 ? data12 : dataBase;
+const faq = B ? B.faq : v12 ? faq12 : faqBase;
+const what = B ? B.what : v12 ? what12 : whatBase;
 const sched = v12 ? sched12 : steps.report.schedule;
+const alternates = isStart ? (['ru', 'en', 'id'] as Lang[]).map((l) => ({ lang: l, href: homePath[l] })) : undefined;
 const link = (t: string) => botLink(t.replace('land10_', tag));
 const ctaText = isStart ? start.cta : cta;
 const sCut = cut(start.title, start.underline);
 // Домен — один раз, в astro.config.mjs (site)
 const site = new URL('/', Astro.site).href;
 const jsonld = [
-  { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${site}#website`, name: 'Nota', url: site, inLanguage: 'ru' },
+  { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${site}#website`, name: 'Nota', url: site, inLanguage: lang },
   {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
@@ -51,8 +69,8 @@ const jsonld = [
     operatingSystem: 'Telegram',
     inLanguage: ['ru', 'en', 'id'],
     description: m.description,
-    image: new URL('/og-v10.png', Astro.site).href,
-    screenshot: new URL(hero.report.file2x, Astro.site).href,
+    image: new URL(m.og, Astro.site).href,
+    screenshot: new URL(isStart ? start.report.file2x : hero.report.file2x, Astro.site).href,
     publisher: { '@type': 'Organization', name: 'Axiom Consulting' }, // url и юрлицо — после ответа основателя (аудит 15.11, вопрос 42)
     // Цена — за месяц; ссылка — на блок цен, а не в бота (переходы из поиска не путаются с нажатиями в ценах)
     offers: pricing.plans.filter((p) => p.month).map((p) => {
@@ -71,23 +89,21 @@ const jsonld = [
 ];
 const showReviews = false; // блок «Отзывы» (19.11: скрыт, пока нет настоящих отзывов)
 ---
-<Base title={m.title} description={m.description} noindex={noindex} og={m.og} ogAlt={m.ogAlt} selfFonts>
-  <a class="skip" href="#main">К содержанию</a>
+<Base title={m.title} description={m.description} noindex={noindex} og={m.og} ogAlt={m.ogAlt} selfFonts lang={lang} alternates={alternates}>
+  <a class="skip" href="#main">{u.skip}</a>
   <header class="header">
     <div class="wrap">
-      <a class="logo-link" href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
-      <nav aria-label="Разделы">{nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
-      <!-- Языки (основатель, 19.11): пока только русский; EN и ID — «скоро», без перехода на пустую страницу -->
-      <div class="lang" role="group" aria-label="Язык сайта">
-        <button type="button" class="lang-b" aria-disabled="true" data-soon="Coming soon">EN</button>
-        <button type="button" class="lang-b" aria-disabled="true" data-soon="Segera hadir">ID</button>
-        <span class="lang-b on" aria-current="true">RU</span>
+      <a class="logo-link" href={homePath[lang]} aria-label={u.home}><Logo height={30} /></a>
+      <nav aria-label={u.navLabel}>{nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
+      <!-- Языки (25.11): главная на трёх языках; со страницы с архивом ведут на главные -->
+      <div class="lang" role="group" aria-label={u.langLabel}>
+        {(['en', 'id', 'ru'] as Lang[]).map((l) => l === lang ? <span class="lang-b on" aria-current="true">{l.toUpperCase()}</span> : <a class="lang-b" href={homePath[l]} hreflang={l}>{l.toUpperCase()}</a>)}
       </div>
       <details class="lang-m">
-        <summary aria-label="Язык сайта: русский">RU</summary>
-        <div class="lang-menu"><span>EN <small>Coming soon</small></span><span>ID <small>Segera hadir</small></span></div>
+        <summary aria-label={`${u.langLabel}: ${u.langName}`}>{lang.toUpperCase()}</summary>
+        <div class="lang-menu">{(['ru', 'en', 'id'] as Lang[]).filter((l) => l !== lang).map((l) => <a href={homePath[l]} hreflang={l}>{UI[l].langName} <small>{l.toUpperCase()}</small></a>)}</div>
       </details>
-      <a class="btn btn--sm btn--dark" href={link('land10_header')}><span class="hb-lg">Открыть в Telegram</span><span class="hb-sm">В Telegram</span></a>
+      <a class="btn btn--sm btn--dark" href={link('land10_header')}><span class="hb-lg">{u.open}</span><span class="hb-sm">{u.openSm}</span></a>
     </div>
   </header>
 
@@ -113,7 +129,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
             <div class="cta-row cta-row--qr">
               <a class="btn" href={link('land10_hero')}>{ctaText}</a>
               <div class="cta-qr">
-                <img src="/screens/qr-bot-v10.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="54" height="54" />
+                <img src="/screens/qr-bot-v10.svg" alt={u.qrAlt} width="54" height="54" />
                 <span>{hero.qr}</span>
               </div>
             </div>
@@ -220,9 +236,9 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
     <section class="section num-sec" id="analytics">
       <div class="wrap">
         <h2>{!isStart && <span class="num-dot" aria-hidden="true"><i data-n="3"></i></span>}{isStart ? start.tableTitle : steps.table.title}</h2>
-        <p class="lead">{steps.table.lead}</p>
+        <p class="lead">{tableLead}</p>
         <div class="an" data-an>
-          <div class="an-pick" role="tablist" aria-label="Листы таблицы">
+          <div class="an-pick" role="tablist" aria-label={u.sheetTabs}>
             {analytics.screens.map((sc, i) => (
               <button type="button" role="tab" class="an-btn" id={`an-tab-${sc.id}`} aria-controls={`an-panel-${sc.id}`} aria-selected={i === 0 ? 'true' : 'false'}>
                 <b>{sc.label}</b><small>{sc.tab}</small>
@@ -231,7 +247,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
           </div>
           {analytics.screens.map((sc, i) => (
             <div class:list={['an-panel', { on: i === 0 }]} role="tabpanel" id={`an-panel-${sc.id}`} aria-labelledby={`an-tab-${sc.id}`}>
-              <ScreenSlot bar={false} file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={shotAlt[sc.id] ?? `Лист ${sc.tab} на тестовых данных`} w={sc.w} h={sc.h} mobile={sc.mobile} />
+              <ScreenSlot bar={false} file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={shotAlt[sc.id] ?? u.shotFallback(sc.tab)} w={sc.w} h={sc.h} mobile={sc.mobile} lang={lang} />
               <ul class="an-points">{sc.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
             </div>
           ))}
@@ -318,21 +334,21 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
             ))}
           </fieldset>
         </div>
-        <p class="plan-common">Во всех тарифах: {pricing.common.join(', ')}.</p>
+        <p class="plan-common">{u.allPlans} {pricing.common.join(', ')}.</p>
         <!-- Таблица-лестница (только телефон): строка на тариф, строки — плотные блоки, у групп подпись «Группы:» -->
-        <div class="ptab" role="table" aria-label="Тарифы">
+        <div class="ptab" role="table" aria-label={u.plansAria}>
           <div class="ptab-h" role="row">
-            <span role="columnheader">Тариф</span><span role="columnheader">Документов в месяц</span><span role="columnheader">Группы</span><span role="columnheader">Цена</span><span role="columnheader"><span class="sr-only">Действие</span></span>
+            <span role="columnheader">{u.thPlan}</span><span role="columnheader">{u.thDocs}</span><span role="columnheader">{u.thGroups}</span><span role="columnheader">{u.thPrice}</span><span role="columnheader"><span class="sr-only">{u.thAction}</span></span>
           </div>
           {pricing.plans.map((p) => (
             <div class:list={['ptab-r', { 'ptab-r--hl': p.highlight, 'ptab-r--custom': p.custom }]} role="row">
               <div class="ptab-n" role="rowheader"><b>{p.name}</b><span>{p.who}</span></div>
-              <div class="ptab-v" role="cell"><b>{p.vol}</b> <small>документов<span class="m-only"> в месяц</span></small></div>
-              <div class="ptab-g" role="cell"><span class="m-only">Группы: </span>{p.groups}</div>
+              <div class="ptab-v" role="cell"><b>{p.vol}</b> <small>{u.docsWord}<span class="m-only">{u.perMonthTail}</span></small></div>
+              <div class="ptab-g" role="cell"><span class="m-only">{u.groupsPrefix}</span>{p.groups}</div>
               <div class="ptab-p" role="cell">
                 {p.custom ? <b class="ptab-custom">{p.custom}</b> : (
                   <>
-                    <b><span class="pm">{p.month!.price}</span><span class="p3">{p.q3!.price}</span><span class="p6">{p.q6!.price}</span></b><small> / мес</small>
+                    <b><span class="pm">{p.month!.price}</span><span class="p3">{p.q3!.price}</span><span class="p6">{p.q6!.price}</span></b><small>{u.perMo}</small>
                     <span class="ptab-tot"><span class="p3">{p.q3!.total}</span><span class="p6">{p.q6!.total}</span></span>
                   </>
                 )}
@@ -347,22 +363,22 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
             <div class:list={['pa-c', { 'pa-c--hl': p.highlight, 'pa-c--dk': p.custom }]}>
               <h3 class="pa-n">{p.name}</h3>
               <div class="pa-w">{p.who}</div>
-              <div class="pa-v"><b>{p.custom ? 'Более 500' : p.vol}</b><span>документов в месяц</span></div>
+              <div class="pa-v"><b>{p.custom ? u.over500 : p.vol}</b><span>{u.docsPerMonth}</span></div>
               {p.custom ? <div class="pa-p pa-p--custom">{p.custom}</div> : (
                 <div class="pa-p">
-                  <span class="pm">{p.month!.price}</span><span class="p3">{p.q3!.price}</span><span class="p6">{p.q6!.price}</span><small> / мес</small>
+                  <span class="pm">{p.month!.price}</span><span class="p3">{p.q3!.price}</span><span class="p6">{p.q6!.price}</span><small>{u.perMo}</small>
                   <span class="pa-tot"><span class="p3">{p.q3!.total}</span><span class="p6">{p.q6!.total}</span></span>
                 </div>
               )}
               <ul class="pa-l">
-                {(p.services ?? [`Группы: ${p.groups}`, ...pricing.common.map((c) => c[0].toUpperCase() + c.slice(1))]).map((f) => <li><Icon name="check" size={18} />{f}</li>)}
+                {(p.services ?? [`${u.groupsPrefix}${p.groups}`, ...pricing.common.map((c) => c[0].toUpperCase() + c.slice(1))]).map((f) => <li><Icon name="check" size={18} />{f}</li>)}
               </ul>
               <a class:list={['btn', { 'btn--outline': p.outline }]} href={link(p.tag)}>{p.cta}<span class="sr-only"> — тариф {p.name}</span></a>
             </div>
           ))}
         </div>
         <dl class="plan-facts3 g4">
-          {(v12 ? facts12 : pricing.facts).map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
+          {facts.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
         </dl>
         <script is:inline>
           (function () {
@@ -426,9 +442,9 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
     <section class="section cmp-sec">
       <div class="wrap">
         <h2 class="cmp-title">{compare.title}</h2>
-        <div class="cmp" role="table" aria-label="Сравнение: Nota, админ с Excel, приложение для расходов">
+        <div class="cmp" role="table" aria-label={u.cmpAria}>
           <div class="cmp-row cmp-head" role="row">
-            <div class="cmp-q" role="columnheader"><span class="sr-only">Вопрос</span></div>
+            <div class="cmp-q" role="columnheader"><span class="sr-only">{u.question}</span></div>
             {compare.options.map((o) => (
               <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="columnheader">{o.nota ? <Logo height={24} /> : o.name}</div>
             ))}
@@ -448,7 +464,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
                 const [m, t] = o.cells[i];
                 return (
                   <div class:list={['cmp-c', `m-${m}`, { 'cmp-c--nota': o.nota }]} role="cell">
-                    <span class="vs-mark"><Icon name={m === 'yes' ? 'check' : m === 'no' ? 'x' : 'minus'} size={16} /><span class="sr-only">{m === 'yes' ? 'Плюс.' : m === 'no' ? 'Минус.' : 'Отчасти.'}</span></span>
+                    <span class="vs-mark"><Icon name={m === 'yes' ? 'check' : m === 'no' ? 'x' : 'minus'} size={16} /><span class="sr-only">{m === 'yes' ? u.yes : m === 'no' ? u.no : u.mid}</span></span>
                     <span class="cmp-who">{o.short ?? o.name}</span>
                     <span class="cmp-t">{t}</span>
                   </div>
@@ -469,14 +485,14 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
             <div class="dark-item"><Icon name={d.icon} /><div><h3>{d.title}</h3><p set:html={fmt(d.text)} /></div></div>
           ))}
         </div>
-        <div class="who"><span class="who-label">Кто делает</span><p>{data.who}</p></div>
+        <div class="who"><span class="who-label">{u.who}</span><p>{data.who}</p></div>
       </div>
     </section>
 
     <!-- 12. Вопросы -->
     <section class="section" id="faq">
       <div class="wrap">
-        <h2 class="h2-gap">Вопросы</h2>
+        <h2 class="h2-gap">{u.faqTitle}</h2>
         <div class="faq">{faq.map((f) => <details><summary>{f.q}</summary><p set:html={fmt(f.a)} /></details>)}</div>
       </div>
     </section>
@@ -489,8 +505,8 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
         <div class="final-cta">
           <a class="btn" href={link('land10_final')}>{ctaText}</a>
           <div class="final-qr">
-            <img src="/screens/qr-bot-v10-final.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
-            <span>Или наведите камеру телефона</span>
+            <img src="/screens/qr-bot-v10-final.svg" alt={u.qrAlt} width="96" height="96" />
+            <span>{u.finalQr}</span>
           </div>
         </div>
       </div>
@@ -499,7 +515,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
 
   <!-- Телефон: кнопка внизу экрана — только когда первая кнопка уехала вверх и на экране нет ни одной другой оранжевой кнопки
        (шаг 2, тарифы, финал), чтобы две одинаковые кнопки не стояли рядом -->
-  <aside aria-label="Быстрый старт"><div class="sticky-cta" id="sticky-cta"><a class="btn" href={link('land10_sticky')}>{ctaText}</a></div></aside>
+  <aside aria-label={u.quick}><div class="sticky-cta" id="sticky-cta"><a class="btn" href={link('land10_sticky')}>{ctaText}</a></div></aside>
   <script is:inline>
     (function () {
       var bar = document.getElementById('sticky-cta'), heroBtn = document.querySelector('.hero .btn');
@@ -531,11 +547,11 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
   <footer class="footer">
     <div class="wrap">
       <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
-      <nav aria-label="Документы">
-        <a href={footer.terms}>Пользовательское соглашение</a>
-        <a href={footer.privacy}>Политика конфиденциальности</a>
-        <a href={footer.refund}>Правила возврата</a>
-        <a href="https://t.me/NotaSuppBot" target="_blank" rel="noopener">Поддержка в боте</a>
+      <nav aria-label={u.docsNav}>
+        <a href={footer.terms}>{u.terms}</a>
+        <a href={footer.privacy}>{u.privacy}</a>
+        <a href={footer.refund}>{u.refund}</a>
+        <a href="https://t.me/NotaSuppBot" target="_blank" rel="noopener">{u.support}</a>
       </nav>
       <div class="op">© 2026</div>
       <p class="foot-note">{footer.testData}</p>
