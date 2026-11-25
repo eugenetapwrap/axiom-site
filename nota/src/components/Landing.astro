@@ -53,6 +53,9 @@ const what = B ? B.what : v12 ? what12 : whatBase;
 const sched = v12 ? sched12 : steps.report.schedule;
 const alternates = isStart ? (['ru', 'en', 'id'] as Lang[]).map((l) => ({ lang: l, href: homePath[l] })) : undefined;
 const link = (t: string) => botLink(t.replace('land10_', tag));
+// Custom (от 500 документов, учёт от Axiom) — разговор с человеком: бот поддержки, с той же меткой (основатель 25.11)
+const supportLink = (t: string) => `https://t.me/NotaSuppBot?start=${t.replace('land10_', tag)}`;
+const planLink = (p: { tag: string; custom?: string }) => (p.custom ? supportLink(p.tag) : link(p.tag));
 const ctaText = isStart ? start.cta : cta;
 const sCut = cut(start.title, start.underline);
 // Домен — один раз, в astro.config.mjs (site)
@@ -353,7 +356,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
                   </>
                 )}
               </div>
-              <div class="ptab-a" role="cell"><a class:list={['btn', { 'btn--outline': p.outline }]} href={link(p.tag)}>{p.cta}<span class="sr-only">{u.planSr}{p.name}</span></a></div>
+              <div class="ptab-a" role="cell"><a class:list={['btn', { 'btn--outline': p.outline }]} href={planLink(p)}>{p.cta}<span class="sr-only">{u.planSr}{p.name}</span></a></div>
             </div>
           ))}
         </div>
@@ -373,7 +376,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
               <ul class="pa-l">
                 {(p.services ?? [`${u.groupsPrefix}${p.groups}`, ...pricing.common.map((c) => c[0].toUpperCase() + c.slice(1))]).map((f) => <li><Icon name="check" size={18} />{f}</li>)}
               </ul>
-              <a class:list={['btn', { 'btn--outline': p.outline }]} href={link(p.tag)}>{p.cta}<span class="sr-only">{u.planSr}{p.name}</span></a>
+              <a class:list={['btn', { 'btn--outline': p.outline }]} href={planLink(p)}>{p.cta}<span class="sr-only">{u.planSr}{p.name}</span></a>
             </div>
           ))}
         </div>
