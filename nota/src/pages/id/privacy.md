@@ -18,123 +18,129 @@ Teks perlu diperiksa penutur asli bahasa Indonesia.
 "[perlu dikonfirmasi: …]" — pertanyaan terbuka, juga ada di founder/legal-docs-questions.md.
 -->
 
-Kebijakan ini menjelaskan data apa yang diterima Nota, untuk apa, di mana disimpan dan cara menghapusnya.
+Kebijakan Privasi ini (selanjutnya disebut "Kebijakan") menetapkan data apa yang diproses layanan Nota, untuk tujuan apa, berapa lama disimpan dan bagaimana Pengguna dapat menghapusnya. Istilah yang digunakan memiliki arti sebagaimana ditetapkan dalam [Ketentuan Layanan](/id/terms).
 
-## 1. Pengendali data
+## 1. Pengendali Data
 
-Pengendali data adalah Individual Entrepreneur Evgenii Popov (pengusaha perorangan), Georgia, nomor identifikasi 346999215, alamat resmi: Rustaveli Street 140-v, Entrance 1, Floor 6, Kobuleti, Georgia.
+1.1. Pengendali data adalah Individual Entrepreneur Evgenii Popov (pengusaha perorangan), Georgia, nomor identifikasi 346999215, alamat resmi: Rustaveli Street, Kobuleti, Georgia (selanjutnya disebut "Operator").
 
-Untuk pertanyaan tentang data, tulis ke [perlu dikonfirmasi: email dukungan] atau ke bot [@NotaGetBot](https://t.me/NotaGetBot).
+1.2. Permintaan terkait pemrosesan data disampaikan melalui bot Telegram [@NotaGetBot](https://t.me/NotaGetBot) atau email [perlu dikonfirmasi: email dukungan].
 
-## 2. Data yang kami terima
+## 2. Data yang Diproses
 
-**Dari Telegram:**
+2.1. Data Telegram:
 
-- Telegram ID, nama, username dan bahasa antarmuka Anda;
-- ID dan nama grup kerja tempat Anda menambahkan bot;
-- nama dan Telegram ID anggota grup yang mengirim dokumen;
-- pesan yang Anda kirim langsung ke bot.
+- Telegram ID, nama, username dan bahasa antarmuka Pengguna;
+- ID dan nama Grup Kerja tempat bot ditambahkan;
+- nama dan Telegram ID anggota Grup Kerja yang mengirim Dokumen;
+- pesan yang dikirim Pengguna langsung ke bot.
 
-Di grup kerja, bot hanya mengambil dokumen pembayaran. Nota tidak menyimpan pesan grup lainnya.
+2.2. Di Grup Kerja, Layanan hanya memproses dokumen pembayaran. Pesan lain di Grup Kerja tidak disimpan.
 
-**Dokumen yang Anda kirim:** file struk, invoice, nota pengiriman, bukti transfer dan arsip chat, serta data yang dibaca Nota darinya: tanggal, jumlah, pemasok, detail pembayaran, rincian barang, kategori, proyek. Dokumen bisa berisi data orang lain: nama, nomor telepon, nomor rekening.
+2.3. Dokumen: file struk, invoice, nota pengiriman, bukti transfer dan arsip chat, serta informasi yang diambil darinya — tanggal, jumlah, pemasok, detail pembayaran, rincian barang, kategori, proyek. Dokumen dapat berisi data pribadi pihak ketiga, termasuk nama, nomor telepon dan nomor rekening bank.
 
-**Dari Google**, jika Anda menghubungkan Google:
+2.4. Data Google (jika Akun Google dihubungkan):
 
-- alamat email Akun Google Anda;
-- token akses agar Nota dapat menulis ke spreadsheet dan folder;
-- akses ke spreadsheet dan folder yang dibuat Nota di Google Drive Anda. Nota tidak dapat melihat file lain di Google Drive Anda.
+- alamat email Akun Google;
+- token akses yang diperlukan untuk menulis ke Spreadsheet dan Folder;
+- akses ke Spreadsheet dan Folder yang dibuat Layanan. Layanan tidak memiliki akses ke file lain di Google Drive Pengguna.
 
-**Data pembayaran:** paket, jumlah, tanggal dan status pembayaran, nomor transaksi di bank atau layanan kripto. Data kartu dimasukkan di halaman Bank of Georgia; kami tidak menerima atau menyimpannya.
+2.5. Data pembayaran: Paket, jumlah, tanggal dan status pembayaran, serta nomor transaksi di bank atau layanan pembayaran. Data kartu dimasukkan di halaman Bank of Georgia; Operator tidak menerima atau menyimpannya.
 
-**Data teknis:** log server dan kesalahan; alamat IP dan jenis browser saat Anda membuka situs atau halaman pembayaran.
+2.6. Data teknis: log server dan kesalahan; alamat IP dan jenis browser saat situs atau halaman pembayaran dikunjungi.
 
-## 3. Untuk apa kami menggunakan data
+## 3. Tujuan dan Dasar Pemrosesan
 
-- Membaca dokumen, mencatat baris di spreadsheet Anda dan menyimpan file asli ke folder.
-- Mencari duplikat dan kesalahan jumlah, mengirim laporan dan pemberitahuan.
-- Menerima pembayaran, mengelola paket dan menerbitkan invoice.
-- Menjawab permintaan dukungan.
-- Memperbaiki kesalahan dan melindungi layanan dari penyalahgunaan.
+3.1. Data diproses untuk:
 
-Dasar pemrosesan: pelaksanaan perjanjian dengan Anda ([Ketentuan Layanan](/id/terms)), persetujuan Anda (menghubungkan Google), kepentingan sah kami (keamanan layanan) dan kewajiban hukum (catatan pembayaran).
+- mengenali Dokumen, mencatat data ke Spreadsheet dan menyimpan file asli ke Folder;
+- mendeteksi duplikat dan selisih jumlah serta mengirim laporan dan pemberitahuan;
+- menerima pembayaran, mengelola Paket dan menerbitkan invoice;
+- menanggapi permintaan Pengguna;
+- memperbaiki kesalahan dan melindungi Layanan dari penyalahgunaan.
 
-Kami tidak menjual data Anda, tidak menampilkan iklan dan tidak menggunakan dokumen Anda untuk melatih model AI. Kami memilih layanan pengenalan dokumen yang tidak melatih model dengan data pelanggan.
+3.2. Dasar pemrosesan: pelaksanaan [Ketentuan Layanan](/id/terms), persetujuan Pengguna (menghubungkan Akun Google), kepentingan sah Operator (keamanan Layanan) dan kewajiban hukum (catatan pembayaran).
 
-## 4. Data dari Google
+3.3. Operator tidak menjual data Pengguna, tidak menggunakannya untuk iklan dan tidak menggunakan Dokumen untuk melatih model kecerdasan buatan. Operator menggunakan layanan pengenalan yang tidak melatih model dengan data pelanggan.
 
-Penggunaan dan pengalihan informasi yang diterima Nota dari Google API mematuhi [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), termasuk persyaratan Limited Use. Artinya:
+## 4. Data yang Diterima melalui Google API
 
-- data dari Google hanya digunakan untuk mengelola spreadsheet dan folder Anda;
-- kami tidak mengalihkannya kepada pihak ketiga, kecuali jika diperlukan untuk menjalankan layanan, diwajibkan hukum, atau atas permintaan Anda;
-- kami tidak menggunakannya untuk iklan dan tidak menjualnya;
-- tidak ada yang membacanya, kecuali jika Anda meminta bantuan, diperlukan untuk keamanan, atau diwajibkan hukum;
-- kami tidak menggunakannya untuk mengembangkan, meningkatkan atau melatih model AI atau machine learning umum.
+4.1. Penggunaan dan pengalihan informasi yang diterima Nota dari Google API mematuhi [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), termasuk persyaratan Limited Use. Secara khusus:
 
-Anda dapat mencabut akses Nota kapan saja: Akun Google → Keamanan → Aplikasi & layanan pihak ketiga. Spreadsheet dan folder tetap menjadi milik Anda.
+- data Google hanya digunakan untuk mengelola Spreadsheet dan Folder Pengguna;
+- data tidak dialihkan kepada pihak ketiga, kecuali jika diperlukan untuk menyediakan Layanan, diwajibkan hukum, atau atas permintaan Pengguna;
+- data tidak digunakan untuk iklan dan tidak dijual;
+- data tidak dibaca oleh manusia, kecuali jika Pengguna meminta bantuan, diperlukan untuk keamanan, atau diwajibkan hukum;
+- data tidak digunakan untuk mengembangkan, meningkatkan atau melatih model kecerdasan buatan atau machine learning umum.
 
-## 5. Kepada siapa data dibagikan
+4.2. Pengguna dapat mencabut akses Layanan kapan saja melalui Akun Google → Keamanan → Aplikasi & layanan pihak ketiga. Spreadsheet dan Folder tetap menjadi milik Pengguna.
 
-Hanya kepada penyedia yang diperlukan agar layanan berjalan:
+## 5. Pengungkapan kepada Pihak Ketiga
+
+5.1. Data hanya diungkapkan kepada pihak yang diperlukan agar Layanan dapat berjalan:
 
 - Telegram — menerima dan mengirim pesan;
-- Google — spreadsheet dan folder Anda di Google Drive;
-- hosting — server dan basis data Nota;
-- layanan pengenalan dokumen — membaca teks pada dokumen;
-- Bank of Georgia — pembayaran kartu;
-- layanan pembayaran kripto — pembayaran kripto.
+- Google — mengelola Spreadsheet dan Folder di Google Drive Pengguna;
+- penyedia hosting — menempatkan server dan basis data Layanan;
+- layanan pengenalan — mengambil teks dari Dokumen;
+- Bank of Georgia — menerima pembayaran kartu;
+- layanan pembayaran — menerima pembayaran kripto.
 
-Daftar penyedia secara spesifik kami berikan atas permintaan.
+5.2. Daftar penyedia secara spesifik tersedia atas permintaan.
 
-Kami juga dapat mengungkapkan data kepada otoritas negara jika diwajibkan hukum.
+5.3. Data dapat diungkapkan kepada otoritas negara jika diwajibkan hukum.
 
-## 6. Transfer data ke luar negeri
+## 6. Transfer Data Lintas Negara
 
-Server dan penyedia kami dapat berada di luar negara Anda, termasuk di luar Indonesia. Kami hanya mentransfer data kepada penyedia di atas dan mewajibkan mereka melindunginya setidaknya sesuai standar hukum, termasuk Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP). <!-- pengacara: persyaratan transfer data ke luar Indonesia -->
+6.1. Server dan penyedia Operator dapat berada di luar negara Pengguna, termasuk di luar Indonesia. Operator hanya mentransfer data kepada penyedia yang tercantum dalam bagian 5 dan mewajibkan mereka melindunginya setidaknya sesuai standar hukum, termasuk Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP). <!-- pengacara: persyaratan transfer data ke luar Indonesia -->
 
-## 7. Berapa lama data disimpan
+## 7. Jangka Waktu Penyimpanan
 
-- **Tanpa Google terhubung**, file yang Anda kirim dan data yang dibaca darinya disimpan selama 7 hari. Jika Anda menghubungkan Google dalam waktu itu, semuanya dicatat ke spreadsheet. Jika tidak, data dihapus dan Anda tetap memiliki laporan di chat.
-- **Dengan Google terhubung**, file asli dan baris disimpan di spreadsheet dan folder di Google Drive Anda hingga Anda menghapusnya. Di servernya sendiri, Nota menyimpan catatan dokumen Anda, termasuk sidik digital (hash) untuk mendeteksi duplikat, selama paket Anda aktif.
-- **Dokumen di atas kuota** menunggu dalam antrean selama 7 hari sejak dokumen pertama masuk.
-- **Setelah paket berakhir**, kami menyimpan data Anda selama 30 hari agar Anda bisa kembali tanpa kehilangan data, lalu menghapusnya.
-- **Catatan pembayaran** disimpan selama yang diwajibkan hukum pajak Georgia.
+7.1. Jika Akun Google tidak terhubung, file yang dikirim dan data yang diambil darinya disimpan selama 7 hari. Jika Akun Google dihubungkan dalam jangka waktu tersebut, data dicatat ke Spreadsheet; jika tidak, data dihapus.
 
-## 8. Cara menghapus data
+7.2. Jika Akun Google terhubung, Dokumen asli dan data yang dicatat disimpan di Spreadsheet dan Folder di Google Drive Pengguna hingga dihapus oleh Pengguna. Selama Paket berlaku, server Operator menyimpan catatan Dokumen, termasuk sidik digital (hash) untuk mendeteksi duplikat.
 
-Kirim perintah hapus ke bot atau tulis ke email di bagian 1. Kami akan:
+7.3. Dokumen di atas kuota disimpan dalam antrean selama 7 hari sejak Dokumen pertama dimasukkan.
 
-- menghapus semua catatan dokumen Anda di basis data kami, termasuk sidik digital (hash);
-- memutus Nota dari Akun Google Anda;
-- mengeluarkan bot dari semua grup kerja Anda.
+7.4. Setelah Paket berakhir, data Pengguna disimpan selama 30 hari lalu dihapus.
 
-Yang tersisa hanya username Telegram Anda dan catatan pembayaran yang wajib kami simpan menurut hukum. Penghapusan memakan waktu paling lama 30 hari, dan kami mengonfirmasinya di bot atau melalui email.
+7.5. Data pembayaran disimpan selama jangka waktu yang diwajibkan hukum pajak Georgia.
 
-Spreadsheet dan folder berisi file Anda tetap ada di Google Drive Anda: itu milik Anda, Nota hanya memutus akses darinya. Hanya Anda yang dapat menghapusnya.
+## 8. Penghapusan Data
 
-## 9. Hak Anda
+8.1. Untuk menghapus data, Pengguna mengirim perintah hapus ke bot atau permintaan melalui email yang tercantum dalam butir 1.2. Atas permintaan tersebut Operator:
 
-Anda berhak:
+- menghapus semua catatan Dokumen Pengguna di basis data, termasuk sidik digital (hash);
+- memutus Layanan dari Akun Google Pengguna;
+- mengeluarkan bot dari semua Grup Kerja Pengguna.
 
-- mengetahui data apa yang kami miliki tentang Anda dan mendapatkan salinannya;
-- memperbaiki data yang tidak akurat;
-- menghapus data;
-- menarik persetujuan, misalnya mencabut akses Google;
-- menolak atau membatasi pemrosesan;
-- mengajukan keluhan kepada otoritas pelindungan data di negara Anda.
+8.2. Setelah penghapusan, hanya username Telegram dan data pembayaran yang wajib disimpan menurut hukum yang dipertahankan. Penghapusan diselesaikan paling lama 30 hari dan dikonfirmasi di bot atau melalui email.
 
-Untuk menggunakan hak tersebut, tulis ke bot atau ke email di bagian 1. Kami akan membalas dalam 24 jam dan memenuhi permintaan dalam batas waktu yang ditetapkan hukum.
+8.3. Spreadsheet dan Folder tetap berada di Google Drive Pengguna; Layanan memutus akses darinya. Hanya Pengguna yang dapat menghapusnya.
 
-## 10. Cara kami melindungi data
+## 9. Hak Pengguna
 
-Data dikirim melalui koneksi terenkripsi. Data setiap pelanggan disimpan terpisah. Hanya orang yang memerlukan akses server untuk pekerjaannya yang memilikinya.
+9.1. Pengguna berhak:
 
-Jika terjadi kebocoran yang menyangkut data Anda, kami akan memberi tahu Anda dan, jika diwajibkan hukum, regulator dalam batas waktu yang ditentukan.
+- memperoleh informasi tentang data yang diproses dan salinannya;
+- meminta perbaikan data yang tidak akurat;
+- meminta penghapusan data;
+- menarik persetujuan, termasuk mencabut akses Akun Google;
+- menolak pemrosesan atau meminta pembatasannya;
+- mengajukan keluhan kepada otoritas pelindungan data di negaranya.
 
-## 11. Anak-anak
+9.2. Permintaan disampaikan melalui bot atau email yang tercantum dalam butir 1.2. Operator membalas dalam 24 jam dan memenuhi permintaan dalam jangka waktu yang ditetapkan hukum.
 
-Nota adalah layanan untuk bisnis. Kami tidak dengan sengaja memproses data orang berusia di bawah 18 tahun.
+## 10. Keamanan Data
 
-## 12. Perubahan kebijakan
+10.1. Data dikirim melalui koneksi terenkripsi. Data setiap Pengguna disimpan secara terpisah. Akses ke server hanya diberikan kepada pihak yang memerlukannya untuk pekerjaan.
 
-Kami akan memberi tahu perubahan penting di bot terlebih dahulu. Tanggal versi saat ini tercantum di bagian atas halaman.
+10.2. Jika terjadi kebocoran yang menyangkut data Pengguna, Operator memberi tahu Pengguna dan, jika diwajibkan hukum, otoritas yang berwenang dalam jangka waktu yang ditentukan.
+
+## 11. Anak di Bawah Umur
+
+11.1. Layanan ditujukan untuk bisnis. Operator tidak dengan sengaja memproses data orang yang berusia di bawah 18 tahun.
+
+## 12. Perubahan Kebijakan
+
+12.1. Operator berhak mengubah Kebijakan ini. Operator memberi tahu Pengguna tentang perubahan material di bot terlebih dahulu. Tanggal versi yang berlaku tercantum di bagian atas halaman.

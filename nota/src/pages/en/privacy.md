@@ -18,123 +18,129 @@ DRAFT 22.11, translated from the Russian version (src/pages/privacy.md). Not leg
 This is the page to link in Google Cloud Console → OAuth consent screen.
 -->
 
-This policy explains what data Nota receives, why, where it is stored and how to delete it.
+This Privacy Policy (the "Policy") sets out what data the Nota service processes, for what purposes, how long it is kept and how the User can delete it. Terms have the meanings given in the [Terms of Service](/en/terms).
 
-## 1. Who is responsible for your data
+## 1. Data Controller
 
-The data controller is Individual Entrepreneur Evgenii Popov, Georgia, identification number 346999215, legal address: Entrance 1, Floor 6, 140-v Rustaveli Street, Kobuleti, Georgia.
+1.1. The data controller is Individual Entrepreneur Evgenii Popov, Georgia, identification number 346999215, legal address: Rustaveli Street, Kobuleti, Georgia (the "Operator").
 
-For questions about your data, write to [to confirm: support email] or to the bot [@NotaGetBot](https://t.me/NotaGetBot).
+1.2. Requests concerning data processing shall be sent to the Telegram bot [@NotaGetBot](https://t.me/NotaGetBot) or by email to [to confirm: support email].
 
-## 2. What data we receive
+## 2. Data Processed
 
-**From Telegram:**
+2.1. Telegram data:
 
-- your Telegram ID, name, username and interface language;
-- the ID and name of work groups to which you add the bot;
-- the name and Telegram ID of the group member who sent a document;
-- messages you send to the bot directly.
+- the User's Telegram ID, name, username and interface language;
+- the ID and name of Work Groups to which the bot has been added;
+- the name and Telegram ID of the Work Group member who sent a Document;
+- messages the User sends to the bot directly.
 
-In a work group, the bot takes only payment documents. Nota does not store other group messages.
+2.2. In a Work Group, the Service processes payment documents only. Other Work Group messages are not stored.
 
-**Documents you send:** files of receipts, invoices, delivery notes, transfer screenshots and chat archives, and what Nota reads from them: date, amount, supplier, payment details, line items, category, project. Documents may contain other people's data: names, phone numbers, account numbers.
+2.3. Documents: files of receipts, invoices, delivery notes, transfer confirmations and chat archives, and the information extracted from them — date, amount, supplier, payment details, line items, category, project. Documents may contain personal data of third parties, including names, phone numbers and bank account numbers.
 
-**From Google**, if you connect Google:
+2.4. Google data (when a Google Account is connected):
 
-- the email address of your Google Account;
-- access tokens so that Nota can write to the sheet and folder;
-- access to the sheet and folder Nota creates on your Google Drive. Nota cannot see other files on your Google Drive.
+- the email address of the Google Account;
+- access tokens required to write to the Sheet and Folder;
+- access to the Sheet and Folder created by the Service. The Service has no access to other files on the User's Google Drive.
 
-**Payment data:** plan, amount, date and status of the payment, the transaction number at the bank or crypto service. You enter card details on the Bank of Georgia page; we do not receive or store them.
+2.5. Payment data: Plan, amount, date and status of the payment, and the transaction number at the bank or payment service. Card details are entered on the Bank of Georgia page; the Operator does not receive or store them.
 
-**Technical data:** server and error logs; IP address and browser type when you open the website or the payment page.
+2.6. Technical data: server and error logs; IP address and browser type when the website or payment page is visited.
 
-## 3. Why we use this data
+## 3. Purposes and Legal Bases
 
-- To read documents, write rows to your sheet and save the originals to the folder.
-- To find duplicates and errors in totals, and to send reports and alerts.
-- To take payments, manage plans and issue invoices.
-- To answer support requests.
-- To fix errors and protect the service from abuse.
+3.1. Data is processed in order to:
 
-Legal bases: performance of our contract with you ([Terms of Service](/en/terms)), your consent (connecting Google), our legitimate interests (security of the service) and legal obligations (payment records).
+- recognise Documents, write data to the Sheet and save originals to the Folder;
+- detect duplicates and discrepancies in amounts and send reports and alerts;
+- accept payments, manage Plans and issue invoices;
+- respond to User requests;
+- fix errors and protect the Service from abuse.
 
-We do not sell your data, do not show ads and do not use your documents to train AI models. We choose document-recognition services that do not train models on customer data.
+3.2. Legal bases: performance of the [Terms of Service](/en/terms), the User's consent (connecting a Google Account), the Operator's legitimate interest (security of the Service) and legal obligations (payment records).
 
-## 4. Data from Google
+3.3. The Operator does not sell User data, does not use it for advertising and does not use Documents to train artificial intelligence models. The Operator engages recognition services that do not train models on customer data.
 
-Nota's use and transfer of information received from Google APIs adheres to the [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), including the Limited Use requirements. This means:
+## 4. Data Received via Google APIs
 
-- we use data from Google only to maintain your sheet and folder;
-- we do not transfer it to third parties, except as needed to run the service, as required by law, or at your request;
-- we do not use it for advertising and do not sell it;
-- no one reads it, except when you ask for help, when needed for security, or as required by law;
-- we do not use it to develop, improve or train generalised AI or machine learning models.
+4.1. Nota's use and transfer of information received from Google APIs adheres to the [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), including the Limited Use requirements. In particular:
 
-You can revoke Nota's access at any time: Google Account → Security → Third-party apps & services. The sheet and folder stay with you.
+- Google data is used solely to maintain the User's Sheet and Folder;
+- it is not transferred to third parties, except as necessary to provide the Service, as required by law, or at the User's request;
+- it is not used for advertising and is not sold;
+- it is not read by humans, except where the User has requested assistance, where necessary for security purposes, or where required by law;
+- it is not used to develop, improve or train generalised artificial intelligence or machine learning models.
 
-## 5. Who we share data with
+4.2. The User may revoke the Service's access at any time under Google Account → Security → Third-party apps & services. The Sheet and Folder remain with the User.
 
-Only with providers the service cannot work without:
+## 5. Disclosure to Third Parties
+
+5.1. Data is disclosed only to parties without which the Service cannot operate:
 
 - Telegram — receiving and sending messages;
-- Google — your sheet and folder on Google Drive;
-- hosting — Nota's server and database;
-- a document-recognition service — reading text on documents;
-- Bank of Georgia — card payments;
-- a cryptocurrency payment service — cryptocurrency payments.
+- Google — maintaining the Sheet and Folder on the User's Google Drive;
+- the hosting provider — hosting the Service's server and database;
+- a recognition service — extracting text from Documents;
+- Bank of Georgia — accepting card payments;
+- a payment service — accepting cryptocurrency payments.
 
-We will share the list of specific providers on request.
+5.2. A list of specific providers is available on request.
 
-We may also disclose data to public authorities where the law requires it.
+5.3. Data may be disclosed to public authorities where required by law.
 
-## 6. International transfers
+## 6. International Transfers
 
-Our servers and providers may be located outside your country, including outside Indonesia. We transfer data only to the providers listed above and require them to protect it at least to the standard required by law, including Indonesia's Personal Data Protection Law (Law No. 27 of 2022, UU PDP). <!-- lawyer: requirements for transfers out of Indonesia -->
+6.1. The Operator's servers and providers may be located outside the User's country, including outside Indonesia. The Operator transfers data only to the providers listed in section 5 and requires them to protect it to at least the standard required by law, including Indonesian Law No. 27 of 2022 on Personal Data Protection (UU PDP). <!-- lawyer: requirements for transfers out of Indonesia -->
 
-## 7. How long we keep data
+## 7. Retention
 
-- **Without Google connected**, the files you send and the data read from them are kept for 7 days. If you connect Google within that time, everything is written to your sheet. If not, it is deleted, and you keep the report in the chat.
-- **With Google connected**, originals and rows are kept in your sheet and folder on your Google Drive until you delete them. On its own servers, Nota keeps records of your documents, including their fingerprints (hashes) for duplicate detection, while your plan is active.
-- **Documents over the limit** wait in a queue for 7 days from the date the first document entered it.
-- **After your plan ends**, we keep your data for 30 days so you can come back without losing anything, then delete it.
-- **Payment records** are kept for as long as Georgian tax law requires.
+7.1. If no Google Account is connected, the files sent and the data extracted from them are kept for 7 days. If a Google Account is connected within that period, the data is written to the Sheet; otherwise it is deleted.
 
-## 8. How to delete your data
+7.2. With a Google Account connected, original Documents and recorded data are kept in the Sheet and Folder on the User's Google Drive until the User deletes them. For the duration of the Plan, the Operator's servers keep records of Documents, including their fingerprints (hashes) for duplicate detection.
 
-Send the bot the delete command or write to the email in section 1. We will then:
+7.3. Documents over the limit are kept in a queue for 7 days from the date the first Document was placed in it.
 
-- delete all records of your documents in our database, including fingerprints (hashes);
-- disconnect Nota from your Google Account;
-- remove the bot from all your work groups.
+7.4. After the Plan ends, User data is kept for 30 days and then deleted.
 
-All that remains is your Telegram username and the payment records the law requires us to keep. Deletion takes no more than 30 days, and we confirm it in the bot or by email.
+7.5. Payment data is kept for the period required by Georgian tax law.
 
-The sheet and the folder with your files stay on your Google Drive: they are yours, and Nota simply disconnects from them. Only you can delete them.
+## 8. Deletion
 
-## 9. Your rights
+8.1. To delete their data, the User sends the bot the delete command or a request by email to the address in clause 1.2. Upon such request the Operator:
 
-You can:
+- deletes all records of the User's Documents in its database, including fingerprints (hashes);
+- disconnects the Service from the User's Google Account;
+- removes the bot from all of the User's Work Groups.
 
-- find out what data we hold about you and get a copy;
-- correct inaccurate data;
-- delete your data;
-- withdraw consent, for example by revoking Google access;
-- object to or restrict processing;
-- complain to the data protection authority in your country.
+8.2. After deletion, only the Telegram username and the payment data required to be kept by law are retained. Deletion is completed within 30 days and confirmed in the bot or by email.
 
-To exercise a right, write to the bot or to the email in section 1. We will reply within 24 hours and complete the request within the time the law sets.
+8.3. The Sheet and Folder remain on the User's Google Drive; the Service disconnects from them. Only the User can delete them.
 
-## 10. How we protect data
+## 9. User Rights
 
-Data is sent over encrypted connections. Each customer's data is stored separately. Only people who need server access for their work have it.
+9.1. The User has the right to:
 
-If a breach affects your data, we will notify you and, where the law requires, the regulator within the required time.
+- obtain information about the data processed and a copy of it;
+- request correction of inaccurate data;
+- request deletion of data;
+- withdraw consent, including by revoking Google Account access;
+- object to or request restriction of processing;
+- lodge a complaint with the data protection authority in their country.
 
-## 11. Children
+9.2. Requests shall be sent to the bot or to the email in clause 1.2. The Operator responds within 24 hours and fulfils the request within the period set by law.
 
-Nota is a business service. We do not knowingly process data of people under 18.
+## 10. Data Security
 
-## 12. Changes to this policy
+10.1. Data is transmitted over encrypted connections. Each User's data is stored separately. Server access is granted only to persons who need it for their work.
 
-We will notify you of material changes in the bot in advance. The date of the current version is shown at the top of the page.
+10.2. In the event of a breach affecting User data, the Operator shall notify the User and, where required by law, the competent authority within the prescribed period.
+
+## 11. Minors
+
+11.1. The Service is intended for businesses. The Operator does not knowingly process data of persons under 18.
+
+## 12. Changes to the Policy
+
+12.1. The Operator may amend this Policy. The Operator shall notify the User of material changes in the bot in advance. The date of the current version is shown at the top of the page.

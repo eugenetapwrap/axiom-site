@@ -16,46 +16,61 @@ DRAFT 22.11, translated from the Russian version (src/pages/refund.md). Not lega
 "[to confirm: …]" marks open questions, also listed in founder/legal-docs-questions.md.
 -->
 
-Nota processes your first 30 documents free of charge, with no card, so you can try the service before paying. Below is what happens if you decide to stop after paying.
+This Refund Policy (the "Policy") sets out the procedure for cancelling a Plan and refunding payments. The Policy forms an integral part of the [Terms of Service](/en/terms); terms have the meanings given in the Terms.
 
-## 1. Turning off auto-renewal
+## 1. General
 
-You can turn auto-renewal off at any time on the payment page, which opens from the payment button in the header of your sheet. The current period is not refunded; the plan stays active until the end of the paid period, and no further charges are made.
+1.1. The first 30 Documents are processed free of charge, without a payment card, allowing the User to evaluate the Service before paying.
 
-## 2. Cancelling a plan with a refund for unused days
+## 2. Disabling Auto-renewal
 
-If you paid for a plan by card and want to stop using it early, we refund the unused days.
+2.1. The User may disable auto-renewal at any time on the payment page, which opens from the payment button in the Sheet.
 
-- Refund = amount paid × days left ÷ days in the period. Days are counted inclusively from the day of your request. The amount is rounded to cents.
-- The plan ends on the day of your request. The sheet, the folder and everything in them stay on your Google Drive.
-- Example: Growth for 3 months at $93, a 92-day period with 40 days left. Refund: $93 × 40 ÷ 92 = $40.43.
-- If you received a credit when changing plans, the refund is based on what you actually paid for the current period.
+2.2. Disabling auto-renewal does not entitle the User to a refund for the current period. The Plan remains active until the end of the paid period and no further charges are made.
 
-## 3. What is not refunded
+## 3. Cancellation with a Refund for Unused Days
 
-- **The +50 documents pack.**
-- **Cryptocurrency payments.**
-- Periods that have already ended.
-- A period we stopped because of a breach of the [Terms of Service](/en/terms).
+3.1. If a Plan paid by card is cancelled before the end of the period, the Operator refunds the value of the unused days.
 
-## 4. Payment errors
+3.2. Refund amount = amount paid × days remaining ÷ days in the period. Days are counted inclusively from the date of the request. The amount is rounded to the cent.
 
-If you were charged twice, or charged after you turned off auto-renewal, we refund the full extra amount, including for a pack.
+3.3. The Plan ends on the date of the request. The Sheet, the Folder and their contents remain on the User's Google Drive.
 
-## 5. How to request a refund
+3.4. Example: the Growth Plan for 3 months at $93, a 92-day period with 40 days remaining. Refund amount: $93 × 40 ÷ 92 = $40.43.
 
-Write to the bot [@NotaGetBot](https://t.me/NotaGetBot) or to the email in section 1 of the [Terms of Service](/en/terms). Include the Telegram account or Google email you use with Nota and the date of payment.
+3.5. If a credit was applied when changing Plans, the calculation is based on the amount actually paid for the current period.
 
-## 6. When and how you get the money
+## 4. Non-refundable Payments
 
-- We process the refund within 5 business days of your request.
-- The money goes back to the card you paid with. How long it takes depends on your bank, usually up to 10 business days.
-- Payments and refunds are made in Georgian lari (GEL). If your card is in another currency, your bank converts the amount at its own rate, so it may differ slightly from the amount paid in dollars. We do not refund your bank's fees.
+4.1. No refund is made:
 
-## 7. Failed auto-renewal charge
+- for the additional pack of 50 Documents;
+- for cryptocurrency payments;
+- for a period that has expired;
+- for a period for which the Operator terminated access due to a breach of the [Terms of Service](/en/terms).
 
-If an auto-renewal charge fails, we retry: 3 attempts over 3 days in total. If they all fail, the plan ends and the bot sends a link to pay manually. No money is taken in that time, so there is nothing to refund.
+## 5. Erroneous Charges
 
-## 8. Consumer rights
+5.1. In the event of a double charge, or a charge made after auto-renewal was disabled, the Operator refunds the excess amount in full, including for an additional pack.
 
-This policy does not limit any rights you have under the law of your country.
+## 6. How to Request a Refund
+
+6.1. Refund requests shall be sent to the Telegram bot [@NotaGetBot](https://t.me/NotaGetBot) or to the email specified in clause 1.3 of the [Terms of Service](/en/terms).
+
+6.2. The request shall state the Telegram account or Google Account email used with the Service and the payment date.
+
+## 7. Timing and Method
+
+7.1. The Operator processes the refund within 5 business days of receiving the request.
+
+7.2. Funds are returned to the card used for payment. The crediting time is determined by the User's bank and usually takes up to 10 business days.
+
+7.3. Payments and refunds are made in Georgian lari (GEL). If the card currency differs, the User's bank converts the amount at its own rate, so the refund may differ from the amount paid in US dollars. The User's bank fees are not reimbursed.
+
+## 8. Failed Auto-renewal Charge
+
+8.1. If an auto-renewal charge fails, the Operator retries no more than 3 times within 3 days. If the charge does not succeed, the Plan ends and the User is sent a payment link. As no funds are charged in this case, no refund is required.
+
+## 9. Consumer Rights
+
+9.1. This Policy does not limit the rights granted to the User as a consumer by the laws of their country of residence.

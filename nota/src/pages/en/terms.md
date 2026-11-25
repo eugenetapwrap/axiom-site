@@ -17,134 +17,164 @@ DRAFT 22.11, translated from the Russian version (src/pages/terms.md). Not legal
 "[to confirm: …]" marks open questions, also listed in founder/legal-docs-questions.md.
 -->
 
-These Terms are an agreement between you and the operator of Nota. Please read them before using the bot. If you do not agree, do not use the service.
+These Terms of Service (the "Terms") govern the relationship between the Operator and the User in connection with the use of the Nota service.
 
-## 1. Who provides the service
+## 1. Operator
 
-Nota is provided by Individual Entrepreneur Evgenii Popov, registered in Georgia.
+1.1. The Nota service is provided by Individual Entrepreneur Evgenii Popov, registered in Georgia (the "Operator").
 
-- Identification number: 346999215.
-- Legal address: Entrance 1, Floor 6, 140-v Rustaveli Street, Kobuleti, Georgia.
-- Contact email: [to confirm: support email].
-- Bot: [@NotaGetBot](https://t.me/NotaGetBot).
+1.2. Identification number: 346999215. Legal address: Rustaveli Street, Kobuleti, Georgia.
 
-Below, the operator is "we" and the person or company using Nota is "you".
+1.3. Operator contacts: Telegram bot [@NotaGetBot](https://t.me/NotaGetBot), email [to confirm: support email].
 
 ## 2. Definitions
 
-- **Nota, the service** — the Telegram bot @NotaGetBot, the website nota.axiomco.io and the payment page.
-- **Document** — a payment document from which Nota writes a row to the sheet: a receipt, invoice, delivery note or transfer screenshot. Each page of a multi-page PDF counts as a separate document. Duplicates and files that are not payment documents do not count towards the limit.
-- **Sheet and folder** — the Google Sheet and the folder on your Google Drive that Nota creates when you connect Google.
-- **Plan** — a paid number of documents per month and work groups for the chosen period.
-- **Work group** — a Telegram group to which you have added the bot.
+2.1. **Service** means the Telegram bot @NotaGetBot, the website nota.axiomco.io and the payment page.
 
-## 3. When these Terms apply
+2.2. **User** means an individual, sole proprietor or organisation using the Service.
 
-You accept these Terms when you first do any of the following: send the bot a document or an archive, connect Google, or pay for a plan. From then on, the Terms apply for as long as you use the service.
+2.3. **Document** means a payment document (receipt, invoice, delivery note, transfer confirmation) from which the Service writes a row to the Sheet. Each page of a multi-page PDF file counts as a separate Document. Duplicates and files that are not payment documents do not count towards the limit.
 
-You may use Nota if you are at least 18 years old and authorised to act on behalf of your business.
+2.4. **Sheet** and **Folder** mean the Google Sheet and the folder on the User's Google Drive that the Service creates when a Google Account is connected.
 
-## 4. What Nota does
+2.5. **Plan** means a paid number of Documents per month and number of Work Groups for the selected period.
 
-- Reads the documents you send: directly to the bot, as a work chat archive, or in a work group.
-- Checks calculations and looks for duplicates and totals that don't add up.
-- Writes rows to your sheet and saves the originals to the folder on your Google Drive.
-- Sends a report on the archive it has processed. With Google connected, it also sends reports at the 30th document, on Mondays, on the 1st of each month and on request, and alerts you to duplicates right away.
+2.6. **Work Group** means a Telegram group to which the User has added the bot.
 
-In a work group, the bot takes only payment documents and does not post in the group: it reacts with ✍ to each document it accepts. Reports and questions go privately to the person who connected the bot.
+## 3. Acceptance
 
-Nota reads documents automatically and can make mistakes: misread an amount, a date or a supplier, especially on handwritten or blurry documents. Nota does not replace an accountant and does not give tax or legal advice. Check the data in your sheet before paying invoices, filing reports or making decisions.
+3.1. These Terms constitute a public offer. The User accepts them in full by performing any of the following: sending a Document or archive to the Service, connecting a Google Account, or paying for a Plan.
 
-## 5. Free documents
+3.2. The Terms apply from the moment of acceptance until the User stops using the Service.
 
-Nota processes your first 30 documents free of charge, with no card and no sign-up. If an archive has more than 30 documents, the report covers the first 30. After that you need a plan.
+3.3. By accepting the Terms, the User confirms that they have full legal capacity and are at least 18 years old and, when using the Service on behalf of an organisation or sole proprietor, that they are authorised to act on its behalf.
 
-Without Google connected, only the archive report works. The sheet, scheduled reports and duplicate alerts work once you connect Google.
+## 4. Subject Matter
 
-If you have not connected Google, the files you send are kept for 7 days and then deleted. See the [Privacy Policy](/en/privacy).
+4.1. The Operator provides the User with access to the Service, which:
+
+- recognises Documents sent directly to the bot, as a chat archive or in a Work Group;
+- checks calculations and detects duplicates and discrepancies in amounts;
+- writes data to the Sheet and saves the original Documents to the Folder;
+- produces a report on the processed archive and, with a Google Account connected, reports at the 30th Document, weekly on Mondays, monthly on the 1st and on request, as well as duplicate alerts.
+
+4.2. Without a connected Google Account, only the report on the processed archive is available.
+
+4.3. In a Work Group, the Service processes payment documents only and does not post messages; an accepted Document is marked with the ✍ reaction. Reports and alerts are sent privately to the User who connected the bot.
+
+4.4. Recognition is automatic and may contain errors, including in amounts, dates and supplier names, especially in handwritten or unclear documents. The Service is not an accounting, tax or legal service. The User shall verify the data before using it.
+
+## 5. Free Use
+
+5.1. The first 30 Documents are processed free of charge, without a payment card or registration. If an archive contains more than 30 Documents, the report covers the first 30.
+
+5.2. Further processing of Documents requires a Plan.
+
+5.3. If no Google Account is connected, the files sent are kept for 7 days and then deleted as set out in the [Privacy Policy](/en/privacy).
 
 ## 6. Plans
 
-Prices are in US dollars and include taxes.
+6.1. Prices are in US dollars and include taxes.
 
-| Plan | 1 month | 3 months | 6 months | Documents per month | Work groups |
+| Plan | 1 month | 3 months | 6 months | Documents per month | Work Groups |
 |---|---|---|---|---|---|
 | Start | $19 | $51 | $96 | 100 | up to 5 |
 | Growth | $35 | $93 | $174 | 200 | up to 10 |
 | Scale | $79 | $213 | $402 | 500 | unlimited |
 
-- The document limit applies to each month of the paid period. Unused documents do not roll over to the next month.
-- When the limit runs out, the header of your sheet offers to buy a pack or upgrade. Nota puts up to 50 documents over the limit in a queue; they are not written to the sheet. The queue is kept for 7 days from the date the first document entered it.
-- **The +50 documents pack** costs $10 and can be bought only with an active plan. It is added to your limit immediately and lasts until the end of the paid period.
+6.2. The Document limit applies to each month of the paid period. Unused limit does not carry over to the next month.
 
-We may change prices. New prices do not affect a period you have already paid for. We will notify you in the bot at least 14 days before an auto-renewal at a new price.
+6.3. When the limit is reached, the Service offers to purchase an additional pack or upgrade the Plan. Up to 50 Documents over the limit are placed in a queue and are not written to the Sheet. The queue is kept for 7 days from the date the first Document was placed in it.
+
+6.4. An additional pack of 50 Documents costs $10 and may be purchased only with an active Plan. The pack is added to the limit upon payment and remains valid until the end of the paid period.
+
+6.5. The Operator may change prices. Price changes do not apply to a period already paid for. The Operator shall notify the User in the bot of a price change affecting auto-renewal at least 14 days before the charge.
 
 ## 7. Payment
 
-- You pay with the payment button in the header of your sheet: by Visa or Mastercard, or in cryptocurrency. Russian cards are not accepted at the moment.
-- Card payments are processed by Bank of Georgia. You enter your card details on the bank's page; we do not receive or store them.
-- Card payments are charged in Georgian lari (GEL) at the exchange rate on the day of payment. Your bank may convert the amount to your card currency at its own rate and charge a fee.
-- Cryptocurrency payments are processed by an external payment service. A cryptocurrency payment is always one-off.
-- The plan period starts on the day of payment.
-- You can request an invoice for your accounting in the bot.
+7.1. Payment is made via the payment button in the Sheet by Visa or Mastercard, or in cryptocurrency. Cards issued by Russian banks are not accepted.
+
+7.2. Card payments are processed by Bank of Georgia. Card details are entered on the bank's page; the Operator does not receive or store them.
+
+7.3. Card payments are charged in Georgian lari (GEL) at the exchange rate on the payment date. The User's bank may apply its own conversion rate and fees.
+
+7.4. Cryptocurrency payments are processed by a third-party payment service. Cryptocurrency payments are always one-off.
+
+7.5. The Plan period starts on the payment date.
+
+7.6. An invoice for accounting purposes is provided on request in the bot.
 
 ## 8. Auto-renewal
 
-- Auto-renewal is on by default for card payments. You can untick it when paying.
-- You can turn auto-renewal off at any time on the payment page, which opens from the payment button in the header of your sheet. The plan stays active until the end of the paid period, and no further charges are made.
-- If auto-renewal is on, we charge the price of the same plan for the same period on the day after the period ends.
-- If a charge fails, we retry: 3 attempts over 3 days in total. If they all fail, the plan ends and the bot sends you a link to pay manually.
+8.1. Auto-renewal is enabled by default for card payments. The User may disable it when paying.
 
-## 9. Changing your plan
+8.2. The User may disable auto-renewal at any time on the payment page. In that case the Plan remains active until the end of the paid period and no further charges are made.
 
-A new plan or period takes effect immediately, and the new period starts on the day of payment. Unused days of the old plan are credited:
+8.3. If auto-renewal is enabled, the price of the same Plan for the same period is charged on the day after the period ends.
 
-- credit = amount paid × days left ÷ days in the period (days counted inclusively, rounded to cents);
-- you pay the new price minus the credit;
-- if the credit exceeds the price, the remainder reduces your next charge.
+8.4. If a charge fails, the Operator retries no more than 3 times within 3 days. If the charge does not succeed, the Plan ends and the User is sent a payment link.
 
-Example: Growth at $35 for 30 days with 13 days left gives a credit of $15.17. Upgrading to Scale at $79 costs $63.83.
+## 9. Changing Plans
 
-## 10. Cancellation and refunds
+9.1. A new Plan or period takes effect on the payment date.
 
-How to cancel a plan and get a refund for unused days is described in the [Refund Policy](/en/refund).
+9.2. The value of the unused days of the previous Plan is credited towards the new one: credit = amount paid × days remaining ÷ days in the period (days counted inclusively, rounded to the cent). The amount payable is the price of the new Plan less the credit. If the credit exceeds the price, the balance reduces the next charge.
 
-## 11. Your obligations
+9.3. Example: the Growth Plan at $35 for 30 days with 13 days remaining gives a credit of $15.17. Upgrading to the Scale Plan at $79, the amount payable is $63.83.
 
-- Send only documents you are entitled to process. If documents contain other people's data (employees, suppliers, customers), you are responsible for being allowed to share it with us for processing.
-- Let members of your work group know that the Nota bot works there and saves payment documents.
-- Do not use Nota for unlawful purposes, do not send malicious files, do not try to access other people's data and do not interfere with the service.
-- Keep your Telegram and Google accounts secure. Actions taken from your account are considered yours.
+## 10. Cancellation and Refunds
 
-If you break these rules, we may suspend or end your access to Nota. Unless the breach is serious, we will warn you in the bot first.
+10.1. Cancellation and refunds are governed by the [Refund Policy](/en/refund), which forms an integral part of these Terms.
 
-## 12. Google and Telegram
+## 11. User Obligations
 
-Nota works through Telegram and Google. Their own terms apply separately from these Terms, and we are not responsible for their services.
+11.1. The User shall:
 
-Nota can access only the sheet and folder it creates. Nota cannot see the rest of your Google Drive. The sheet, the folder and everything in them stay on your Google Drive and belong to you, including after your plan ends. You can revoke Nota's access in your Google Account settings at any time.
+- send only documents they are entitled to process; where documents contain personal data of third parties, the User warrants that they have a lawful basis for transferring such data to the Operator;
+- inform members of the Work Group that the Service operates in it and saves payment documents;
+- not use the Service for unlawful purposes, send malicious files, attempt unauthorised access to other users' data or the Operator's systems, or place artificial load on the Service;
+- keep their Telegram and Google accounts secure. Actions performed from the User's account are deemed to be performed by the User.
+
+11.2. If the User breaches these Terms, the Operator may suspend or terminate access to the Service. Unless the breach is material, the Operator shall first send a warning in the bot.
+
+## 12. Third-party Services
+
+12.1. The Service uses Telegram and Google. Their terms apply independently of these Terms; the Operator is not responsible for their operation.
+
+12.2. The Service accesses only the Sheet and Folder it has created and has no access to other files on the User's Google Drive.
+
+12.3. The Sheet, the Folder and their contents belong to the User and remain on the User's Google Drive, including after the Plan ends. The User may revoke the Service's access at any time in their Google Account settings.
 
 ## 13. Liability
 
-- We work to keep Nota running without interruption but do not guarantee it will always be available. There may be breaks for updates and outages at Telegram, Google and other providers.
-- The service is provided "as is". We are not liable for decisions you make based on data in the sheet and reports, or for lost profits.
-- Our total liability to you is limited to the amount you paid us in the last 3 months. <!-- lawyer: period and amount -->
-- These limits do not apply where the law does not allow them, or in case of our intent or gross negligence.
+13.1. The Operator takes reasonable measures to keep the Service running without interruption but does not guarantee its continuous availability. Interruptions for updates and outages at Telegram, Google and other providers may occur.
 
-## 14. Intellectual property
+13.2. The Service is provided "as is". The Operator is not liable for decisions made by the User on the basis of data in the Sheet and reports, or for lost profits and indirect losses.
 
-The software, design, name and logo of Nota belong to us. The documents you send and the data in your sheet belong to you. You allow us to process them only to provide the service to you.
+13.3. The Operator's total liability to the User is limited to the amount paid by the User in the 3 months preceding the event giving rise to liability. <!-- lawyer: period and amount -->
 
-## 15. Changes to these Terms
+13.4. The limitations of liability do not apply where not permitted by law or in the event of the Operator's wilful misconduct or gross negligence.
 
-We may change these Terms. We will notify you of material changes in the bot at least 14 days before they take effect. If you keep using Nota after that date, you accept the new version. If you do not agree, turn off auto-renewal and request a refund under the [Refund Policy](/en/refund).
+## 14. Intellectual Property
 
-## 16. Disputes
+14.1. The software, design, name and logo of Nota belong to the Operator.
 
-If something goes wrong, write to the bot or to the email in section 1. We will reply within 24 hours.
+14.2. Documents sent by the User and data in the Sheet belong to the User. The User grants the Operator the right to process them solely for the purpose of providing the services under these Terms.
 
-These Terms are governed by the laws of Georgia. Disputes that cannot be settled by negotiation are heard by the court at the operator's place of registration. <!-- lawyer: governing law and court, given customers in Indonesia --> If the law of your country gives you more rights as a consumer, those rights still apply.
+## 15. Changes to the Terms
 
-## 17. Languages
+15.1. The Operator may amend these Terms. The Operator shall notify the User of material changes in the bot at least 14 days before they take effect.
 
-These Terms are published in Russian, English and Indonesian. <!-- lawyer: which version prevails -->
+15.2. Continued use of the Service after the changes take effect constitutes the User's acceptance of the new version. If the User does not agree, they may disable auto-renewal and request a refund under the [Refund Policy](/en/refund).
+
+## 16. Dispute Resolution
+
+16.1. Claims shall be sent to the Operator via the bot or to the email specified in clause 1.3. The Operator responds within 24 hours.
+
+16.2. These Terms are governed by the laws of Georgia. Disputes not settled by negotiation shall be heard by the court at the Operator's place of registration. <!-- lawyer: governing law and court, given customers in Indonesia -->
+
+16.3. Nothing in these Terms limits the rights granted to the User as a consumer by the laws of their country of residence.
+
+## 17. Final Provisions
+
+17.1. These Terms are published in Russian, English and Indonesian. <!-- lawyer: which version prevails -->
