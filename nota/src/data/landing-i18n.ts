@@ -8,6 +8,8 @@ export type Lang = 'ru' | 'en' | 'id';
 export const bundles = { en, id } as const;
 // 25.11, основатель: «основная версия на англ» — английская на /, русская на /ru/, индонезийская на /id/ (старый /en/ → / в public/_redirects)
 export const homePath: Record<Lang, string> = { en: '/', ru: '/ru/', id: '/id/' };
+// Инструкция (25.11): как документы — русская /guide, английская /en/guide, индонезийская /id/guide
+export const guidePath: Record<Lang, string> = { ru: '/guide', en: '/en/guide', id: '/id/guide' };
 
 export const UI = {
   ru: {
@@ -18,7 +20,7 @@ export const UI = {
     docsWord: 'документов', perMonthTail: ' в месяц', groupsPrefix: 'Группы: ', perMo: ' / мес', planSr: ' — тариф ', over500: 'Более 500', docsPerMonth: 'документов в месяц',
     cmpAria: 'Сравнение: Nota, админ с Excel, приложение для расходов', question: 'Вопрос', yes: 'Плюс.', no: 'Минус.', mid: 'Отчасти.',
     who: 'Кто делает', faqTitle: 'Вопросы', finalQr: 'Или наведите камеру телефона', quick: 'Быстрый старт', docsNav: 'Документы',
-    terms: 'Пользовательское соглашение', privacy: 'Политика конфиденциальности', refund: 'Правила возврата', support: 'Поддержка в боте',
+    guide: 'Как пользоваться', terms: 'Пользовательское соглашение', privacy: 'Политика конфиденциальности', refund: 'Правила возврата', support: 'Поддержка в боте',
     shotOpen: 'Открыть в полном размере', shotOpenNew: 'открыть в полном размере, в новой вкладке',
   },
   en: {
@@ -29,7 +31,7 @@ export const UI = {
     docsWord: 'documents', perMonthTail: ' per month', groupsPrefix: 'Groups: ', perMo: ' / mo', planSr: ' — plan ', over500: 'Over 500', docsPerMonth: 'documents per month',
     cmpAria: 'Comparison: Nota, an admin with Excel, an expense app', question: 'Question', yes: 'Yes.', no: 'No.', mid: 'Partly.',
     who: 'Who is behind it', faqTitle: 'Questions', finalQr: 'Or point your phone camera here', quick: 'Quick start', docsNav: 'Documents',
-    terms: 'Terms of Service', privacy: 'Privacy Policy', refund: 'Refund Policy', support: 'Support bot',
+    guide: 'How to use Nota', terms: 'Terms of Service', privacy: 'Privacy Policy', refund: 'Refund Policy', support: 'Support bot',
     shotOpen: 'Open full size', shotOpenNew: 'open full size in a new tab',
   },
   id: {
@@ -40,7 +42,7 @@ export const UI = {
     docsWord: 'dokumen', perMonthTail: ' per bulan', groupsPrefix: 'Grup: ', perMo: ' / bln', planSr: ' — paket ', over500: 'Lebih dari 500', docsPerMonth: 'dokumen per bulan',
     cmpAria: 'Perbandingan: Nota, admin dengan Excel, aplikasi pengeluaran', question: 'Pertanyaan', yes: 'Ya.', no: 'Tidak.', mid: 'Sebagian.',
     who: 'Siapa di baliknya', faqTitle: 'Pertanyaan', finalQr: 'Atau arahkan kamera ponsel ke sini', quick: 'Mulai cepat', docsNav: 'Dokumen',
-    terms: 'Ketentuan Layanan', privacy: 'Kebijakan Privasi', refund: 'Kebijakan Pengembalian Dana', support: 'Bot dukungan',
+    guide: 'Cara menggunakan', terms: 'Ketentuan Layanan', privacy: 'Kebijakan Privasi', refund: 'Kebijakan Pengembalian Dana', support: 'Bot dukungan',
     shotOpen: 'Buka ukuran penuh', shotOpenNew: 'buka ukuran penuh di tab baru',
   },
 };

@@ -18,7 +18,7 @@ import {
   meta, cta, nav as navRu, hero as heroRu, result, analytics as analyticsRu, send as sendRu, what as whatBase, compare as compareBase, segments as segmentsRu, reviews, data as dataBase, pricing as pricingRu, faq as faqBase, final as finalRu, footer as footerRu, steps, bar, shotAlt as shotAltRu,
   start as startRu, facts12, compare12, data12, faq12, what12, sched12 as sched12Ru,
 } from '../data/content-v12';   // = content-v11 + тексты нового первого экрана (start)
-import { bundles, UI, homePath, type Lang } from '../data/landing-i18n';   // EN и ID (25.11): тексты — src/data/i18n/*.json
+import { bundles, UI, homePath, guidePath, type Lang } from '../data/landing-i18n';   // EN и ID (25.11): тексты — src/data/i18n/*.json
 
 // Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
 const cut = (text: string, word: string) => { const i = text.indexOf(word); return i < 0 ? [text, '', ''] : [text.slice(0, i), word, text.slice(i + word.length)]; };
@@ -562,6 +562,7 @@ const showReviews = false; // блок «Отзывы» (19.11: скрыт, по
     <div class="wrap">
       <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
       <nav aria-label={u.docsNav}>
+        <a href={guidePath[lang]}>{u.guide}</a>
         <a href={footer.terms}>{u.terms}</a>
         <a href={footer.privacy}>{u.privacy}</a>
         <a href={footer.refund}>{u.refund}</a>

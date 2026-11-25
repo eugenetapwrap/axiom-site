@@ -11,9 +11,9 @@ const bot = 'https://t.me/NotaGetBot';
 const supportBot = 'https://t.me/NotaSuppBot';
 // Подписи шапки и подвала на языке документа. Русская версия — /terms, английская — /en/terms, индонезийская — /id/terms.
 const t = {
-  ru: { home: 'Nota — на главную', open: 'Открыть в Telegram', openSm: 'В Telegram', rev: 'Редакция от', soon: 'текст появится', draft: 'черновик', prep: 'Документ готовится. Здесь будет:', q: 'Вопросы — в', qBot: 'боте @NotaGetBot', docs: 'Документы', terms: 'Пользовательское соглашение', privacy: 'Политика конфиденциальности', refund: 'Правила возврата', support: 'Поддержка в боте', langs: 'Язык документа' },
-  en: { home: 'Nota — home', open: 'Open in Telegram', openSm: 'Telegram', rev: 'Version of', soon: 'coming soon', draft: 'draft', prep: 'This document is being prepared. It will cover:', q: 'Questions? Ask in', qBot: 'the @NotaGetBot bot', docs: 'Documents', terms: 'Terms of Service', privacy: 'Privacy Policy', refund: 'Refund Policy', support: 'Support in the bot', langs: 'Document language' },
-  id: { home: 'Nota — beranda', open: 'Buka di Telegram', openSm: 'Telegram', rev: 'Versi', soon: 'segera hadir', draft: 'draf', prep: 'Dokumen sedang disiapkan. Isinya:', q: 'Pertanyaan? Tanyakan di', qBot: 'bot @NotaGetBot', docs: 'Dokumen', terms: 'Ketentuan Layanan', privacy: 'Kebijakan Privasi', refund: 'Kebijakan Pengembalian Dana', support: 'Dukungan di bot', langs: 'Bahasa dokumen' },
+  ru: { guide: 'Как пользоваться', home: 'Nota — на главную', open: 'Открыть в Telegram', openSm: 'В Telegram', rev: 'Редакция от', soon: 'текст появится', draft: 'черновик', prep: 'Документ готовится. Здесь будет:', q: 'Вопросы — в', qBot: 'боте @NotaGetBot', docs: 'Документы', terms: 'Пользовательское соглашение', privacy: 'Политика конфиденциальности', refund: 'Правила возврата', support: 'Поддержка в боте', langs: 'Язык документа' },
+  en: { guide: 'How to use Nota', home: 'Nota — home', open: 'Open in Telegram', openSm: 'Telegram', rev: 'Version of', soon: 'coming soon', draft: 'draft', prep: 'This document is being prepared. It will cover:', q: 'Questions? Ask in', qBot: 'the @NotaGetBot bot', docs: 'Documents', terms: 'Terms of Service', privacy: 'Privacy Policy', refund: 'Refund Policy', support: 'Support in the bot', langs: 'Document language' },
+  id: { guide: 'Cara menggunakan', home: 'Nota — beranda', open: 'Buka di Telegram', openSm: 'Telegram', rev: 'Versi', soon: 'segera hadir', draft: 'draf', prep: 'Dokumen sedang disiapkan. Isinya:', q: 'Pertanyaan? Tanyakan di', qBot: 'bot @NotaGetBot', docs: 'Dokumen', terms: 'Ketentuan Layanan', privacy: 'Kebijakan Privasi', refund: 'Kebijakan Pengembalian Dana', support: 'Dukungan di bot', langs: 'Bahasa dokumen' },
 }[lang as 'ru' | 'en' | 'id'];
 const pre = lang === 'ru' ? '' : `/${lang}`;
 const langs = slug ? [['ru', 'RU', `/${slug}`], ['en', 'EN', `/en/${slug}`], ['id', 'ID', `/id/${slug}`]] : [];
@@ -51,6 +51,7 @@ import { homePath, type Lang } from '../data/landing-i18n';   // главная 
       <div class="wrap">
         <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
         <nav aria-label={t.docs}>
+          <a href={`${pre}/guide`}>{t.guide}</a>
           <a href={`${pre}/terms`}>{t.terms}</a>
           <a href={`${pre}/privacy`}>{t.privacy}</a>
           <a href={`${pre}/refund`}>{t.refund}</a>
