@@ -1,7 +1,7 @@
 {
  "meta.title": "Nota — semua pengeluaran tim dalam satu spreadsheet Google Sheets",
  "meta.description": "Pencatatan pengeluaran di Telegram. Kirim struk, invoice, dan nota langsung ke bot, sebagai arsip, atau di grup kerja: Nota memeriksa perhitungan, menemukan duplikat, dan mencatat semuanya ke spreadsheet Google Sheets Anda. Laporan setiap minggu dan setiap bulan. 30 dokumen gratis.",
- "meta.ogAlt": "Nota: semua pengeluaran tim dalam satu spreadsheet. Contoh laporan bulanan: 10.996 dolar, 2 duplikat dikecualikan",
+ "meta.ogAlt": "Nota: semua pengeluaran tim dalam satu spreadsheet. Contoh laporan bulanan: 105,5 juta rupiah, 2 duplikat dikecualikan",
  "start.eyebrow": "Pencatatan pengeluaran di Telegram",
  "start.title": "Semua pengeluaran tim dalam satu spreadsheet",
  "start.underline": "dalam satu spreadsheet",
@@ -16,7 +16,7 @@
  "start.flow.3.title": "Laporan terjadwal",
  "start.flow.3.lines.0": "Setiap minggu, setiap bulan, dan atas permintaan",
  "start.ctaLine": "Bot akan terbuka di Telegram. 30 dokumen gratis, tanpa kartu pembayaran",
- "start.report.alt": "Contoh laporan bulanan Nota: total pengeluaran 10.996 dolar, 354 dolar menunggu diperiksa, 2 duplikat dikecualikan, pengeluaran per kategori dan pemasok",
+ "start.report.alt": "Contoh laporan bulanan Nota: total pengeluaran 105,5 juta rupiah, 3,38 juta rupiah menunggu diperiksa, 2 duplikat dikecualikan, pengeluaran per kategori dan pemasok",
  "start.report.caption": "Contoh laporan bulanan",
  "start.reportBlock.title": "Apa yang ditunjukkan laporan",
  "start.reportBlock.points.0": "Total pengeluaran selama periode dan jumlah pembayaran",

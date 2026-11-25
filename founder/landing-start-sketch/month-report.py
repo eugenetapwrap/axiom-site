@@ -28,7 +28,10 @@ def build():
     def add(d, s, amount=None, **kw):
         payee, cat, typ, amts = s
         usd = (amount or rnd.choice(amts)) * 1000 * RATE
-        usd = round(usd / 5) * 5 if typ == 'Invoice' or payee == 'Бригада Wayan' else round(usd, 2)   # счета и зарплата — круглые
+        if CUR == 'USD':
+            usd = round(usd / 5) * 5 if typ == 'Invoice' or payee == 'Бригада Wayan' else round(usd, 2)   # счета и зарплата — круглые
+        else:   # рупии: счета и зарплата — до 50 тыс., чеки — до тысячи
+            usd = round(usd / 50000) * 50000 if typ == 'Invoice' or payee == 'Бригада Wayan' else round(usd / 1000) * 1000
         rows.append(dict(date=d, amount=usd, payee=payee, cat=cat, type=typ, check='OK', status='', **kw))
     d = dt.date(2026, 10, 1)
     while d <= dt.date(2026, 11, 25):
@@ -56,6 +59,9 @@ FOOT = {'ru': 'Подготовлено в Nota', 'en': 'Made with Nota', 'id': 
 
 if __name__ == '__main__':
     loc = sys.argv[1] if len(sys.argv) > 1 else 'ru'
+    # Валюта (25.11: индонезийская версия сайта — отчёт в рупиях): python3 month-report.py id IDR
+    if len(sys.argv) > 2 and sys.argv[2] == 'IDR':
+        CUR, RATE = 'IDR', 1
     rows = build()
     N = NAMES.get(loc, {})
     if N:
@@ -66,6 +72,6 @@ if __name__ == '__main__':
     i = h.find(FOOT[loc]); a = h.rfind('<div style="padding-top: ', 0, i); b = h.find('</div>', h.find('@NotaGetBot', i)) + 6
     assert i > 0 and a > 0, 'не нашёл нижнюю строку'
     h = h[:a] + h[b:]
-    suf = '' if loc == 'ru' else '-' + loc
+    suf = ('' if loc == 'ru' else '-' + loc) + ('' if CUR == 'USD' else '-' + CUR.lower())
     p = os.path.join(HERE, f'month-report{suf}.html'); open(p, 'w', encoding='utf-8').write(h)
     subprocess.run(['node', os.path.join(GEN, 'render.cjs'), p, p[:-5] + '.png', '2'], check=True)

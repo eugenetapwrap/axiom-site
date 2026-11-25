@@ -7,10 +7,12 @@ const ru = JSON.parse(fs.readFileSync(new URL('ru.json', dir), 'utf8'));
 const CYR = /[А-Яа-яЁё]/;
 
 // Что зависит от языка, кроме текста: картинки, ссылки на документы, метки
+// Валюта примера отчёта: индонезийская версия — в рупиях (основатель 25.11), английская — в долларах
+const REPORT = { en: 'en', id: 'id-idr' };
 const PER_LANG = (lang) => ({
   'meta.og': `/og-v12-${lang}.png`,
-  'start.report.file': `/screens/report-month-${lang}-1080.webp`,
-  'start.report.file2x': `/screens/report-month-${lang}-2160.webp`,
+  'start.report.file': `/screens/report-month-${REPORT[lang]}-1080.webp`,
+  'start.report.file2x': `/screens/report-month-${REPORT[lang]}-2160.webp`,
   'footer.terms': `/${lang}/terms`,
   'footer.privacy': `/${lang}/privacy`,
   'footer.refund': `/${lang}/refund`,
