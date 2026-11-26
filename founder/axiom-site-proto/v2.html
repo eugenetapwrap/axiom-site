@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Axiom Consulting — главная</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap&subset=cyrillic,cyrillic-ext">
+<style>
+/* Фирменный стиль презентаций Axiom: зелёный #035746, серый фон #F2F2F2, Montserrat, обведённые карточки, заголовки капслоком с зелёным выделением */
+:root {
+  color-scheme: light;
+  --green: #035746;
+  --green-dark: #152A28;
+  --green-tint: #E7EFED;
+  --green-line: #A6C3BD;
+  --ink: #2B2F2E;
+  --muted: #5E6463;
+  --grey-bg: #F2F2F2;
+  --white: #FFFFFF;
+  --line: #E2E4E3;
+  --red: #C8102E;
+  --amber: #B7791F;
+  --ok: #3E8E41;
+  --font: "Montserrat", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --wrap: 1200px;
+  --radius: 18px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--white); color: var(--ink); font: 400 16px/1.65 var(--font); -webkit-font-smoothing: antialiased; }
+img, svg { max-width: 100%; display: block; }
+a { color: var(--green); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { color: var(--green-dark); text-wrap: balance; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.band { padding-block: 96px; }
+.band.grey { background: var(--grey-bg); }
+.band.dark { background: var(--green-dark); color: #DCE6E3; }
+.band.dark h2, .band.dark h3 { color: #FFFFFF; }
+.title { font-size: clamp(28px, 3.4vw, 44px); line-height: 1.12; font-weight: 700; text-transform: uppercase; letter-spacing: 0.005em; }
+.title em { font-style: normal; color: var(--green); }
+.band.dark .title em { color: #8FC9B8; }
+.lead { font-size: 18px; line-height: 1.6; color: var(--muted); max-width: 62ch; }
+.band.dark .lead { color: #B9CBC6; }
+.label { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); }
+.band.dark .label { color: #8FC9B8; }
+.head { display: grid; gap: 18px; margin-bottom: 48px; max-width: 860px; }
+.ph { display: inline-block; background: #EDEDED; border: 1px dashed #B5B5B5; color: #6F6F6F; border-radius: 6px; padding: 1px 8px; font-size: 0.92em; }
+.btn { display: inline-flex; align-items: center; gap: 10px; font: 600 15px/1 var(--font); padding: 16px 26px; border-radius: 10px; text-decoration: none; border: 2px solid var(--green); cursor: pointer; }
+.btn.primary { background: var(--green); color: #FFFFFF; }
+.btn.primary:hover { background: #024537; border-color: #024537; }
+.btn.ghost { background: transparent; color: var(--green); }
+.btn.ghost:hover { background: var(--green-tint); }
+
+/* Шапка */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(255,255,255,0.96); border-bottom: 1px solid var(--line); backdrop-filter: blur(6px); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: #FFFFFF; z-index: 21; }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 76px; }
+.logo { display: inline-flex; align-items: flex-end; gap: 6px; text-decoration: none; color: var(--green); }
+.logo b { font-size: 30px; font-weight: 600; letter-spacing: 0.02em; line-height: 1; }
+.logo small { font-size: 12px; font-weight: 500; letter-spacing: 0.14em; line-height: 1; margin-bottom: 18px; display: inline-flex; align-items: center; gap: 4px; }
+.logo small::before { content: ""; width: 7px; height: 7px; background: var(--green); display: inline-block; }
+.logo .ph-note { font-size: 10px; color: #8A8A8A; letter-spacing: 0.06em; margin-left: 6px; align-self: center; }
+.nav { display: flex; gap: 30px; align-items: center; }
+.nav a { color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 500; }
+.nav a:hover { color: var(--green); }
+.nav .lang { font-size: 13px; color: var(--muted); }
+.nav .btn { padding: 12px 18px; font-size: 14px; }
+.burger { display: none; background: none; border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; font: 600 14px var(--font); color: var(--green-dark); }
+
+/* Первый экран */
+.hero { padding-block: 72px 88px; background: var(--grey-bg); }
+.hero .grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 56px; align-items: center; }
+.hero h1 { font-size: clamp(26px, 7.6vw, 50px); line-height: 1.08; font-weight: 700; text-transform: uppercase; overflow-wrap: break-word; }
+@media (min-width: 901px) { .hero h1 { font-size: clamp(34px, 3.4vw, 50px); } }
+.hero h1 em { font-style: normal; color: var(--green); }
+.hero .lead { margin-top: 24px; color: var(--ink); }
+.hero .segs { margin-top: 22px; display: grid; gap: 6px; font-size: 14px; color: var(--muted); font-weight: 500; }
+.hero .segs b { font-weight: 600; color: var(--green-dark); margin-right: 8px; }
+.hero .cta { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 14px; }
+
+/* Образец отчёта в первом экране */
+.doc { background: var(--white); border: 2px solid var(--green); border-radius: var(--radius); padding: 28px; display: grid; gap: 18px; min-width: 0; }
+.doc-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+.doc-top b { font-size: 15px; color: var(--green-dark); }
+.doc-top span { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.doc h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
+.doc table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.doc td { padding: 9px 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.doc td:last-child { text-align: right; white-space: nowrap; }
+.sev { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; font-size: 12.5px; }
+.sev::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+.sev.crit { color: var(--red); }
+.sev.major { color: var(--amber); }
+.sev.minor { color: var(--ok); }
+.kpi { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.kpi div { background: var(--grey-bg); border-radius: 10px; padding: 12px; min-width: 0; }
+.kpi small { display: block; font-size: 11.5px; color: var(--muted); }
+.kpi b { font-size: 15px; color: var(--green-dark); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.kpi i { font-style: normal; font-size: 12px; color: var(--red); font-weight: 600; display: block; }
+.doc-note { font-size: 12px; color: var(--muted); }
+
+/* Цифры */
+.figures { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--green); }
+.figures div { padding: 28px 22px 0 0; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.figures div + div { padding-left: 22px; border-left: 1px solid var(--line); }
+.figures b { font-size: clamp(30px, 3vw, 42px); line-height: 1; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; }
+.figures span { font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+/* Услуги */
+.services { display: grid; gap: 22px; }
+.svc { background: var(--white); border: 2px solid var(--green); border-radius: var(--radius); padding: 34px 36px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 36px; }
+.svc h3 { font-size: 22px; line-height: 1.25; font-weight: 700; }
+.svc .desc { margin-top: 12px; color: var(--ink); }
+.svc .meta { margin-top: 22px; display: grid; gap: 8px; font-size: 14px; }
+.svc .meta div { display: grid; grid-template-columns: 82px 1fr; gap: 12px; }
+.svc .meta dt, .svc .meta .k { color: var(--muted); }
+.svc .more { margin-top: 24px; display: inline-flex; gap: 8px; font-weight: 600; text-decoration: none; }
+.svc .more:hover { text-decoration: underline; }
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+.cols h4 { margin: 0 0 12px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+.dots { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; font-size: 15px; }
+.dots li { display: grid; grid-template-columns: 14px 1fr; gap: 10px; }
+.dots li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-top: 9px; }
+.product { margin-top: 8px; border-radius: var(--radius); background: var(--green-dark); color: #DCE6E3; padding: 30px 36px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; align-items: center; }
+.product .label { color: #8FC9B8; }
+.product h3 { color: #FFFFFF; font-size: 22px; margin-top: 6px; }
+.product p { margin-top: 8px; max-width: 70ch; color: #C6D6D2; }
+.product .btn { border-color: #8FC9B8; color: #FFFFFF; }
+.product .btn:hover { background: rgba(143,201,184,0.14); }
+
+/* Комплексное сопровождение */
+.cycle { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; counter-reset: c; }
+.cycle li { list-style: none; position: relative; background: var(--white); border: 2px solid var(--green); border-radius: var(--radius); padding: 26px 24px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.cycle li::before { counter-increment: c; content: "0" counter(c); font-size: 13px; font-weight: 700; color: var(--green); letter-spacing: 0.08em; }
+.cycle li h3 { font-size: 18px; }
+.cycle li p { font-size: 14.5px; color: var(--muted); }
+.cycle li:not(:last-child)::after { content: ""; position: absolute; right: -14px; top: 50%; width: 10px; height: 10px; border-top: 2px solid var(--green); border-right: 2px solid var(--green); transform: translateY(-50%) rotate(45deg); background: transparent; }
+.cycle { padding: 0; margin: 0; }
+.cycle-note { margin-top: 26px; font-size: 15px; color: var(--muted); max-width: 80ch; }
+
+/* Результаты и кейсы */
+.res { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-bottom: 56px; }
+.res div { border: 1px solid rgba(143,201,184,0.35); border-radius: var(--radius); padding: 24px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.res b { font-size: clamp(28px, 2.6vw, 38px); line-height: 1; color: #FFFFFF; font-variant-numeric: tabular-nums; }
+.res span { font-size: 14px; color: #B9CBC6; }
+.cases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.case { background: #FFFFFF; color: var(--ink); border-radius: var(--radius); padding: 32px; display: grid; gap: 18px; align-content: start; min-width: 0; }
+.case .tag { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+.case h3 { font-size: 20px; color: var(--green-dark); }
+.case dl { margin: 0; display: grid; gap: 14px; }
+.case dt { font-size: 13px; font-weight: 700; color: var(--green-dark); }
+.case dd { margin: 4px 0 0; font-size: 15px; }
+.case dd.result { font-weight: 600; color: var(--green-dark); }
+.cases-note { margin-top: 22px; font-size: 14px; color: #9FB6B0; }
+
+/* Методология */
+.meth { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.std { display: grid; gap: 0; border-top: 2px solid var(--green); }
+.std div { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr); gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.std b { color: var(--green-dark); font-size: 15px; }
+.std span { font-size: 14.5px; color: var(--muted); }
+.scale { display: grid; gap: 14px; }
+.scale div { border: 2px solid var(--line); border-radius: 14px; padding: 18px 20px; display: grid; gap: 6px; background: var(--white); }
+.scale div.crit { border-color: rgba(200,16,46,0.45); }
+.scale div.major { border-color: rgba(183,121,31,0.45); }
+.scale div.minor { border-color: rgba(62,142,65,0.45); }
+.scale p { font-size: 14.5px; color: var(--muted); }
+.scale-h { font-size: 14px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green-dark); margin-bottom: 4px; }
+
+/* Порядок работы */
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; padding: 0; margin: 0; border-top: 2px solid var(--green); counter-reset: s; }
+.steps li { list-style: none; padding: 26px 24px 0 0; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.steps li + li { padding-left: 24px; border-left: 1px solid var(--line); }
+.steps li::before { counter-increment: s; content: "Этап " counter(s); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+.steps h3 { font-size: 18px; }
+.steps p { font-size: 14.5px; color: var(--muted); }
+
+/* Команда и отзывы */
+.team { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+.person { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.photo { aspect-ratio: 4 / 5; border-radius: var(--radius); background: #E6E8E7; border: 1px dashed #B5B5B5; display: grid; place-items: end center; overflow: hidden; max-width: 100%; }
+.photo svg { width: 70%; height: auto; }
+.person b { color: var(--green-dark); }
+.person span { font-size: 14px; color: var(--muted); }
+.quotes { margin-top: 56px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.quote { border: 2px solid var(--green); border-radius: var(--radius); padding: 28px; display: grid; gap: 16px; background: var(--white); min-width: 0; }
+.quote p { font-size: 17px; }
+
+/* Вопросы */
+.faq { display: grid; border-top: 2px solid var(--green); max-width: 920px; }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; padding: 22px 44px 22px 0; font-weight: 600; font-size: 17px; color: var(--green-dark); position: relative; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: ""; position: absolute; right: 8px; top: 50%; width: 10px; height: 10px; border-right: 2px solid var(--green); border-bottom: 2px solid var(--green); transform: translateY(-70%) rotate(45deg); transition: transform .15s; }
+.faq details[open] summary::after { transform: translateY(-30%) rotate(225deg); }
+.faq details p { padding: 0 0 22px; color: var(--muted); max-width: 72ch; }
+
+/* Форма */
+.req { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 56px; align-items: start; }
+.contacts { margin-top: 30px; display: grid; gap: 12px; font-size: 15px; }
+.contacts div { display: grid; grid-template-columns: 110px 1fr; gap: 12px; }
+.contacts span { color: var(--muted); }
+form { background: var(--white); border: 2px solid var(--green); border-radius: var(--radius); padding: 32px; display: grid; gap: 18px; }
+.field { display: grid; gap: 8px; }
+.field label { font-size: 13px; font-weight: 600; color: var(--green-dark); }
+.field small { font-weight: 400; color: var(--muted); }
+input, select, textarea { font: 400 15px/1.4 var(--font); color: var(--ink); background: var(--white); border: 1px solid #C9CDCC; border-radius: 10px; padding: 13px 14px; width: 100%; }
+textarea { min-height: 110px; resize: vertical; }
+.row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.form-note { font-size: 13px; color: var(--muted); }
+.form-done { font-size: 14px; color: var(--green); font-weight: 600; }
+
+/* Подвал */
+footer { background: var(--green-dark); color: #A9BDB8; padding-block: 48px; font-size: 14px; }
+footer .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end; }
+footer .logo { color: #FFFFFF; }
+footer .logo small::before { background: #FFFFFF; }
+footer nav { display: flex; flex-wrap: wrap; gap: 10px 24px; }
+footer a { color: #DCE6E3; text-decoration: none; }
+footer .ph { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.3); color: #C6D6D2; }
+
+.back { position: fixed; left: calc(16px + env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 30; background: var(--white); border: 1px solid var(--line); color: var(--muted); font-size: 12px; font-weight: 500; text-decoration: none; padding: 7px 12px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+@media (max-width: 1080px) {
+  .figures { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 28px; }
+  .figures div:nth-child(4) { padding-left: 0; border-left: 0; }
+  .res, .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cycle { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cycle li:nth-child(2)::after { display: none; }
+}
+@media (max-width: 900px) {
+  .nav { display: none; }
+  .burger { display: inline-block; }
+  .nav.open { display: grid; position: absolute; top: 76px; left: 0; right: 0; background: #FFFFFF; border-bottom: 1px solid var(--line); padding: 16px max(16px, env(safe-area-inset-left, 0px)) 22px; gap: 16px; }
+  .hero .grid, .svc, .meth, .req, .cases, .quotes { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
+  .steps li:nth-child(3) { padding-left: 0; border-left: 0; }
+  .product { grid-template-columns: 1fr; }
+  .band { padding-block: 72px; }
+}
+@media (max-width: 600px) {
+  .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .figures div:nth-child(n) { padding-left: 0; border-left: 0; padding-right: 12px; }
+  .figures div:nth-child(even) { padding-left: 16px; border-left: 1px solid var(--line); }
+  .cols, .row2, .cycle, .steps, .res { grid-template-columns: 1fr; }
+  .steps li + li { padding-left: 0; border-left: 0; }
+  .cycle li::after { display: none !important; }
+  .svc { padding: 26px 22px; }
+  .kpi { grid-template-columns: 1fr 1fr; }
+  .team { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .doc { padding: 20px; }
+  .kpi { grid-template-columns: 1fr; }
+  .doc-top { flex-direction: column; gap: 4px; }
+  .logo .ph-note { display: none; }
+  .std div { grid-template-columns: 1fr; gap: 4px; }
+  .contacts div { grid-template-columns: 1fr; gap: 2px; }
+  footer .wrap { grid-template-columns: 1fr; }
+  .band { padding-block: 60px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Axiom Consulting, на главную"><b>Axiom</b><small>consulting</small><span class="ph-note">логотип — заглушка</span></a>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="nav">Меню</button>
+    <nav class="nav" id="nav" aria-label="Разделы">
+      <a href="#services">Услуги</a>
+      <a href="#method">Методология</a>
+      <a href="#cases">Кейсы</a>
+      <a href="#team">Команда</a>
+      <a href="#faq">Вопросы</a>
+      <span class="lang">RU · EN</span>
+      <a class="btn primary" href="#request">Запросить предложение</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap grid">
+      <div>
+        <p class="label">Axiom Consulting · финансовый консалтинг</p>
+        <h1 style="margin-top:18px">Математическая точность <em>инвестиционных решений</em></h1>
+        <p class="lead">Разрабатываем и независимо проверяем финансовые модели девелоперских проектов, внедряем системы контроля платежей и управленческой отчётности, выполняем функции финансового директора.</p>
+        <div class="segs"><p><b>Отрасли</b>девелопмент, строительство, IT</p><p><b>География</b>Россия, ОАЭ, Юго-Восточная Азия</p></div>
+        <div class="cta">
+          <a class="btn primary" href="#request">Запросить предложение</a>
+          <a class="btn ghost" href="#services">Услуги</a>
+        </div>
+      </div>
+      <figure class="doc" aria-label="Образец отчёта об аудите финансовой модели на условных данных" style="margin:0">
+        <div class="doc-top"><b>Отчёт об аудите финансовой модели</b><span>Образец · условные данные</span></div>
+        <h3>Выводы по направлениям проверки</h3>
+        <table>
+          <tbody>
+            <tr><td>Техника формул и связи между листами</td><td><span class="sev crit">Критичное</span></td></tr>
+            <tr><td>Денежный поток и финансирование</td><td><span class="sev crit">Критичное</span></td></tr>
+            <tr><td>Выручка и рассрочки</td><td><span class="sev major">Существенное</span></td></tr>
+            <tr><td>Налоги</td><td><span class="sev major">Существенное</span></td></tr>
+            <tr><td>Сценарии и чувствительность</td><td><span class="sev minor">Незначительное</span></td></tr>
+          </tbody>
+        </table>
+        <h3>Показатели: в модели и после исправления критичных ошибок</h3>
+        <div class="kpi">
+          <div><small>IRR проекта</small><b>21,4% → 17,9%</b><i>−3,5 п. п.</i></div>
+          <div><small>NPV, млн $</small><b>4,8 → 3,1</b><i>−1,7</i></div>
+          <div><small>Пик финансирования, млн $</small><b>9,6 → 11,2</b><i>+1,6</i></div>
+        </div>
+        <p class="doc-note">Цифры условные и приведены для иллюстрации формата отчёта.</p>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="fig-h">
+    <div class="wrap">
+      <h2 class="title" id="fig-h" style="margin-bottom:36px">Axiom <em>в цифрах</em></h2>
+      <div class="figures">
+        <div><b>15+ лет</b><span>опыта в финансах девелоперского бизнеса</span></div>
+        <div><b>15+</b><span>девелоперских проектов: финансовые модели и аналитика</span></div>
+        <div><b>13</b><span>девелоперских проектов работают в системе контроля платежей</span></div>
+        <div><b>17 000+</b><span>заявок на оплату обработано за год на сумму 400+ млрд IDR</span></div>
+        <div><b>0,89%</b><span>затрат сохранено: заблокированы дубликаты оплат и ошибки</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band grey" id="services" aria-labelledby="svc-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">Услуги</p>
+        <h2 class="title" id="svc-h">Финансы проекта <em>на всех стадиях</em></h2>
+        <p class="lead">От расчёта концепции до контроля фактических расходов и отчётности перед инвесторами.</p>
+      </div>
+      <div class="services">
+        <article class="svc">
+          <div>
+            <h3>Финансово-экономическая модель проекта</h3>
+            <p class="desc">Модель девелоперского проекта для принятия инвестиционных решений и обоснования финансирования перед банком и инвесторами.</p>
+            <div class="meta">
+              <div><span class="k">Срок</span><span><span class="ph">⟦от … рабочих дней⟧</span></span></div>
+              <div><span class="k">Стоимость</span><span><span class="ph">⟦от … USD⟧</span></span></div>
+            </div>
+            <a class="more" href="#request">Подробнее об услуге <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="cols">
+            <div><h4>Состав работ</h4><ul class="dots"><li>Помесячный денежный поток</li><li>График проектного финансирования</li><li>План продаж с рассрочками и ростом цены</li><li>Налоги, показатели NPV, IRR, ROI</li><li>Сравнение вариантов концепции</li></ul></div>
+            <div><h4>Результат</h4><ul class="dots"><li>Модель в Excel</li><li>Технико-экономические показатели</li><li>Пояснительная записка</li><li>Сводка показателей для инвестора</li></ul></div>
+          </div>
+        </article>
+
+        <article class="svc">
+          <div>
+            <h3>Аудит финансовой модели</h3>
+            <p class="desc">Независимая проверка модели перед инвестиционным решением, привлечением финансирования или началом строительства.</p>
+            <div class="meta">
+              <div><span class="k">Срок</span><span>пример из практики: 20 календарных дней с получения файлов</span></div>
+              <div><span class="k">Стоимость</span><span><span class="ph">⟦от … USD⟧</span></span></div>
+            </div>
+            <a class="more" href="#request">Подробнее об услуге <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="cols">
+            <div><h4>Состав работ</h4><ul class="dots"><li>Проверка по 11 направлениям</li><li>Технический аудит формул и связей</li><li>Стресс-тест вводных данных</li><li>Независимый пересчёт показателей</li></ul></div>
+            <div><h4>Результат</h4><ul class="dots"><li>Отчёт с заключением и выводами по направлениям</li><li>Реестр замечаний: расположение в модели, влияние на показатели, рекомендация</li><li>Порядок исправления</li></ul></div>
+          </div>
+        </article>
+
+        <article class="svc">
+          <div>
+            <h3>Система контроля платежей и управленческой отчётности</h3>
+            <p class="desc">Единая система обработки платежей: от заявки исполнителя до отчётности для собственника и инвестора.</p>
+            <div class="meta">
+              <div><span class="k">Срок</span><span>внедрение — 40 дней</span></div>
+              <div><span class="k">Стоимость</span><span><span class="ph">⟦от … USD⟧</span></span></div>
+            </div>
+            <a class="more" href="#request">Подробнее об услуге <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="cols">
+            <div><h4>Состав работ</h4><ul class="dots"><li>Формы заявок с распознаванием первичных документов</li><li>Маршруты согласования платежей</li><li>Контроль дубликатов и несанкционированных действий</li><li>План-факт, ДДС, реестр задолженности</li></ul></div>
+            <div><h4>Результат</h4><ul class="dots"><li>Внедрённая система и аналитические панели</li><li>План счетов управленческого учёта</li><li>Регламенты и обучение сотрудников</li></ul></div>
+          </div>
+        </article>
+
+        <article class="svc">
+          <div>
+            <h3>Инвестиционный анализ</h3>
+            <p class="desc">Оценка инвестиционной привлекательности проекта для собственника, инвестора и покупателей.</p>
+            <div class="meta">
+              <div><span class="k">Срок</span><span><span class="ph">⟦от … рабочих дней⟧</span></span></div>
+              <div><span class="k">Стоимость</span><span><span class="ph">⟦от … USD⟧</span></span></div>
+            </div>
+            <a class="more" href="#request">Подробнее об услуге <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="cols">
+            <div><h4>Состав работ</h4><ul class="dots"><li>Сравнение стратегий: продажа и сдача в аренду</li><li>Сценарии стоимости выхода</li><li>Анализ чувствительности и точки безубыточности</li><li>Доходность для покупателя</li></ul></div>
+            <div><h4>Результат</h4><ul class="dots"><li>Расчёты в Excel</li><li>Пояснительная записка с выводами</li></ul></div>
+          </div>
+        </article>
+
+        <article class="svc">
+          <div>
+            <h3>Финансовый директор на аутсорсе</h3>
+            <p class="desc">Выполнение функций финансового директора для строительных и IT-компаний.</p>
+            <div class="meta">
+              <div><span class="k">Формат</span><span><span class="ph">⟦абонемент, от … USD в месяц⟧</span></span></div>
+            </div>
+            <a class="more" href="#request">Подробнее об услуге <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="cols">
+            <div><h4>Состав работ</h4><ul class="dots"><li>Бюджетирование и план-факт</li><li>Платёжный календарь</li><li>Управленческая отчётность для собственников и инвесторов</li><li>Взаимодействие с банками</li></ul></div>
+            <div><h4>Результат</h4><ul class="dots"><li><span class="ph">⟦состав и периодичность отчётности — уточняется⟧</span></li></ul></div>
+          </div>
+        </article>
+
+        <aside class="product" aria-label="Продукт Axiom: Nota">
+          <div>
+            <p class="label">Продукт</p>
+            <h3>Nota — учёт расходов через Telegram</h3>
+            <p>Первичные документы сотрудников автоматически заносятся в Google-таблицу с проверкой на дубликаты.</p>
+          </div>
+          <a class="btn" href="https://notagetbot.com/ru/" target="_blank" rel="noopener">Перейти на сайт Nota <span aria-hidden="true">↗</span></a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="cyc-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">Подход</p>
+        <h2 class="title" id="cyc-h">Комплексное сопровождение <em>финансов проекта</em></h2>
+        <p class="lead">Услуги связаны между собой. Утверждённая модель становится бюджетом проекта, система контроля платежей фиксирует фактические расходы, отчётность показывает отклонения от плана.</p>
+      </div>
+      <ol class="cycle">
+        <li><h3>Модель</h3><p>Расчёт проекта и утверждение плановых показателей.</p></li>
+        <li><h3>Проверка</h3><p>Независимый аудит модели до принятия решения.</p></li>
+        <li><h3>Контроль платежей</h3><p>Каждый платёж проходит согласованный маршрут и проверку на дубликаты.</p></li>
+        <li><h3>Отчётность</h3><p>План-факт, движение денежных средств и задолженность в реальном времени.</p></li>
+      </ol>
+      <p class="cycle-note">Одна команда отвечает за весь цикл: от расчёта до контроля исполнения бюджета.</p>
+    </div>
+  </section>
+
+  <section class="band dark" id="cases" aria-labelledby="case-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">Результаты</p>
+        <h2 class="title" id="case-h">Система контроля платежей: <em>результаты за год</em></h2>
+        <p class="lead">Система работает в действующих девелоперских и строительных компаниях на Бали.</p>
+      </div>
+      <div class="res">
+        <div><b>13</b><span>девелоперских проектов используют систему</span></div>
+        <div><b>17 000+</b><span>заявок на оплату на сумму 400+ млрд IDR</span></div>
+        <div><b>800</b><span>попыток несанкционированных действий выявлено и пресечено — 4,7% операций</span></div>
+        <div><b>3,55 млрд IDR</b><span>дубликатов оплат и ошибок заблокировано — 0,89% затрат</span></div>
+      </div>
+      <div class="cases">
+        <article class="case">
+          <p class="tag">Кейс 1 · Девелопмент</p>
+          <h3>Схема повторной оплаты счетов</h3>
+          <dl>
+            <div><dt>Ситуация</dt><dd>Сотрудники отдела закупок совместно с поставщиком повторно направляли на оплату ранее оплаченные счета без фактической поставки. Совпадения объясняли ошибками в переписке.</dd></div>
+            <div><dt>Решение</dt><dd>Автоматическая проверка документов на дубликаты при загрузке и полное протоколирование действий с платежами.</dd></div>
+            <div><dt>Результат</dt><dd class="result">Схема выявлена, причастные сотрудники уволены, выплаты по фиктивным счетам прекращены.</dd></div>
+          </dl>
+        </article>
+        <article class="case">
+          <p class="tag">Кейс 2 · Строительство</p>
+          <h3>Завышение объёмов поставок</h3>
+          <dl>
+            <div><dt>Ситуация</dt><dd>Прораб совместно с поставщиком завышал в счетах объёмы песка и воды. На объект поставлялся только необходимый объём, разница обналичивалась.</dd></div>
+            <div><dt>Решение</dt><dd>План-факт анализ: сопоставление оплаченных объёмов с ходом строительства и нормативами расхода.</dd></div>
+            <div><dt>Результат</dt><dd class="result">Расхождения выявлены, хищения пресечены.</dd></div>
+          </dl>
+        </article>
+      </div>
+      <p class="cases-note">Кейсы приводятся без указания клиентов.</p>
+    </div>
+  </section>
+
+  <section class="band" id="method" aria-labelledby="meth-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">Методология</p>
+        <h2 class="title" id="meth-h">Признанные стандарты <em>финансового моделирования</em></h2>
+        <p class="lead">При проверке моделей руководствуемся международными стандартами. Каждое замечание классифицируется по степени влияния на результат.</p>
+      </div>
+      <div class="meth">
+        <div class="std">
+          <div><b>ICAEW Financial Modelling Code</b><span>Структура модели, формулы, вводные данные, проверки</span></div>
+          <div><b>FAST Standard</b><span>Прозрачность, единая временная шкала, флаги периодов</span></div>
+          <div><b>EuSpRIG</b><span>Классификация ошибок в электронных таблицах и порядок проверки формул</span></div>
+          <div><b>RICS NRM1</b><span>Структура затрат и справочник статей бюджета</span></div>
+        </div>
+        <div class="scale">
+          <p class="scale-h">Классификация замечаний</p>
+          <div class="crit"><span class="sev crit">Критичное</span><p>Искажает итоговые показатели проекта или денежные потоки, либо модель в целом не пересчитывается от единых вводных.</p></div>
+          <div class="major"><span class="sev major">Существенное</span><p>Искажает отдельный блок, период или показатель, либо в модели отсутствует необходимая функция.</p></div>
+          <div class="minor"><span class="sev minor">Незначительное</span><p>Касается качества, прозрачности и удобства работы с моделью.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band grey" aria-labelledby="steps-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">Порядок работы</p>
+        <h2 class="title" id="steps-h">Этапы <em>сотрудничества</em></h2>
+      </div>
+      <ol class="steps">
+        <li><h3>Постановка задачи</h3><p>Определяем цели, сроки и состав исходных данных.</p></li>
+        <li><h3>Коммерческое предложение</h3><p>Фиксируем объём работ, сроки, стоимость и формат результата.</p></li>
+        <li><h3>Выполнение работ</h3><p>Работаем по согласованному плану с промежуточной отчётностью.</p></li>
+        <li><h3>Передача результата</h3><p>Передаём материалы и представляем выводы руководству проекта.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" id="team" aria-labelledby="team-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">Команда</p>
+        <h2 class="title" id="team-h">Финансисты <em>из девелопмента</em></h2>
+        <p class="lead">Опыт работы в крупных девелоперских компаниях, реализации собственных проектов и финансового консультирования более 15 девелоперских проектов.</p>
+      </div>
+      <div class="team">
+        <div class="person"><div class="photo" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="18" fill="#C9CDCC"/><path d="M14 100c4-22 18-32 36-32s32 10 36 32z" fill="#C9CDCC"/></svg></div><b><span class="ph">⟦Имя Фамилия⟧</span></b><span>Управляющий партнёр</span><span class="ph">⟦опыт, 2 строки⟧</span></div>
+        <div class="person"><div class="photo" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="18" fill="#C9CDCC"/><path d="M14 100c4-22 18-32 36-32s32 10 36 32z" fill="#C9CDCC"/></svg></div><b><span class="ph">⟦Имя Фамилия⟧</span></b><span>Финансовый менеджер</span><span class="ph">⟦опыт, 2 строки⟧</span></div>
+        <div class="person"><div class="photo" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="18" fill="#C9CDCC"/><path d="M14 100c4-22 18-32 36-32s32 10 36 32z" fill="#C9CDCC"/></svg></div><b><span class="ph">⟦Имя Фамилия⟧</span></b><span>Инвестиционный аналитик</span><span class="ph">⟦опыт, 2 строки⟧</span></div>
+        <div class="person"><div class="photo" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="18" fill="#C9CDCC"/><path d="M14 100c4-22 18-32 36-32s32 10 36 32z" fill="#C9CDCC"/></svg></div><b><span class="ph">⟦Имя Фамилия⟧</span></b><span>Специалист по внедрению систем</span><span class="ph">⟦опыт, 2 строки⟧</span></div>
+      </div>
+      <div class="quotes">
+        <figure class="quote" style="margin:0"><p><span class="ph">⟦Текст отзыва клиента⟧</span></p><figcaption class="ph">⟦Имя, должность, тип компании⟧</figcaption></figure>
+        <figure class="quote" style="margin:0"><p><span class="ph">⟦Текст отзыва клиента⟧</span></p><figcaption class="ph">⟦Имя, должность, тип компании⟧</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band grey" id="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">Вопросы</p>
+        <h2 class="title" id="faq-h">Частые <em>вопросы</em></h2>
+      </div>
+      <div class="faq">
+        <details><summary>В каких странах вы работаете?</summary><p>Наши клиенты находятся в России, ОАЭ и странах Юго-Восточной Азии. Работа ведётся дистанционно.</p></details>
+        <details><summary>Как определяется стоимость работ?</summary><p>Стоимость зависит от объёма и сложности задачи. Она фиксируется в коммерческом предложении после предварительного анализа исходных данных.</p></details>
+        <details><summary>Можно ли передать отчёт об аудите банку или инвестору?</summary><p>Стандартный отчёт предназначен для решений собственника. Передача отчёта третьим лицам возможна с письменного согласия Axiom Consulting.</p></details>
+        <details><summary>Сколько времени занимает внедрение системы контроля платежей?</summary><p>Около 40 дней: анализ процессов, настройка, тестовый период с обучением сотрудников, доработка и запуск.</p></details>
+        <details><summary>Подходит ли система для нескольких объектов?</summary><p>Да. Система рассчитана на работу как с одним проектом, так и с портфелем из 10 и более объектов. Подключение нового проекта или сотрудника занимает не более 10 минут.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="request" aria-labelledby="req-h">
+    <div class="wrap req">
+      <div>
+        <p class="label">Контакты</p>
+        <h2 class="title" id="req-h" style="margin-top:18px">Запросить <em>предложение</em></h2>
+        <p class="lead" style="margin-top:18px">Укажите контакт и интересующую услугу. Мы свяжемся с вами, чтобы уточнить задачу и состав исходных данных.</p>
+        <div class="contacts">
+          <div><span>E-mail</span><b><span class="ph">⟦e-mail⟧</span></b></div>
+          <div><span>Telegram</span><b><span class="ph">⟦Telegram⟧</span></b></div>
+          <div><span>WhatsApp</span><b><span class="ph">⟦WhatsApp⟧</span></b></div>
+        </div>
+      </div>
+      <form id="req-form" novalidate>
+        <div class="row2">
+          <div class="field"><label for="f-name">Имя</label><input id="f-name" name="name" autocomplete="name"></div>
+          <div class="field"><label for="f-contact">Контакт <small>Telegram, WhatsApp или e-mail</small></label><input id="f-contact" name="contact"></div>
+        </div>
+        <div class="field">
+          <label for="f-service">Услуга</label>
+          <select id="f-service" name="service">
+            <option>Финансово-экономическая модель проекта</option>
+            <option>Аудит финансовой модели</option>
+            <option>Система контроля платежей и управленческой отчётности</option>
+            <option>Инвестиционный анализ</option>
+            <option>Финансовый директор на аутсорсе</option>
+            <option>Nota</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div class="field"><label for="f-msg">Комментарий <small>необязательно</small></label><textarea id="f-msg" name="message"></textarea></div>
+        <div><button class="btn primary" type="submit">Отправить запрос</button></div>
+        <p class="form-note">Нажимая кнопку, вы соглашаетесь с <a href="#request">политикой конфиденциальности</a>.</p>
+        <p class="form-done" id="f-done" hidden>Это прототип: запрос никуда не отправляется.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div style="display:grid;gap:14px">
+      <a class="logo" href="#top"><b>Axiom</b><small>consulting</small></a>
+      <span>Финансовый консалтинг для девелопмента, строительства и IT · <span class="ph">⟦юрлицо⟧</span></span>
+    </div>
+    <nav aria-label="Подвал">
+      <a href="#services">Услуги</a><a href="#method">Методология</a><a href="#cases">Кейсы</a><a href="#team">Команда</a><a href="#request">Контакты</a>
+    </nav>
+  </div>
+</footer>
+
+<a class="back" href="index.html">← Исследование</a>
+
+<script>
+(function () {
+  var b = document.getElementById('burger'), n = document.getElementById('nav');
+  b.addEventListener('click', function () { var o = n.classList.toggle('open'); b.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+  n.addEventListener('click', function (e) { if (e.target.tagName === 'A') { n.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); } });
+  document.getElementById('req-form').addEventListener('submit', function (e) { e.preventDefault(); document.getElementById('f-done').hidden = false; });
+})();
+</script>
+</body>
+</html>
