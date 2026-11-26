@@ -3,7 +3,7 @@ import { t } from '../lib/typo';
 import { results } from '../content/ru';
 ---
 
-<section class="section section--soft" id="results" aria-labelledby="results-title">
+<section class="section" id="results" aria-labelledby="results-title">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow">{results.eyebrow}</p>
@@ -22,7 +22,7 @@ import { results } from '../content/ru';
       }
     </ul>
 
-    <h3 class="cases__title">Случаи из практики</h3>
+    <h3 class="cases__title">{results.casesTitle}</h3>
     <ul class="cases">
       {
         results.cases.map((c) => (

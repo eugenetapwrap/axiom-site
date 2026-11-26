@@ -3,7 +3,7 @@ import { t } from '../lib/typo';
 import { process } from '../content/ru';
 ---
 
-<section class="section" id="process" aria-labelledby="process-title">
+<section class="section section--soft" id="process" aria-labelledby="process-title">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow">{process.eyebrow}</p>
@@ -22,16 +22,24 @@ import { process } from '../content/ru';
       }
     </ol>
 
-    <ul class="notes">
-      {
-        process.notes.map((n) => (
-          <li class:list={['note', { tbd: n.tbd }]}>
-            <p class="note__title">{n.title}</p>
-            <p class="note__text">{t(n.text)}</p>
-          </li>
-        ))
-      }
-    </ul>
+    <div class="cond">
+      <ul class="terms">
+        {
+          process.terms.map((n) => (
+            <li class:list={['term', { tbd: n.tbd }]}>
+              <p class="term__title">{n.title}</p>
+              <p class="term__text">{t(n.text)}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="not">
+        <p class="not__title">{process.notTitle}</p>
+        <ul>
+          {process.not.map((n) => <li>{t(n)}</li>)}
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -40,7 +48,6 @@ import { process } from '../content/ru';
     list-style: none;
     display: grid;
     gap: var(--s-5);
-    counter-reset: step;
   }
   @media (min-width: 720px) {
     .steps {
@@ -72,30 +79,67 @@ import { process } from '../content/ru';
     color: var(--c-ink-2);
     font-size: var(--fs-sm);
   }
-  .notes {
-    list-style: none;
+  .cond {
     display: grid;
     gap: var(--s-4);
     margin-top: var(--s-8);
   }
   @media (min-width: 1040px) {
-    .notes {
-      grid-template-columns: repeat(3, 1fr);
+    .cond {
+      grid-template-columns: 2fr 1fr;
     }
   }
-  .note {
+  .terms {
+    list-style: none;
+    display: grid;
+    gap: var(--s-4);
+  }
+  @media (min-width: 640px) {
+    .terms {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .term {
     display: grid;
     gap: var(--s-2);
     align-content: start;
     padding: var(--s-5);
     border-radius: var(--r-lg);
-    background: var(--c-bg-soft);
+    background: var(--c-surface);
   }
-  .note__title {
+  .term__title {
     font-weight: 600;
   }
-  .note__text {
+  .term__text {
     color: var(--c-ink-2);
     font-size: var(--fs-sm);
+  }
+  .not {
+    padding: var(--s-5);
+    border: 1px dashed var(--c-line-strong);
+    border-radius: var(--r-lg);
+  }
+  .not__title {
+    font-weight: 600;
+    margin-bottom: var(--s-3);
+  }
+  .not ul {
+    list-style: none;
+    display: grid;
+    gap: var(--s-3);
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .not li {
+    position: relative;
+    padding-left: 20px;
+  }
+  .not li::before {
+    content: '×';
+    position: absolute;
+    left: 0;
+    top: -1px;
+    font-family: var(--f-mono);
+    color: var(--c-muted);
   }
 </style>

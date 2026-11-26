@@ -1,193 +1,260 @@
 ---
 import { t } from '../lib/typo';
 import { services } from '../content/ru';
-import ModelMock from './mock/ModelMock.astro';
 import AuditMock from './mock/AuditMock.astro';
 import DashboardMock from './mock/DashboardMock.astro';
 
-// Модель уже показана на первом экране, поэтому в карточке модели вместо макета — состав файла.
-const modelSheets = ['Допущения', 'Бюджет', 'График стройки', 'Затраты', 'Продажи и рассрочки', 'Аренда', 'Налоги', 'Cash Flow', 'Показатели', 'Сценарии'];
+// Сводка модели уже показана на первом экране, поэтому у модели здесь — состав файла.
+const modelSheets = ['Допущения', 'Бюджет стройки', 'График стройки', 'Продажи и рассрочки', 'Аренда', 'Налоги', 'Cash Flow', 'Пик финансирования', 'Показатели', 'Сценарии'];
 ---
 
-<section class="section" id="services" aria-labelledby="services-title">
-  <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">{services.eyebrow}</p>
-      <h2 id="services-title" class="h2">{t(services.title)}</h2>
-      <p class="lead">{t(services.lead)}</p>
-    </div>
+<div id="services">
+  {
+    services.items.map((s, idx) => (
+      <section
+        class:list={['section', 'svc', { 'section--soft': idx % 2 === 1, 'svc--compact': !s.mock }]}
+        id={s.id}
+        aria-labelledby={`${s.id}-title`}
+      >
+        <div class="container">
+          <header class="svc__head">
+            <p class="eyebrow">
+              {s.num} · {s.name}
+            </p>
+            <h2 id={`${s.id}-title`} class="h2 svc__title">{t(s.title)}</h2>
+          </header>
 
-    <div class="list">
-      {
-        services.items.map((s) => (
-          <article class:list={['svc', { 'svc--plain': !s.mock }]} id={s.id} aria-labelledby={`${s.id}-title`}>
-            <div class="svc__text">
-              <p class="svc__num mono">{s.num}</p>
-              <h3 id={`${s.id}-title`} class="svc__title">{t(s.title)}</h3>
-              <p class="svc__for">{t(s.for)}</p>
-
-              <div class="svc__cols">
-                <div>
-                  <p class="svc__label">Когда нужна</p>
-                  <ul class="svc__list">
-                    {s.when.map((w) => <li>{t(w)}</li>)}
-                  </ul>
-                </div>
-                <div>
-                  <p class="svc__label">Что вы получите</p>
-                  <ul class="svc__list svc__list--get">
-                    {s.get.map((g) => <li>{t(g)}</li>)}
-                  </ul>
-                </div>
-              </div>
-
-              {s.terms.length > 0 && (
-                <dl class="svc__terms">
-                  {s.terms.map((term) => (
-                    <div class:list={{ tbd: term.tbd }}>
-                      <dt>{term.label}</dt>
-                      <dd>{t(term.value)}</dd>
-                    </div>
-                  ))}
-                </dl>
-              )}
-
-              <a class="btn btn--secondary svc__cta" href="#request">{s.cta}</a>
+          <div class="svc__grid">
+            <div class="svc__main">
+              <ul class="qa">
+                {s.questions.map((item) => (
+                  <li class="qa__item">
+                    <p class="qa__q">{t(item.q)}</p>
+                    <p class="qa__a">{t(item.a)}</p>
+                  </li>
+                ))}
+              </ul>
+              <a class="btn btn--secondary svc__cta" href="#request">
+                {s.cta}
+              </a>
             </div>
 
             {s.mock && (
-              <div class="svc__visual">
-                {s.mock === 'model' && (
-                  <div class="sheets" aria-label="Листы модели">
+              <div class="svc__aside">
+                {s.mock === 'sheets' && (
+                  <figure class="sheets">
                     <p class="sheets__title mono">Модель_проекта.xlsx</p>
                     <ol>
                       {modelSheets.map((name, i) => (
-                        <li><span class="mono">{String(i).padStart(2, '0')}</span>{name}</li>
+                        <li>
+                          <span class="mono">{String(i).padStart(2, '0')}</span>
+                          {name}
+                        </li>
                       ))}
                     </ol>
-                    <p class="sheets__note">+ сводка для инвестора на одной странице и пояснительная записка</p>
-                  </div>
+                    <figcaption class="sheets__note">
+                      + сводка для инвестора на одной странице и пояснительная записка
+                    </figcaption>
+                  </figure>
                 )}
                 {s.mock === 'audit' && <AuditMock />}
                 {s.mock === 'dashboard' && <DashboardMock />}
+
+                {s.get.length > 0 && (
+                  <div class="get">
+                    <p class="label">Что вы получите</p>
+                    <ul class="get__list">
+                      {s.get.map((g) => <li>{t(g)}</li>)}
+                    </ul>
+                  </div>
+                )}
+                {s.formats.length > 0 && (
+                  <div class="fmt">
+                    <p class="label">Форматы и сроки</p>
+                    <ul class="fmt__list">
+                      {s.formats.map((f) => (
+                        <li>
+                          <span class="fmt__name">{f.name}</span>
+                          <span class:list={['fmt__time', { tbd: f.tbd }]}>{t(f.time)}</span>
+                          <span class="fmt__what">{t(f.what)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {s.terms.length > 0 && (
+                  <dl class="terms">
+                    {s.terms.map((term) => (
+                      <div class:list={{ tbd: term.tbd }}>
+                        <dt>{term.label}</dt>
+                        <dd>{t(term.value)}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
               </div>
             )}
-          </article>
-        ))
-      }
-    </div>
-  </div>
-</section>
+          </div>
+
+        </div>
+      </section>
+    ))
+  }
+</div>
 
 <style>
-  .list {
-    display: grid;
-    gap: var(--s-8);
-  }
   .svc {
+    scroll-margin-top: 64px;
+  }
+  .svc__head {
+    display: grid;
+    gap: var(--s-3);
+    max-width: 820px;
+    margin-bottom: var(--s-6);
+  }
+  .svc__grid {
     display: grid;
     gap: var(--s-6);
-    padding-top: var(--s-6);
-    border-top: 1px solid var(--c-line);
-    scroll-margin-top: 88px;
   }
   @media (min-width: 1040px) {
-    .svc {
+    .svc__grid {
       grid-template-columns: 1fr 1fr;
       gap: var(--s-8);
       align-items: start;
     }
-    .svc:nth-child(even) .svc__visual {
-      order: -1;
-    }
   }
-  .svc__text {
+  .qa {
+    list-style: none;
     display: grid;
-    gap: var(--s-4);
-    align-content: start;
   }
-  .svc__num {
-    font-size: var(--fs-xs);
-    color: var(--c-muted);
+  .qa__item {
+    display: grid;
+    gap: var(--s-1);
+    padding: var(--s-4) 0;
+    border-top: 1px solid var(--c-line);
   }
-  .svc__title {
-    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  .qa__item:first-child {
+    border-top: 2px solid var(--c-ink);
   }
-  .svc__for {
+  .qa__q {
+    font-weight: 600;
+    font-size: var(--fs-md);
+    line-height: 1.35;
+  }
+  .qa__a {
     color: var(--c-ink-2);
+    font-size: var(--fs-sm);
   }
-  .svc__cols {
-    display: grid;
-    gap: var(--s-5);
-    margin-top: var(--s-2);
+  .svc--compact .qa {
+    gap: 0 var(--s-6);
   }
-  @media (min-width: 640px) {
-    .svc--plain .svc__cols {
+  @media (min-width: 720px) {
+    .svc--compact .qa {
       grid-template-columns: 1fr 1fr;
     }
+    .svc--compact .qa__item:nth-child(2) {
+      border-top: 2px solid var(--c-ink);
+    }
   }
-  .svc__label {
+  @media (min-width: 1040px) {
+    .svc--compact .svc__grid {
+      grid-template-columns: 1fr;
+    }
+    .svc--compact .qa {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .svc--compact .qa__item:nth-child(3) {
+      border-top: 2px solid var(--c-ink);
+    }
+  }
+  .svc__aside {
+    display: grid;
+    gap: var(--s-5);
+    min-width: 0;
+  }
+  .label {
     margin-bottom: var(--s-2);
-    font-size: var(--fs-xs);
     font-family: var(--f-mono);
+    font-size: var(--fs-xs);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--c-muted);
+    text-align: left;
   }
-  .svc__list {
+  .get__list {
     list-style: none;
     display: grid;
     gap: var(--s-2);
     font-size: var(--fs-sm);
   }
-  .svc__list li {
+  .get__list li {
     position: relative;
     padding-left: 18px;
   }
-  .svc__list li::before {
+  .get__list li::before {
     content: '';
     position: absolute;
-    left: 2px;
-    top: 0.62em;
-    width: 7px;
-    height: 1px;
-    background: var(--c-ink-2);
-  }
-  .svc__list--get li::before {
-    top: 0.45em;
+    left: 1px;
+    top: 0.5em;
     width: 7px;
     height: 7px;
     border-radius: 2px;
     background: var(--c-accent);
   }
-  .svc__terms {
+  .fmt__list {
+    list-style: none;
+    display: grid;
+    border-top: 1px solid var(--c-line);
+    font-size: var(--fs-sm);
+  }
+  .fmt__list li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2px var(--s-3);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--c-line);
+  }
+  .fmt__name {
+    font-weight: 600;
+  }
+  .fmt__time {
+    font-family: var(--f-mono);
+    font-size: var(--fs-xs);
+    text-align: right;
+    align-self: center;
+  }
+  .fmt__what {
+    grid-column: 1 / -1;
+    color: var(--c-ink-2);
+  }
+  .terms {
     display: grid;
     gap: var(--s-2);
-    margin: var(--s-2) 0 0;
+    margin: 0;
     padding: var(--s-4);
     border-radius: var(--r-md);
     background: var(--c-bg-soft);
     font-size: var(--fs-sm);
   }
-  .svc__terms div {
+  .section--soft .terms {
+    background: var(--c-surface);
+  }
+  .terms div {
     display: grid;
-    grid-template-columns: 120px 1fr;
+    grid-template-columns: 96px 1fr;
     gap: var(--s-3);
   }
-  .svc__terms dt {
+  .terms dt {
     color: var(--c-muted);
   }
-  .svc__terms dd {
+  .terms dd {
     margin: 0;
   }
   .svc__cta {
-    justify-self: start;
-    margin-top: var(--s-2);
-  }
-  .svc__visual {
-    min-width: 0;
+    margin-top: var(--s-5);
   }
   .sheets {
+    margin: 0;
     padding: var(--s-5);
     border: 1px solid var(--c-line);
     border-radius: var(--r-lg);
@@ -214,8 +281,13 @@ const modelSheets = ['Допущения', 'Бюджет', 'График стр�
     display: flex;
     gap: var(--s-3);
     align-items: center;
-    padding: 10px 12px;
+    padding: 9px 12px;
     background: var(--c-surface);
+  }
+  .sheets li:nth-child(8) {
+    background: var(--c-accent-soft);
+    color: var(--c-accent-ink);
+    font-weight: 600;
   }
   .sheets li .mono {
     font-size: 12px;

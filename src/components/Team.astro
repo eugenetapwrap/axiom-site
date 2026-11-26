@@ -3,12 +3,12 @@ import { t } from '../lib/typo';
 import { team } from '../content/ru';
 ---
 
-<section class="section section--soft" id="team" aria-labelledby="team-title">
+<section class="section" id="team" aria-labelledby="team-title">
   <div class="container team">
     <div class="team__intro">
       <p class="eyebrow">{team.eyebrow}</p>
       <h2 id="team-title" class="h2">{t(team.title)}</h2>
-      <p class="lead">{t(team.text)}</p>
+      <p class:list={['lead', { tbd: team.textTbd }]}>{t(team.text)}</p>
     </div>
 
     <div class="team__side">

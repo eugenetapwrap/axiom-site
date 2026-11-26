@@ -1,7 +1,7 @@
 ---
 interface Props {
   nav: { href: string; label: string }[];
-  cta: { href: string; label: string };
+  cta: { href: string; label: string; short?: string };
   brand: string;
 }
 const { nav, cta, brand } = Astro.props;
@@ -18,7 +18,7 @@ const { nav, cta, brand } = Astro.props;
         {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
       </ul>
     </nav>
-    <a class="btn btn--primary header__cta" href={cta.href}>{cta.label}</a>
+    <a class="btn btn--primary header__cta" href={cta.href} aria-label={cta.label}><span class="full" aria-hidden="true">{cta.label}</span><span class="short" aria-hidden="true">{cta.short ?? cta.label}</span></a>
   </div>
 </header>
 
@@ -82,6 +82,21 @@ const { nav, cta, brand } = Astro.props;
   .nav a:hover {
     color: var(--c-ink);
     background: var(--c-bg-soft);
+  }
+  .logo__word,
+  .header__cta {
+    white-space: nowrap;
+  }
+  .header__cta .full {
+    display: none;
+  }
+  @media (min-width: 480px) {
+    .header__cta .full {
+      display: inline;
+    }
+    .header__cta .short {
+      display: none;
+    }
   }
   .header__cta {
     margin-left: auto;

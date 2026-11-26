@@ -50,7 +50,7 @@
   --s-7: 48px;
   --s-8: 64px;
   --s-9: 96px;
-  --s-section: clamp(64px, 8vw, 120px);
+  --s-section: clamp(56px, 6.5vw, 96px);
 
   --w-content: 1200px;
   --w-text: 680px;

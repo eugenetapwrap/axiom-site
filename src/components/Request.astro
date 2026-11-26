@@ -4,7 +4,7 @@ import { request } from '../content/ru';
 import LeadForm from './LeadForm.astro';
 ---
 
-<section class="section section--soft" id="request" aria-labelledby="request-title">
+<section class="section" id="request" aria-labelledby="request-title">
   <div class="container req">
     <div class="req__intro">
       <p class="eyebrow">{request.eyebrow}</p>
@@ -69,7 +69,7 @@ import LeadForm from './LeadForm.astro';
   }
   .req__form {
     padding: clamp(20px, 3vw, 40px);
-    background: var(--c-surface);
+    background: var(--c-bg-soft);
     border: 1px solid var(--c-line);
     border-radius: var(--r-lg);
   }

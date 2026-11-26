@@ -19,7 +19,7 @@ const flow = [
 const W = 480;
 const H = 150;
 const top = 2000;
-const bottom = -7400;
+const bottom = -8600;
 const x = (i: number) => 16 + (i * (W - 32)) / (flow.length - 1);
 const y = (v: number) => 12 + ((top - v) / (top - bottom)) * (H - 24);
 const path = flow.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
@@ -58,7 +58,7 @@ const prices = [
         <path d={area} class="area" />
         <path d={path} class="line" />
         <circle cx={x(peakI)} cy={y(flow[peakI])} r="4" class="peak" />
-        <text x={x(peakI) - 6} y={y(flow[peakI]) + 2} text-anchor="end" class="lbl lbl--peak">пик −6 900</text>
+        <text x={x(peakI)} y={y(flow[peakI]) + 16} text-anchor="middle" class="lbl lbl--peak">пик −6 900</text>
         <text x={x(flow.length - 1)} y={y(flow[flow.length - 1]) - 8} text-anchor="end" class="lbl">+1 600</text>
         <text x="16" y={H - 2} class="lbl lbl--axis">2026</text>
         <text x={W - 16} y={H - 2} text-anchor="end" class="lbl lbl--axis">2028</text>
