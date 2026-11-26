@@ -77,3 +77,13 @@
 
 - Таблица на скриншотах (`#analytics`) — в рупиях; основатель переведёт в доллары.
 - Пример отчёта — «ноябрь 2026»; перед запуском пересобрать на свежий месяц (`founder/landing-start-sketch/month-report.py`).
+
+## 26.11 — демо-таблица для скриншотов (EN, USD)
+
+- Копия всей тестовой таблицы, не одного листа: оригинал не тронут, Insights и Monthly spend считаются от Payments без переписывания формул, названия листов на скриншотах правильные. Ссылка: https://docs.google.com/spreadsheets/d/1ywgNCK6RnySqufmUICKMtHJm2ALRaTLVWByE8lOu49A/edit
+- В копии удалены служебные и архивные листы (в них были реальные данные), остались Payments, Monthly spend, Insights, References (скрыт).
+- Payments: 332 выдуманные строки, июнь–ноябрь 2026, $274 054; 16 дублей (5 не закрыты), 16 на проверку, 6 счетов к оплате, 3 опечатки в сумме (их ловит блок Check these). Генератор: `founder/landing-start-sketch/demo-sheet-gen.py`.
+- References: валюта USD, язык en, тариф Start (осталось 43 из 100, до 9 Dec), проекты Mangata Villas / Sunset Resort / Head office / Personal, счета BCA / Mandiri / Wise / Cash. Порог Check these — от $100.
+- Ссылки на файлы и папку ведут на notagetbot.com (в оригинале — на настоящие файлы).
+- Найдена ошибка шаблона Insights (и в оригинале): D7 «Duplicates caught» и I8 под «Handwritten» без ARRAYFORMULA, показывали «–» и «0 payments». В копии исправлено, в шаблоне бота — нет.
+- Логотипы Nota (IMAGE с внешнего адреса) в копии показывают #REF!, пока в таблице не нажать «Разрешить доступ».
