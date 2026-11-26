@@ -10,6 +10,9 @@ import LeadForm from './LeadForm.astro';
       <p class="eyebrow">{request.eyebrow}</p>
       <h2 id="request-title" class="h2">{t(request.title)}</h2>
       <p class="lead">{t(request.lead)}</p>
+      <ol class="next">
+        {request.next.map((n) => <li class:list={{ tbd: n.tbd }}>{t(n.text)}</li>)}
+      </ol>
       <dl class="contacts">
         {
           request.contacts.map((c) => (
@@ -23,8 +26,6 @@ import LeadForm from './LeadForm.astro';
     </div>
     <div class="req__form">
       <LeadForm
-        roleLabel={request.roleLabel}
-        roles={request.roles}
         taskLabel={request.taskLabel}
         tasks={request.tasks}
         submit={request.submit}
@@ -50,6 +51,17 @@ import LeadForm from './LeadForm.astro';
     display: grid;
     gap: var(--s-4);
     align-content: start;
+  }
+  .next {
+    display: grid;
+    gap: var(--s-2);
+    padding-left: 1.2em;
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+  }
+  .next li::marker {
+    font-family: var(--f-mono);
+    color: var(--c-muted);
   }
   .contacts {
     display: grid;

@@ -6,15 +6,13 @@ interface Option {
   label: string;
 }
 interface Props {
-  roleLabel: string;
-  roles: Option[];
   taskLabel: string;
   tasks: Option[];
   submit: string;
   privacy: string;
   demoNote: string;
 }
-const { roleLabel, roles, taskLabel, tasks, submit, privacy, demoNote } = Astro.props;
+const { taskLabel, tasks, submit, privacy, demoNote } = Astro.props;
 ---
 
 <form class="form" id="lead-form" novalidate>
@@ -31,19 +29,6 @@ const { roleLabel, roles, taskLabel, tasks, submit, privacy, demoNote } = Astro.
     <p class="err" id="f-contact-err" hidden>Оставьте контакт, чтобы мы могли ответить</p>
   </div>
 
-  <fieldset class="field">
-    <legend>{roleLabel}</legend>
-    <div class="chips">
-      {
-        roles.map((r, i) => (
-          <label class="chip">
-            <input type="radio" name="role" value={r.value} checked={i === 0} />
-            <span>{r.label}</span>
-          </label>
-        ))
-      }
-    </div>
-  </fieldset>
 
   <div class="field">
     <label for="f-task">{taskLabel}</label>
@@ -112,14 +97,9 @@ const { roleLabel, roles, taskLabel, tasks, submit, privacy, demoNote } = Astro.
     border: 0;
     min-width: 0;
   }
-  label,
-  legend {
+  label {
     font-size: var(--fs-sm);
     font-weight: 600;
-    padding: 0;
-  }
-  legend {
-    margin-bottom: var(--s-2);
   }
   .opt {
     font-weight: 400;
@@ -158,39 +138,6 @@ const { roleLabel, roles, taskLabel, tasks, submit, privacy, demoNote } = Astro.
     font-size: var(--fs-xs);
     color: var(--c-neg);
     font-weight: 500;
-  }
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s-2);
-  }
-  .chip {
-    position: relative;
-    font-weight: 500;
-  }
-  .chip input {
-    position: absolute;
-    opacity: 0;
-    inset: 0;
-    margin: 0;
-    cursor: pointer;
-  }
-  .chip span {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 0 var(--s-4);
-    border: 1px solid var(--c-line-strong);
-    border-radius: 999px;
-    background: #fff;
-  }
-  .chip input:checked + span {
-    border-color: var(--c-ink);
-    background: var(--c-ink);
-    color: #fff;
-  }
-  .chip input:focus-visible + span {
-    box-shadow: var(--focus);
   }
   .form__submit {
     justify-self: start;
