@@ -94,9 +94,9 @@
         "tab": "Payments",
         "label": "All payments",
         "short": "One row per document",
-        "file": "/screens/payments.webp",
-        "w": 1787,
-        "h": 809,
+        "file": "/screens/payments-v2.webp",
+        "w": 3217,
+        "h": 1453,
         "points": [
           "Each document is a separate row in the sheet",
           "You spot duplicates and rows worth checking at a glance",
@@ -104,9 +104,9 @@
           "You can set the status, account and Business Unit manually"
         ],
         "mobile": {
-          "file": "/screens/payments-mobile.webp",
-          "w": 586,
-          "h": 195
+          "file": "/screens/payments-mobile-v2.webp",
+          "w": 869,
+          "h": 354
         }
       },
       {
@@ -114,9 +114,9 @@
         "tab": "Monthly spend",
         "label": "Spending by month",
         "short": "Categories by month",
-        "file": "/screens/monthly-spend.webp",
-        "w": 1345,
-        "h": 695,
+        "file": "/screens/monthly-spend-v2.webp",
+        "w": 3035,
+        "h": 1328,
         "points": [
           "A summary table of your expenses",
           "Each category by month and its share",
@@ -124,9 +124,9 @@
           "Filters by Business Unit and status"
         ],
         "mobile": {
-          "file": "/screens/monthly-mobile.webp",
-          "w": 440,
-          "h": 217
+          "file": "/screens/monthly-mobile-v2.webp",
+          "w": 749,
+          "h": 416
         }
       },
       {
@@ -134,9 +134,9 @@
         "tab": "Insights",
         "label": "What needs attention",
         "short": "What needs attention",
-        "file": "/screens/insights.webp",
-        "w": 1242,
-        "h": 792,
+        "file": "/screens/insights-v2.webp",
+        "w": 2385,
+        "h": 1499,
         "points": [
           "Payments several times larger than usual",
           "Invoices to pay, by due date",
@@ -144,9 +144,9 @@
           "Spending by employee and counterparty"
         ],
         "mobile": {
-          "file": "/screens/insights-mobile.webp",
-          "w": 508,
-          "h": 141
+          "file": "/screens/insights-mobile-v2.webp",
+          "w": 926,
+          "h": 211
         }
       }
     ],

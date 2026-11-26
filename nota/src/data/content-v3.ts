@@ -88,9 +88,9 @@ export const how = {
 };
 
 const mobile: Record<string, { file: string; w: number; h: number }> = {
-  payments: { file: '/screens/payments-mobile.webp', w: 586, h: 195 },
-  monthly: { file: '/screens/monthly-mobile.webp', w: 440, h: 217 },
-  insights: { file: '/screens/insights-mobile.webp', w: 508, h: 141 },
+  payments: { file: '/screens/payments-mobile-v2.webp', w: 869, h: 354 },
+  monthly: { file: '/screens/monthly-mobile-v2.webp', w: 749, h: 416 },
+  insights: { file: '/screens/insights-mobile-v2.webp', w: 926, h: 211 },
 };
 const short: Record<string, { short: string; points: string[] }> = {
   payments: {

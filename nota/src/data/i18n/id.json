@@ -94,9 +94,9 @@
         "tab": "Payments",
         "label": "Semua pembayaran",
         "short": "Satu baris per dokumen",
-        "file": "/screens/payments.webp",
-        "w": 1787,
-        "h": 809,
+        "file": "/screens/payments-v2.webp",
+        "w": 3217,
+        "h": 1453,
         "points": [
           "Setiap dokumen menjadi baris tersendiri di spreadsheet",
           "Duplikat dan baris yang perlu diperiksa langsung terlihat",
@@ -104,9 +104,9 @@
           "Status, akun, dan Business Unit bisa diatur manual"
         ],
         "mobile": {
-          "file": "/screens/payments-mobile.webp",
-          "w": 586,
-          "h": 195
+          "file": "/screens/payments-mobile-v2.webp",
+          "w": 869,
+          "h": 354
         }
       },
       {
@@ -114,9 +114,9 @@
         "tab": "Monthly spend",
         "label": "Pengeluaran per bulan",
         "short": "Kategori per bulan",
-        "file": "/screens/monthly-spend.webp",
-        "w": 1345,
-        "h": 695,
+        "file": "/screens/monthly-spend-v2.webp",
+        "w": 3035,
+        "h": 1328,
         "points": [
           "Tabel ringkasan pengeluaran Anda",
           "Setiap kategori per bulan beserta porsinya",
@@ -124,9 +124,9 @@
           "Filter berdasarkan Business Unit dan status"
         ],
         "mobile": {
-          "file": "/screens/monthly-mobile.webp",
-          "w": 440,
-          "h": 217
+          "file": "/screens/monthly-mobile-v2.webp",
+          "w": 749,
+          "h": 416
         }
       },
       {
@@ -134,9 +134,9 @@
         "tab": "Insights",
         "label": "Yang perlu diperhatikan",
         "short": "Yang perlu diperhatikan",
-        "file": "/screens/insights.webp",
-        "w": 1242,
-        "h": 792,
+        "file": "/screens/insights-v2.webp",
+        "w": 2385,
+        "h": 1499,
         "points": [
           "Pembayaran yang berkali lipat lebih besar dari biasanya",
           "Invoice yang harus dibayar, menurut jatuh tempo",
@@ -144,9 +144,9 @@
           "Pengeluaran per karyawan dan per rekanan"
         ],
         "mobile": {
-          "file": "/screens/insights-mobile.webp",
-          "w": 508,
-          "h": 141
+          "file": "/screens/insights-mobile-v2.webp",
+          "w": 926,
+          "h": 211
         }
       }
     ],
