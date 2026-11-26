@@ -285,3 +285,27 @@ svg {
   box-shadow: 0 0 0 2px #fff3b0;
   border-radius: 2px;
 }
+
+/* Тема «тёплая»: тёплый светлый фон и зелёный акцент, без золота. Включается классом на <html>. */
+.theme-warm {
+  --c-bg: #f7f5ef;
+  --c-bg-soft: #eeebe3;
+  --c-surface: #ffffff;
+  --c-ink: #15191e;
+  --c-ink-2: #434b54;
+  --c-muted: #5c636b;
+  --c-line: #ddd8cc;
+  --c-line-strong: #c6c0b2;
+  --c-accent: #0e5446;
+  --c-accent-ink: #0a3f35;
+  --c-accent-soft: #e3eeea;
+  --focus: 0 0 0 3px var(--c-bg), 0 0 0 5px var(--c-accent);
+}
+
+.theme-warm .btn--primary {
+  background: var(--c-accent);
+}
+
+.theme-warm .btn--primary:hover {
+  background: var(--c-accent-ink);
+}

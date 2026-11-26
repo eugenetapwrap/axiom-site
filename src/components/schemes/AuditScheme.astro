@@ -1,0 +1,141 @@
+---
+// Схема аудита модели: пять шагов проверки и три уровня замечаний.
+import { t } from '../../lib/typo';
+import { auditSteps, auditLevels } from '../../content/schemes';
+---
+
+<figure class="as" aria-label="Как проходит аудит финансовой модели">
+  <ol class="as__steps">
+    {
+      auditSteps.map((s, i) => (
+        <li>
+          <span class="as__num mono">{i + 1}</span>
+          <p class="as__title">{s.title}</p>
+          <p class="as__text">{t(s.text)}</p>
+        </li>
+      ))
+    }
+  </ol>
+  <div class="as__levels">
+    <p class="as__levelsTitle">Каждое замечание — с адресом ячейки, уровнем и влиянием в деньгах</p>
+    <ul>
+      {
+        auditLevels.map((l) => (
+          <li>
+            <span class={`as__tag as__tag--${l.tone}`}>{l.level}</span>
+            <span class="as__levelText">{t(l.text)}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</figure>
+
+<style>
+  .as {
+    margin: 0;
+    display: grid;
+    gap: var(--s-4);
+  }
+  .as__steps {
+    list-style: none;
+    display: grid;
+    gap: 0;
+    counter-reset: s;
+  }
+  @media (min-width: 900px) {
+    .as__steps {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+  .as__steps li {
+    position: relative;
+    display: grid;
+    gap: 4px;
+    align-content: start;
+    padding: var(--s-3) var(--s-4) var(--s-3) var(--s-6);
+    border-left: 2px solid var(--c-line-strong);
+  }
+  @media (min-width: 900px) {
+    .as__steps li {
+      padding: var(--s-5) var(--s-4) 0 0;
+      border-left: 0;
+      border-top: 2px solid var(--c-line-strong);
+    }
+  }
+  .as__num {
+    position: absolute;
+    left: -13px;
+    top: var(--s-3);
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--c-ink);
+    color: #fff;
+    font-size: 12px;
+  }
+  @media (min-width: 900px) {
+    .as__num {
+      left: 0;
+      top: -13px;
+    }
+  }
+  .as__title {
+    font-weight: 600;
+  }
+  .as__text {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .as__levels {
+    padding: var(--s-4);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+  }
+  .as__levelsTitle {
+    font-weight: 600;
+    font-size: var(--fs-sm);
+    margin-bottom: var(--s-3);
+  }
+  .as__levels ul {
+    list-style: none;
+    display: grid;
+    gap: var(--s-2);
+  }
+  @media (min-width: 900px) {
+    .as__levels ul {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s-4);
+    }
+  }
+  .as__levels li {
+    display: grid;
+    gap: 4px;
+    font-size: var(--fs-sm);
+  }
+  .as__tag {
+    justify-self: start;
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .as__tag--neg {
+    background: var(--c-neg-soft);
+    color: var(--c-neg);
+  }
+  .as__tag--warn {
+    background: var(--c-warn-soft);
+    color: var(--c-warn);
+  }
+  .as__tag--muted {
+    background: var(--c-bg-soft);
+    color: var(--c-muted);
+  }
+  .as__levelText {
+    color: var(--c-ink-2);
+  }
+</style>

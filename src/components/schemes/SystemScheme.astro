@@ -1,0 +1,146 @@
+---
+// Схема системы учёта: путь платежа и то, что работает на всех этапах.
+import { t } from '../../lib/typo';
+import { systemStages, systemAlways } from '../../content/schemes';
+---
+
+<figure class="ss" aria-label="Как платёж проходит через систему учёта">
+  <ol class="ss__flow">
+    {
+      systemStages.map((s, i) => (
+        <li class="ss__stage">
+          <span class="ss__num mono">{i + 1}</span>
+          <p class="ss__title">{s.title}</p>
+          <p class="ss__who">{s.who}</p>
+          <p class="ss__text">{t(s.text)}</p>
+          <p class="ss__tool mono">{s.tool}</p>
+        </li>
+      ))
+    }
+  </ol>
+  <div class="ss__always">
+    <p class="ss__alwaysTitle">На всех этапах</p>
+    <ul>
+      {
+        systemAlways.map((a) => (
+          <li>
+            <p class="ss__aTitle">{a.title}</p>
+            <p class="ss__aText">{t(a.text)}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</figure>
+
+<style>
+  .ss {
+    margin: 0;
+    display: grid;
+    gap: var(--s-3);
+  }
+  .ss__flow {
+    list-style: none;
+    display: grid;
+    gap: var(--s-3);
+  }
+  @media (min-width: 900px) {
+    .ss__flow {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--s-5);
+    }
+  }
+  .ss__stage {
+    position: relative;
+    display: grid;
+    gap: 4px;
+    align-content: start;
+    padding: var(--s-4);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+  }
+  .ss__stage:not(:last-child)::after {
+    content: '↓';
+    position: absolute;
+    left: 50%;
+    bottom: calc(-1 * var(--s-3) - 2px);
+    transform: translate(-50%, 50%);
+    font-family: var(--f-mono);
+    color: var(--c-muted);
+    line-height: 1;
+    background: transparent;
+  }
+  @media (min-width: 900px) {
+    .ss__stage:not(:last-child)::after {
+      content: '→';
+      left: auto;
+      right: calc(-1 * var(--s-5) / 2);
+      top: 50%;
+      bottom: auto;
+      transform: translate(50%, -50%);
+    }
+  }
+  .ss__num {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .ss__title {
+    font-weight: 600;
+    font-size: var(--fs-lg);
+  }
+  .ss__who {
+    font-size: var(--fs-xs);
+    color: var(--c-accent-ink);
+    font-weight: 600;
+  }
+  .ss__text {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .ss__tool {
+    margin-top: var(--s-2);
+    font-size: 12px;
+    color: var(--c-muted);
+  }
+  .ss__always {
+    display: grid;
+    gap: var(--s-3);
+    padding: var(--s-4);
+    border: 1px dashed var(--c-accent);
+    border-radius: var(--r-md);
+    background: var(--c-accent-soft);
+  }
+  @media (min-width: 900px) {
+    .ss__always {
+      grid-template-columns: 160px 1fr;
+      align-items: start;
+    }
+  }
+  .ss__alwaysTitle {
+    font-family: var(--f-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-accent-ink);
+  }
+  .ss__always ul {
+    list-style: none;
+    display: grid;
+    gap: var(--s-3);
+  }
+  @media (min-width: 700px) {
+    .ss__always ul {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-5);
+    }
+  }
+  .ss__aTitle {
+    font-weight: 600;
+    font-size: var(--fs-sm);
+  }
+  .ss__aText {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+</style>

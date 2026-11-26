@@ -6,19 +6,22 @@ interface Props {
   description: string;
   lang?: string;
   skipLabel?: string;
+  theme?: 'cool' | 'warm';
+  noindex?: boolean;
 }
 
-const { title, description, lang = 'ru', skipLabel = 'Перейти к содержанию' } = Astro.props;
+const { title, description, lang = 'ru', skipLabel = 'Перейти к содержанию', theme = 'cool', noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} class={theme === 'warm' ? 'theme-warm' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
