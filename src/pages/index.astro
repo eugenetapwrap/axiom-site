@@ -27,7 +27,7 @@ import { meta, brand, nav, headerCta } from '../content/ru';
   </main>
   <Footer />
   <script is:inline>
-    // Режим ревью: ?review подсвечивает факты, которые ждут подтверждения.
-    if (new URLSearchParams(location.search).has('review')) document.documentElement.classList.add('review');
+    // Режим ревью: ?review или #review подсвечивает факты, которые ждут подтверждения.
+    if (new URLSearchParams(location.search).has('review') || location.hash === '#review') document.documentElement.classList.add('review');
   </script>
 </Base>

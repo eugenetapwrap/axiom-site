@@ -78,7 +78,7 @@ const { roleLabel, roles, taskLabel, tasks, submit, privacy, demoNote } = Astro.
         const bad = !input.value.trim();
         input.setAttribute('aria-invalid', String(bad));
         if (bad) {
-          input.setAttribute('aria-describedby', `${id}-err`);
+          input.setAttribute('aria-describedby', id === 'f-contact' ? 'f-contact-err f-contact-hint' : `${id}-err`);
         } else if (id === 'f-contact') {
           input.setAttribute('aria-describedby', 'f-contact-hint');
         } else {
