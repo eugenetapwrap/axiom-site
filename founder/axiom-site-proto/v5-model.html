@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Axiom — финансовая модель</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Inter:wght@400;500;600&display=swap&subset=cyrillic,cyrillic-ext">
+<style>
+
+/* Вариант 5: спокойная деловая вёрстка в цветах Axiom. Белый фон, мягкие серые секции, один зелёный акцент, крупная типографика без украшений */
+:root {
+  color-scheme: light;
+  --green: #035746;
+  --green-hover: #024537;
+  --head: #13302A;
+  --ink: #252B29;
+  --muted: #5B6461;
+  --soft: #F4F6F5;
+  --tint: #E6F0ED;
+  --line: #DFE5E2;
+  --white: #FFFFFF;
+  --ph: #ECEDEC;
+  --font-head: "Montserrat", "Segoe UI", Arial, sans-serif;
+  --font: "Inter", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --wrap: 1160px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--white); color: var(--ink); font: 400 17px/1.65 var(--font); -webkit-font-smoothing: antialiased; }
+img, svg { max-width: 100%; display: block; }
+h1, h2, h3, p, ul, ol, dl, figure { margin: 0; }
+h1, h2, h3 { font-family: var(--font-head); color: var(--head); text-wrap: balance; letter-spacing: -0.01em; }
+a { color: var(--green); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.band { padding-block: 104px; }
+.band.soft { background: var(--soft); }
+.kicker { font: 600 13px/1.4 var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+.h2 { font-size: clamp(28px, 3.2vw, 40px); line-height: 1.15; font-weight: 700; }
+.lead { font-size: 19px; line-height: 1.6; color: var(--muted); max-width: 60ch; }
+.head { display: grid; gap: 16px; margin-bottom: 56px; max-width: 760px; }
+.ph { display: inline-block; background: var(--ph); border: 1px dashed #B4B8B6; color: #6E7472; border-radius: 6px; padding: 0 8px; font-size: 0.92em; }
+.btn { display: inline-flex; align-items: center; gap: 10px; font: 600 16px/1 var(--font); padding: 17px 28px; border-radius: 12px; text-decoration: none; border: 1.5px solid var(--green); cursor: pointer; transition: background .15s, color .15s; }
+.btn.primary { background: var(--green); color: #FFFFFF; }
+.btn.primary:hover { background: var(--green-hover); border-color: var(--green-hover); }
+.btn.quiet { color: var(--green); background: transparent; }
+.btn.quiet:hover { background: var(--tint); }
+
+/* Шапка */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: #FFFFFF; z-index: 21; }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(255,255,255,0.97); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 74px; }
+.logo { display: inline-flex; align-items: flex-end; gap: 6px; text-decoration: none; color: var(--green); }
+.logo b { font: 600 28px/1 var(--font-head); letter-spacing: 0.02em; }
+.logo small { font: 500 11px/1 var(--font-head); letter-spacing: 0.16em; margin-bottom: 17px; display: inline-flex; align-items: center; gap: 4px; }
+.logo small::before { content: ""; width: 6px; height: 6px; background: currentColor; }
+.nav { display: flex; align-items: center; gap: 32px; }
+.nav a { color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 500; }
+.nav a:hover { color: var(--green); }
+.nav .lang { font-size: 13px; color: var(--muted); }
+.nav .btn { padding: 12px 20px; font-size: 14px; }
+.burger { display: none; background: none; border: 1px solid var(--line); border-radius: 10px; padding: 9px 14px; font: 600 14px var(--font); color: var(--head); }
+
+/* Первый экран */
+.hero { padding-block: 112px 96px; }
+.hero h1 { font-size: clamp(36px, 5.4vw, 68px); line-height: 1.06; font-weight: 700; max-width: 15ch; }
+.hero h1 span { color: var(--green); }
+.hero .lead { margin-top: 28px; font-size: 21px; max-width: 46ch; }
+.hero .cta { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 14px; }
+.facts { margin-top: 88px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.facts div { padding: 26px 24px 0 0; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.facts div + div { padding-left: 24px; border-left: 1px solid var(--line); }
+.facts b { font: 700 30px/1.1 var(--font-head); color: var(--head); font-variant-numeric: tabular-nums; }
+.facts span { font-size: 15px; color: var(--muted); }
+
+/* Полный цикл */
+.cycle { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; position: relative; padding: 0; list-style: none; }
+.cycle::before { content: ""; position: absolute; left: 0; right: 0; top: 23px; height: 2px; background: var(--green); opacity: 0.25; }
+.cycle li { position: relative; padding-right: 28px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.cycle .node { width: 48px; height: 48px; border-radius: 50%; background: var(--white); border: 2px solid var(--green); display: grid; place-items: center; font: 700 15px/1 var(--font-head); color: var(--green); position: relative; z-index: 1; }
+.cycle h3 { font-size: 20px; line-height: 1.3; margin-top: 8px; }
+.cycle p { font-size: 16px; color: var(--muted); }
+.cycle .links { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 14px; font-weight: 500; }
+.cycle .links a { text-decoration: none; }
+.cycle .links a:hover { text-decoration: underline; }
+.cycle-foot { margin-top: 64px; padding: 32px 36px; background: var(--tint); border-radius: 16px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; }
+.cycle-foot p { font-size: 18px; color: var(--head); max-width: 70ch; }
+
+/* Услуги */
+.services { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.svc { background: var(--white); border: 1px solid var(--line); border-radius: 18px; padding: 36px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 18px; min-width: 0; transition: border-color .15s, box-shadow .15s; }
+.svc:hover { border-color: var(--green); box-shadow: 0 10px 30px rgba(19,48,42,0.06); }
+.svc h3 { font-size: 23px; line-height: 1.25; }
+.svc .for { font-size: 14px; color: var(--muted); font-weight: 500; }
+.svc dl { display: grid; gap: 16px; align-content: start; }
+.svc dt { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+.svc dd { margin: 6px 0 0; font-size: 16px; }
+.svc .go { font-weight: 600; text-decoration: none; display: inline-flex; gap: 8px; align-items: center; font-size: 15px; }
+.svc .go:hover { text-decoration: underline; }
+.svc.product { background: var(--head); border-color: var(--head); color: #D6E2DE; }
+.svc.product h3 { color: #FFFFFF; }
+.svc.product .for { color: #A9BFB9; }
+.svc.product dt { color: #8FCAB8; }
+.svc.product .go { color: #FFFFFF; }
+
+/* Кейсы */
+.cases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.case { border-top: 2px solid var(--green); padding-top: 28px; display: grid; gap: 18px; align-content: start; min-width: 0; }
+.case .tag { font-size: 13px; color: var(--muted); font-weight: 500; }
+.case h3 { font-size: 22px; }
+.case p { font-size: 16px; }
+.case p b { color: var(--head); font-weight: 600; }
+.note { margin-top: 32px; font-size: 14px; color: var(--muted); }
+
+/* Команда */
+.team { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+.person { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.photo { aspect-ratio: 1 / 1; border-radius: 16px; background: var(--ph); border: 1px dashed #B4B8B6; display: grid; place-items: end center; overflow: hidden; max-width: 100%; }
+.photo svg { width: 64%; }
+.person b { color: var(--head); font-weight: 600; }
+.person span { font-size: 14px; color: var(--muted); }
+.quotes { margin-top: 64px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.quote { background: var(--white); border-radius: 16px; padding: 32px; display: grid; gap: 16px; min-width: 0; }
+.quote p { font-size: 18px; color: var(--head); }
+
+/* Форма */
+.req { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 64px; align-items: start; }
+.contacts { margin-top: 32px; display: grid; gap: 12px; font-size: 15px; }
+.contacts div { display: grid; grid-template-columns: 100px 1fr; gap: 12px; }
+.contacts span { color: var(--muted); }
+form { display: grid; gap: 18px; background: var(--white); border: 1px solid var(--line); border-radius: 18px; padding: 36px; }
+.field { display: grid; gap: 8px; }
+.field label { font-size: 14px; font-weight: 600; color: var(--head); }
+.field small { font-weight: 400; color: var(--muted); }
+input, select, textarea { font: 400 16px/1.4 var(--font); color: var(--ink); background: var(--white); border: 1px solid #C8CFCC; border-radius: 10px; padding: 13px 14px; width: 100%; }
+textarea { min-height: 112px; resize: vertical; }
+.row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.form-note { font-size: 13px; color: var(--muted); }
+.form-done { font-size: 15px; color: var(--green); font-weight: 600; }
+
+footer { border-top: 1px solid var(--line); padding-block: 44px; font-size: 14px; color: var(--muted); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; align-items: center; }
+footer nav { display: flex; flex-wrap: wrap; gap: 10px 24px; }
+footer a { color: var(--ink); text-decoration: none; }
+
+.back { position: fixed; left: calc(16px + env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 30; background: var(--white); border: 1px solid var(--line); color: var(--muted); font-size: 12px; font-weight: 500; text-decoration: none; padding: 7px 12px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+@media (max-width: 960px) {
+  .nav { display: none; }
+  .burger { display: inline-block; }
+  .nav.open { display: grid; position: absolute; top: 74px; left: 0; right: 0; background: #FFFFFF; border-bottom: 1px solid var(--line); padding: 18px max(16px, env(safe-area-inset-left, 0px)) 24px; gap: 16px; }
+  .cycle { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
+  .cycle::before { display: none; }
+  .services, .cases, .quotes, .req { grid-template-columns: 1fr; }
+  .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .band { padding-block: 80px; }
+}
+@media (max-width: 600px) {
+  .hero { padding-block: 64px 64px; }
+  .hero .lead { font-size: 18px; }
+  .facts { grid-template-columns: 1fr; margin-top: 56px; }
+  .facts div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); margin-top: 20px; }
+  .cycle { grid-template-columns: 1fr; row-gap: 36px; }
+  .cycle li { padding-right: 0; }
+  .cycle-foot { grid-template-columns: 1fr; padding: 26px 22px; }
+  .svc { padding: 28px 22px; }
+  .row2 { grid-template-columns: 1fr; }
+  form { padding: 24px 20px; }
+  .contacts div { grid-template-columns: 1fr; gap: 0; }
+  .band { padding-block: 64px; }
+  .head { margin-bottom: 40px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+
+/* Интерактивная схема: блоки слева, адресаты справа, связи — линии между ними */
+.scheme-wrap { display: grid; gap: 28px; }
+.scheme-hint { font-size: 15px; color: var(--muted); }
+.hint-m { display: none; }
+.scheme { position: relative; display: grid; grid-template-columns: minmax(0, 360px) minmax(96px, 1fr) minmax(0, 290px); align-items: start; }
+.scheme svg.links { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.scheme svg.links path { fill: none; stroke: var(--green); stroke-width: 1.6; }
+.scheme svg.links circle { fill: var(--green); }
+.blocks { list-style: none; padding: 0; margin: 0; display: grid; gap: 0; grid-column: 1; }
+.blocks > li { display: grid; }
+.blocks > li + li::before { content: ""; width: 2px; height: 14px; background: var(--line); margin-left: 34px; }
+.block { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; align-items: center; padding: 14px 18px; background: var(--white); border: 1px solid var(--line); border-radius: 14px; cursor: pointer; transition: background .15s, border-color .15s, color .15s; }
+.block:hover { border-color: var(--green); }
+.block:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+.block .n { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--green); color: var(--green); display: grid; place-items: center; font: 700 13px/1 var(--font-head); }
+.block b { display: block; font: 600 17px/1.3 var(--font-head); color: var(--head); }
+.block span.s { display: block; font-size: 14px; color: var(--muted); line-height: 1.4; margin-top: 2px; }
+.block[aria-pressed="true"] { background: var(--green); border-color: var(--green); }
+.block[aria-pressed="true"] b, .block[aria-pressed="true"] span.s { color: #FFFFFF; }
+.block[aria-pressed="true"] .n { background: #FFFFFF; border-color: #FFFFFF; }
+.block.related { border-color: var(--green); background: var(--tint); }
+.who { list-style: none; padding: 0; margin: 0; grid-column: 3; display: grid; gap: 14px; align-self: center; }
+.who li { padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--white); font: 600 15px/1.35 var(--font-head); color: var(--head); cursor: default; transition: opacity .15s, border-color .15s, background .15s; }
+.who li.on { border-color: var(--green); background: var(--tint); }
+.who li.off { opacity: 0.38; }
+.panel { background: var(--white); border: 1px solid var(--line); border-radius: 18px; padding: 32px 36px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
+.panel h3 { font-size: 22px; grid-column: 1 / -1; }
+.panel h4 { margin: 0 0 12px; font: 600 12px/1.4 var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+.panel ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.panel .inside li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 10px; font-size: 16px; }
+.panel .inside li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-top: 10px; }
+.panel .for li { font-size: 16px; }
+.panel .for b { display: block; color: var(--head); font-weight: 600; }
+.panel .for span { color: var(--muted); }
+@media (max-width: 900px) {
+  .scheme { grid-template-columns: 1fr; }
+  .scheme svg.links, .who { display: none; }
+  .hint-d { display: none; }
+  .hint-m { display: inline; }
+  .blocks > li > .panel { margin-top: 12px; margin-bottom: 4px; }
+  .panel { grid-template-columns: 1fr; gap: 24px; padding: 24px 20px; }
+}
+@media (prefers-reduced-motion: reduce) { .block, .who li { transition: none; } }
+
+/* Страница услуги */
+.crumbs { font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px; }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--green); }
+.s-hero { padding-block: 56px 88px; }
+.s-hero h1 { margin-top: 28px; font-size: clamp(32px, 4.6vw, 56px); line-height: 1.08; font-weight: 700; max-width: 18ch; }
+.s-hero .lead { margin-top: 24px; font-size: 20px; max-width: 58ch; }
+.s-hero .cta { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 14px; }
+.tasks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; border-top: 1px solid var(--line); }
+.tasks div { padding: 26px 0; border-bottom: 1px solid var(--line); display: grid; gap: 8px; min-width: 0; }
+.tasks b { font: 600 18px/1.35 var(--font-head); color: var(--head); }
+.tasks span { color: var(--muted); font-size: 16px; }
+.get { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.get div { background: var(--white); border: 1px solid var(--line); border-radius: 16px; padding: 28px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.get b { font: 600 18px/1.3 var(--font-head); color: var(--head); }
+.get span { font-size: 15px; color: var(--muted); }
+.flow { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px 28px; counter-reset: f; }
+.flow.five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.flow li { display: grid; gap: 8px; align-content: start; border-top: 2px solid var(--green); padding-top: 18px; min-width: 0; }
+.flow li::before { counter-increment: f; content: "Шаг " counter(f); font: 600 12px/1 var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+.flow b { font: 600 17px/1.3 var(--font-head); color: var(--head); }
+.flow span { font-size: 15px; color: var(--muted); }
+.terms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.terms div { padding: 26px 24px 0 0; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.terms div + div { padding-left: 24px; border-left: 1px solid var(--line); }
+.terms small { font-size: 13px; color: var(--muted); font-weight: 500; }
+.terms b { font: 700 24px/1.2 var(--font-head); color: var(--head); }
+.terms span { font-size: 15px; color: var(--muted); }
+.faq { border-top: 1px solid var(--line); max-width: 880px; }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; padding: 22px 44px 22px 0; font: 600 17px/1.4 var(--font-head); color: var(--head); position: relative; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: ""; position: absolute; right: 8px; top: 50%; width: 9px; height: 9px; border-right: 2px solid var(--green); border-bottom: 2px solid var(--green); transform: translateY(-70%) rotate(45deg); transition: transform .15s; }
+.faq details[open] summary::after { transform: translateY(-30%) rotate(225deg); }
+.faq details p { padding: 0 0 22px; color: var(--muted); max-width: 70ch; }
+.others { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 48px; border-top: 1px solid var(--line); }
+.others a { display: flex; justify-content: space-between; gap: 16px; padding: 22px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--head); font: 600 17px/1.35 var(--font-head); }
+.others a:hover { color: var(--green); }
+.numbers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+.numbers div { background: var(--white); border-radius: 16px; padding: 26px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.numbers b { font: 700 32px/1.1 var(--font-head); color: var(--green); font-variant-numeric: tabular-nums; }
+.numbers span { font-size: 15px; color: var(--muted); }
+@media (max-width: 960px) {
+  .get, .numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .flow, .flow.five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .tasks, .get, .flow, .flow.five, .others, .numbers { grid-template-columns: 1fr; }
+  .terms { grid-template-columns: 1fr; }
+  .terms div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); margin-top: 20px; }
+  .s-hero .lead { font-size: 18px; }
+}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="v5.html" aria-label="Axiom Consulting, на главную"><b>Axiom</b><small>consulting</small></a>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="nav">Меню</button>
+    <nav class="nav" id="nav" aria-label="Разделы">
+      <a href="v5.html#cycle">Подход</a>
+      <a href="v5.html#services">Услуги</a>
+      <a href="v5.html#cases">Кейсы</a>
+      <a href="v5.html#team">Команда</a>
+      <span class="lang">RU · EN</span>
+      <a class="btn primary" href="#request">Связаться</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="s-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Навигация"><a href="v5.html">Главная</a><span>/</span><a href="v5.html#services">Услуги</a><span>/</span><span>Финансовая модель</span></nav>
+      <h1>Финансовая модель девелоперского проекта</h1>
+      <p class="lead">Показывает, сколько проект заработает, сколько денег потребуется и когда. Служит основой для решений собственника, переговоров с банком и инвесторами, а на стадии строительства — для контроля бюджета.</p>
+      <div class="cta"><a class="btn primary" href="#request">Обсудить модель</a><a class="btn quiet" href="#scheme">Из чего состоит модель</a></div>
+    </div>
+  </section>
+
+  <section class="band soft" id="scheme" aria-labelledby="scheme-h">
+    <div class="wrap scheme-wrap" id="model-scheme">
+      <div class="head" style="margin-bottom:0">
+        <p class="kicker">Структура модели</p>
+        <h2 class="h2" id="scheme-h">Из чего состоит модель и кому она нужна</h2>
+        <p class="scheme-hint"><span class="hint-d">Наведите на блок или нажмите на него: справа появятся те, кому этот блок нужен, а ниже — что в него входит.</span><span class="hint-m">Нажмите на блок, чтобы увидеть, что в него входит и кому он нужен.</span></p>
+      </div>
+      <div class="scheme">
+        <svg class="links" aria-hidden="true"></svg>
+        <ol class="blocks" aria-label="Блоки финансовой модели"></ol>
+        <ul class="who" aria-label="Кому нужна модель"></ul>
+      </div>
+      <div class="panel-home"><div class="panel" aria-live="polite"></div></div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="tasks-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Задачи</p>
+        <h2 class="h2" id="tasks-h">Какие задачи решает модель</h2>
+      </div>
+      <div class="tasks">
+        <div><b>Выбрать концепцию проекта</b><span>Сравнить несколько вариантов на этапе мастер-плана по объективным показателям.</span></div>
+        <div><b>Определить потребность в финансировании</b><span>Сколько собственных и заёмных средств понадобится и в какие месяцы.</span></div>
+        <div><b>Подготовиться к разговору с банком и инвестором</b><span>Денежный поток, график финансирования и показатели доходности в понятном виде.</span></div>
+        <div><b>Спланировать продажи</b><span>Цены, рассрочки, скидки и рост цены по мере строительства с учётом налогов.</span></div>
+        <div><b>Оценить сдачу в аренду</b><span>Денежные потоки от управления недвижимостью на весь срок эксплуатации.</span></div>
+        <div><b>Управлять проектом по факту</b><span>После утверждения модель становится плановой, а на стройке обновляется по фактическим данным.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band soft" aria-labelledby="get-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Результат</p>
+        <h2 class="h2" id="get-h">Что вы получаете</h2>
+      </div>
+      <div class="get">
+        <div><b>Финансовая модель в Excel</b><span>Помесячный расчёт проекта со всеми блоками схемы выше.</span></div>
+        <div><b>Технико-экономические показатели</b><span>Сводка параметров проекта для утверждения стейкхолдерами.</span></div>
+        <div><b>Пояснительная записка</b><span>Назначение модели, источники данных, допущения и методика расчёта.</span></div>
+        <div><b>Сводка показателей для инвестора</b><span>Ключевые показатели проекта и инвестора на одной странице.</span></div>
+        <div><b>Сравнение вариантов</b><span>Показатели нескольких концепций или стратегий рядом друг с другом.</span></div>
+        <div><b>Модель на стадии строительства</b><span>Обновление по фактическим данным, контроль лимитов и отклонений.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="flow-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Порядок работы</p>
+        <h2 class="h2" id="flow-h">Как строим модель</h2>
+      </div>
+      <ol class="flow">
+        <li><b>Исходные данные</b><span>Собираем параметры проекта, сметы и допущения.</span></li>
+        <li><b>График реализации</b><span>Задаём сроки стадий и последовательность работ.</span></li>
+        <li><b>Бюджет и Cash Flow</b><span>Связываем затраты с графиком и получаем движение денег по месяцам.</span></li>
+        <li><b>Финансирование и налоги</b><span>Рассчитываем график финансирования, налоги и дисконтированные показатели.</span></li>
+        <li><b>План продаж</b><span>Под лимит собственных средств и требуемую доходность.</span></li>
+        <li><b>Предложения</b><span>Готовим условия для покупателей и расчёты для инвесторов.</span></li>
+        <li><b>Утверждение</b><span>Согласованная модель фиксируется как плановая.</span></li>
+        <li><b>Ведение по факту</b><span>На стадии строительства модель обновляется по фактическим данным.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band soft" aria-labelledby="terms-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Сроки и стоимость</p>
+        <h2 class="h2" id="terms-h">Сроки и стоимость</h2>
+      </div>
+      <div class="terms">
+        <div><small>Срок</small><b><span class="ph">⟦от … рабочих дней⟧</span></b><span>Зависит от типа проекта и готовности исходных данных.</span></div>
+        <div><small>Стоимость</small><b><span class="ph">⟦от … USD⟧</span></b><span>Фиксируется в коммерческом предложении.</span></div>
+        <div><small>Начало работы</small><b>Исходные данные</b><span>Параметры проекта, сметы и условия финансирования, которые уже есть.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="faq-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Вопросы</p>
+        <h2 class="h2" id="faq-h">Частые вопросы</h2>
+      </div>
+      <div class="faq">
+        <details><summary>Можно ли сравнить несколько вариантов проекта?</summary><p>Да. Модель позволяет сравнить несколько концепций и показывает показатели каждой рядом друг с другом.</p></details>
+        <details><summary>Учитываются ли рассрочки и рост цены по мере строительства?</summary><p>Да. План продаж учитывает рассрочки, скидки и рост цены по стадиям строительства.</p></details>
+        <details><summary>Учитываются ли налоги?</summary><p>Да. В модель закладываются налоги на продажи и прибыль и налоговые платежи по графику. Налоговые выводы рекомендуем подтверждать у налогового консультанта.</p></details>
+        <details><summary>Что происходит с моделью после начала строительства?</summary><p>Утверждённая модель фиксируется как плановая. На стадии строительства ведётся модель по факту: она показывает отклонения от бюджета и графика.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="band soft" aria-labelledby="oth-h">
+    <div class="wrap">
+      <div class="head"><p class="kicker">Другие услуги</p><h2 class="h2" id="oth-h">Финансы проекта полного цикла</h2></div>
+      <nav class="others" aria-label="Другие услуги"><a href="v5.html#svc-audit"><span>Аудит финансовой модели</span><span aria-hidden="true">→</span></a><a href="v5-control.html"><span>Контроль платежей и управленческий учёт</span><span aria-hidden="true">→</span></a><a href="v5.html#svc-invest"><span>Инвестиционный анализ</span><span aria-hidden="true">→</span></a><a href="v5.html#svc-cfo"><span>Финансовый директор на аутсорсе</span><span aria-hidden="true">→</span></a></nav>
+    </div>
+  </section>
+
+  <section class="band" id="request" aria-labelledby="req-h">
+    <div class="wrap req">
+      <div>
+        <p class="kicker">Контакты</p>
+        <h2 class="h2" id="req-h" style="margin-top:16px">Обсудить проект</h2>
+        <p class="lead" style="margin-top:18px">Оставьте контакт и выберите услугу. Мы свяжемся, чтобы уточнить задачу.</p>
+        <div class="contacts">
+          <div><span>E-mail</span><span class="ph">⟦e-mail⟧</span></div>
+          <div><span>Telegram</span><span class="ph">⟦Telegram⟧</span></div>
+          <div><span>WhatsApp</span><span class="ph">⟦WhatsApp⟧</span></div>
+        </div>
+      </div>
+      <form id="req-form" novalidate>
+        <div class="row2">
+          <div class="field"><label for="f-name">Имя</label><input id="f-name" name="name" autocomplete="name"></div>
+          <div class="field"><label for="f-contact">Контакт <small>Telegram, WhatsApp или e-mail</small></label><input id="f-contact" name="contact"></div>
+        </div>
+        <div class="field"><label for="f-service">Услуга</label><select id="f-service" name="service"><option selected>Финансовая модель проекта</option><option>Аудит финансовой модели</option><option>Контроль платежей и управленческий учёт</option><option>Инвестиционный анализ</option><option>Финансовый директор на аутсорсе</option><option>Nota</option><option>Другое</option></select></div>
+        <div class="field"><label for="f-msg">Комментарий <small>необязательно</small></label><textarea id="f-msg" name="message"></textarea></div>
+        <div><button class="btn primary" type="submit">Отправить</button></div>
+        <p class="form-note">Нажимая кнопку, вы соглашаетесь с <a href="#request">политикой конфиденциальности</a>.</p>
+        <p class="form-done" id="f-done" hidden>Это прототип: заявка никуда не отправляется.</p>
+      </form>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap">
+    <a class="logo" href="v5.html"><b>Axiom</b><small>consulting</small></a>
+    <nav aria-label="Подвал"><a href="v5.html#cycle">Подход</a><a href="v5.html#services">Услуги</a><a href="v5.html#cases">Кейсы</a><a href="v5.html#team">Команда</a><a href="#request">Контакты</a></nav>
+    <span class="ph">⟦юрлицо⟧</span>
+  </div>
+</footer>
+<a class="back" href="index.html">← Все варианты</a>
+<script>
+function initScheme(root, data, startId) {
+  var scheme = root.querySelector('.scheme');
+  var blocksEl = root.querySelector('.blocks');
+  var whoEl = root.querySelector('.who');
+  var svg = root.querySelector('svg.links');
+  var panel = root.querySelector('.panel');
+  var panelHome = root.querySelector('.panel-home');
+  var mq = window.matchMedia('(max-width: 900px)');
+  var byId = {};
+  data.who.forEach(function (w) { byId[w.id] = w; });
+
+  data.blocks.forEach(function (b, i) {
+    var li = document.createElement('li');
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'block';
+    btn.dataset.id = b.id;
+    btn.setAttribute('aria-pressed', 'false');
+    btn.innerHTML = '<span class="n">' + (i + 1) + '</span><span><b>' + b.title + '</b><span class="s">' + b.short + '</span></span>';
+    li.appendChild(btn);
+    blocksEl.appendChild(li);
+    btn.addEventListener('mouseenter', function () { if (!mq.matches) activate(b.id); });
+    btn.addEventListener('focus', function () { activate(b.id); });
+    btn.addEventListener('click', function () { activate(b.id); });
+  });
+  data.who.forEach(function (w) {
+    var li = document.createElement('li');
+    li.dataset.id = w.id;
+    li.textContent = w.title;
+    whoEl.appendChild(li);
+  });
+
+  var current = null;
+  function activate(id) {
+    current = id;
+    var b = data.blocks.filter(function (x) { return x.id === id; })[0];
+    var targets = Object.keys(b.why);
+    blocksEl.querySelectorAll('.block').forEach(function (el) { el.setAttribute('aria-pressed', el.dataset.id === id ? 'true' : 'false'); });
+    whoEl.querySelectorAll('li').forEach(function (el) {
+      var on = targets.indexOf(el.dataset.id) !== -1;
+      el.classList.toggle('on', on);
+      el.classList.toggle('off', !on);
+    });
+    panel.innerHTML = '<h3>' + b.title + '</h3>' +
+      '<div><h4>Что входит</h4><ul class="inside">' + b.inside.map(function (t) { return '<li><span>' + t + '</span></li>'; }).join('') + '</ul></div>' +
+      '<div><h4>Кому и зачем</h4><ul class="for">' + targets.map(function (k) { return '<li><b>' + byId[k].title + '</b><span>' + b.why[k] + '</span></li>'; }).join('') + '</ul></div>';
+    place();
+    draw();
+  }
+
+  function place() {
+    if (mq.matches) {
+      var btn = blocksEl.querySelector('.block[data-id="' + current + '"]');
+      if (btn && panel.parentNode !== btn.parentNode) btn.parentNode.appendChild(panel);
+    } else if (panel.parentNode !== panelHome) {
+      panelHome.appendChild(panel);
+    }
+  }
+
+  function draw() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    if (mq.matches || !current) return;
+    var c = scheme.getBoundingClientRect();
+    var btn = blocksEl.querySelector('.block[data-id="' + current + '"]');
+    var a = btn.getBoundingClientRect();
+    var sx = a.right - c.left, sy = a.top + a.height / 2 - c.top;
+    var b = data.blocks.filter(function (x) { return x.id === current; })[0];
+    Object.keys(b.why).forEach(function (k) {
+      var t = whoEl.querySelector('li[data-id="' + k + '"]').getBoundingClientRect();
+      var ex = t.left - c.left, ey = t.top + t.height / 2 - c.top;
+      var dx = (ex - sx) / 2;
+      var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('d', 'M' + sx + ' ' + sy + ' C' + (sx + dx) + ' ' + sy + ', ' + (ex - dx) + ' ' + ey + ', ' + ex + ' ' + ey);
+      svg.appendChild(p);
+      var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', ex); dot.setAttribute('cy', ey); dot.setAttribute('r', 3.5);
+      svg.appendChild(dot);
+    });
+    var s0 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    s0.setAttribute('cx', sx); s0.setAttribute('cy', sy); s0.setAttribute('r', 3.5);
+    svg.appendChild(s0);
+  }
+
+  window.addEventListener('resize', function () { place(); draw(); });
+  if (mq.addEventListener) mq.addEventListener('change', function () { place(); draw(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+  activate(startId || data.blocks[0].id);
+}
+
+initScheme(document.getElementById('model-scheme'), {"who": [{"id": "owner", "title": "Собственник и инвестор"}, {"id": "bank", "title": "Банк"}, {"id": "cfo", "title": "Финансовый директор и бухгалтерия"}, {"id": "pmo", "title": "Проектный офис"}, {"id": "sales", "title": "Отдел продаж"}], "blocks": [{"id": "inputs", "title": "Исходные данные", "short": "Параметры проекта и допущения", "inside": ["Типы и площади юнитов", "Затраты по статьям: земля, проектирование, разрешения, строительство", "Операционные расходы", "Цены продаж и условия рассрочек", "Налоговые ставки и условия финансирования"], "why": {"pmo": "Даёт и утверждает параметры проекта и сметы.", "cfo": "Сверяет условия финансирования и налоги.", "owner": "Видит, на каких допущениях построен расчёт."}}, {"id": "tep", "title": "ТЭП", "short": "Технико-экономические показатели", "inside": ["Площади GFA и NSA, количество юнитов", "Стоимость строительства на 1 м²", "Целевая цена продажи на 1 м²", "Сводка параметров для утверждения"], "why": {"owner": "Утверждает концепцию и параметры проекта.", "pmo": "Сверяет проектные решения с утверждёнными параметрами.", "bank": "Оценивает параметры объекта при рассмотрении финансирования."}}, {"id": "budget", "title": "Бюджет", "short": "Затраты по статьям и стадиям", "inside": ["CAPEX и OPEX по статьям", "Бюджет итого и на 1 м²", "Затраты по стадиям проекта", "Резервы"], "why": {"cfo": "Получает лимиты по статьям для контроля платежей.", "pmo": "Контролирует себестоимость и выбирает подрядчиков в рамках бюджета.", "owner": "Видит полную стоимость проекта."}}, {"id": "schedule", "title": "График реализации", "short": "Сроки и последовательность работ", "inside": ["Сроки по стадиям проекта", "Помесячный график работ и платежей", "Авансы и длительность по статьям затрат", "График налоговых платежей"], "why": {"pmo": "Планирует работы и закупки.", "cfo": "Строит платёжный календарь.", "bank": "Видит, когда проекту потребуются средства."}}, {"id": "cashflow", "title": "Cash Flow", "short": "Движение денег по месяцам", "inside": ["Помесячные поступления и платежи", "Укрупнённый бюджет с привязкой к графику", "Потребность в финансировании и её пик", "График финансирования", "Налоги"], "why": {"cfo": "Управляет ликвидностью и предотвращает кассовые разрывы.", "bank": "Оценивает потребность в финансировании и возможность возврата.", "owner": "Видит, сколько собственных средств потребуется и когда."}}, {"id": "kpi", "title": "Инвестиционные показатели", "short": "Доходность проекта и инвестора", "inside": ["Прибыль, NPV, IRR, ROI, PI", "Срок окупаемости", "Показатели проекта и инвестора", "Сравнение вариантов концепции"], "why": {"owner": "Принимает решение о запуске и выбирает вариант концепции.", "bank": "Оценивает устойчивость проекта."}}, {"id": "offers", "title": "Варианты для инвестора", "short": "Стратегии, сценарии, условия продаж", "inside": ["Продажа после строительства или сдача в аренду", "Сценарии цены выхода", "План продаж под требуемую доходность", "Условия для покупателей: цена, рассрочка, доходность аренды"], "why": {"owner": "Выбирает стратегию и условия выхода из проекта.", "sales": "Получает цены, рассрочки и расчёт доходности для покупателей."}}]}, 'cashflow');
+(function () {
+  var b = document.getElementById('burger'), n = document.getElementById('nav');
+  b.addEventListener('click', function () { var o = n.classList.toggle('open'); b.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+  n.addEventListener('click', function (e) { if (e.target.tagName === 'A') { n.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); } });
+  document.getElementById('req-form').addEventListener('submit', function (e) { e.preventDefault(); document.getElementById('f-done').hidden = false; });
+})();
+</script>
+</body>
+</html>

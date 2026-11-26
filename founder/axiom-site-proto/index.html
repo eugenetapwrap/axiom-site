@@ -56,7 +56,8 @@ ul.plain li::before { content: ""; width: 8px; height: 8px; margin-top: 9px; bor
 .chain { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-weight: 600; }
 .chain .step { background: var(--accent-soft); color: var(--ink); padding: 8px 14px; border-radius: 6px; }
 .chain .arr { color: var(--muted); font-family: var(--font-mono); }
-.variants { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.variants { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.variants .card:first-child { grid-column: 1 / -1; border-color: var(--accent); }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 22px; display: grid; gap: 12px; align-content: start; min-width: 0; }
 .card .tag { font: 500 12px/1 var(--font-mono); color: var(--mark); letter-spacing: 0.06em; text-transform: uppercase; }
 .card p { color: var(--muted); font-size: 15px; }
@@ -89,9 +90,63 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; font-family: v
 <main class="wrap">
   <header class="col" style="display:grid;gap:16px">
     <p class="eyebrow">Axiom Consulting · концепция сайта · 26 ноября 2026</p>
-    <h1>Новый сайт Axiom Consulting: исследование и образец главной</h1>
-    <p class="lead">Разобрали 36 конкурентов, рынки России, ОАЭ и Юго-Восточной Азии, 20 сайтов консалтинговых и финансовых компаний и ваши материалы. Ниже — выводы, карта сайта, структура страниц и образец главной страницы.</p>
+    <h1>Новый сайт Axiom Consulting: исследование и пять вариантов</h1>
+    <p class="lead">Разобрали 36 конкурентов, рынки России, ОАЭ и Юго-Восточной Азии, 20 сайтов консалтинговых и финансовых компаний и ваши материалы. Ниже — пять вариантов сайта, выводы исследования, карта сайта и структура страниц.</p>
   </header>
+
+  <section aria-labelledby="h-var">
+    <div class="col" style="display:grid;gap:12px">
+      <h2 id="h-var">Пять вариантов</h2>
+      <p class="lead">Откройте каждый и пролистайте до конца. Заглушки (команда, отзывы, цены, контакты, логотип) выделены пунктиром. Напишите, что нравится и что нет — по блокам или по вариантам.</p>
+    </div>
+    <div class="variants">
+      <article class="card">
+        <span class="tag">Вариант 5 · новый</span>
+        <h3>Финансы проекта полного цикла</h3>
+        <div class="swatches" aria-hidden="true"><i style="background:#FFFFFF"></i><i style="background:#035746"></i><i style="background:#13302A"></i><i style="background:#F4F6F5"></i></div>
+        <p>По вашей структуре: заголовок «Финансовый консалтинг для девелоперов и строительных компаний», затем финансы проекта полного цикла (модель, инвесторы и банки, управление финансами, отчётность), затем услуги в формате «задача клиента → что делаем». На страницах услуг — интерактивная схема: наведите на блок и увидите, что в него входит и кому он нужен.</p>
+        <a class="open" href="v5.html">Главная <span aria-hidden="true">→</span></a>
+        <a class="open" href="v5-model.html">Страница «Финансовая модель» <span aria-hidden="true">→</span></a>
+        <a class="open" href="v5-control.html">Страница «Контроль платежей» <span aria-hidden="true">→</span></a>
+
+      </article>
+      <article class="card">
+        <span class="tag">Вариант 4</span>
+        <h3>Фирменный стиль презентаций</h3>
+        <div class="swatches" aria-hidden="true"><i style="background:#035746"></i><i style="background:#152A28"></i><i style="background:#F2F2F2"></i><i style="background:#FFFFFF"></i></div>
+        <p>Montserrat, зелёный Axiom, серый фон, обведённые карточки, заголовки капслоком — как в ваших презентациях. Строгий деловой язык.</p>
+        <a class="open" href="v2.html">Главная <span aria-hidden="true">→</span></a>
+
+      </article>
+      <article class="card">
+        <span class="tag">Вариант A</span>
+        <h3>Тёплая редакционная ясность</h3>
+        <div class="swatches" aria-hidden="true"><i style="background:#FAF8F3"></i><i style="background:#1C1B19"></i><i style="background:#0E5446"></i><i style="background:#A8461F"></i></div>
+        <p>Вырос из anthropic.com: заголовки с засечками, бумажный фон, финансовые схемы вместо картинок.</p>
+        <a class="open" href="a.html">Главная <span aria-hidden="true">→</span></a>
+        <a class="open" href="audit.html">Страница «Аудит модели» <span aria-hidden="true">→</span></a>
+
+      </article>
+      <article class="card">
+        <span class="tag">Вариант B</span>
+        <h3>Прозрачный продукт</h3>
+        <div class="swatches" aria-hidden="true"><i style="background:#FFFFFF"></i><i style="background:#0B2240"></i><i style="background:#2158D9"></i><i style="background:#FF6A3D"></i></div>
+        <p>Структура onlytraffic.com: каждая услуга — формат со сроком и ценой, интерфейсы системы и бота на демо-данных.</p>
+        <a class="open" href="b.html">Главная <span aria-hidden="true">→</span></a>
+
+      </article>
+      <article class="card">
+        <span class="tag">Вариант C</span>
+        <h3>Тихий частный банк</h3>
+        <div class="swatches" aria-hidden="true"><i style="background:#F5F4F0"></i><i style="background:#17332B"></i><i style="background:#C2A26A"></i><i style="background:#111315"></i></div>
+        <p>Глубокий зелёный, латунные линии, крупные цифры и проекты-плашки вместо карточек.</p>
+        <a class="open" href="c.html">Главная <span aria-hidden="true">→</span></a>
+
+      </article>
+    </div>
+    <p class="note col">Тексты вариантов A, B и C ещё содержат разговорные обороты из первой версии («созвон» и подобные) — в итоговом сайте их не будет.</p>
+  </section>
+
 
   <section class="col" aria-labelledby="h-find">
     <h2 id="h-find">Главные выводы</h2>
@@ -117,23 +172,6 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; font-family: v
       <span class="step">Отчётность</span>
     </div>
     <p class="note">Финдиректор на аутсорсе держит эту цепочку постоянно. Nota — простой вход в контроль расходов для небольших команд.</p>
-  </section>
-
-  <section aria-labelledby="h-var">
-    <div class="col" style="display:grid;gap:12px">
-      <h2 id="h-var">Образец главной страницы</h2>
-      <p class="lead">Новая версия после ваших замечаний: строгий деловой язык и фирменный стиль ваших презентаций — зелёный Axiom, светло-серый фон, Montserrat, обведённые карточки, заголовки капслоком. Подача финансового бутика: состав работ, результат, сроки, методология.</p>
-    </div>
-    <div class="variants" style="grid-template-columns:minmax(0,1fr)">
-      <article class="card">
-        <span class="tag">Версия 2</span>
-        <h3>Главная Axiom Consulting в фирменном стиле</h3>
-        <div class="swatches" aria-hidden="true"><i style="background:#035746"></i><i style="background:#152A28"></i><i style="background:#F2F2F2"></i><i style="background:#FFFFFF"></i></div>
-        <p>Первый экран с образцом отчёта об аудите модели, цифры, пять услуг с составом работ и результатом, комплексное сопровождение, результаты системы контроля платежей и кейсы, методология и классификация замечаний, этапы сотрудничества, команда, вопросы, запрос предложения.</p>
-        <a class="open" href="v2.html">Открыть образец главной <span aria-hidden="true">→</span></a>
-      </article>
-    </div>
-    <p class="note col">Три первых варианта (A, B, C) сняты: тон и внешний вид не подошли. Их файлы остались в репозитории в founder/axiom-site-proto.</p>
   </section>
 
   <section aria-labelledby="h-map">
@@ -216,7 +254,7 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; font-family: v
       <li><span><b>Кейс аудита модели:</b> можно ли публиковать его обезличенно, с обобщёнными цифрами объёма проверки.</span></li>
       <li><span><b>Контакты и домен:</b> в материалах встречаются axiomco.io и axiom-asia.com. Какой домен и какая почта основные?</span></li>
       <li><span><b>Цифры:</b> подтвердить «книгу цифр» выше или прислать свежие значения.</span></li>
-      <li><span><b>Оценка образца:</b> подходит ли тон и стиль. Если да, соберу сайт целиком: главную, пять страниц услуг, кейсы, команду и контакты.</span></li>
+      <li><span><b>Выбор:</b> что нравится в каждом варианте. По итогам соберу сайт целиком: главную, пять страниц услуг, кейсы, команду и контакты.</span></li>
     </ol>
     <p class="note">Команда, отзывы и логотип пока заглушки, как договорились. Полные отчёты исследования лежат в репозитории, в папке founder/axiom-site-research.</p>
   </section>
