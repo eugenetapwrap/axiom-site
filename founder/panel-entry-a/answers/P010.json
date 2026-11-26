@@ -1,0 +1,13 @@
+{
+  "id": "P010",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The problem is real, I only look at those receipt groups when something smells wrong and I know money slips through. But I'm not handing a full export of my work chats, with transfer screenshots and bank details, to a bot I've never heard of from a company that might be gone by next season.",
+  "objection": "Who is behind this and will it still exist in a year? If it disappears I've trained my staff around a dead bot, and meanwhile some stranger has seen all my payments.",
+  "would_change_my_mind": "Another villa owner I know telling me they've used it for months and it caught real duplicate payments, so I'd know it's legit and sticking around.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

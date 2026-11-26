@@ -1,0 +1,13 @@
+{
+  "id": "P054",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The missing receipts are a real headache at month end, but I'm not signing a bot into my Google account and dropping it into the chat where my staff talk all day. And I'm not sure we'd still be using it once the free 40 run out.",
+  "objection": "It wants my Google login and it reads everything in our work group, not only the receipts. I don't know who's behind it or where my staff's messages end up.",
+  "would_change_my_mind": "If it only got access to the one sheet and folder it creates, never my whole Google account, and my accountant or another owner I know here told me they've used it for months.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

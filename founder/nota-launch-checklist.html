@@ -1,0 +1,136 @@
+<title>Запуск платной Nota</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap">
+<style>
+/* Layout: одна колонка; сверху общий прогресс, ниже группы по ответственным; статус пункта меняется щелчком */
+:root{
+  /* Светлая гамма лендинга Nota; тёмной темы нет намеренно (как у технического кабинета) */
+  --bg:#fbfcfa; --card:#ffffff; --ink:#14201b; --muted:#56635d; --line:#e2e7e3; --box:#eef1ee;
+  --accent:#334154; --ok-bg:#e3f1e8; --ok:#0a6b45; --work-bg:#fff4d6; --work:#7a5a00; --crit:#a3341a;
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif; color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.5;margin:0}
+.wrap{max-width:860px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-size:28px;line-height:1.15;letter-spacing:-.015em;margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:8px 0 0;max-width:64ch}
+.top{display:flex;align-items:center;gap:16px;margin-top:20px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;flex-wrap:wrap}
+.meter{flex:1;min-width:160px;height:8px;border-radius:8px;background:var(--line);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:8px;transition:width .3s}
+.top b{font-variant-numeric:tabular-nums}
+.note{font-size:13.5px;color:var(--muted)}
+.note.warn{color:var(--crit)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:12px}
+.grp{margin-top:30px}
+.gh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.gh h2{font-size:17px;margin:0}
+.gh span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px}
+.it{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 14px;align-items:start;padding:14px 16px;border-top:1px solid var(--line)}
+.it:first-child{border-top:0}
+.st{font:inherit;font-size:12.5px;font-weight:600;border:0;border-radius:999px;padding:4px 10px;cursor:pointer;white-space:nowrap;background:var(--box);color:var(--muted);min-width:96px;text-align:center}
+.st[data-s="doing"]{background:var(--work-bg);color:var(--work)}
+.st[data-s="done"]{background:var(--ok-bg);color:var(--ok)}
+.st:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.st:disabled{cursor:default}
+.tt{font-weight:600}
+.it.done .tt{color:var(--muted);text-decoration:line-through;text-decoration-color:#a9b3ad}
+.dt{font-size:13.5px;color:var(--muted);margin-top:2px}
+.dy{font-size:12.5px;color:var(--muted);white-space:nowrap;padding-top:3px;font-variant-numeric:tabular-nums}
+.crit{display:inline-block;margin-left:6px;font-size:11.5px;font-weight:700;color:var(--crit);background:#fbe9e3;border-radius:999px;padding:1px 7px;vertical-align:1px}
+.foot{margin-top:28px;font-size:13.5px;color:var(--muted);max-width:64ch}
+@media (max-width:560px){.it{grid-template-columns:auto minmax(0,1fr)}.dy{grid-column:2;padding-top:0}.st{min-width:0}}
+@media (prefers-reduced-motion:reduce){.meter i{transition:none}}
+</style>
+
+<div class="wrap">
+  <h1>Запуск платной Nota</h1>
+  <p class="lead">Что нужно сделать до запуска платной версии, кто отвечает и к какому дню. Щёлкните по статусу пункта, чтобы поменять его: не начато → в работе → готово. Отметки сохраняются.</p>
+  <div class="top"><div class="meter" aria-hidden="true"><i id="bar" style="width:0"></i></div><span><b id="cnt">0 из 0</b> готово</span><span class="note" id="state">Загружаю отметки…</span></div>
+  <div class="legend"><span>Дни — от начала двух недель</span><span><span class="crit">долго</span> — начать сразу: от этого зависит срок</span></div>
+  <div id="groups"></div>
+  <p class="foot">Менять отметки можете только вы. Claude читает их отсюда и отмечает свои пункты сам.</p>
+</div>
+
+<script>
+(function(){
+  var GROUPS = [
+    ['Вы', [
+      ['you-bank', 'Bank of Georgia', 'Договор интернет-эквайринга, тестовый доступ к API, списания с сохранённой карты (автопродление), оплата в долларах', 'Дни 1–2', true],
+      ['you-google', 'Проверка приложения в Google', 'Пройдена', '—', false],
+      ['you-decide', 'Решения', 'Что бот делает, когда документы закончились; цена для действующих клиентов при смене цен; сколько раз повторять неудачное автосписание', 'Дни 1–2', false],
+      ['you-approve', 'Утвердить страницу оплаты', 'После этого Claude пишет инструкцию для программиста', 'Дни 1–2', false],
+      ['you-access', 'Доступы', 'DNS домена notagetbot.com и аккаунт хостинга (Vercel или Cloudflare Pages), лучше на компанию', 'Дни 1–2', false],
+      ['you-crypto', 'Крипто-сервис', 'Выбрать сервис и завести аккаунт', 'Дни 1–5', false],
+      ['you-cabinet', 'Технический кабинет', 'Почта поддержки, ссылка для «Instruction» в шапке таблицы, реквизиты', 'Дни 1–5', false],
+      ['you-docs', 'Юридические тексты', 'Соглашение и политика (те же документы, что в Google), правила возврата, условия автопродления — на страницы /terms, /privacy, /refund', 'Дни 3–5', false]
+    ]],
+    ['Программист', [
+      ['dev-db', 'База', 'Клиенты и их таблицы, код оплаты для каждой таблицы, подписки, платежи, счётчик документов по месяцам', 'Дни 3–5', false],
+      ['dev-api', 'API страницы оплаты', 'Данные таблицы, создание платежа, статус платежа, автопродление, смена карты', 'Дни 3–8', false],
+      ['dev-pay', 'Платежи', 'Уведомления от Bank of Georgia и крипто-сервиса, автосписания по расписанию, повторы при неудаче', 'Дни 6–8', false],
+      ['dev-sheet', 'Запись в таблицу клиента', 'Settings: при подключении, после каждого документа, после оплаты, в начале месяца', 'Дни 6–8', false],
+      ['dev-bot', 'Бот', 'Сообщения про лимит и оплату; в Telegram без ссылки на оплату — «подробности в таблице»', 'Дни 6–8', false],
+      ['dev-mail', 'Письма', 'Чек и уведомления о списаниях — если их не присылает сам банк', 'Дни 6–8', false],
+      ['dev-test', 'Тестовые платежи', 'Бесплатно → платно, смена тарифа, пакет +50, неудачное списание, криптовалюта, три языка', 'Дни 9–10', false]
+    ]],
+    ['Claude', [
+      ['cl-paypage', 'Страница оплаты', 'Все экраны, три языка, зачёт при смене тарифа — прототип ждёт утверждения', 'Дни 1–2', false],
+      ['cl-block', 'Блок оплаты в шапке таблицы', 'Формулы, цвета состояний, таблица Settings на листе References', '—', false],
+      ['cl-cabinet', 'Технический кабинет', 'Поля для ссылок и контактов', '—', false],
+      ['cl-docs', 'Страницы документов', '/terms, /privacy, /refund — ждут текстов', '—', false],
+      ['cl-faq', 'Лендинг: ответы про оплату', 'Оплата по кнопке Billing в шапке таблицы, автопродление, «один тариф»', '—', false],
+      ['cl-guide', 'Инструкция для программиста', 'После утверждения страницы оплаты', 'Дни 3–5', false],
+      ['cl-links', 'Ссылки и контакты на сайт', 'Из технического кабинета — на сайт и страницу оплаты', 'Дни 6–8', false],
+      ['cl-deploy', 'Выкладка сайта', 'Настройки хостинга, правило для /pay/…, закрыт от поиска до запуска', 'Дни 3–8', false],
+      ['cl-plans', 'Тарифы в одном файле', 'Позже, по вашей команде', 'позже', false]
+    ]],
+    ['Запуск', [
+      ['go-beta', 'Пробный запуск', '3–5 знакомых клиентов с настоящей оплатой', 'Дни 11–12', false],
+      ['go-live', 'Запуск', 'Открыть сайт для поиска, финальная проверка', 'Дни 13–14', false]
+    ]]
+  ];
+  var LABEL = { todo: 'Не начато', doing: 'В работе', done: 'Готово' }, NEXT = { todo: 'doing', doing: 'done', done: 'todo' };
+  var st = {}, db = null, canWrite = true, busy = {};
+  var groupsEl = document.getElementById('groups'), stateEl = document.getElementById('state');
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function render(){
+    var all = 0, done = 0;
+    groupsEl.innerHTML = GROUPS.map(function(g){
+      var gd = 0;
+      var rows = g[1].map(function(it){
+        var s = st[it[0]] || 'todo'; all++; if (s === 'done') { done++; gd++; }
+        return '<div class="it' + (s === 'done' ? ' done' : '') + '"><button type="button" class="st" data-id="' + it[0] + '" data-s="' + s + '"' + (canWrite && db ? '' : ' disabled') + ' aria-label="' + esc(it[1]) + ': ' + LABEL[s] + '">' + LABEL[s] + '</button>' +
+          '<div><div class="tt">' + esc(it[1]) + (it[4] && s !== 'done' ? '<span class="crit">долго</span>' : '') + '</div><div class="dt">' + esc(it[2]) + '</div></div><div class="dy">' + esc(it[3]) + '</div></div>';
+      }).join('');
+      return '<section class="grp"><div class="gh"><h2>' + g[0] + '</h2><span>' + gd + ' из ' + g[1].length + '</span></div><div class="card">' + rows + '</div></section>';
+    }).join('');
+    document.getElementById('cnt').textContent = done + ' из ' + all;
+    document.getElementById('bar').style.width = (all ? Math.round(done / all * 100) : 0) + '%';
+  }
+  render();
+  groupsEl.addEventListener('click', function(e){
+    var b = e.target.closest('.st'); if (!b || b.disabled || !db) return;
+    var id = b.getAttribute('data-id'); if (busy[id]) return;
+    var prev = st[id] || 'todo', next = NEXT[prev]; st[id] = next; busy[id] = true; render();
+    db.collection('items').doc(id).set({ status: next, updatedAt: new Date().toISOString() }).catch(function(err){
+      st[id] = prev; render();
+      if (err && err.code === 'invalid_argument') { canWrite = false; stateEl.textContent = 'Только просмотр: менять отметки может владелец.'; render(); }
+      else { stateEl.textContent = 'Не сохранилось, попробуйте ещё раз'; stateEl.className = 'note warn'; }
+    }).then(function(){ busy[id] = false; });
+  });
+  var timer = setTimeout(function(){ stateEl.textContent = 'Отметки пока не загрузились. Проверьте интернет.'; stateEl.className = 'note warn'; }, 10000);
+  if (!window.claude || !window.claude.use) { clearTimeout(timer); stateEl.textContent = 'Отметки сохраняются только на странице в Claude.'; stateEl.className = 'note warn'; return; }
+  window.claude.use('user').then(function(u){ if (u && u.isOwner && !u.isOwner()) { canWrite = false; render(); stateEl.textContent = 'Только просмотр: менять отметки может владелец.'; } });
+  window.claude.use('db').then(function(d){
+    if (!d) { clearTimeout(timer); stateEl.textContent = 'Хранилище недоступно в этом просмотре. Откройте страницу, войдя в Claude.'; stateEl.className = 'note warn'; return; }
+    db = d;
+    db.collection('items').onSnapshot(function(snap){
+      if (!snap.metadata.fromCache) { clearTimeout(timer); stateEl.textContent = 'Отметки сохраняются автоматически'; stateEl.className = 'note'; }
+      var next = {}; snap.docs.forEach(function(doc){ var x = doc.data(); if (x && LABEL[x.status]) next[doc.id] = x.status; });
+      Object.keys(busy).forEach(function(id){ if (busy[id]) next[id] = st[id]; });
+      st = next; render();
+    }, function(){ clearTimeout(timer); stateEl.textContent = 'Связь с хранилищем прервалась. Обновите страницу.'; stateEl.className = 'note warn'; });
+  });
+})();
+</script>

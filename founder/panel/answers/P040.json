@@ -1,0 +1,13 @@
+{
+  "id": "P040",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I'd burn the 40 free ones, sure, but my guys' nota from the supply shop are scribbled in Indonesian half the time and smudged with cement. If I'm checking every row by hand anyway, I'm not paying $45 a month for the privilege.",
+  "objection": "It will misread the handwritten nota, quantities and prices, and I'll end up fixing the sheet myself, which is worse than just having my admin type it up.",
+  "would_change_my_mind": "If the free 40 come back with the handwritten supply-shop nota right, amounts and items, without me correcting them, I'd pay for the 300 plan.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

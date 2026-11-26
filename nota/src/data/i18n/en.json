@@ -1,0 +1,611 @@
+{
+  "meta": {
+    "title": "Nota — all your team's expenses in one Google Sheet",
+    "description": "Expense tracking in Telegram. Send receipts, invoices and delivery notes to the bot directly, as an archive or in a work group. Nota checks the math, finds duplicates and writes everything into your Google Sheet. Weekly and monthly reports. 30 documents free.",
+    "ogAlt": "Nota: all your team's expenses in one sheet. Sample monthly report: $10,996, 2 duplicates excluded",
+    "og": "/og-v12-en.png"
+  },
+  "start": {
+    "eyebrow": "Expense tracking in Telegram",
+    "title": "All your team's expenses in one sheet",
+    "underline": "in one sheet",
+    "cta": "Start for free",
+    "flow": [
+      {
+        "mark": "1",
+        "title": "Send documents to the bot directly, as an archive or in a work group",
+        "lines": [
+          "Receipts, invoices, handwritten delivery notes: any document with a date, an amount and a description"
+        ]
+      },
+      {
+        "mark": "2",
+        "title": "Nota checks the math and finds duplicates and errors",
+        "lines": [
+          "If something is unreadable, it flags it for review instead of guessing"
+        ]
+      },
+      {
+        "mark": "ok",
+        "title": "Done: it's all in your Google Sheet",
+        "lines": [
+          "The sheet fills in automatically",
+          "You get duplicate and error alerts right away"
+        ]
+      },
+      {
+        "mark": "ok",
+        "title": "Scheduled reports",
+        "lines": [
+          "Every week, every month and on request"
+        ]
+      }
+    ],
+    "ctaLine": "The bot opens in Telegram. 30 documents free, no card needed",
+    "report": {
+      "file": "/screens/report-month-en-1080.webp",
+      "file2x": "/screens/report-month-en-2160.webp",
+      "w": 1080,
+      "h": 1265,
+      "alt": "Sample Nota monthly report: $10,996 spent, $354 awaiting review, 2 duplicates excluded, spending by category and supplier",
+      "caption": "Sample monthly report"
+    },
+    "reportBlock": {
+      "title": "What the report shows",
+      "points": [
+        "Total spending for the period and the number of payments",
+        "Where the money went and who got it: expense categories, top suppliers, large payments",
+        "Possible duplicates and errors in documents: payments worth checking",
+        "How it compares with last week or last month"
+      ]
+    },
+    "tableTitle": "A Google Sheet that keeps itself up to date"
+  },
+  "hero": {
+    "qr": "Or scan with your phone camera"
+  },
+  "nav": [
+    {
+      "href": "#result",
+      "label": "Report"
+    },
+    {
+      "href": "#analytics",
+      "label": "Sheet"
+    },
+    {
+      "href": "#price",
+      "label": "Pricing"
+    },
+    {
+      "href": "#data",
+      "label": "Data"
+    },
+    {
+      "href": "#faq",
+      "label": "FAQ"
+    }
+  ],
+  "tableLead": "Nota creates a sheet and a folder in your Google Drive and moves everything you've sent into them: the first 30 documents are free, the rest are covered by your plan. From then on, the sheet keeps itself up to date: each new receipt becomes a row, and the analytics tabs recalculate. Nota has access only to this sheet and folder.",
+  "analytics": {
+    "screens": [
+      {
+        "id": "payments",
+        "tab": "Payments",
+        "label": "All payments",
+        "short": "One row per document",
+        "file": "/screens/payments-v2.webp",
+        "w": 3217,
+        "h": 1453,
+        "points": [
+          "Each document is a separate row in the sheet",
+          "You spot duplicates and rows worth checking at a glance",
+          "Each row links to the original",
+          "You can set the status, account and Business Unit manually"
+        ],
+        "mobile": {
+          "file": "/screens/payments-mobile-v2.webp",
+          "w": 869,
+          "h": 354
+        }
+      },
+      {
+        "id": "monthly",
+        "tab": "Monthly spend",
+        "label": "Spending by month",
+        "short": "Categories by month",
+        "file": "/screens/monthly-spend-v2.webp",
+        "w": 3035,
+        "h": 1328,
+        "points": [
+          "A summary table of your expenses",
+          "Each category by month and its share",
+          "Monthly spending and the running total",
+          "Filters by Business Unit and status"
+        ],
+        "mobile": {
+          "file": "/screens/monthly-mobile-v2.webp",
+          "w": 749,
+          "h": 416
+        }
+      },
+      {
+        "id": "insights",
+        "tab": "Insights",
+        "label": "What needs attention",
+        "short": "What needs attention",
+        "file": "/screens/insights-v2.webp",
+        "w": 2385,
+        "h": 1499,
+        "points": [
+          "Payments several times larger than usual",
+          "Invoices to pay, by due date",
+          "Duplicates still marked “To pay”",
+          "Spending by employee and counterparty"
+        ],
+        "mobile": {
+          "file": "/screens/insights-mobile-v2.webp",
+          "w": 926,
+          "h": 211
+        }
+      }
+    ],
+    "tabs": [
+      "Payments",
+      "Monthly spend",
+      "Insights",
+      "References"
+    ],
+    "note": ""
+  },
+  "shotAlt": {
+    "payments": "Nota Google Sheet, Payments tab: one row per payment, totals at the top, OK, DBL and Review flags (test data)",
+    "monthly": "Monthly spend tab: spending for the month and the change from last month, each category by month and its share (test data)",
+    "insights": "Insights tab: payments several times larger than usual, invoices to pay by due date, duplicates marked “To pay” (test data)"
+  },
+  "send": {
+    "title": "How to send documents from now on",
+    "items": [
+      {
+        "icon": "archive",
+        "title": "As an archive",
+        "text": "Documents from past months in one file. Is your team on WhatsApp? Export the chat whenever it suits you.",
+        "tag": "Quick start",
+        "tone": "green"
+      },
+      {
+        "icon": "receipt",
+        "title": "Directly to the bot",
+        "text": "Take a photo of a receipt, and a minute later it's in the sheet."
+      },
+      {
+        "icon": "forward",
+        "title": "By forwarding",
+        "text": "From work chats, WhatsApp or email."
+      },
+      {
+        "icon": "chat-people",
+        "title": "In a work group",
+        "text": "Nota picks up only payment documents, doesn't post in the group and marks each recorded receipt with ✍.",
+        "tag": "Optional",
+        "tone": "yellow"
+      }
+    ]
+  },
+  "what": {
+    "title": "What Nota does with each document",
+    "items": [
+      {
+        "icon": "table",
+        "title": "Records it in the sheet",
+        "text": "Each document becomes a row in your Google Sheet: date, amount, supplier, category and other details.",
+        "accent": false
+      },
+      {
+        "icon": "copy",
+        "title": "Finds duplicates",
+        "text": "The same receipt sent by two people or photographed again. Nota flags the duplicate so no invoice gets paid twice.",
+        "accent": false
+      },
+      {
+        "icon": "calc",
+        "title": "Checks the amounts",
+        "text": "Recalculates line items and spots corrections and amounts several times larger than usual.",
+        "accent": false
+      },
+      {
+        "icon": "folder",
+        "title": "Keeps a document archive",
+        "text": "Nota saves each file to a folder in your Google Drive under its row number. No need to scroll through the chat: you open the original from the sheet in one click.",
+        "accent": false
+      },
+      {
+        "icon": "globe",
+        "title": "Works in your currency",
+        "text": "Converts payments in other currencies at the central bank rate on the payment date. You can change the currency at any time.",
+        "accent": false
+      },
+      {
+        "icon": "review",
+        "title": "No silent guessing",
+        "text": "When in doubt, it marks the row Review and gives the reason.",
+        "accent": false
+      }
+    ]
+  },
+  "segments": {
+    "title": "Who it's for",
+    "items": [
+      {
+        "title": "Construction and renovation",
+        "text": "Handwritten delivery notes, transfers to contractors, multiple sites."
+      },
+      {
+        "title": "Villas and property management companies",
+        "text": "Repairs, cleaning and utility bills for each villa."
+      },
+      {
+        "title": "Shops and rentals",
+        "text": "Purchases, spare parts, fuel, payments to technicians."
+      },
+      {
+        "title": "Remote owners",
+        "text": "See your expenses even when you're in another country."
+      },
+      {
+        "title": "Accountants",
+        "text": "All your clients' documents in one sheet, broken down by client."
+      },
+      {
+        "title": "Any other business",
+        "text": "Where expenses are backed by receipts, invoices and delivery notes.",
+        "any": true
+      }
+    ]
+  },
+  "pricing": {
+    "title": "Pricing",
+    "lead": "The first 30 documents are free. After that, you pay per document, not per employee.",
+    "billing": {
+      "label": "Billing period",
+      "opts": [
+        {
+          "v": "month",
+          "lg": "Monthly",
+          "sm": "1 mo"
+        },
+        {
+          "v": "q3",
+          "lg": "3 months",
+          "sm": "3 mo",
+          "save": "−10%"
+        },
+        {
+          "v": "q6",
+          "lg": "6 months",
+          "sm": "6 mo",
+          "save": "−15%"
+        }
+      ]
+    },
+    "common": [
+      "reports",
+      "unlimited team members",
+      "duplicates don't count toward your limit"
+    ],
+    "plans": [
+      {
+        "name": "Start",
+        "vol": "100",
+        "groups": "up to 5",
+        "docs": "Up to 100 documents a month",
+        "who": "One or two projects",
+        "month": {
+          "price": "$19",
+          "unit": "≈ $0.19 per document"
+        },
+        "q3": {
+          "price": "$17",
+          "unit": "≈ $0.17 per document",
+          "total": "$51 for 3 months"
+        },
+        "q6": {
+          "price": "$16",
+          "unit": "≈ $0.16 per document",
+          "total": "$96 for 6 months"
+        },
+        "tag": "land10_price_start",
+        "cta": "Start for free"
+      },
+      {
+        "name": "Growth",
+        "vol": "200",
+        "groups": "up to 10",
+        "docs": "Up to 200 documents a month",
+        "who": "Several projects",
+        "month": {
+          "price": "$35",
+          "unit": "≈ $0.18 per document"
+        },
+        "q3": {
+          "price": "$31",
+          "unit": "≈ $0.16 per document",
+          "total": "$93 for 3 months"
+        },
+        "q6": {
+          "price": "$29",
+          "unit": "≈ $0.15 per document",
+          "total": "$174 for 6 months"
+        },
+        "tag": "land10_price_business",
+        "cta": "Start for free",
+        "highlight": true
+      },
+      {
+        "name": "Scale",
+        "vol": "500",
+        "groups": "unlimited",
+        "docs": "Up to 500 documents a month",
+        "who": "Developers and property managers",
+        "month": {
+          "price": "$79",
+          "unit": "≈ $0.16 per document"
+        },
+        "q3": {
+          "price": "$71",
+          "unit": "≈ $0.14 per document",
+          "total": "$213 for 3 months"
+        },
+        "q6": {
+          "price": "$67",
+          "unit": "≈ $0.13 per document",
+          "total": "$402 for 6 months"
+        },
+        "tag": "land10_price_dev",
+        "cta": "Start for free"
+      },
+      {
+        "name": "Custom",
+        "vol": "500+",
+        "groups": "unlimited",
+        "docs": "Over 500 documents a month",
+        "who": "Accounting system by Axiom Consulting",
+        "custom": "On request",
+        "services": [
+          "Setting up management accounting",
+          "Choosing and implementing a system: CRM, ERP",
+          "Reporting for owners and partners",
+          "Support from the Axiom Consulting team"
+        ],
+        "tag": "land10_price_custom",
+        "cta": "Let's talk",
+        "outline": true
+      }
+    ]
+  },
+  "facts": [
+    {
+      "q": "What counts as a document",
+      "a": "A receipt, invoice or delivery note that becomes a row in the sheet. In a PDF, each page counts. Duplicates and non-payment files don't count. You can buy extra documents beyond your limit."
+    },
+    {
+      "q": "What is a group",
+      "a": "Your team's work chat in Telegram. Each group is its own Business Unit (Project)."
+    },
+    {
+      "q": "How many documents you need",
+      "a": "Building three villas takes about 70 documents a month, so “Start” is enough."
+    },
+    {
+      "q": "Payment",
+      "a": "Visa, Mastercard or cryptocurrency. We don't accept Russian cards yet."
+    }
+  ],
+  "sched": {
+    "title": "When reports arrive",
+    "rows": [
+      [
+        "First",
+        "from your archive or at the 30th document"
+      ],
+      [
+        "Every Monday",
+        "for the week"
+      ],
+      [
+        "On the 1st",
+        "for the month"
+      ],
+      [
+        "Any time",
+        "with the “Report” button"
+      ]
+    ]
+  },
+  "compare": {
+    "title": "An employee sent a delivery note at 9:41. When will it be in the sheet?",
+    "whenLabel": "Delivery note in the sheet",
+    "rows": [
+      "Who enters it in the sheet",
+      "Does your team need a new app?",
+      "Handwritten delivery note",
+      "Where to find the original",
+      "What you pay for"
+    ],
+    "mobileHide": [
+      "Does your team need a new app?",
+      "Where to find the original"
+    ],
+    "options": [
+      {
+        "name": "Nota",
+        "when": "At 9:42",
+        "whenNote": "a minute later, without you",
+        "nota": true,
+        "cells": [
+          [
+            "yes",
+            "Done without you"
+          ],
+          [
+            "yes",
+            "No, they send via Telegram"
+          ],
+          [
+            "yes",
+            "Reads it"
+          ],
+          [
+            "yes",
+            "Link in every row"
+          ],
+          [
+            "yes",
+            "Per document"
+          ]
+        ]
+      },
+      {
+        "name": "Admin with Excel",
+        "when": "On Friday",
+        "whenNote": "when they get around to it",
+        "cells": [
+          [
+            "no",
+            "Admin, every row by hand"
+          ],
+          [
+            "yes",
+            "No"
+          ],
+          [
+            "no",
+            "Admin deciphers it by hand"
+          ],
+          [
+            "no",
+            "Search the chat"
+          ],
+          [
+            "no",
+            "Admin's salary"
+          ]
+        ]
+      },
+      {
+        "name": "Expense app",
+        "short": "App",
+        "when": "When filled in",
+        "whenNote": "the employee enters it",
+        "cells": [
+          [
+            "no",
+            "Employee fills in a form"
+          ],
+          [
+            "no",
+            "Yes: install and sign in"
+          ],
+          [
+            "mid",
+            "Often fixed by hand"
+          ],
+          [
+            "yes",
+            "In the app"
+          ],
+          [
+            "mid",
+            "Per employee"
+          ]
+        ]
+      }
+    ]
+  },
+  "data": {
+    "title": "Your data",
+    "items": [
+      {
+        "icon": "key",
+        "title": "Access to the sheet and folder only",
+        "text": "Nota creates them itself in your Google Drive."
+      },
+      {
+        "icon": "table",
+        "title": "Your documents stay with you",
+        "text": "The sheet and the originals are stored in your Google Drive."
+      },
+      {
+        "icon": "lock",
+        "title": "We keep only fingerprints",
+        "text": "We store only file fingerprints, to find duplicates. We keep documents only while processing them and discard non-payment files right away. We don't train AI on your documents."
+      },
+      {
+        "icon": "trash",
+        "title": "Delete with one command",
+        "text": "We erase document fingerprints and history, disconnect from Google, and the bot leaves all groups. Only your Telegram username and payment records remain. The sheet, folder and documents stay with you."
+      }
+    ],
+    "who": "Nota is built on more than 15 years of Axiom Consulting's experience in financial control for businesses in the CIS and Southeast Asia."
+  },
+  "faq": [
+    {
+      "q": "What documents does Nota read?",
+      "a": "Any payment document: store receipts, bills and invoices, delivery notes (including crumpled and handwritten ones), and screenshots of bank transfers. PDFs and photos, in any language; a multi-page PDF is read page by page. The bot skips non-payment files such as contracts, passports or site photos, and they don't count toward your limit."
+    },
+    {
+      "q": "An invoice and a screenshot of its payment: is that two rows?",
+      "a": "If the screenshot confirms payment of an invoice that's already recorded, Nota asks what to do with it: add it as a separate row or skip it. You can save your choice as the default, and the bot won't ask again."
+    },
+    {
+      "q": "When will I get the first report?",
+      "a": "For an archive of up to 30 documents, in about 15 minutes. The bot tells you right away that the archive is being processed. If you forward receipts one at a time, the bot records them, and the first report arrives on its own after 30 documents. You can also get a report earlier, at any time, with the “Report” button."
+    },
+    {
+      "q": "What if I don't connect Google?",
+      "a": "Without Google, you get only the archive report. The sheet, duplicate alerts and scheduled reports need Google. The bot keeps everything you've sent for 7 days: connect Google within that time, and the archive and any separate files go into the sheet. If you don't connect it, the data is deleted after 7 days, and you keep the report."
+    },
+    {
+      "q": "What happens after the 30 free documents?",
+      "a": "Nota sends a report on the first 30 documents, even if your archive has more. They already show you how the bot reads your receipts and delivery notes. After that, you choose and pay for a plan using the payment button at the top of your sheet. Everything already in the sheet stays in your Google Drive, along with the folder of originals, even if you don't pay."
+    },
+    {
+      "q": "Does Nota read messages in the group?",
+      "a": "No. The bot processes only messages with files and skips text messages. From those files, it takes only payment documents and discards non-payment ones right away. The bot doesn't post in the group. It only marks each recorded receipt with ✍ and tells you about duplicates in a private chat. The group is optional: you can forward receipts to the bot in a private chat."
+    },
+    {
+      "q": "My team uses WhatsApp. Will it work?",
+      "a": "Yes. The bot itself runs in Telegram, but you can export a WhatsApp archive right from your phone: chat → “Export chat”, with media. Send the archive to the bot whenever it suits you, or forward receipts one at a time."
+    },
+    {
+      "q": "I'm an accountant with several clients. How should I use it?",
+      "a": "One plan and one sheet for all of them. Create a Telegram group for each client and forward that client's receipts there: Nota records them under the right client in the Business Unit column. You can download the sheet as Excel or CSV."
+    },
+    {
+      "q": "What language is the sheet in?",
+      "a": "The sheet is in English. The bot speaks Russian, English and Indonesian, and understands documents in any language. It converts payments in other currencies into yours at the central bank rate on the payment date."
+    },
+    {
+      "q": "How does Nota know what's been paid?",
+      "a": "Nota sets the “Paid” status when the document itself confirms payment, such as a store receipt or a payment slip. You mark “To pay” yourself. Invoices to pay appear on the Insights tab by due date."
+    },
+    {
+      "q": "Is this accounting software? Will it work for our accountant?",
+      "a": "It's not accounting software. Nota shows where the money goes and who gets it, and flags duplicates and unusual amounts. Taxes and reporting stay with your accountant, who will find a ready-made sheet with links to the originals useful. You can download it as Excel or CSV and import it into Jurnal, Zoho or another system. There's no direct export yet."
+    },
+    {
+      "q": "What can't Nota see?",
+      "a": "Cash without a receipt, spending with no document, and advances paid to the foreman. Nota doesn't know market prices, but it flags a payment several times larger than usual on the Insights tab."
+    }
+  ],
+  "final": {
+    "title": "Send an archive of your receipts",
+    "lead": "Export your work chat and send the archive to the bot. In 15 minutes, you'll see where the money went and whether there are duplicates. 30 documents free, no card, no sign-up."
+  },
+  "footer": {
+    "terms": "/en/terms",
+    "privacy": "/en/privacy",
+    "refund": "/en/refund",
+    "testData": "The sample report and sheet use test data."
+  }
+}

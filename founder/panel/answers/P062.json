@@ -1,0 +1,13 @@
+{
+  "id": "P062",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd probably add it to the group and burn the 40 free documents, but $19 a month for something my admin already does by hand is hard to justify. The missing receipts at month end are a staff problem, and a bot can't read a receipt nobody sent.",
+  "objection": "It only catches what people actually post in the chat. My real headache is the receipts that never get sent, so I'd be paying monthly and still chasing staff.",
+  "would_change_my_mind": "If the free trial showed it saving my admin several hours at month end, or it chased staff for missing receipts automatically, I'd pay $19, but only if I could cancel any time.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

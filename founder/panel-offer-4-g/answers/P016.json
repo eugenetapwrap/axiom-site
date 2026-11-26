@@ -1,0 +1,13 @@
+{
+  "id": "P016",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd let it run on the free 30, but with receipts landing in my Telegram groups every day that's gone in a week or two, and then I'm likely on $35 or more a month because it charges per receipt. That's another subscription I'd question every month, and I'd rather keep doing it with free tools.",
+  "objection": "It charges per document, so the busier we are the more I pay, and I'm not sure it saves me enough time to be worth another monthly bill I'll be questioning every month.",
+  "would_change_my_mind": "A flat price around $15 a month with no receipt limit, or a full free month, so I can see at month-end whether it actually saved me the hours.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 20,
+  "price_too_expensive": 40
+}

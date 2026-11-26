@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "convenience",
+  "reason": "The receipts are already sitting in our Telegram groups, so 30 free documents with no card costs me nothing to try before month end. If the sheet is clean when my accountant asks, $19 is nothing next to the hours I lose chasing staff for nota.",
+  "objection": "I keep telling myself I could do this with Zoho, Excel or a bot I build myself, and I'm not sure it reads handwritten Indonesian nota and blurry transfer screenshots well enough that I don't end up checking everything again anyway.",
+  "would_change_my_mind": "If the free 30 come back with wrong totals or it misses receipts from the group, I drop it and go back to Excel.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P079",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I'd try the 40 free documents out of curiosity, but I wouldn't pay. My build only throws off a few dozen transfers and receipts a month, and I can wire up n8n with ChatGPT to dump them into a Google Sheet over a weekend.",
+  "objection": "This is a wrapper around OCR plus a spreadsheet. I'd be giving a bot I've never heard of every invoice and bank screenshot from my project, and paying $19 a month for something I could build myself.",
+  "would_change_my_mind": "If the free trial actually caught a duplicate or padded invoice from my contractor that I'd missed, it would pay for itself and I'd stop arguing with myself about building my own.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

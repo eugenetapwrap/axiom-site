@@ -1,0 +1,13 @@
+{
+  "id": "P051",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "convenience",
+  "reason": "My admin is always a week behind on the receipt spreadsheet, and I'm reading the group chat at midnight trying to work out what got spent. If my guys just keep sending photos to the same chat and it lands in a sheet, $45 a month is nothing next to one double-paid supplier invoice.",
+  "objection": "Once the free 40 run out, will it still be reading every handwritten nota from my site guys correctly, or will my admin end up checking every row anyway and we quietly stop paying attention to it?",
+  "would_change_my_mind": "If the free 40 show a lot of misread handwritten nota or missed duplicates, so my admin still has to redo the sheet, I won't pay.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 90,
+  "price_too_expensive": 200
+}

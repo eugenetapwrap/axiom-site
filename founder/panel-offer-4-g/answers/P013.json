@@ -1,0 +1,13 @@
+{
+  "id": "P013",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My admin already types everything into Excel once a week, and I pay her anyway, so another monthly bill for something she half does already is hard to justify. Most of my spend is cash to mechanics and parts shops, and half the time there is only a handwritten nota or nothing at all.",
+  "objection": "Will it actually read a crumpled handwritten bengkel nota or a fuel receipt photo correctly? If my admin still has to check and fix every line, I am paying $19 to do the same work twice, when I could just make Excel or a free bot do it.",
+  "would_change_my_mind": "If the free 30 documents showed it reading our real handwritten mechanic and parts notas correctly, with almost no fixing, and the weekly sheet came out cleaner and on time compared with my admin's.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 25,
+  "price_too_expensive": 45
+}

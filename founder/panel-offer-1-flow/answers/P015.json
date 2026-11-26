@@ -1,0 +1,13 @@
+{
+  "id": "P015",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The month-end chase for missing receipts is a real headache, and the price is nothing to me. But I don't touch receipts myself. I'd forward this to my bookkeeper and maybe hear back in a few weeks. I'm not putting an unknown bot in my site crew's group on my own this week.",
+  "objection": "This is a small new bot. Will it still be running in a year, or will I move the whole team onto it and then have to go back to the old mess when it shuts down? Also, it can't make my guys send the receipts they never send.",
+  "would_change_my_mind": "My bookkeeper runs it on one month of our real receipts and tells me she didn't have to chase anyone, or another contractor in Bali tells me he's used it for a year without problems.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P014",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason": "The money is nothing and the receipt mess is real, especially when I have to show my partner the month. But the only way this saves me time is putting an unknown bot into my work groups, where my crew talks prices, suppliers and client stuff. I am not doing that for a bot I found scrolling.",
+  "reason_code": "trust",
+  "objection": "Who is behind this bot? 'It only sees one sheet and folder' is just what they say. Once it sits in the work group it reads everything my staff write, and I cannot check where that goes.",
+  "would_change_my_mind": "Another Bali business owner I know using it in their own work group, plus a real company name and a plain answer on whether the bot can read normal chat messages or only the receipts.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 120
+}

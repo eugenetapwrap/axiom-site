@@ -1,0 +1,13 @@
+{
+  "id": "P064",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "Catching doubled or re-photographed receipts is exactly my problem with the mechanics, but I'm not letting an unknown bot sign into my Google account and read my work chats. Most of my scooter repairs are cash and handwritten nota anyway, so I'd want proof it reads those before I hand over access.",
+  "objection": "A bot from a company I've never heard of gets into my Google Drive and sits in my staff group reading everything. If it leaks or gets hacked, that's my business records and my staff's messages gone.",
+  "would_change_my_mind": "Letting it write only to one sheet it creates, with no wider Google access, plus seeing it catch a real duplicate from my own old chat history in the free trial.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

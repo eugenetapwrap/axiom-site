@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I pay the contractors by bank transfer myself, so my bank app already lists every payment, and the screenshots are sitting in the group if I need to check one. I might let it eat the 30 free documents out of curiosity, but I would not put a card in for yet another monthly bill.",
+  "objection": "A sheet that flags duplicates or wrong totals does not fix anything. If someone sends me the same invoice twice or pads a bill, that is a people problem, and I deal with it by calling them, not by paying $19 a month for a spreadsheet to tell me.",
+  "would_change_my_mind": "If during the free 30 it caught real money I would otherwise have paid twice or missed on the build, more than a few months of the fee, I would keep it for the length of the project.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 25
+}

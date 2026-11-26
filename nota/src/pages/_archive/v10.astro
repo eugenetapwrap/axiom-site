@@ -1,0 +1,467 @@
+---
+// Версия 10 лендинга (была главной до v11). Тексты: src/data/content-v10.ts.
+// Прежние версии v1–v9 — в src/pages/_archive (папка с «_» не попадает на сайт).
+// Первый экран новый, отчёт на компьютере скользящий. На телефоне цифр шагов нет, внизу закреплённая кнопка.
+// Решения — в founder/landing.md, разделы v7 и v8.
+import Base from '../../layouts/Base.astro';
+import Logo from '../../components/Logo.astro';
+import Icon from '../../components/Icon.astro';
+import ScreenSlot from '../../components/ScreenSlot.astro';
+import MiniReport from '../../components/MiniReport.astro';
+import Pen from '../../components/Pen.astro';
+import { botLink } from '../../data/content';
+import { fmt } from '../../lib/fmt';
+import {
+  meta, cta, nav, hero, result, analytics, send, what, compare, segments, reviews, data, pricing, faq, final, footer, steps, bar, shotAlt,
+} from '../../data/content-v10';
+
+// Карандашное подчёркивание «15 минут» в главном заголовке: режем на «до / слово / после».
+const cut = (text: string, word: string) => { const i = text.indexOf(word); return i < 0 ? [text, '', ''] : [text.slice(0, i), word, text.slice(i + word.length)]; };
+const h1Cut = cut(hero.title, '15\u00a0минут');
+
+// Разметка для поиска и ИИ-ответов: продукт с тарифами и вопросы. Цены — временные, как на странице.
+interface Props { noindex?: boolean }
+const { noindex = false } = Astro.props;
+// Домен — один раз, в astro.config.mjs (site)
+const site = new URL('/', Astro.site).href;
+const jsonld = [
+  { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${site}#website`, name: 'Nota', url: site, inLanguage: 'ru' },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    '@id': `${site}#app`,
+    name: 'Nota',
+    url: site,
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Telegram',
+    inLanguage: ['ru', 'en', 'id'],
+    description: meta.description,
+    image: new URL('/og-v10.png', Astro.site).href,
+    screenshot: new URL(hero.report.file, Astro.site).href,
+    publisher: { '@type': 'Organization', name: 'Axiom Consulting' }, // url и юрлицо — после ответа основателя (аудит 15.11, вопрос 42)
+    // Цена — за месяц; ссылка — на блок цен, а не в бота (переходы из поиска не путаются с нажатиями в ценах)
+    offers: pricing.plans.filter((p) => p.month).map((p) => {
+      const price = p.month!.price.replace('$', '');
+      return {
+        '@type': 'Offer', name: `${p.name}: ${p.docs.toLowerCase()}`, price, priceCurrency: 'USD', url: `${site}#price`,
+        priceSpecification: { '@type': 'UnitPriceSpecification', price, priceCurrency: 'USD', billingDuration: 'P1M', unitCode: 'MON' },
+      };
+    }),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+<Base title={meta.title} description={meta.description} noindex={noindex} og="/og-v10.png" selfFonts>
+  <a class="skip" href="#main">К содержанию</a>
+  <header class="header">
+    <div class="wrap">
+      <a class="logo-link" href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
+      <nav aria-label="Разделы">{nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
+      <a class="btn btn--sm btn--dark" href={botLink('land10_header')}>Открыть в Telegram</a>
+    </div>
+  </header>
+
+  <main class="tight v7 v8 v9 v10" id="main">
+    <div class="story">
+    <!-- 1. Первый экран: архив → отчёт за 15 минут, QR, пример отчёта -->
+    <section class="hero hero2 hero3">
+      <div class="wrap split hero-split">
+        <div class="hero-left">
+          <span class="hero-eyebrow">{hero.eyebrow}</span>
+          <h1>{h1Cut[0]}<Pen u id="h1">{h1Cut[1]}</Pen>{h1Cut[2]}</h1>
+          <p class="lead">{hero.lead}</p>
+          <div class="num-group">
+          <span class="num-dot" aria-hidden="true"><i data-n="1"></i></span>
+          <div class="cta-row cta-row--qr">
+            <a class="btn" href={botLink('land10_hero')}>{cta}</a>
+            <div class="cta-qr">
+              <img src="/screens/qr-bot-v10.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="54" height="54" />
+              <span>{hero.qr}</span>
+            </div>
+          </div>
+          <!-- Под кнопкой — условия; «Кому подходит» убрано: аудиторию называет строка над заголовком, сферы — блок «Для кого» (основатель 15.11) -->
+          <p class="cta-line">{hero.noteShort}</p>
+          <p class="phone-hint">{hero.phoneHint}</p>
+          </div>
+          <!-- «Как выгрузить архив» — служебная ссылка внизу блока (на компьютере — по нижней линии примера отчёта) -->
+          <details class="howto-inline howto-bottom">
+            <summary>{hero.howto.summary}</summary>
+            <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
+          </details>
+        </div>
+        <figure class="hero-report in-flow">
+          <img src={hero.report.file} alt="Пример отчёта Nota по архиву: 96,15 млн рупий, 27 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
+          <figcaption>{hero.report.caption}</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 2. Шаг 2: что покажет отчёт. Объединён с бывшим «Отчёт каждый понедельник»: слева карточка недельного
+         отчёта (на телефоне скрыта — там пример отчёта прямо над блоком), справа что в отчёте и как часто -->
+    <section class="section section--paper num-sec" id="result">
+      <div class="wrap">
+        <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i data-n="2"></i></span>{steps.report.title}</h2>
+        <div class="s2-split">
+          <div class="s2-text">
+            <ul class="check">{steps.report.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
+            <div class="sched">
+              <div class="sched-title">{steps.report.schedule.title}</div>
+              <dl>{steps.report.schedule.rows.map(([when, what]) => <><dt>{when}</dt><dd>{what}</dd></>)}</dl>
+            </div>
+            <div class="cta-row"><a class="btn" href={botLink('land10_result')}>{cta}</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Скользящая картинка отчёта (компьютер): слой поверх первого экрана и шага 2, картинка «липнет» и едет рядом с пунктами -->
+    <div class="story-media" aria-hidden="true">
+      <div class="wrap">
+        <figure class="hero-report story-fig">
+          <img src={hero.report.file} alt="" width={hero.report.w} height={hero.report.h} />
+          <figcaption>{hero.report.caption}</figcaption>
+        </figure>
+      </div>
+    </div>
+    </div>
+
+    <!-- 3. Шаг 3: подключите Google, и таблица будет вестись сама -->
+    <section class="section num-sec" id="analytics">
+      <div class="wrap">
+        <h2><span class="num-dot" aria-hidden="true"><i data-n="3"></i></span>{steps.table.title}</h2>
+        <p class="lead">{steps.table.lead}</p>
+        <div class="an" data-an>
+          <div class="an-pick" role="tablist" aria-label="Листы таблицы">
+            {analytics.screens.map((sc, i) => (
+              <button type="button" role="tab" class="an-btn" id={`an-tab-${sc.id}`} aria-controls={`an-panel-${sc.id}`} aria-selected={i === 0 ? 'true' : 'false'}>
+                <b>{sc.label}</b><small>{sc.tab}</small>
+              </button>
+            ))}
+          </div>
+          {analytics.screens.map((sc, i) => (
+            <div class:list={['an-panel', { on: i === 0 }]} role="tabpanel" id={`an-panel-${sc.id}`} aria-labelledby={`an-tab-${sc.id}`}>
+              <ScreenSlot file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={shotAlt[sc.id] ?? `Лист ${sc.tab} на тестовых данных`} w={sc.w} h={sc.h} mobile={sc.mobile} />
+              <ul class="an-points">{sc.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+        <script is:inline>
+          (function () {
+            var root = document.querySelector('[data-an]');
+            if (!root) return;
+            root.classList.add('js');
+            var tabs = root.querySelectorAll('[role="tab"]');
+            var panels = root.querySelectorAll('[role="tabpanel"]');
+            function show(i) {
+              tabs.forEach(function (t, k) { t.setAttribute('aria-selected', k === i ? 'true' : 'false'); t.tabIndex = k === i ? 0 : -1; });
+              panels.forEach(function (p, k) { p.classList.toggle('on', k === i); });
+            }
+            tabs.forEach(function (t, i) {
+              t.addEventListener('click', function () { show(i); });
+              t.addEventListener('keydown', function (e) {
+                var n;
+                if (e.key === 'ArrowRight') n = (i + 1) % tabs.length;
+                else if (e.key === 'ArrowLeft') n = (i + tabs.length - 1) % tabs.length;
+                else if (e.key === 'Home') n = 0;
+                else if (e.key === 'End') n = tabs.length - 1;
+                else return;
+                e.preventDefault(); show(n); tabs[n].focus();
+              });
+            });
+            show(0);
+          })();
+        </script>
+        {analytics.note && <p class="note">{analytics.note}</p>}
+      </div>
+    </section>
+
+    <!-- 4. Шаг 4: как присылать документы дальше, группа по желанию -->
+    <section class="section section--paper num-sec" id="send">
+      <div class="wrap">
+        <h2 class="h2-gap"><span class="num-dot" aria-hidden="true"><i data-n="4"></i></span>{send.title}</h2>
+        <div class="grid g4" style="--min: 240px">
+          {send.items.map((c) => (
+            <div class="card send-card send-card--row">
+              <div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div>
+              <p>{c.text}</p>
+              {c.tag && <span class:list={['tag', `tag--${c.tone}`]}>{c.tag}</span>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Что Nota делает с каждым документом; цифры (дубли, ошибки в суммах) — строкой в своих пунктах, на одной линии -->
+    <section class="section" id="what">
+      <div class="wrap">
+        <h2 class="h2-gap">{what.title}</h2>
+        <ul class="feat-list">
+          {what.items.map((c) => (
+            <li class:list={{ 'feat--accent': c.accent }}><span class="feat-icon"><Icon name={c.icon} /></span><div><h3>{c.title}</h3><p>{c.text}</p>{c.stat && <p class="feat-stat"><b>{c.stat.value}</b><span>{c.stat.text}<a class="fn" href="#stats-note" aria-label="Откуда эти суммы">*</a></span></p>}</div></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Для кого: после «Что Nota делает», перед ценами (основатель 15.11) -->
+    <section class="section section--paper">
+      <div class="wrap">
+        <!-- «Для кого» + пять сфер и шестая карточка «Любой другой бизнес» (серая полоска), сетка 1 / 3 × 2 (основатель 15.11) -->
+        <h2 class="h2-gap">{segments.title}</h2>
+        <ul class="seg-list">{segments.items.map((c) => <li class:list={{ 'seg-any': c.any }}><h3>{c.title}</h3><p>{c.text}</p></li>)}</ul>
+      </div>
+    </section>
+
+    <!-- Цены сразу после «Что Nota делает» и цифры про дубли; дальше отзывы и «Ваши данные» -->
+    <section class="section" id="price" data-bill="month">
+      <div class="wrap">
+        <div class="price-head">
+          <div>
+            <h2>{pricing.title}</h2>
+            <p class="lead">{pricing.lead}</p>
+          </div>
+          <fieldset class="bill">
+            <legend class="sr-only">{pricing.billing.label}</legend>
+            {pricing.billing.opts.map((o, i) => (
+              <label><input type="radio" name="bill" value={o.v} checked={i === 0} /><span><b class="lg">{o.lg}</b><b class="sm">{o.sm}</b>{o.save && <em>{o.save}</em>}</span></label>
+            ))}
+          </fieldset>
+        </div>
+        <p class="plan-common">Во всех тарифах: {pricing.common.join(', ')}.</p>
+        <!-- Таблица-лестница (только телефон): строка на тариф, строки — плотные блоки, у групп подпись «Группы:» -->
+        <div class="ptab" role="table" aria-label="Тарифы">
+          <div class="ptab-h" role="row">
+            <span role="columnheader">Тариф</span><span role="columnheader">Документов в месяц</span><span role="columnheader">Группы</span><span role="columnheader">Цена</span><span role="columnheader"><span class="sr-only">Действие</span></span>
+          </div>
+          {pricing.plans.map((p) => (
+            <div class:list={['ptab-r', { 'ptab-r--hl': p.highlight, 'ptab-r--custom': p.custom }]} role="row">
+              <div class="ptab-n" role="rowheader"><b>{p.name}</b><span>{p.who}</span></div>
+              <div class="ptab-v" role="cell"><b>{p.vol}</b> <small>документов<span class="m-only"> в месяц</span></small></div>
+              <div class="ptab-g" role="cell"><span class="m-only">Группы: </span>{p.groups}</div>
+              <div class="ptab-p" role="cell">
+                {p.custom ? <b class="ptab-custom">{p.custom}</b> : (
+                  <>
+                    <b><span class="pm">{p.month!.price}</span><span class="p3">{p.q3!.price}</span><span class="p6">{p.q6!.price}</span></b><small> / мес</small>
+                    <span class="ptab-tot"><span class="p3">{p.q3!.total}</span><span class="p6">{p.q6!.total}</span></span>
+                  </>
+                )}
+              </div>
+              <div class="ptab-a" role="cell"><a class:list={['btn', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}<span class="sr-only"> — тариф {p.name}</span></a></div>
+            </div>
+          ))}
+        </div>
+        <!-- Карточки (компьютер и планшет): главная цифра — объём, список «что входит», меняется только строка про группы -->
+        <div class="pa">
+          {pricing.plans.map((p) => (
+            <div class:list={['pa-c', { 'pa-c--hl': p.highlight, 'pa-c--dk': p.custom }]}>
+              <h3 class="pa-n">{p.name}</h3>
+              <div class="pa-w">{p.who}</div>
+              <div class="pa-v"><b>{p.custom ? 'Более 500' : p.vol}</b><span>документов в месяц</span></div>
+              {p.custom ? <div class="pa-p pa-p--custom">{p.custom}</div> : (
+                <div class="pa-p">
+                  <span class="pm">{p.month!.price}</span><span class="p3">{p.q3!.price}</span><span class="p6">{p.q6!.price}</span><small> / мес</small>
+                  <span class="pa-tot"><span class="p3">{p.q3!.total}</span><span class="p6">{p.q6!.total}</span></span>
+                </div>
+              )}
+              <ul class="pa-l">
+                {(p.services ?? [`Группы: ${p.groups}`, ...pricing.common.map((c) => c[0].toUpperCase() + c.slice(1))]).map((f) => <li><Icon name="check" size={18} />{f}</li>)}
+              </ul>
+              <a class:list={['btn', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}<span class="sr-only"> — тариф {p.name}</span></a>
+            </div>
+          ))}
+        </div>
+        <dl class="plan-facts3 g4">
+          {pricing.facts.map((f) => <div><dt>{f.q}</dt><dd>{f.a}</dd></div>)}
+        </dl>
+        <script is:inline>
+          (function () {
+            var sec = document.getElementById('price');
+            if (!sec) return;
+            sec.querySelectorAll('input[name="bill"]').forEach(function (r) {
+              r.addEventListener('change', function () { if (r.checked) sec.setAttribute('data-bill', r.value); });
+            });
+          })();
+        </script>
+      </div>
+    </section>
+
+    <!-- После цен — по силе для продажи: отзывы → сравнение → ваши данные → вопросы → для кого -->
+    <!-- Отзывы: тексты основателя (15.11), порядок как у основателя — первым реальный кейс со сговором; лентой -->
+    <section class="section section--paper" id="reviews">
+      <div class="wrap">
+        <!-- Лента отзывов (основатель 15.11): 3 на экране компьютера, 2 на планшете, 1 с краем следующего на телефоне; листается свайпом и стрелками, без автопрокрутки -->
+        <div class="rv-head h2-gap">
+          <h2>{reviews.title}</h2>
+          <div class="rv-nav">
+            <button class="rv-btn" type="button" data-dir="-1" aria-controls="rv-track" aria-label="Предыдущий отзыв"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M14.5 6l-6 6 6 6" /></svg></button>
+            <button class="rv-btn" type="button" data-dir="1" aria-controls="rv-track" aria-label="Следующий отзыв"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9.5 6l6 6-6 6" /></svg></button>
+          </div>
+        </div>
+        <div class="rv-track" id="rv-track" tabindex="0" role="region" aria-label="Отзывы, листаются влево и вправо">
+          {reviews.items.map((r) => (
+            <figure class:list={['review', { 'review--draft': r.draft }]}>
+              {r.draft && <p class="rv-draft"><mark class="todo">Черновик — найти клиента</mark></p>}
+              <blockquote set:html={fmt(r.text)} />
+              <figcaption>
+                <span class="rv-ava" aria-hidden="true">{r.photo ? <img src={r.photo} alt="" width="48" height="48" loading="lazy" /> : r.draft ? '?' : r.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}</span>
+                <span class="rv-who"><b set:html={fmt(r.name)} /><span set:html={fmt(r.role)} /></span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <script is:inline>
+          // Стрелки листают ленту на одну карточку; у краёв стрелка гаснет
+          (function () {
+            var t = document.getElementById('rv-track'); if (!t) return;
+            var btns = document.querySelectorAll('.rv-btn');
+            var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            function step() { var c = t.querySelector('.review'); return c ? c.getBoundingClientRect().width + parseFloat(getComputedStyle(t).columnGap || 0) : t.clientWidth; }
+            function sync() {
+              var max = t.scrollWidth - t.clientWidth - 2;
+              btns[0].setAttribute('aria-disabled', String(t.scrollLeft <= 2)); btns[1].setAttribute('aria-disabled', String(t.scrollLeft >= max)); /* не disabled: иначе фокус слетает на body */
+              document.querySelector('.rv-nav').hidden = max <= 0;
+            }
+            btns.forEach(function (b) { b.addEventListener('click', function () { if (b.getAttribute('aria-disabled') === 'true') return; t.scrollBy({ left: step() * Number(b.dataset.dir), behavior: calm ? 'auto' : 'smooth' }); }); });
+            t.addEventListener('scroll', sync, { passive: true }); window.addEventListener('resize', sync); sync();
+          })();
+        </script>
+      </div>
+    </section>
+
+    <!-- 6. Сравнение: накладная в 9:41 -->
+    <section class="section">
+      <div class="wrap">
+        <h2 class="cmp-title">{compare.title}</h2>
+        <div class="cmp" role="table" aria-label="Сравнение: Nota, админ с Excel, приложение для расходов">
+          <div class="cmp-row cmp-head" role="row">
+            <div class="cmp-q" role="columnheader"><span class="sr-only">Вопрос</span></div>
+            {compare.options.map((o) => (
+              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="columnheader">{o.nota ? <Logo height={24} /> : o.name}</div>
+            ))}
+          </div>
+          <div class="cmp-row cmp-when" role="row">
+            <div class="cmp-q" role="rowheader">{compare.whenLabel}</div>
+            {compare.options.map((o) => (
+              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="cell">
+                <span class="cmp-who">{o.short ?? o.name}</span><b>{o.when}</b><small>{o.whenNote}</small>
+              </div>
+            ))}
+          </div>
+          {compare.rows.map((q, i) => (
+            <div class:list={['cmp-row', { 'cmp-row--m-hide': compare.mobileHide.includes(q) }]} role="row">
+              <div class="cmp-q" role="rowheader">{q}</div>
+              {compare.options.map((o) => {
+                const [m, t] = o.cells[i];
+                return (
+                  <div class:list={['cmp-c', `m-${m}`, { 'cmp-c--nota': o.nota }]} role="cell">
+                    <span class="vs-mark"><Icon name={m === 'yes' ? 'check' : m === 'no' ? 'x' : 'minus'} size={16} /><span class="sr-only">{m === 'yes' ? 'Плюс.' : m === 'no' ? 'Минус.' : 'Отчасти.'}</span></span>
+                    <span class="cmp-who">{o.short ?? o.name}</span>
+                    <span class="cmp-t">{t}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Ваши данные и кто делает: снимают страх пустить бота в чаты и Google -->
+    <section class="section section--paper data-sec" id="data">
+      <div class="wrap">
+        <h2 class="h2-gap">{data.title}</h2>
+        <div class="grid g4" style="--min: 240px; gap: 36px">
+          {data.items.map((d) => (
+            <div class="dark-item"><Icon name={d.icon} /><div><h3>{d.title}</h3><p set:html={fmt(d.text)} /></div></div>
+          ))}
+        </div>
+        <div class="who"><span class="who-label">Кто делает</span><p>{data.who}</p></div>
+      </div>
+    </section>
+
+    <!-- 12. Вопросы -->
+    <section class="section" id="faq">
+      <div class="wrap">
+        <h2 class="h2-gap">Вопросы</h2>
+        <div class="faq">{faq.map((f) => <details><summary>{f.q}</summary><p set:html={fmt(f.a)} /></details>)}</div>
+      </div>
+    </section>
+
+    <!-- Финал -->
+    <section class="section--dark final">
+      <div class="wrap">
+        <h2>{final.title}</h2>
+        <p>{final.lead}</p>
+        <div class="final-cta">
+          <a class="btn" href={botLink('land10_final')}>{cta}</a>
+          <div class="final-qr">
+            <img src="/screens/qr-bot-v10-final.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
+            <span>Или наведите камеру телефона</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Телефон: кнопка внизу экрана — только когда первая кнопка уехала вверх и на экране нет ни одной другой оранжевой кнопки
+       (шаг 2, тарифы, финал), чтобы две одинаковые кнопки не стояли рядом -->
+  <aside aria-label="Быстрый старт"><div class="sticky-cta" id="sticky-cta"><a class="btn" href={botLink('land10_sticky')}>{cta}</a></div></aside>
+  <script is:inline>
+    (function () {
+      var bar = document.getElementById('sticky-cta'), heroBtn = document.querySelector('.hero .btn');
+      var others = [].slice.call(document.querySelectorAll('main .btn')).filter(function (b) { return b !== heroBtn; });
+      if (!bar || !heroBtn || !window.IntersectionObserver) return;
+      var heroOut = false, visible = new Set();
+      function upd() { bar.classList.toggle('on', heroOut && visible.size === 0); }
+      new IntersectionObserver(function (e) { heroOut = !e[0].isIntersecting && e[0].boundingClientRect.top < 0; upd(); }).observe(heroBtn);
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) visible.add(e.target); else visible.delete(e.target); });
+        upd();
+      }, { rootMargin: '0px 0px 90px 0px' });
+      others.forEach(function (b) { io.observe(b); });
+    })();
+  </script>
+  <footer class="footer">
+    <div class="wrap">
+      <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
+      <nav aria-label="Документы">
+        <a href={footer.terms}>Пользовательское соглашение <mark class="todo">ссылка</mark></a>
+        <a href={footer.privacy}>Политика конфиденциальности <mark class="todo">ссылка</mark></a>
+        <a href={botLink('land10_support')}>Поддержка в боте</a>
+      </nav>
+      <div class="op">{footer.operator} · © 2026</div>
+      <p class="foot-note">{footer.testData}<br /><span id="stats-note">*&nbsp;{footer.statsNote}</span></p>
+    </div>
+  </footer>
+  <script is:inline>
+    // Пунктир от цифры к цифре по левой полосе (только на компьютере; на телефоне цифры стоят у заголовков).
+    (function () {
+      var NS = 'http://www.w3.org/2000/svg', layer, timer;
+      function box(e) { var r = e.getBoundingClientRect(); return { t: r.top + scrollY, b: r.bottom + scrollY, cx: (r.left + r.right) / 2 + scrollX }; }
+      function add(d, cls) { var p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); p.setAttribute('class', cls); layer.appendChild(p); }
+      function draw() {
+        if (!layer) { layer = document.createElementNS(NS, 'svg'); layer.setAttribute('class', 'pen-layer'); layer.setAttribute('aria-hidden', 'true'); document.body.appendChild(layer); }
+        layer.innerHTML = ''; layer.setAttribute('width', 0); layer.setAttribute('height', 0);
+        if (innerWidth < 900) return;
+        layer.setAttribute('width', document.documentElement.scrollWidth); layer.setAttribute('height', document.documentElement.scrollHeight);
+        var dots = [].slice.call(document.querySelectorAll('.num-dot i')).map(box);
+        dots.forEach(function (d, i) {
+          var n = dots[i + 1]; if (!n) return;
+          var y1 = d.b + 8, y2 = n.t - 10;
+          add('M' + d.cx + ' ' + y1 + ' L' + d.cx + ' ' + y2, 'num-line');
+          add('M' + (d.cx - 6) + ' ' + (y2 - 8) + ' L' + d.cx + ' ' + y2 + ' L' + (d.cx + 6) + ' ' + (y2 - 8), 'num-head');
+        });
+      }
+      function later() { clearTimeout(timer); timer = setTimeout(draw, 120); }
+      window.addEventListener('resize', later);
+      if (window.ResizeObserver) new ResizeObserver(later).observe(document.body);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+      window.addEventListener('load', draw);
+    })();
+  </script>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+</Base>

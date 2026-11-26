@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Axiom — вариант 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Inter:wght@400;500;600&display=swap&subset=cyrillic,cyrillic-ext">
+<style>
+/* Вариант 5: спокойная деловая вёрстка в цветах Axiom. Белый фон, мягкие серые секции, один зелёный акцент, крупная типографика без украшений */
+:root {
+  color-scheme: light;
+  --green: #035746;
+  --green-hover: #024537;
+  --head: #13302A;
+  --ink: #252B29;
+  --muted: #5B6461;
+  --soft: #F4F6F5;
+  --tint: #E6F0ED;
+  --line: #DFE5E2;
+  --white: #FFFFFF;
+  --ph: #ECEDEC;
+  --font-head: "Montserrat", "Segoe UI", Arial, sans-serif;
+  --font: "Inter", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --wrap: 1160px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--white); color: var(--ink); font: 400 17px/1.65 var(--font); -webkit-font-smoothing: antialiased; }
+img, svg { max-width: 100%; display: block; }
+h1, h2, h3, p, ul, ol, dl, figure { margin: 0; }
+h1, h2, h3 { font-family: var(--font-head); color: var(--head); text-wrap: balance; letter-spacing: -0.01em; }
+a { color: var(--green); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.band { padding-block: 104px; }
+.band.soft { background: var(--soft); }
+.kicker { font: 600 13px/1.4 var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+.h2 { font-size: clamp(28px, 3.2vw, 40px); line-height: 1.15; font-weight: 700; }
+.lead { font-size: 19px; line-height: 1.6; color: var(--muted); max-width: 60ch; }
+.head { display: grid; gap: 16px; margin-bottom: 56px; max-width: 760px; }
+.ph { display: inline-block; background: var(--ph); border: 1px dashed #B4B8B6; color: #6E7472; border-radius: 6px; padding: 0 8px; font-size: 0.92em; }
+.btn { display: inline-flex; align-items: center; gap: 10px; font: 600 16px/1 var(--font); padding: 17px 28px; border-radius: 12px; text-decoration: none; border: 1.5px solid var(--green); cursor: pointer; transition: background .15s, color .15s; }
+.btn.primary { background: var(--green); color: #FFFFFF; }
+.btn.primary:hover { background: var(--green-hover); border-color: var(--green-hover); }
+.btn.quiet { color: var(--green); background: transparent; }
+.btn.quiet:hover { background: var(--tint); }
+
+/* Шапка */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: #FFFFFF; z-index: 21; }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(255,255,255,0.97); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 74px; }
+.logo { display: inline-flex; align-items: flex-end; gap: 6px; text-decoration: none; color: var(--green); }
+.logo b { font: 600 28px/1 var(--font-head); letter-spacing: 0.02em; }
+.logo small { font: 500 11px/1 var(--font-head); letter-spacing: 0.16em; margin-bottom: 17px; display: inline-flex; align-items: center; gap: 4px; }
+.logo small::before { content: ""; width: 6px; height: 6px; background: currentColor; }
+.nav { display: flex; align-items: center; gap: 32px; }
+.nav a { color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 500; }
+.nav a:hover { color: var(--green); }
+.nav .lang { font-size: 13px; color: var(--muted); }
+.nav .btn { padding: 12px 20px; font-size: 14px; }
+.burger { display: none; background: none; border: 1px solid var(--line); border-radius: 10px; padding: 9px 14px; font: 600 14px var(--font); color: var(--head); }
+
+/* Первый экран */
+.hero { padding-block: 96px 96px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); gap: 56px; align-items: center; }
+.hero h1 { font-size: clamp(34px, 4.2vw, 54px); line-height: 1.08; font-weight: 700; max-width: 16ch; }
+/* Круг полного цикла */
+.ring { position: relative; width: 100%; max-width: 560px; aspect-ratio: 560 / 420; margin-left: auto; }
+.ring svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.ring .track { fill: none; stroke: #035746; stroke-opacity: 0.18; stroke-width: 2; }
+.ring .arc { fill: none; stroke: #035746; stroke-width: 2; }
+.ring .core { fill: #E6F0ED; }
+.ring .node { fill: #FFFFFF; stroke: #035746; stroke-width: 2; }
+.ring .num { font: 700 14px "Montserrat", Arial, sans-serif; fill: #035746; }
+.ring .ctext { font: 700 15px "Montserrat", Arial, sans-serif; fill: #13302A; }
+.ring .csub { font: 400 12px "Inter", Arial, sans-serif; fill: #5B6461; }
+.stage { position: absolute; display: grid; gap: 3px; text-decoration: none; color: var(--ink); }
+.stage b { font: 600 15px/1.3 var(--font-head); color: var(--head); transition: color .15s; }
+.stage span { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.stage:hover b, .stage:focus-visible b { color: var(--green); }
+.stage.n { left: 50%; bottom: calc(78.57% + 28px); transform: translateX(-50%); width: 60%; text-align: center; }
+.stage.s { left: 50%; top: calc(78.57% + 28px); transform: translateX(-50%); width: 60%; text-align: center; }
+.stage.e { left: calc(71.43% + 30px); top: 50%; transform: translateY(-50%); width: calc(28.57% - 30px); }
+.stage.w { right: calc(71.43% + 30px); top: 50%; transform: translateY(-50%); width: calc(28.57% - 30px); text-align: right; }
+@media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; } .ring { display: none; } }
+.hero h1 span { color: var(--green); }
+.hero .lead { margin-top: 28px; font-size: 21px; max-width: 46ch; }
+.hero .cta { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 14px; }
+.facts { margin-top: 88px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.facts div { padding: 26px 24px 0 0; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.facts div + div { padding-left: 24px; border-left: 1px solid var(--line); }
+.facts b { font: 700 30px/1.1 var(--font-head); color: var(--head); font-variant-numeric: tabular-nums; }
+.facts span { font-size: 15px; color: var(--muted); }
+
+/* Полный цикл */
+.cycle { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; position: relative; padding: 0; list-style: none; }
+.cycle::before { content: ""; position: absolute; left: 0; right: 0; top: 23px; height: 2px; background: var(--green); opacity: 0.25; }
+.cycle li { position: relative; padding-right: 28px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.cycle .node { width: 48px; height: 48px; border-radius: 50%; background: var(--white); border: 2px solid var(--green); display: grid; place-items: center; font: 700 15px/1 var(--font-head); color: var(--green); position: relative; z-index: 1; }
+.cycle h3 { font-size: 20px; line-height: 1.3; margin-top: 8px; }
+.cycle p { font-size: 16px; color: var(--muted); }
+.cycle .links { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 14px; font-weight: 500; }
+.cycle .links a { text-decoration: none; }
+.cycle .links a:hover { text-decoration: underline; }
+.cycle-foot { margin-top: 64px; padding: 32px 36px; background: var(--tint); border-radius: 16px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: center; }
+.cycle-foot p { font-size: 18px; color: var(--head); max-width: 70ch; }
+
+/* Услуги */
+.services { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.svc { background: var(--white); border: 1px solid var(--line); border-radius: 18px; padding: 36px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 18px; min-width: 0; transition: border-color .15s, box-shadow .15s; }
+.svc:hover { border-color: var(--green); box-shadow: 0 10px 30px rgba(19,48,42,0.06); }
+.svc h3 { font-size: 23px; line-height: 1.25; }
+.svc .for { font-size: 14px; color: var(--muted); font-weight: 500; }
+.svc dl { display: grid; gap: 16px; align-content: start; }
+.svc dt { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+.svc dd { margin: 6px 0 0; font-size: 16px; }
+.svc .go { font-weight: 600; text-decoration: none; display: inline-flex; gap: 8px; align-items: center; font-size: 15px; }
+.svc .go:hover { text-decoration: underline; }
+.svc.product { background: var(--head); border-color: var(--head); color: #D6E2DE; }
+.svc.product h3 { color: #FFFFFF; }
+.svc.product .for { color: #A9BFB9; }
+.svc.product dt { color: #8FCAB8; }
+.svc.product .go { color: #FFFFFF; }
+
+/* Кейсы */
+.cases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.case { border-top: 2px solid var(--green); padding-top: 28px; display: grid; gap: 18px; align-content: start; min-width: 0; }
+.case .tag { font-size: 13px; color: var(--muted); font-weight: 500; }
+.case h3 { font-size: 22px; }
+.case p { font-size: 16px; }
+.case p b { color: var(--head); font-weight: 600; }
+.note { margin-top: 32px; font-size: 14px; color: var(--muted); }
+
+/* Команда */
+.team { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+.person { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.photo { aspect-ratio: 1 / 1; border-radius: 16px; background: var(--ph); border: 1px dashed #B4B8B6; display: grid; place-items: end center; overflow: hidden; max-width: 100%; }
+.photo svg { width: 64%; }
+.person b { color: var(--head); font-weight: 600; }
+.person span { font-size: 14px; color: var(--muted); }
+.quotes { margin-top: 64px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.quote { background: var(--white); border-radius: 16px; padding: 32px; display: grid; gap: 16px; min-width: 0; }
+.quote p { font-size: 18px; color: var(--head); }
+
+/* Форма */
+.req { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 64px; align-items: start; }
+.contacts { margin-top: 32px; display: grid; gap: 12px; font-size: 15px; }
+.contacts div { display: grid; grid-template-columns: 100px 1fr; gap: 12px; }
+.contacts span { color: var(--muted); }
+form { display: grid; gap: 18px; background: var(--white); border: 1px solid var(--line); border-radius: 18px; padding: 36px; }
+.field { display: grid; gap: 8px; }
+.field label { font-size: 14px; font-weight: 600; color: var(--head); }
+.field small { font-weight: 400; color: var(--muted); }
+input, select, textarea { font: 400 16px/1.4 var(--font); color: var(--ink); background: var(--white); border: 1px solid #C8CFCC; border-radius: 10px; padding: 13px 14px; width: 100%; }
+textarea { min-height: 112px; resize: vertical; }
+.row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.form-note { font-size: 13px; color: var(--muted); }
+.form-done { font-size: 15px; color: var(--green); font-weight: 600; }
+
+footer { border-top: 1px solid var(--line); padding-block: 44px; font-size: 14px; color: var(--muted); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; align-items: center; }
+footer nav { display: flex; flex-wrap: wrap; gap: 10px 24px; }
+footer a { color: var(--ink); text-decoration: none; }
+
+.back { position: fixed; left: calc(16px + env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 30; background: var(--white); border: 1px solid var(--line); color: var(--muted); font-size: 12px; font-weight: 500; text-decoration: none; padding: 7px 12px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+@media (max-width: 960px) {
+  .nav { display: none; }
+  .burger { display: inline-block; }
+  .nav.open { display: grid; position: absolute; top: 74px; left: 0; right: 0; background: #FFFFFF; border-bottom: 1px solid var(--line); padding: 18px max(16px, env(safe-area-inset-left, 0px)) 24px; gap: 16px; }
+  .cycle { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
+  .cycle::before { display: none; }
+  .services, .cases, .quotes, .req { grid-template-columns: 1fr; }
+  .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .band { padding-block: 80px; }
+}
+@media (max-width: 600px) {
+  .hero { padding-block: 64px 64px; }
+  .hero .lead { font-size: 18px; }
+  .facts { grid-template-columns: 1fr; margin-top: 56px; }
+  .facts div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); margin-top: 20px; }
+  .cycle { grid-template-columns: 1fr; row-gap: 36px; }
+  .cycle li { padding-right: 0; }
+  .cycle-foot { grid-template-columns: 1fr; padding: 26px 22px; }
+  .svc { padding: 28px 22px; }
+  .row2 { grid-template-columns: 1fr; }
+  form { padding: 24px 20px; }
+  .contacts div { grid-template-columns: 1fr; gap: 0; }
+  .band { padding-block: 64px; }
+  .head { margin-bottom: 40px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Axiom Consulting, на главную"><b>Axiom</b><small>consulting</small></a>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="nav">Меню</button>
+    <nav class="nav" id="nav" aria-label="Разделы">
+      <a href="#cycle">Подход</a>
+      <a href="#services">Услуги</a>
+      <a href="#cases">Кейсы</a>
+      <a href="#team">Команда</a>
+      <span class="lang">RU · EN</span>
+      <a class="btn primary" href="#request">Связаться</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <p class="kicker">Axiom Consulting</p>
+          <h1 style="margin-top:20px">Финансовый консалтинг для <span>девелоперов и строительных компаний</span></h1>
+          <p class="lead">Ведём финансы проекта на всех стадиях: от финансовой модели до отчётности перед собственником и инвесторами.</p>
+          <div class="cta">
+            <a class="btn primary" href="#request">Обсудить проект</a>
+            <a class="btn quiet" href="#services">Услуги</a>
+          </div>
+        </div>
+        <div class="ring" role="group" aria-label="Финансы проекта полного цикла">
+          <svg viewBox="0 0 560 420" aria-hidden="true">
+            <defs><marker id="ring-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#035746"/></marker></defs>
+            <circle class="track" cx="280" cy="210" r="120"/>
+            <path class="arc" d="M 304.9 92.6 A 120 120 0 0 1 397.4 185.1" marker-end="url(#ring-arrow)"/><path class="arc" d="M 397.4 234.9 A 120 120 0 0 1 304.9 327.4" marker-end="url(#ring-arrow)"/><path class="arc" d="M 255.1 327.4 A 120 120 0 0 1 162.6 234.9" marker-end="url(#ring-arrow)"/><path class="arc" d="M 162.6 185.1 A 120 120 0 0 1 255.1 92.6" marker-end="url(#ring-arrow)"/>
+            <circle class="core" cx="280" cy="210" r="78"/>
+            <text class="ctext" x="280" y="196" text-anchor="middle">Финансы проекта</text>
+            <text class="ctext" x="280" y="216" text-anchor="middle">полного цикла</text>
+            <text class="csub" x="280" y="240" text-anchor="middle">одна команда</text>
+            <circle class="node" cx="280.0" cy="90.0" r="18"/><text class="num" x="280.0" y="90.0" text-anchor="middle" dominant-baseline="central">1</text><circle class="node" cx="400.0" cy="210.0" r="18"/><text class="num" x="400.0" y="210.0" text-anchor="middle" dominant-baseline="central">2</text><circle class="node" cx="280.0" cy="330.0" r="18"/><text class="num" x="280.0" y="330.0" text-anchor="middle" dominant-baseline="central">3</text><circle class="node" cx="160.0" cy="210.0" r="18"/><text class="num" x="160.0" y="210.0" text-anchor="middle" dominant-baseline="central">4</text>
+          </svg>
+                    <a class="stage n" href="v5-model.html"><b>Финансовая модель</b><span>расчёт и проверка проекта</span></a>
+          <a class="stage e" href="#svc-invest"><b>Инвесторы и банки</b><span>расчёты и материалы для финансирования</span></a>
+          <a class="stage s" href="v5-control.html"><b>Управление финансами</b><span>бюджет, платежи, финансовый директор</span></a>
+          <a class="stage w" href="v5-control.html"><b>Отчётность</b><span>план-факт и отчёты собственнику</span></a>
+        </div>
+      </div>
+      <div class="facts">
+        <div><b>15+ лет</b><span>в финансах девелоперского бизнеса</span></div>
+        <div><b>15+ проектов</b><span>финансовые модели и аналитика для девелоперов</span></div>
+        <div><b>13 проектов</b><span>работают в нашей системе контроля платежей</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band soft" id="cycle" aria-labelledby="cycle-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Подход</p>
+        <h2 class="h2" id="cycle-h">Финансы проекта полного цикла</h2>
+        <p class="lead">Одна команда отвечает за финансы проекта от первого расчёта до регулярной отчётности. Модель становится бюджетом, бюджет — основой контроля платежей, а отчётность показывает, как проект идёт относительно плана.</p>
+      </div>
+      <ol class="cycle">
+        <li>
+          <span class="node" aria-hidden="true">1</span>
+          <h3>Финансовая модель</h3>
+          <p>Рассчитываем проект: бюджет, график, денежный поток, доходность и варианты концепции.</p>
+          <div class="links"><a href="v5-model.html">Финансовая модель →</a><a href="#svc-audit">Аудит модели →</a></div>
+        </li>
+        <li>
+          <span class="node" aria-hidden="true">2</span>
+          <h3>Инвесторы и банки</h3>
+          <p>Готовим расчёты и материалы для инвесторов и банков, сопровождаем обсуждение финансирования.</p>
+          <div class="links"><a href="#svc-invest">Инвестиционный анализ →</a></div>
+        </li>
+        <li>
+          <span class="node" aria-hidden="true">3</span>
+          <h3>Управление финансами</h3>
+          <p>Выстраиваем бюджетный контроль и согласование платежей, при необходимости берём на себя функцию финансового директора.</p>
+          <div class="links"><a href="v5-control.html">Контроль платежей →</a><a href="#svc-cfo">Финансовый директор →</a></div>
+        </li>
+        <li>
+          <span class="node" aria-hidden="true">4</span>
+          <h3>Отчётность</h3>
+          <p>План-факт, движение денежных средств и задолженность — в регулярных отчётах для собственника и инвесторов.</p>
+          <div class="links"><a href="v5-control.html">Управленческий учёт →</a></div>
+        </li>
+      </ol>
+      <div class="cycle-foot">
+        <p>Можно начать с любого этапа: заказать только модель, только проверку или только систему контроля платежей.</p>
+        <a class="btn primary" href="#request">Обсудить задачу</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="services" aria-labelledby="svc-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Услуги</p>
+        <h2 class="h2" id="svc-h">Какие задачи мы решаем</h2>
+      </div>
+      <div class="services">
+        <article class="svc" id="svc-model">
+          <h3>Финансовая модель проекта</h3>
+          <p class="for">Девелоперам и инвесторам</p>
+          <dl>
+            <div><dt>Задача</dt><dd>Понять, сколько проект заработает, сколько денег потребуется и когда, и обосновать это перед банком и инвесторами.</dd></div>
+            <div><dt>Что делаем</dt><dd>Строим модель проекта: бюджет, график реализации, денежный поток, показатели доходности и расчёты для инвестора.</dd></div>
+          </dl>
+          <a class="go" href="v5-model.html">Подробнее <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="svc" id="svc-audit">
+          <h3>Аудит финансовой модели</h3>
+          <p class="for">Собственникам и инвесторам перед решением</p>
+          <dl>
+            <div><dt>Задача</dt><dd>Решение принимается по модели, которую готовил подрядчик, агент или прежний финансист. Нужно знать, можно ли ей доверять.</dd></div>
+            <div><dt>Что делаем</dt><dd>Независимо проверяем формулы, логику расчёта и показатели. Показываем, какие ошибки влияют на результат и в каком порядке их исправить.</dd></div>
+          </dl>
+          <a class="go" href="#request">Подробнее <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="svc" id="svc-control">
+          <h3>Контроль платежей и управленческий учёт</h3>
+          <p class="for">Девелоперам и генподрядчикам</p>
+          <dl>
+            <div><dt>Задача</dt><dd>Платежи согласуются в мессенджерах, счета теряются и оплачиваются дважды, собственник не видит полной картины по проектам.</dd></div>
+            <div><dt>Что делаем</dt><dd>Внедряем единую систему: заявки, маршруты согласования, контроль дубликатов, план-факт и отчётность в реальном времени.</dd></div>
+          </dl>
+          <a class="go" href="v5-control.html">Подробнее <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="svc" id="svc-invest">
+          <h3>Инвестиционный анализ</h3>
+          <p class="for">Собственникам, инвесторам и покупателям</p>
+          <dl>
+            <div><dt>Задача</dt><dd>Выбрать стратегию — продавать объекты или сдавать в аренду, понять риски и условия выхода из проекта.</dd></div>
+            <div><dt>Что делаем</dt><dd>Сравниваем стратегии и сценарии, оцениваем чувствительность и считаем доходность для инвестора и покупателей.</dd></div>
+          </dl>
+          <a class="go" href="#request">Подробнее <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="svc" id="svc-cfo">
+          <h3>Финансовый директор на аутсорсе</h3>
+          <p class="for">Строительным и IT-компаниям</p>
+          <dl>
+            <div><dt>Задача</dt><dd>Компании нужен опытный руководитель финансов, но штатный финансовый директор пока избыточен.</dd></div>
+            <div><dt>Что делаем</dt><dd>Берём на себя бюджет, платёжный календарь, план-факт, отчётность для собственников и работу с банками.</dd></div>
+          </dl>
+          <a class="go" href="#request">Подробнее <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="svc product" id="svc-nota">
+          <h3>Nota</h3>
+          <p class="for">Продукт Axiom · Telegram-бот для расходов команды</p>
+          <dl>
+            <div><dt>Задача</dt><dd>Сотрудники тратят деньги компании, чеки теряются, учёт ведётся вручную, а дубли никто не замечает.</dd></div>
+            <div><dt>Что делаем</dt><dd>Сотрудники присылают чеки и счета в Telegram, Nota записывает их в Google-таблицу и находит дубли.</dd></div>
+          </dl>
+          <a class="go" href="https://notagetbot.com/ru/" target="_blank" rel="noopener">Сайт Nota <span aria-hidden="true">↗</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band soft" id="cases" aria-labelledby="cases-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Кейсы</p>
+        <h2 class="h2" id="cases-h">Что находит система контроля платежей</h2>
+      </div>
+      <div class="cases">
+        <article class="case">
+          <p class="tag">Девелопер · Бали</p>
+          <h3>Повторная оплата уже оплаченных счетов</h3>
+          <p>Отдел закупок вместе с поставщиком повторно отправлял на оплату счета без поставки. Совпадения объясняли путаницей в переписке.</p>
+          <p><b>Результат.</b> Система находит дубликаты при загрузке документа и фиксирует каждое действие с платежом. Схема раскрыта, причастные сотрудники уволены.</p>
+        </article>
+        <article class="case">
+          <p class="tag">Строительство · Бали</p>
+          <h3>Завышенные объёмы поставок</h3>
+          <p>Прораб вместе с поставщиком завышал в счетах объёмы песка и воды и обналичивал разницу.</p>
+          <p><b>Результат.</b> План-факт сопоставил оплаченные объёмы с ходом стройки и нормами расхода. Расхождения выявлены, хищения прекращены.</p>
+        </article>
+      </div>
+      <p class="note">Кейсы приводятся без названий клиентов.</p>
+    </div>
+  </section>
+
+  <section class="band" id="team" aria-labelledby="team-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker">Команда</p>
+        <h2 class="h2" id="team-h">Финансисты из девелопмента</h2>
+        <p class="lead">Работали в крупных девелоперских компаниях, строили собственные проекты и вели финансы проектов как консультанты.</p>
+      </div>
+      <div class="team">
+        <div class="person"><div class="photo" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="40" r="18" fill="#CDD3D0"/><path d="M14 100c4-22 18-31 36-31s32 9 36 31z" fill="#CDD3D0"/></svg></div><b><span class="ph">⟦Имя Фамилия⟧</span></b><span>Управляющий партнёр</span></div>
+        <div class="person"><div class="photo" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="40" r="18" fill="#CDD3D0"/><path d="M14 100c4-22 18-31 36-31s32 9 36 31z" fill="#CDD3D0"/></svg></div><b><span class="ph">⟦Имя Фамилия⟧</span></b><span>Финансовый менеджер</span></div>
+        <div class="person"><div class="photo" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="40" r="18" fill="#CDD3D0"/><path d="M14 100c4-22 18-31 36-31s32 9 36 31z" fill="#CDD3D0"/></svg></div><b><span class="ph">⟦Имя Фамилия⟧</span></b><span>Инвестиционный аналитик</span></div>
+        <div class="person"><div class="photo" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="40" r="18" fill="#CDD3D0"/><path d="M14 100c4-22 18-31 36-31s32 9 36 31z" fill="#CDD3D0"/></svg></div><b><span class="ph">⟦Имя Фамилия⟧</span></b><span>Специалист по внедрению систем</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band soft" aria-labelledby="rev-h">
+    <div class="wrap">
+      <div class="head" style="margin-bottom:40px">
+        <p class="kicker">Отзывы</p>
+        <h2 class="h2" id="rev-h">Что говорят клиенты</h2>
+      </div>
+      <div class="quotes" style="margin-top:0">
+        <figure class="quote"><p><span class="ph">⟦Текст отзыва клиента⟧</span></p><figcaption><span class="ph">⟦Имя, должность, тип компании⟧</span></figcaption></figure>
+        <figure class="quote"><p><span class="ph">⟦Текст отзыва клиента⟧</span></p><figcaption><span class="ph">⟦Имя, должность, тип компании⟧</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="request" aria-labelledby="req-h">
+    <div class="wrap req">
+      <div>
+        <p class="kicker">Контакты</p>
+        <h2 class="h2" id="req-h" style="margin-top:16px">Обсудить проект</h2>
+        <p class="lead" style="margin-top:18px">Оставьте контакт и выберите услугу. Мы свяжемся, чтобы уточнить задачу.</p>
+        <div class="contacts">
+          <div><span>E-mail</span><span class="ph">⟦e-mail⟧</span></div>
+          <div><span>Telegram</span><span class="ph">⟦Telegram⟧</span></div>
+          <div><span>WhatsApp</span><span class="ph">⟦WhatsApp⟧</span></div>
+        </div>
+      </div>
+      <form id="req-form" novalidate>
+        <div class="row2">
+          <div class="field"><label for="f-name">Имя</label><input id="f-name" name="name" autocomplete="name"></div>
+          <div class="field"><label for="f-contact">Контакт <small>Telegram, WhatsApp или e-mail</small></label><input id="f-contact" name="contact"></div>
+        </div>
+        <div class="field">
+          <label for="f-service">Услуга</label>
+          <select id="f-service" name="service">
+            <option>Финансовая модель проекта</option>
+            <option>Аудит финансовой модели</option>
+            <option>Контроль платежей и управленческий учёт</option>
+            <option>Инвестиционный анализ</option>
+            <option>Финансовый директор на аутсорсе</option>
+            <option>Nota</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div class="field"><label for="f-msg">Комментарий <small>необязательно</small></label><textarea id="f-msg" name="message"></textarea></div>
+        <div><button class="btn primary" type="submit">Отправить</button></div>
+        <p class="form-note">Нажимая кнопку, вы соглашаетесь с <a href="#request">политикой конфиденциальности</a>.</p>
+        <p class="form-done" id="f-done" hidden>Это прототип: заявка никуда не отправляется.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top"><b>Axiom</b><small>consulting</small></a>
+    <nav aria-label="Подвал"><a href="#cycle">Подход</a><a href="#services">Услуги</a><a href="#cases">Кейсы</a><a href="#team">Команда</a><a href="#request">Контакты</a></nav>
+    <span class="ph">⟦юрлицо⟧</span>
+  </div>
+</footer>
+
+<a class="back" href="index.html">← Все варианты</a>
+
+<script>
+(function () {
+  var b = document.getElementById('burger'), n = document.getElementById('nav');
+  b.addEventListener('click', function () { var o = n.classList.toggle('open'); b.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+  n.addEventListener('click', function (e) { if (e.target.tagName === 'A') { n.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); } });
+  document.getElementById('req-form').addEventListener('submit', function (e) { e.preventDefault(); document.getElementById('f-done').hidden = false; });
+})();
+</script>
+</body>
+</html>

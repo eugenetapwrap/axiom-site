@@ -1,0 +1,13 @@
+{
+  "id": "P001",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I'd let it chew through the free 30 because it costs me nothing, but I'm not paying until I see it read our handwritten notas and faded shop receipts without me fixing every row. If I'm still correcting amounts in the group chat at midnight, I'm back where I started.",
+  "objection": "It will misread the handwritten and faded Indonesian receipts my staff send, get amounts or suppliers wrong, and I will have to check and fix everything anyway.",
+  "would_change_my_mind": "If the free 30 come back right on our worst handwritten notas and blurry photos, with no fixing from me, I'd pay without thinking about it.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 49,
+  "price_too_expensive": 99
+}

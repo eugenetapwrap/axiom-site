@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I already check every receipt myself because I've been burned by double claims, so a bot that flags duplicates in the work chat saves me real hours. Between the café and the scooter repairs I'd use the 30 free ones in a couple of weeks, and $19 is less than one padded receipt.",
+  "objection": "Will a small new bot still be around in a year? At least the rows sit in my own Google Sheet, so I keep the data if it dies. It catches duplicates, but I doubt it can tell an inflated price or a fake handwritten note from a mechanic I paid in cash, and that's where the cheating happens.",
+  "would_change_my_mind": "If it misreads the handwritten mechanic notes and local receipts during the free 30, or wants access to my whole Google Drive instead of just one sheet, I don't pay.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

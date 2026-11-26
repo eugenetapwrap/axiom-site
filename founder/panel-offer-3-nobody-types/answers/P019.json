@@ -1,0 +1,13 @@
+{
+  "id": "P019",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper already puts everything in Jurnal and it works well enough. Half of what I spend is cash to mechanics with no receipt at all, so a bot that reads photos doesn't fix my real gap. I might throw the 30 free ones at it out of curiosity, but I wouldn't pay for a second system.",
+  "objection": "Will it really catch a duplicate, or is it just a receipt-to-table bot? If the same fuel receipt comes in twice from two guys, or a parts invoice and a transfer screenshot for the same payment, I need to see it flag that. Otherwise it's just one more sheet next to Jurnal that my bookkeeper has to reconcile.",
+  "would_change_my_mind": "If it pushed the rows straight into Jurnal so my bookkeeper stops retyping, and on the free trial it actually flagged a double-sent receipt from my own staff.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

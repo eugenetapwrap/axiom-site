@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I've already caught someone claiming the same receipt twice, and between scooter parts, fuel and cash for mechanics I'll get through 30 free documents fast. If it flags duplicates in the group I already use, $19 costs less than one padded repair bill, and the records stay in my own Google Sheet if they shut down.",
+  "objection": "Will a small new bot still be here in a year, and can it actually catch a mechanic's inflated handwritten note, or only the same photo sent twice? Duplicates are the easy part. Padded prices are what cost me money.",
+  "would_change_my_mind": "If the free 30 documents miss a duplicate I already know about, or it can't read my mechanics' handwritten notes, I'm out.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

@@ -1,0 +1,265 @@
+<title>Сайт Axiom Consulting</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap&subset=cyrillic,cyrillic-ext">
+<style>
+/* Layout: one reading column (~72ch) with wide blocks for the variant cards and the sitemap */
+:root {
+  --bg: #F7F6F2;
+  --surface: #FFFFFF;
+  --ink: #17201C;
+  --muted: #56605B;
+  --line: #DCDDD6;
+  --accent: #0E5446;
+  --accent-soft: #E3EEEA;
+  --mark: #9A5B1F;
+  --ph-bg: #EEEDE8;
+  --font-text: "Onest", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121614; --surface: #1A201D; --ink: #E8ECE9; --muted: #A3ADA8; --line: #2E3632;
+    --accent: #6CC2A8; --accent-soft: #1F3530; --mark: #E3A469; --ph-bg: #232A27; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121614; --surface: #1A201D; --ink: #E8ECE9; --muted: #A3ADA8; --line: #2E3632;
+  --accent: #6CC2A8; --accent-soft: #1F3530; --mark: #E3A469; --ph-bg: #232A27; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 16px/1.6 var(--font-text);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 72px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 56px; }
+.col { max-width: 720px; }
+h1, h2, h3 { line-height: 1.2; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(30px, 5vw, 46px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: clamp(22px, 3vw, 28px); font-weight: 650; }
+h3 { font-size: 18px; font-weight: 600; }
+p { margin: 0; }
+.eyebrow { font: 500 12px/1.4 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lead { font-size: 18px; color: var(--muted); max-width: 64ch; }
+section { display: grid; gap: 20px; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+ul.plain { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+ul.plain li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; }
+ul.plain li::before { content: ""; width: 8px; height: 8px; margin-top: 9px; border-radius: 2px; background: var(--accent); }
+.finding b { display: block; }
+.finding span { color: var(--muted); }
+.chain { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-weight: 600; }
+.chain .step { background: var(--accent-soft); color: var(--ink); padding: 8px 14px; border-radius: 6px; }
+.chain .arr { color: var(--muted); font-family: var(--font-mono); }
+.variants { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.variants .card:first-child { grid-column: 1 / -1; border-color: var(--accent); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 22px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.card .tag { font: 500 12px/1 var(--font-mono); color: var(--mark); letter-spacing: 0.06em; text-transform: uppercase; }
+.card p { color: var(--muted); font-size: 15px; }
+.swatches { display: flex; gap: 6px; }
+.swatches i { width: 22px; height: 22px; border-radius: 4px; border: 1px solid var(--line); display: block; }
+.card .open { font-weight: 600; text-decoration: none; display: inline-flex; gap: 6px; }
+.card .open:hover { text-decoration: underline; }
+.rec { border-left: 3px solid var(--accent); padding: 4px 0 4px 18px; max-width: 72ch; }
+.sitemap { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 22px; overflow-x: auto; }
+.sitemap pre { margin: 0; font: 14px/1.7 var(--font-mono); color: var(--ink); }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+.two > div { min-width: 0; display: grid; gap: 12px; align-content: start; }
+ol.steps { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+ol.steps li { padding-left: 4px; }
+ol.steps li::marker { font-family: var(--font-mono); color: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.tablewrap { overflow-x: auto; }
+th, td { text-align: left; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 12px/1.4 var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--font-mono); }
+.q { display: grid; gap: 10px; counter-reset: q; }
+.q li { list-style: none; display: grid; grid-template-columns: 34px 1fr; gap: 8px; }
+.q li::before { counter-increment: q; content: counter(q); font: 500 14px/1.6 var(--font-mono); color: var(--accent); }
+.q { padding: 0; margin: 0; }
+.note { font-size: 14px; color: var(--muted); }
+.ph { background: var(--ph-bg); border: 1px dashed var(--line); padding: 0 6px; border-radius: 4px; }
+@media (max-width: 860px) { .variants, .two { grid-template-columns: 1fr; } }
+</style>
+
+<main class="wrap">
+  <header class="col" style="display:grid;gap:16px">
+    <p class="eyebrow">Axiom Consulting · концепция сайта · 26 ноября 2026</p>
+    <h1>Новый сайт Axiom Consulting: исследование и пять вариантов</h1>
+    <p class="lead">Разобрали 36 конкурентов, рынки России, ОАЭ и Юго-Восточной Азии, 20 сайтов консалтинговых и финансовых компаний и ваши материалы. Ниже — пять вариантов сайта, выводы исследования, карта сайта и структура страниц.</p>
+  </header>
+
+  <section aria-labelledby="h-var">
+    <div class="col" style="display:grid;gap:12px">
+      <h2 id="h-var">Пять вариантов</h2>
+      <p class="lead">Откройте каждый и пролистайте до конца. Заглушки (команда, отзывы, цены, контакты, логотип) выделены пунктиром. Напишите, что нравится и что нет — по блокам или по вариантам.</p>
+    </div>
+    <div class="variants">
+      <article class="card">
+        <span class="tag">Вариант 5 · новый</span>
+        <h3>Финансы проекта полного цикла</h3>
+        <div class="swatches" aria-hidden="true"><i style="background:#FFFFFF"></i><i style="background:#035746"></i><i style="background:#13302A"></i><i style="background:#F4F6F5"></i></div>
+        <p>По вашей структуре: заголовок «Финансовый консалтинг для девелоперов и строительных компаний», затем финансы проекта полного цикла (модель, инвесторы и банки, управление финансами, отчётность), затем услуги в формате «задача клиента → что делаем». На страницах услуг — интерактивная схема: наведите на блок и увидите, что в него входит и кому он нужен.</p>
+        <a class="open" href="v5.html">Главная <span aria-hidden="true">→</span></a>
+        <a class="open" href="v5-model.html">Страница «Финансовая модель» <span aria-hidden="true">→</span></a>
+        <a class="open" href="v5-control.html">Страница «Контроль платежей» <span aria-hidden="true">→</span></a>
+
+      </article>
+      <article class="card">
+        <span class="tag">Вариант 4</span>
+        <h3>Фирменный стиль презентаций</h3>
+        <div class="swatches" aria-hidden="true"><i style="background:#035746"></i><i style="background:#152A28"></i><i style="background:#F2F2F2"></i><i style="background:#FFFFFF"></i></div>
+        <p>Montserrat, зелёный Axiom, серый фон, обведённые карточки, заголовки капслоком — как в ваших презентациях. Строгий деловой язык.</p>
+        <a class="open" href="v2.html">Главная <span aria-hidden="true">→</span></a>
+
+      </article>
+      <article class="card">
+        <span class="tag">Вариант A</span>
+        <h3>Тёплая редакционная ясность</h3>
+        <div class="swatches" aria-hidden="true"><i style="background:#FAF8F3"></i><i style="background:#1C1B19"></i><i style="background:#0E5446"></i><i style="background:#A8461F"></i></div>
+        <p>Вырос из anthropic.com: заголовки с засечками, бумажный фон, финансовые схемы вместо картинок.</p>
+        <a class="open" href="a.html">Главная <span aria-hidden="true">→</span></a>
+        <a class="open" href="audit.html">Страница «Аудит модели» <span aria-hidden="true">→</span></a>
+
+      </article>
+      <article class="card">
+        <span class="tag">Вариант B</span>
+        <h3>Прозрачный продукт</h3>
+        <div class="swatches" aria-hidden="true"><i style="background:#FFFFFF"></i><i style="background:#0B2240"></i><i style="background:#2158D9"></i><i style="background:#FF6A3D"></i></div>
+        <p>Структура onlytraffic.com: каждая услуга — формат со сроком и ценой, интерфейсы системы и бота на демо-данных.</p>
+        <a class="open" href="b.html">Главная <span aria-hidden="true">→</span></a>
+
+      </article>
+      <article class="card">
+        <span class="tag">Вариант C</span>
+        <h3>Тихий частный банк</h3>
+        <div class="swatches" aria-hidden="true"><i style="background:#F5F4F0"></i><i style="background:#17332B"></i><i style="background:#C2A26A"></i><i style="background:#111315"></i></div>
+        <p>Глубокий зелёный, латунные линии, крупные цифры и проекты-плашки вместо карточек.</p>
+        <a class="open" href="c.html">Главная <span aria-hidden="true">→</span></a>
+
+      </article>
+    </div>
+    <p class="note col">Тексты вариантов A, B и C ещё содержат разговорные обороты из первой версии («созвон» и подобные) — в итоговом сайте их не будет.</p>
+  </section>
+
+
+  <section class="col" aria-labelledby="h-find">
+    <h2 id="h-find">Главные выводы</h2>
+    <ul class="plain">
+      <li><div class="finding"><b>Ниша свободна.</b><span>Ни одна из 36 компаний не совмещает модель, аудит модели, контроль платежей и финдиректора на аутсорсе для стройки в СНГ, ОАЭ и Азии. Рынок поделён между узкими игроками.</span></div></li>
+      <li><div class="finding"><b>На Бали и в Дубае модели часто делают агенты, подрядчики и оценщики.</b><span>У них конфликт интересов: модель помогает продать объект или подряд. Независимая модель и независимый аудит — понятное отличие.</span></div></li>
+      <li><div class="finding"><b>Аудит моделей на Западе хорошо упакован, в регионе — нет.</b><span>Лидеры показывают уровни проверки, сроки и вилки цен. В Азии, ОАЭ и СНГ такой упаковки для девелопмента не нашли.</span></div></li>
+      <li><div class="finding"><b>Контроль платежей у девелоперов закрывают софт и Big4.</b><span>Средний сегмент «методика + быстрое внедрение + сопровождение» свободен. Ваши цифры за год и два кейса со сговором — сильнейшее доказательство на сайте.</span></div></li>
+      <li><div class="finding"><b>Стройке и IT нужны разные входы.</b><span>Финдиректоры для IT и для стройки работают с разными метриками. На главной — две «двери» с общим ядром доверия: команда, методика, инструменты.</span></div></li>
+      <li><div class="finding"><b>Русский язык первым — верное решение.</b><span>Большая часть запросов о недвижимости на Бали идёт из России, Telegram — главный канал в СНГ. Русские конкуренты показывают цену «от» и срок «от» прямо на странице.</span></div></li>
+      <li><div class="finding"><b>Доверие строят методика, образцы и кейсы с цифрами.</b><span>Стандарты ICAEW и FAST, понятные границы ответственности, обезличенные примеры отчётов. Отзывы в этой нише редки — настоящие отзывы с именем дадут заметное преимущество.</span></div></li>
+      <li><div class="finding"><b>Нужна единая «книга цифр».</b><span>У многих конкурентов цифры на разных страницах противоречат друг другу. В прототипах цифры взяты только из ваших презентаций, по одному значению на весь сайт.</span></div></li>
+    </ul>
+  </section>
+
+  <section class="col" aria-labelledby="h-pos">
+    <h2 id="h-pos">Позиционирование</h2>
+    <p>Одна команда ведёт деньги проекта целиком — от первой модели до последнего платежа.</p>
+    <div class="chain" aria-label="Цепочка услуг">
+      <span class="step">Модель</span><span class="arr">→</span>
+      <span class="step">Проверка</span><span class="arr">→</span>
+      <span class="step">Контроль платежей</span><span class="arr">→</span>
+      <span class="step">Отчётность</span>
+    </div>
+    <p class="note">Финдиректор на аутсорсе держит эту цепочку постоянно. Nota — простой вход в контроль расходов для небольших команд.</p>
+  </section>
+
+  <section aria-labelledby="h-map">
+    <h2 id="h-map" class="col">Карта сайта</h2>
+    <div class="sitemap">
+<pre>/                          Главная: тезис, цифры, две двери, услуги, кейсы, команда, форма
+├── /financial-model       Финансовая модель проекта
+├── /model-audit           Аудит финансовой модели
+├── /payment-control       Контроль платежей и управленческий учёт
+├── /investment-analysis   Инвестиционный анализ
+├── /cfo                   Финансовый директор на аутсорсе (стройка · IT)
+├── /cases                 Кейсы
+├── /about                 Команда, методика и стандарты
+├── /contacts              Контакты и форма
+└── Nota  →  notagetbot.com/ru (отдельный сайт продукта)
+
+Позже: /en (английская версия) · /insights (статьи и разборы рынков) · калькуляторы</pre>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-struct">
+    <h2 id="h-struct" class="col">Из чего состоят страницы</h2>
+    <div class="two">
+      <div>
+        <h3>Главная</h3>
+        <ol class="steps">
+          <li>Тезис, подзаголовок, две кнопки</li>
+          <li>Цифры из «книги цифр»</li>
+          <li>Две двери: девелопмент и стройка · IT-компании</li>
+          <li>Пять услуг и продукт Nota</li>
+          <li>Цепочка «модель → проверка → контроль → отчётность»</li>
+          <li>Кейсы: было · сделали · итог</li>
+          <li>Как работаем, стандарты и принципы</li>
+          <li>Команда и отзывы</li>
+          <li>Вопросы и короткая форма: контакт и выбор услуги</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Страница услуги</h3>
+        <ol class="steps">
+          <li>Название, кому и какой результат, кнопка</li>
+          <li>Когда нужна услуга: узнаваемые ситуации</li>
+          <li>Что делаем и по какой методике</li>
+          <li>Что вы получите, с образцом на условных данных</li>
+          <li>Этапы и сроки</li>
+          <li>Стоимость: цена «от» и от чего она зависит</li>
+          <li>Границы ответственности</li>
+          <li>Кейс, вопросы, форма, другие услуги</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="col" aria-labelledby="h-num">
+    <h2 id="h-num">Книга цифр</h2>
+    <p class="note">Одно значение каждой цифры на весь сайт. Источник — ваши презентации. Перед публикацией подтвердите, что цифры актуальны.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Цифра</th><th>Что означает</th></tr></thead>
+        <tbody>
+          <tr><td class="num">15+ лет</td><td>в финансах девелоперского бизнеса</td></tr>
+          <tr><td class="num">15+ проектов</td><td>финмодели и финансовая аналитика для девелоперов на Бали</td></tr>
+          <tr><td class="num">13 проектов</td><td>девелоперские проекты работают в системе контроля платежей</td></tr>
+          <tr><td class="num">17 000+</td><td>заявок на оплату за год, на 400+ млрд рупий</td></tr>
+          <tr><td class="num">800</td><td>пресечённых попыток несанкционированных действий (4,7% операций)</td></tr>
+          <tr><td class="num">0,89%</td><td>бюджета — заблокированные дубли и ошибочные оплаты (3,55 млрд рупий)</td></tr>
+          <tr><td class="num">40 дней</td><td>внедрение системы контроля платежей</td></tr>
+          <tr><td class="num">20 дней</td><td>пример срока аудита модели от получения файлов до отчёта</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="col" aria-labelledby="h-ask">
+    <h2 id="h-ask">Что нужно от вас, чтобы собрать сайт</h2>
+    <ol class="q">
+      <li><span><b>Цены «от» и сроки</b> по каждой услуге. Сейчас на их месте <span class="ph">⟦от …⟧</span>. Можно вилкой и с оговоркой «точная цена после разбора».</span></li>
+      <li><span><b>Финдиректор на аутсорсе:</b> формат (абонемент, часы), что входит, кто ведёт, есть ли пример для стройки и для IT.</span></li>
+      <li><span><b>IT-компании:</b> есть ли хотя бы один кейс или типовая задача, которую можно описать обезлично.</span></li>
+      <li><span><b>Кейс аудита модели:</b> можно ли публиковать его обезличенно, с обобщёнными цифрами объёма проверки.</span></li>
+      <li><span><b>Контакты и домен:</b> в материалах встречаются axiomco.io и axiom-asia.com. Какой домен и какая почта основные?</span></li>
+      <li><span><b>Цифры:</b> подтвердить «книгу цифр» выше или прислать свежие значения.</span></li>
+      <li><span><b>Выбор:</b> что нравится в каждом варианте. По итогам соберу сайт целиком: главную, пять страниц услуг, кейсы, команду и контакты.</span></li>
+    </ol>
+    <p class="note">Команда, отзывы и логотип пока заглушки, как договорились. Полные отчёты исследования лежат в репозитории, в папке founder/axiom-site-research.</p>
+  </section>
+
+  <footer class="col note">
+    <p>Конкуренты и рынок собраны по открытым источникам через поисковый индекс; цифры рынка нужно сверить с первоисточниками перед публикацией. onlytraffic.com использован только как образец структуры и публично как референс не упоминается.</p>
+  </footer>
+</main>

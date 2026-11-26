@@ -1,0 +1,13 @@
+{
+  "id": "P056",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I already pay an admin to put receipts into Excel, and if it's behind that's on her, not on a missing bot. I might let it read the free 40 out of curiosity, but I'm not adding another monthly subscription for something my staff already does.",
+  "objection": "Duplicates and messy receipts are a people problem. A bot won't make my contractors send proper screenshots, and I'd still need someone to check what it writes into the sheet.",
+  "would_change_my_mind": "If during the free trial it cleaned up our backlog from the group and caught real double payments my admin missed, so I could see it saves her hours every week.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

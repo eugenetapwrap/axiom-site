@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I already caught someone claiming the same nota twice, and I am tired of checking every supply receipt in Excel at night. With $19 a month and 30 free documents with no card, I will put my site team's real handwritten nota through it, and if it reads them properly and flags the repeats, I will pay. My volume will push me past 30 inside two weeks anyway.",
+  "objection": "Duplicates are only half my problem. A bot can spot the same nota sent twice, but it cannot tell me the shop wrote 12 sacks when only 10 came to site. And if it misreads messy Indonesian handwriting, I have to check every row against the photo again, so it saves me nothing over Excel or KasKecil.",
+  "would_change_my_mind": "If it gets the numbers wrong on a few of my staff's handwritten nota during the free 30, or misses a duplicate I already know about, I cancel and go back to Excel.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 49,
+  "price_too_expensive": 99
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P018",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Thirty-five dollars a month is nothing next to what can quietly go missing on a build I can't see from abroad. If it turns the Telegram pile into a sheet and a Monday report without me chasing anyone, I'll pay. But only after the free 30 show it can read my guys' handwritten nota.",
+  "objection": "It only copies whatever is written on the nota. If my site guy and the toko are padding prices together, I just get a tidy spreadsheet of padded prices. And I doubt it reads a scribbled Indonesian nota correctly.",
+  "would_change_my_mind": "If the free 30 come back with wrong amounts or suppliers from the handwritten nota, I'm out and I'll go back to Excel.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 200
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P001",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "Half our notas are handwritten by the warung or faded thermal paper, and if the bot reads 150.000 as 15.000 I end up checking every row anyway, which is what I already do in the chat at night. I might throw the free 30 at it out of curiosity, but I would not start paying in the first month.",
+  "objection": "It will misread faded or handwritten Indonesian receipts and I will be the one fixing the sheet, so it saves me nothing and I trust the numbers less than my own scrolling.",
+  "would_change_my_mind": "Seeing it read a month of our own messy handwritten notas from the villa group with almost no mistakes in the free trial, and flag a real duplicate payment I had missed.",
+  "price_too_cheap": 5,
+  "price_cheap": 10,
+  "price_expensive": 40,
+  "price_too_expensive": 80
+}

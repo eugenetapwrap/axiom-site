@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I would let my admin try the free 30, it costs nothing, but in a café that is gone in a week and I already pay someone to do the spreadsheet. My staff send photos to the group when they remember, and I don't believe they will change how they work just because there is a bot now.",
+  "objection": "After the free part the staff stop forwarding to the bot, my admin goes back to her own Excel, and I end up paying every month for a sheet nobody looks at.",
+  "would_change_my_mind": "If after the free documents my staff are still sending receipts to the bot on their own and my admin tells me the sheet matches what she would have typed, then I pay for the 200 plan.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

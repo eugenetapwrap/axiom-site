@@ -1,0 +1,13 @@
+{
+  "id": "P085",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'm not letting a bot I've never heard of sit in my staff chat and log into my Google account. My screenshots in the group work fine, I check them myself at the end of the day.",
+  "objection": "A small new bot gets into my Google Drive and reads all my work chats, and in a year it may be gone or sold to someone else with my data.",
+  "would_change_my_mind": "Another café owner I know using it for six months without problems, and a way to use it without giving it my whole Google account.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

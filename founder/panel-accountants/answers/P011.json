@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "convenience",
+  "reason": "I have 20 clients and one account takes only 5 groups and one sheet, so I would be juggling four Google logins and still typing everything into Jurnal myself. I might burn the 40 free documents on one client to see how it reads handwritten nota, but I would not pay for it this month.",
+  "objection": "It is built for one business owner, not for a bookkeeper. I need each client in its own sheet under one account, and an export into Jurnal or Accurate, otherwise I have just moved the retyping from WhatsApp photos to a Google Sheet. I also cannot resell it with a margin if it looks like a cheap consumer bot.",
+  "would_change_my_mind": "An accountant plan: one login, 20+ clients each with a separate sheet, an import file Jurnal or Accurate accepts, and a reseller or volume price so I can bill it on top of my bookkeeping fee.",
+  "price_too_cheap": 10,
+  "price_cheap": 30,
+  "price_expensive": 90,
+  "price_too_expensive": 150
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "Even ten clients send me a few hundred receipts a month, so I'd land on the $35 or $79 plan, and my clients pay me a fixed fee, so that money comes straight out of my pocket. I might export one chat to try the free 30, but I wouldn't put a card in.",
+  "objection": "My clients will not want a bot in their group chats, so the part that saves real time is off the table. Without it I'm still chasing and forwarding every receipt myself, and I'd be paying per document on top of that.",
+  "would_change_my_mind": "A flat price around $10 a month that doesn't go up with every document, or a per-client fee I can add to my clients' invoices, plus it working fine from receipts I forward myself without the bot in their chats.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

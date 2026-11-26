@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I am not putting my clients' receipts and bank screenshots into an unknown Telegram bot when I cannot tell who runs it or where the data is processed under UU PDP. And even if I did, without invoice number, PPN and NPWP fields or an export to Jurnal or Accurate, my staff would still retype everything.",
+  "objection": "Client confidentiality. Who reads these documents, where are they stored and processed, and what do I tell a client if their data leaks through a bot I added to their group?",
+  "would_change_my_mind": "A clear data processing agreement that complies with UU PDP, plus PPN, NPWP and invoice number fields and a direct import file for Accurate or Jurnal, proven on one of my real clients' month of nota.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

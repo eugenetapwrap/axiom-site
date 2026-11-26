@@ -1,0 +1,13 @@
+{
+  "id": "P005",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "Most of what my guys send is handwritten nota from the material shop, faded and half in Bahasa scribble, and I don't believe a bot reads those right. If I end up checking every row anyway, I'd rather wire up n8n with ChatGPT myself for a few dollars than pay $19 a month.",
+  "objection": "It will misread the handwritten Indonesian nota, wrong amounts or a supplier name it made up, and I'll be the one fixing it every week. Then I've paid for a sheet I still have to check line by line.",
+  "would_change_my_mind": "If I put 30 of my staff's real handwritten nota through the free trial and almost all of them come out right without me touching them, I'd pay, because then it beats building and babysitting my own bot.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 22,
+  "price_too_expensive": 40
+}

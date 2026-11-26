@@ -1,0 +1,151 @@
+{
+ "business": "Nota (@NotaGetBot): a Telegram bot that collects receipts, invoices and handwritten delivery notes from work chats into a Google Sheet and flags duplicates and arithmetic errors",
+ "seed": 721575,
+ "dealt": 10,
+ "answered": 10,
+ "skipped": [],
+ "buys": 0,
+ "passes": 10,
+ "buy_rate": 0.0,
+ "by_segment": [
+  [
+   "Small accounting firm (2–8 staff)",
+   3,
+   0.0
+  ],
+  [
+   "Freelance bookkeeper (works alone)",
+   5,
+   0.0
+  ],
+  [
+   "Company-registration / PT PMA service that also does monthly bookkeeping",
+   2,
+   0.0
+  ]
+ ],
+ "by_behaviour": [
+  [
+   "Runs on Jurnal / Accurate",
+   2,
+   0.0
+  ],
+  [
+   "Drowning at month end",
+   3,
+   0.0
+  ],
+  [
+   "Bills clients by the hour",
+   2,
+   0.0
+  ],
+  [
+   "Cautious about client data",
+   1,
+   0.0
+  ],
+  [
+   "Would resell a tool",
+   1,
+   0.0
+  ],
+  [
+   "Price-sensitive freelancer",
+   1,
+   0.0
+  ]
+ ],
+ "by_income": [
+  [
+   "$67,000 and up",
+   4,
+   0.0
+  ],
+  [
+   "under $21,000",
+   3,
+   0.0
+  ],
+  [
+   "$21,000 to $67,000",
+   3,
+   0.0
+  ]
+ ],
+ "why_not": [
+  [
+   "quality",
+   3,
+   [
+    "I have 20 clients and every one needs their own books. A single sheet with everyone's receipts mixed together is just another mess for me to sort out. And at my volume, easily 600-800 notas a month, I'm past the $79 plan, which is way too much on what I earn.",
+    "The chasing and retyping is exactly my pain, but a Google Sheet with categories does not get me into Jurnal or Accurate, and without invoice number, PPN and NPWP I still have to retype every receipt anyway. I might play with the 30 free documents, but I would not pay $19 a month out of my own pocket for a sheet I then have to redo."
+   ],
+   [
+    "P002",
+    "P007"
+   ]
+  ],
+  [
+   "habit",
+   2,
+   [
+    "My WhatsApp routine with clients already works, and everything has to land in Jurnal or Accurate anyway. A Google Sheet is just one more place my staff would have to copy from, so this adds a step instead of removing one.",
+    "My WhatsApp routine is messy, but it works and my clients know it. This bot fixes the retyping, but my days go into chasing the receipts that never arrive, and nothing here gets a client to send them. I might run the 30 free documents on one client, but I wouldn't pay this month."
+   ],
+   [
+    "P001",
+    "P005"
+   ]
+  ],
+  [
+   "trust",
+   2,
+   [
+    "My name is on these books, so I'd still have to check every row the bot reads against the original receipt, and that's most of the work I'd be paying it to do. I charge clients a fixed fee, so a tool only pays off if it lets me take on more clients, and a Google Sheet I have to double-check doesn't do that.",
+    "I can't export my clients' chats with their receipts and bank transfers to a Telegram bot I've never heard of. If something leaks, I lose the client and I could be in trouble under UU PDP. And with 20 clients I'd be on the $79 plan, which is a lot of my monthly income for an app I don't trust yet."
+   ],
+   [
+    "P003",
+    "P006"
+   ]
+  ],
+  [
+   "price",
+   2,
+   [
+    "I make about $1,400 a month and bill by the hour, so $19 a month comes out of my own pocket and saving time just means I bill less unless I get more clients. I might put one client's chat through the free 30 documents to see what it does, but I would not pay after that.",
+    "Even ten clients send me a few hundred receipts a month, so I'd land on the $35 or $79 plan, and my clients pay me a fixed fee, so that money comes straight out of my pocket. I might export one chat to try the free 30, but I wouldn't put a card in."
+   ],
+   [
+    "P004",
+    "P009"
+   ]
+  ],
+  [
+   "convenience",
+   1,
+   [
+    "My clients hand me a bag of crumpled paper nota at month end, not a tidy chat, and everything I do has to land in Jurnal or Accurate. A Google Sheet is just one more place I'd have to copy from, so this adds work instead of removing it."
+   ],
+   [
+    "P010"
+   ]
+  ]
+ ],
+ "why_yes": [],
+ "flip": [
+  "A direct export or import file that posts the entries straight into Jurnal or Accurate per client, so my staff stop retyping receipts.",
+  "A bookkeeper plan: one login, a separate sheet and report for each client, priced for my whole practice at around $25 a month, not per document.",
+  "Running one real client's full month through it and seeing it match my own books with almost no corrections, on one plan that covers all my clients instead of a document cap per business.",
+  "If I could put it on the client's bill, for example a cheap per-client price or a report with my name on it that I can sell as a monthly service, so it earns me money instead of costing me.",
+  "A test on one messy client's month that comes back with a separate sheet per client, correct rupiah amounts from Indonesian receipts, and a list of which receipts are still missing that I can send straight to the client.",
+  "A clear privacy policy that says where data is stored and that it's deleted after processing and covered by UU PDP, plus proof that one account can keep 20 clients completely separate, each with its own sheet and report",
+  "If it pulled out invoice number, PPN and NPWP and gave me a file I can import straight into Jurnal or Accurate, so the retyping actually stops.",
+  "A direct export to Jurnal or Accurate with invoice number, PPN and NPWP pulled out of each receipt, plus one account where I can manage all my client chats and bill them myself at a margin.",
+  "A flat price around $10 a month that doesn't go up with every document, or a per-client fee I can add to my clients' invoices, plus it working fine from receipts I forward myself without the bot in their chats.",
+  "A direct export or import file for Jurnal / Accurate, plus a way to snap photos of the paper nota myself without putting a bot in my clients' chats."
+ ],
+ "purchases_first_month_per_buyer": null,
+ "price_answers": 10
+}

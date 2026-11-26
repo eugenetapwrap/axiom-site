@@ -1,0 +1,338 @@
+<title>Материалы Nota</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one narrow column of sections; each section is a short list of links with a one-line note. Brand colours from nota/src/styles/global.css. */
+:root {
+  --bg: #fbfcfa; --surface: #ffffff; --ink: #14201b; --muted: #56635d; --line: #e2e7e3;
+  --accent: #e8501c; --accent-soft: #fde9e1; --ok: #0a6b45; --ok-soft: #e3f2ea; --warn: #8a5a00; --warn-soft: #fbf0d9;
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121614; --surface: #1a201d; --ink: #e8ece9; --muted: #9aa7a0; --line: #2a332e;
+  --accent: #ff7a4a; --accent-soft: #3a2219; --ok: #5fcf9b; --ok-soft: #16302a; --warn: #f0c060; --warn-soft: #33290f; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121614; --surface: #1a201d; --ink: #e8ece9; --muted: #9aa7a0; --line: #2a332e;
+  --accent: #ff7a4a; --accent-soft: #3a2219; --ok: #5fcf9b; --ok-soft: #16302a; --warn: #f0c060; --warn-soft: #33290f; color-scheme: dark }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--font); }
+.wrap { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 72px; display: grid; gap: 40px; }
+a { color: inherit; text-decoration-color: color-mix(in srgb, var(--accent) 60%, transparent); text-underline-offset: 3px; }
+a:hover { color: var(--accent); }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+header { display: grid; gap: 10px; }
+.logo { font-weight: 700; font-size: 28px; letter-spacing: -0.02em; }
+.logo i { display: inline-block; width: 0.5em; height: 0.5em; border-radius: 50%; background: var(--accent); margin: 0 1px; vertical-align: 0.02em; }
+h1 { font-size: clamp(28px, 4vw, 38px); line-height: 1.15; letter-spacing: -0.015em; margin: 0; text-wrap: balance; }
+.lead { color: var(--muted); margin: 0; max-width: 62ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.pill { font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); white-space: nowrap; }
+.pill.hot { background: var(--accent-soft); box-shadow: none; color: var(--accent); }
+section { display: grid; gap: 14px; }
+h2 { font-size: 22px; line-height: 1.25; margin: 0; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+h2 small { font-size: 14px; font-weight: 500; color: var(--muted); }
+h3 { font-size: 15px; margin: 8px 0 0; color: var(--muted); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.list { list-style: none; margin: 0; padding: 0; background: var(--surface); border-radius: 16px; box-shadow: inset 0 0 0 1px var(--line); }
+.list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; padding: 13px 18px; align-items: baseline; }
+.list li + li { border-top: 1px solid var(--line); }
+.list .t { font-weight: 600; min-width: 0; }
+.list .n { grid-column: 1 / -1; color: var(--muted); font-size: 14.5px; min-width: 0; }
+.tag { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; white-space: nowrap; justify-self: end; }
+.tag.main { background: var(--ok-soft); color: var(--ok); }
+.tag.new { background: var(--accent-soft); color: var(--accent); }
+.tag.live { background: var(--ok-soft); color: var(--ok); }
+.tag.draft { background: var(--warn-soft); color: var(--warn); }
+.tag.old { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); }
+.tag.repo { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); }
+details { background: var(--surface); border-radius: 16px; box-shadow: inset 0 0 0 1px var(--line); }
+details > summary { cursor: pointer; padding: 13px 18px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::after { content: "+"; color: var(--muted); font-weight: 500; }
+details[open] > summary::after { content: "−"; }
+details .inner { padding: 0 18px 16px; display: grid; gap: 10px; }
+details .list { box-shadow: none; border-top: 1px solid var(--line); border-radius: 0; background: transparent; }
+details .list li { padding-inline: 0; }
+.backlog { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.backlog li { background: var(--surface); border-radius: 14px; box-shadow: inset 0 0 0 1px var(--line); padding: 13px 18px; display: grid; gap: 4px; }
+.backlog .who { font-size: 12.5px; font-weight: 600; color: var(--muted); letter-spacing: 0.03em; text-transform: uppercase; }
+.backlog .src { font-size: 14px; color: var(--muted); }
+.decisions { display: grid; gap: 10px; }
+.dec { background: var(--surface); border-radius: 14px; box-shadow: inset 0 0 0 1px var(--line); padding: 14px 18px; display: grid; gap: 8px; min-width: 0; }
+.dec h4 { margin: 0; font-size: 16px; display: flex; gap: 10px; justify-content: space-between; flex-wrap: wrap; }
+.dec h4 span { font-size: 13px; font-weight: 500; color: var(--muted); }
+.dec ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 15px; }
+.dec p { margin: 0; font-size: 14px; color: var(--muted); }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; font-size: 14.5px; font-variant-numeric: tabular-nums; min-width: 520px; width: 100%; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { color: var(--muted); font-weight: 600; font-size: 13px; }
+.note { font-size: 14px; color: var(--muted); margin: 0; }
+.bl-head { display: grid; gap: 4px; }
+.bl-sum { margin: 0; font-weight: 600; }
+.bl-hint { margin: 0; font-size: 14px; color: var(--muted); }
+.bl-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bl-top .who { margin-right: auto; }
+.req { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+.req.must { background: var(--accent-soft); color: var(--accent); }
+.req.opt { color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); }
+.st { font: 600 12.5px/1 var(--font); padding: 6px 10px; border-radius: 999px; border: 0; cursor: pointer; white-space: nowrap; background: var(--bg); color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); }
+.st[data-s="doing"] { background: var(--warn-soft); color: var(--warn); box-shadow: none; }
+.st[data-s="done"] { background: var(--ok-soft); color: var(--ok); box-shadow: none; }
+.st:disabled { cursor: default; }
+.st:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.backlog li.is-done .bl-t { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+footer { font-size: 13.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px; }
+@media (max-width: 520px) { .list li { grid-template-columns: minmax(0, 1fr); } .tag { justify-self: start; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="logo">N<i></i>ta</div>
+    <h1>Все материалы по Nota в одном месте</h1>
+    <p class="lead">Версии сайта, чек-лист запуска, беклог, документы и всё, что вы утвердили. Ссылки на claude.ai открывают страницы, ссылки с пометкой «файл» — файлы на GitHub в ветке <code>claude/plugin-marketplace-founder-skill-dpl9t0</code>: из неё собирается сайт.</p>
+    <div class="facts">
+      <span class="pill hot">Запуск — 7 декабря</span>
+      <span class="pill">Проверка «основатели» — 23–29 ноября</span>
+      <span class="pill">Сайт работает: <a href="https://notagetbot.com" target="_blank" rel="noopener">notagetbot.com</a>, поисковикам закрыт до запуска</span>
+      <span class="pill">Заявка в Bank of Georgia подана 26.11</span>
+      <span class="pill">Обновлено 26.11</span>
+    </div>
+  </header>
+
+  <section id="launch">
+    <h2>Запуск</h2>
+    <ul class="list">
+      <li><a class="t" href="https://claude.ai/artifact/6wXDTvLfvmMq7zctMwjY3y" target="_blank" rel="noopener">Чек-лист запуска платной Nota</a><span class="tag live">отмечаете вы</span><span class="n">Что сделать до запуска, кто отвечает и к какому дню. Статусы сохраняются.</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/6pniqFw9PUeJ8aHpRRYCVw" target="_blank" rel="noopener">Технический кабинет</a><span class="tag live">заполняете вы</span><span class="n">Ссылки и контакты для сайта, страницы оплаты и таблицы: почта поддержки, ссылки на документы, страница оплаты криптой.</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/launch.md" target="_blank" rel="noopener">План запуска</a><span class="tag repo">файл</span><span class="n">Проверка «основатели», обратный отсчёт, день запуска 7.12 и первые 30 дней.</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/must-have.md" target="_blank" rel="noopener">Что делать по приоритету</a><span class="tag repo">файл</span><span class="n">Must have до первых тестовых пользователей и программа тестовых пользователей.</span></li>
+    </ul>
+  </section>
+
+  <section id="backlog">
+    <h2>Беклог <small>что ещё не сделано</small></h2>
+    <div class="bl-head"><p class="bl-sum" id="bl-sum">Загружаю отметки…</p><p class="bl-hint" id="bl-hint">Нажмите на статус, чтобы поменять его: не начато → в работе → выполнено.</p></div>
+    <ul class="backlog">
+      <li data-id="b1" data-must="1"><div class="bl-top"><span class="who">Вы</span><span class="req must">обязательно до запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Завести почту поддержки и решить с телефоном, потом вписать их во все документы и в технический кабинет.</span><span class="src">Документы, 22.11</span></li>
+      <li data-id="b2" data-must="1"><div class="bl-top"><span class="who">Bank of Georgia</span><span class="req must">обязательно до запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Список того, что обязательно должно быть на сайте; можно ли показывать цены в долларах при списании в лари; есть ли автосписания; сроки возврата на карту.</span><span class="src">Документы и страница оплаты</span></li>
+      <li data-id="b4" data-must="1"><div class="bl-top"><span class="who">Программист</span><span class="req must">обязательно до запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Переключатель автопродления на странице оплаты для уже оплаченного тарифа: документы обещают, что отключение там.</span><span class="src">Решение 22.11</span></li>
+      <li data-id="b6" data-must="1"><div class="bl-top"><span class="who">Программист</span><span class="req must">обязательно до запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Неудачное автосписание: 3 попытки за 3 дня, потом тариф заканчивается. Правило утверждено, сделать на сервере.</span><span class="src">Решение 22.11</span></li>
+      <li data-id="b5" data-must="1"><div class="bl-top"><span class="who">Программист</span><span class="req must">обязательно до запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Команда удаления /delete_all (так она названа в меню бота): удалить записи и хэши, отключиться от Google, выйти из групп; остаются имя пользователя в Telegram и данные об оплатах. Выбрать сервис распознавания, который не обучается на данных клиентов.</span><span class="src">Политика конфиденциальности</span></li>
+      <li data-id="b10" data-must="1"><div class="bl-top"><span class="who">Проверка бота</span><span class="req must">обязательно до запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Уведомление о дубле приходит сразу, в том числе из рабочей группы (с подключённым Google). Без Google приходит только отчёт по архиву.</span><span class="src">Лендинг v12</span></li>
+      <li data-id="b12" data-must="0"><div class="bl-top"><span class="who">Вы</span><span class="req opt">можно после запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Ответить: срок ответа поддержки (24 часа), сколько документов сверх лимита (50), возврат крипты при ошибке (не возвращаем). Ответы внесены в документы.</span><span class="src">Документы</span></li>
+      <li data-id="b8" data-must="1"><div class="bl-top"><span class="who">Юрист</span><span class="req must">обязательно до запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Показать черновики документов: право Грузии при клиентах в Индонезии, главная языковая версия, требования UU PDP.</span><span class="src">Документы</span></li>
+      <li data-id="b13" data-must="1"><div class="bl-top"><span class="who">Вы</span><span class="req must">обязательно до запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Google: подтвердить домен notagetbot.com в Search Console и поменять в настройках приложения ссылки на политику и соглашение (/en/privacy, /en/terms). Возможна повторная проверка приложения.</span><span class="src">Переход на notagetbot.com, 25.11</span></li>
+      <li data-id="b14" data-must="1"><div class="bl-top"><span class="who">Вы</span><span class="req must">обязательно до запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Заявка на подключение оплаты в Bank of Georgia подана 26.11, с адресом сайта notagetbot.com и логотипом. Ждём ответа банка.</span><span class="src">Bank of Georgia, 26.11</span></li>
+      <li data-id="b15" data-must="1"><div class="bl-top"><span class="who">Вы</span><span class="req must">обязательно до запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Сайт выложен на notagetbot.com (Cloudflare Pages, 25.11). Осталось: переадресация с notagetbot.app на notagetbot.com — у токена Cloudflare нет прав на правила переадресации, добавить право или настроить в панели Cloudflare; проверить, что почта support@notagetbot.com принимает письма.</span><span class="src">Переход на notagetbot.com, 25.11</span></li>
+      <li data-id="b16" data-must="1"><div class="bl-top"><span class="who">Программист</span><span class="req must">обязательно до запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">В таблице: ссылка оплаты — notagetbot.com/pay/&lt;код&gt;, ссылка «Instruction» — на инструкцию языка таблицы: notagetbot.com/en/guide, /guide или /id/guide.</span><span class="src">Сайт, 25.11</span></li>
+      <li data-id="b17" data-must="1"><div class="bl-top"><span class="who">Вы</span><span class="req must">в день запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Открыть сайт для поисковиков: в Cloudflare, проект nota → Settings → Variables, добавить PUBLIC_INDEX = 1 и пересобрать. Откроются главные на трёх языках; документы, /archive/ и оплата останутся закрытыми.</span><span class="src">Сайт, 25.11</span></li>
+      <li data-id="b18" data-must="1"><div class="bl-top"><span class="who">Программист</span><span class="req must">когда будут сервер и банк</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Выложить страницу оплаты: подключить сервер (CONFIG.api в nota/src/pages/pay/index.astro) и убрать «&amp;&amp; rm -rf dist/pay» из команды сборки в Cloudflare. Сейчас /pay/ на сайте нет.</span><span class="src">Страница оплаты</span></li>
+      <li data-id="b3" data-must="0"><div class="bl-top"><span class="who">Bank of Georgia</span><span class="req opt">если потребует банк</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Нужна ли на сайте пометка, что Axiom Consulting — бренд ИП Evgenii Popov. Добавляем, только если банк потребует.</span><span class="src">Решение 22.11</span></li>
+      <li data-id="b7" data-must="0"><div class="bl-top"><span class="who">Вы</span><span class="req opt">можно после запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Выбрать крипто-сервис (Tribute или другой) и вписать страницу оплаты в технический кабинет. Можно запуститься только с картой.</span><span class="src">Страница оплаты</span></li>
+      <li data-id="b9" data-must="0"><div class="bl-top"><span class="who">Носитель языка</span><span class="req opt">можно после запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Проверить индонезийские тексты: главная /id/, инструкция /id/guide, документы и страница оплаты. Тексты переведены машинно.</span><span class="src">Документы, страница оплаты</span></li>
+      <li data-id="b11" data-must="0"><div class="bl-top"><span class="who">Вы</span><span class="req opt">можно после запуска</span><button type="button" class="st" data-s="todo" aria-label="Статус">не начато</button></div><span class="bl-t">Перевести таблицу на скриншотах сайта из рупий в доллары. Перед запуском пересобрать пример отчёта на свежий месяц.</span><span class="src">Лендинг v12</span></li>
+    </ul>
+    <p class="note">Подробно, с разбивкой по адресатам: <a href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/legal-docs-questions.md" target="_blank" rel="noopener">legal-docs-questions.md</a>.</p>
+  </section>
+
+  <section id="site">
+    <h2>Сайт</h2>
+    <ul class="list">
+      <li><a class="t" href="https://notagetbot.com" target="_blank" rel="noopener">notagetbot.com</a><span class="tag live">на сайте</span><span class="n">Главная v12 на трёх языках: английская <code>/</code>, русская <a href="https://notagetbot.com/ru/" target="_blank" rel="noopener"><code>/ru/</code></a>, индонезийская <a href="https://notagetbot.com/id/" target="_blank" rel="noopener"><code>/id/</code></a> (пример отчёта в рупиях). Вариант с архивом — <code>/archive/</code>, только по-русски. Поисковикам закрыт до запуска.</span></li>
+      <li><a class="t" href="https://notagetbot.com/guide" target="_blank" rel="noopener">Инструкция «Как пользоваться Nota»</a><span class="tag live">на сайте</span><span class="n">Полная: как начать, как присылать документы, каждая колонка таблицы, что делать с записями, дополнительные возможности, команды бота. Русская <code>/guide</code>, английская <a href="https://notagetbot.com/en/guide" target="_blank" rel="noopener"><code>/en/guide</code></a>, индонезийская <a href="https://notagetbot.com/id/guide" target="_blank" rel="noopener"><code>/id/guide</code></a>. Ссылка — в подвале сайта.</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/H8cwhrF3thD5eswvCcC3ED" target="_blank" rel="noopener">Лендинг v12, предпросмотр</a><span class="tag main">главная</span><span class="n">«Все расходы команды — в одной таблице». Русская главная и вариант с архивом.</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/HSidCJ8oZi3anMGU66ZneZ" target="_blank" rel="noopener">Лендинг v11</a><span class="tag old">прошлая главная</span><span class="n">До 25.11 стояла на <code>/</code>.</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/SZd9GVRHY13hC2yKZLZdqu" target="_blank" rel="noopener">Страница оплаты</a><span class="tag draft">заявка в банке</span><span class="n">Заявка в Bank of Georgia подана 26.11, ждём ответа. Выбор тарифа и срока, автопродление с переключателем у оплаченного тарифа, пакет +50, оплата криптой. Правила расчёта утверждены 20.11. На сайт пока не выложена.</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/nota/README.md" target="_blank" rel="noopener">Как выкладывается сайт</a><span class="tag repo">файл</span><span class="n">Cloudflare Pages, проект nota. Каждый коммит в рабочую ветку сразу попадает на сайт. Домен, почта, индексация.</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/landing-v12-notes.md" target="_blank" rel="noopener">Заметки к v12</a><span class="tag repo">файл</span><span class="n">Что изменилось, что исправлено по разбору дизайна, что сознательно не трогали.</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/nota/DESIGN.md" target="_blank" rel="noopener">Правила дизайна и текста сайта</a><span class="tag repo">файл</span><span class="n">Цвета, шрифты, правила текста (про Nota без рода, «Google Диск» полностью), запуск и индексация.</span></li>
+    </ul>
+    <details>
+      <summary>Прошлые версии лендинга, v1–v10</summary>
+      <div class="inner">
+        <ul class="list">
+          <li><a class="t" href="https://claude.ai/artifact/SoYLUhYGanKZvyVnYGygmf" target="_blank" rel="noopener">v10</a><span class="tag old">16.11</span></li>
+          <li><a class="t" href="https://claude.ai/artifact/CeqVdCo6n4AomAoePyRzwk" target="_blank" rel="noopener">v9</a><span class="tag old">15.11</span></li>
+          <li><a class="t" href="https://claude.ai/artifact/SMmK7aKuKYCet9LodYbKs8" target="_blank" rel="noopener">v8</a><span class="tag old">15.11</span></li>
+          <li><a class="t" href="https://claude.ai/artifact/BvfyNsg354QPVB1whD8zfS" target="_blank" rel="noopener">v7</a><span class="tag old">15.11</span></li>
+          <li><a class="t" href="https://claude.ai/artifact/TEaauSQrAqoW9KCBLFc2hu" target="_blank" rel="noopener">v6</a><span class="tag old">14.11</span></li>
+          <li><a class="t" href="https://claude.ai/artifact/S5ABd18Q9x6nwrnCemDPEv" target="_blank" rel="noopener">v5</a><span class="tag old">14.11</span></li>
+          <li><a class="t" href="https://claude.ai/artifact/6uW7kseeJSYTNBYAZsRHJT" target="_blank" rel="noopener">v4</a><span class="tag old">14.11</span></li>
+          <li><a class="t" href="https://claude.ai/artifact/LzSyCZvKwSnj9QUNZrMnnV" target="_blank" rel="noopener">v3</a><span class="tag old">14.11</span></li>
+          <li><a class="t" href="https://claude.ai/artifact/FVch8dNKCJ6xndVBTN8x2g" target="_blank" rel="noopener">v2</a><span class="tag old">14.11</span></li>
+          <li><a class="t" href="https://claude.ai/artifact/2fikyaNCuuXUHyRwPEh2M3" target="_blank" rel="noopener">Первая версия</a><span class="tag old">12.11</span></li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <section id="docs">
+    <h2>Документы сайта <small>утверждены 25.11, юрист одобрил</small></h2>
+    <ul class="list">
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/nota/src/pages/terms.md" target="_blank" rel="noopener">Пользовательское соглашение</a><span class="tag live">утверждено</span><span class="n">На сайте: <code>/terms</code>, <code>/en/terms</code>, <code>/id/terms</code>.</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/nota/src/pages/privacy.md" target="_blank" rel="noopener">Политика конфиденциальности</a><span class="tag live">утверждено</span><span class="n">На сайте: <code>/privacy</code>, <code>/en/privacy</code>, <code>/id/privacy</code>. Английскую ссылку указать в Google Cloud Console.</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/nota/src/pages/refund.md" target="_blank" rel="noopener">Правила возврата</a><span class="tag live">утверждено</span><span class="n">На сайте: <code>/refund</code>, <code>/en/refund</code>, <code>/id/refund</code>.</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/legal-docs-questions.md" target="_blank" rel="noopener">Решения и открытые вопросы по документам</a><span class="tag repo">файл</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/JodDFHW3RaEBHJGpzgAK86" target="_blank" rel="noopener">Старое соглашение, 6.11</a><span class="tag old">устарело</span><span class="n">Ранний черновик. Если ссылку на него давали в Google, политику на сайте нужно сверить с ним.</span></li>
+    </ul>
+  </section>
+
+  <section id="decisions">
+    <h2>Что утверждено</h2>
+    <div class="decisions">
+      <div class="dec">
+        <h4>Тарифы <span>налоги включены</span></h4>
+        <div class="tbl"><table>
+          <thead><tr><th>Тариф</th><th>1 мес</th><th>3 мес</th><th>6 мес</th><th>Документов в месяц</th><th>Групп</th></tr></thead>
+          <tbody>
+            <tr><td>Старт</td><td>$19</td><td>$51</td><td>$96</td><td>100</td><td>до 5</td></tr>
+            <tr><td>Рост</td><td>$35</td><td>$93</td><td>$174</td><td>200</td><td>до 10</td></tr>
+            <tr><td>Масштаб</td><td>$79</td><td>$213</td><td>$402</td><td>500</td><td>без ограничений</td></tr>
+          </tbody>
+        </table></div>
+        <ul>
+          <li>Первые 30 документов бесплатно, без карты и регистрации.</li>
+          <li>Пакет +50 документов — $10, только при действующем тарифе.</li>
+          <li>Неиспользованные документы в конце месяца сгорают.</li>
+        </ul>
+      </div>
+      <div class="dec">
+        <h4>Оплата <span>20.11 и 22.11</span></h4>
+        <ul>
+          <li>Карта Visa / Mastercard через Bank of Georgia (списание в лари) или криптовалюта. Российские карты пока не принимаем.</li>
+          <li>Автопродление по умолчанию включено для карты, отключается на странице оплаты. Криптой оплата разовая.</li>
+          <li>Смена тарифа действует сразу, неиспользованные дни идут в зачёт.</li>
+          <li>Неудачное автосписание: 3 попытки за 3 дня, потом тариф заканчивается.</li>
+          <li>Счёт для бухгалтерии — по запросу в боте.</li>
+        </ul>
+        <p>Подробно: <a href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/nota/PAY.md" target="_blank" rel="noopener">PAY.md</a>, раздел «Правила расчёта».</p>
+      </div>
+      <div class="dec">
+        <h4>Возвраты и данные <span>22.11</span></h4>
+        <ul>
+          <li>Отмена тарифа, оплаченного картой: возврат за неиспользованные дни. Оформляем за 5 рабочих дней.</li>
+          <li>Отключение автопродления — без возврата, тариф работает до конца срока.</li>
+          <li>Пакет +50 и оплата криптой не возвращаются, кроме ошибок оплаты.</li>
+          <li>Без подключённого Google файлы хранятся 7 дней. После окончания тарифа данные хранятся 30 дней.</li>
+          <li>Удаление данных — командой /delete_all или письмом, за 30 дней. Остаются имя пользователя в Telegram и данные об оплатах, которые закон обязывает хранить.</li>
+          <li>Поддержка: бот @NotaSuppBot и support@notagetbot.com, ответ в течение 24 часов.</li>
+          <li>Оператор — ИП Evgenii Popov (Грузия). Axiom Consulting остаётся брендом на сайте.</li>
+          <li>Документы на трёх языках: русском, английском, индонезийском.</li>
+        </ul>
+      </div>
+      <div class="dec">
+        <h4>Лендинг v12 <span>22.11</span></h4>
+        <ul>
+          <li>Заголовок «Все расходы команды — в одной таблице», подчёркнуто «в одной таблице» (25.11). С 25.11 v12 — главная.</li>
+          <li>Первый экран: путь из четырёх строк, отчёты — отдельной строкой. «Первый отчёт — на 30-м документе, бесплатно».</li>
+          <li>Отчёт за месяц в долларах, на индонезийской версии — в рупиях.</li>
+          <li>Главная на английском (25.11): <code>/</code>; русская — <code>/ru/</code>, индонезийская — <code>/id/</code>.</li>
+          <li>Переключатель листов таблицы — ярлыки, которые заходят друг на друга. Тариф Custom («Обсудить») ведёт в бот поддержки.</li>
+          <li>Про рабочую группу на сайте отдельно не пишем, она только названа среди способов отправки.</li>
+        </ul>
+      </div>
+      <div class="dec">
+        <h4>Бот <span>15.11</span></h4>
+        <ul>
+          <li>Описание в BotFather и первое сообщение после /start на трёх языках.</li>
+          <li>В рабочей группе бот берёт только платёжные документы, один раз здоровается при подключении, дальше в группу не пишет и ставит реакцию ✍.</li>
+          <li>Команды из меню бота: /report, /table, /google, /group, /import, /subscription, /settings, /currency, /language, /notifications, /category, /proofs, /delete_all, /start, /support.</li>
+          <li>Доступ к Google — только к таблице и папке, которые создаёт Nota.</li>
+        </ul>
+        <p>Тексты: <a href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/bot-start.md" target="_blank" rel="noopener">bot-start.md</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="product">
+    <h2>Продукт и бизнес</h2>
+    <h3>Продукт</h3>
+    <ul class="list">
+      <li><a class="t" href="https://claude.ai/artifact/X7r6gxW9rZ3ryoDU3ccBgy" target="_blank" rel="noopener">Полное описание продукта</a><span class="tag old">11.11</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/6AoYDSsrzSF1GrzoqxuxJx" target="_blank" rel="noopener">Как работает бот</a><span class="tag old">5.11</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/Qs74qHzRSEmZjfT3wZCMxV" target="_blank" rel="noopener">Как пользоваться</a><span class="tag old">7.11</span><span class="n">Черновик. Полная версия, объединённая с «Как работает бот», — на сайте: <a href="https://notagetbot.com/guide" target="_blank" rel="noopener">notagetbot.com/guide</a>.</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/H3mcE6CmCbyVSLQZ23FivQ" target="_blank" rel="noopener">ТЗ на сквозной тест бота</a><span class="tag old">10.11</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/Nk1xcdDfwN6iX2bLeH5qaM" target="_blank" rel="noopener">Модуль обработки документов: дубли, подмены, ошибки</a><span class="tag old">19.10</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/45T4LsvVQwC71xYkrU2QPi" target="_blank" rel="noopener">Недельный отчёт в Telegram</a><span class="tag old">9.11</span></li>
+    </ul>
+    <h3>Бизнес</h3>
+    <ul class="list">
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/summary.md" target="_blank" rel="noopener">Сводка и вердикт</a><span class="tag repo">файл</span><span class="n">Главная проверка — спрос на живых людях: 5 предоплат из 20 до 7.12.</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/business-plan.md" target="_blank" rel="noopener">Бизнес-план</a><span class="tag repo">файл</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/cfo.md" target="_blank" rel="noopener">Экономика</a><span class="tag repo">файл</span><span class="n">Маржа, точка безубыточности (45 клиентов), первый год.</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/pricing.md" target="_blank" rel="noopener">Цены</a><span class="tag repo">файл</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/competitors.md" target="_blank" rel="noopener">Конкуренты</a><span class="tag repo">файл</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/ops.md" target="_blank" rel="noopener">Операции</a><span class="tag repo">файл</span><span class="n">Поставщики, хостинг, ИИ для распознавания, риски.</span></li>
+    </ul>
+    <h3>Маркетинг и бренд</h3>
+    <ul class="list">
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/marketing.md" target="_blank" rel="noopener">План маркетинга</a><span class="tag repo">файл</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/1rGpvPr6yUXL3FvehMgM7k" target="_blank" rel="noopener">План привлечения лидов</a><span class="tag old">15.11</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/FUhEn6tdP7WgeNdBfe41tR" target="_blank" rel="noopener">План вирусности</a><span class="tag old">6.11</span></li>
+      <li><a class="t" href="https://github.com/eugenetapwrap/axiom-site/blob/claude/plugin-marketplace-founder-skill-dpl9t0/founder/brand.md" target="_blank" rel="noopener">Бренд</a><span class="tag repo">файл</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/Sin8Db2GbepxUwgtVHSmfD" target="_blank" rel="noopener">Логотип</a><span class="tag old">10.11</span></li>
+      <li><a class="t" href="https://claude.ai/artifact/RgNYC6pvc5RMjix1Q4THFU" target="_blank" rel="noopener">Эскизы Nota</a><span class="tag old">12.11</span></li>
+    </ul>
+  </section>
+
+  <footer>Сайт выложен 25.11 на notagetbot.com и закрыт от поисковиков до запуска. Страницу обновляю по вашей просьбе.</footer>
+</div>
+
+<script>
+(function () {
+  var LABEL = { todo: 'не начато', doing: 'в работе', done: 'выполнено' };
+  var NEXT = { todo: 'doing', doing: 'done', done: 'todo' };
+  var items = Array.prototype.slice.call(document.querySelectorAll('.backlog li[data-id]'));
+  var sum = document.getElementById('bl-sum');
+  var hint = document.getElementById('bl-hint');
+  var state = {};
+  var col = null;
+  var canWrite = false;
+  function paint() {
+    var must = 0, mustDone = 0, done = 0;
+    items.forEach(function (li) {
+      var s = state[li.dataset.id] || 'todo';
+      var b = li.querySelector('.st');
+      b.dataset.s = s; b.textContent = LABEL[s];
+      b.disabled = !canWrite;
+      li.classList.toggle('is-done', s === 'done');
+      if (s === 'done') done++;
+      if (li.dataset.must === '1') { must++; if (s === 'done') mustDone++; }
+    });
+    sum.textContent = 'Обязательных до запуска выполнено: ' + mustDone + ' из ' + must + '. Всего выполнено: ' + done + ' из ' + items.length + '.';
+  }
+  items.forEach(function (li) {
+    li.querySelector('.st').addEventListener('click', function () {
+      if (!col || !canWrite) return;
+      var id = li.dataset.id;
+      var prev = state[id] || 'todo';
+      var next = NEXT[prev];
+      state[id] = next; paint();
+      col.doc(id).set({ status: next }).catch(function () {
+        state[id] = prev; paint();
+        hint.textContent = 'Не удалось сохранить. Попробуйте ещё раз.';
+      });
+    });
+  });
+  paint();
+  var timer = setTimeout(function () { hint.textContent = 'Отметки не загрузились. Обновите страницу.'; }, 10000);
+  if (!window.claude || !window.claude.use) { clearTimeout(timer); hint.textContent = 'Отметки видны только на claude.ai.'; return; }
+  Promise.all([window.claude.use('db'), window.claude.use('user')]).then(function (r) {
+    var db = r[0], user = r[1];
+    if (!db) { clearTimeout(timer); hint.textContent = 'Отметки недоступны в этом просмотре.'; return; }
+    col = db.collection('backlog');
+    col.onSnapshot(function (snap) {
+      clearTimeout(timer);
+      var next = {};
+      snap.docs.forEach(function (d) { var v = d.data(); if (v && LABEL[v.status]) next[d.id] = v.status; });
+      state = next; paint();
+    }, function () { clearTimeout(timer); hint.textContent = 'Отметки не загрузились. Обновите страницу.'; });
+    var check = user ? user.isOwner() : Promise.resolve(false);
+    check.then(function (owner) {
+      canWrite = !!owner; paint();
+      if (!owner) hint.textContent = 'Менять отметки может только владелец страницы.';
+    });
+  });
+})();
+</script>

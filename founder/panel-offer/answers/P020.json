@@ -1,0 +1,13 @@
+{
+  "id": "P020",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "convenience",
+  "reason": "On a renovation job the material receipts in our Telegram groups add up fast and I only look when something smells wrong, so if the free check finds even one duplicate it has paid for a year. $19 is nothing next to what I spend on site, and since my guys don't have to change anything I'll try one paid month with the refund as a safety net.",
+  "objection": "My staff and I are not sure we will keep using it after the free part. Our receipts are messy, half are handwritten nota and blurry photos, and if the sheet fills up with wrong rows I'll stop opening it and the Monday report becomes another message I ignore.",
+  "would_change_my_mind": "If the free check on my old chat comes back with nothing useful, or the rows from our handwritten nota are mostly wrong, I won't pay.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

@@ -1,0 +1,15 @@
+---
+// Страница 404: коротко и ссылка на главную; от поисковиков закрыта.
+// 25.11: главная по-английски, поэтому 404 тоже английская, со ссылками на русскую и индонезийскую главные.
+import Base from '../layouts/Base.astro';
+---
+<Base title="Page not found — Nota" description="This page does not exist. Go to the Nota home page." noindex selfFonts lang="en">
+  <main class="section" id="main">
+    <div class="wrap" style="max-width: 640px">
+      <h1 class="h2-gap">This page does not exist</h1>
+      <p class="lead">The link may be out of date. Everything about Nota is on the home page.</p>
+      <a class="btn" href="/">Go to the home page</a>
+      <p class="lead" style="margin-top: 28px; font-size: 16px;"><a href="/ru/" hreflang="ru" lang="ru">Главная на русском</a> · <a href="/id/" hreflang="id" lang="id">Beranda dalam bahasa Indonesia</a></p>
+    </div>
+  </main>
+</Base>

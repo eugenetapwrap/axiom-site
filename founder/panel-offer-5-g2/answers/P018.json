@@ -1,0 +1,13 @@
+{
+  "id": "P018",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I'm not on site, the build throws off piles of nota and nobody logs them, so a bot that sits in the group I already use and fills a sheet I own is worth $19 or $35 a month to me. Let's be honest, I was never going to build that bot myself. I'd run the free 30 on this month's supply-shop receipts and pay if they come out right.",
+  "objection": "Can it actually read my staff's handwritten nota from the building-supply shop, in Indonesian, with sloppy numbers? And checking totals and duplicates doesn't catch what really worries me: a padded price or a nota for material that never showed up.",
+  "would_change_my_mind": "If the free 30 come back garbled and I end up fixing half the handwritten nota myself, I'm out and back to Excel.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

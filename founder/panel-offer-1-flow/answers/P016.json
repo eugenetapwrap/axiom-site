@@ -1,0 +1,13 @@
+{
+  "id": "P016",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd add it to one group and burn through the free 30, sure. But receipts come in every day across three or four groups, so 100 documents won't cover a month, and I'm not paying $35 or $79 every month for something my staff might stop feeding properly. I'd go back to the spreadsheet I already do myself.",
+  "objection": "Once the free part is gone it's another monthly bill, and the price goes up with how many receipts we send. In a busy month I'm paying more for the same sheet, and I'm not sure my staff will keep sending everything through properly.",
+  "would_change_my_mind": "One flat price under $20 a month for all my groups with no document limit, and seeing in the free month that the sheet was right without me fixing it.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 20,
+  "price_too_expensive": 40
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My clients already send their nota to me on WhatsApp and I sort them at month end. I bill by the hour, so a tool that saves me typing time doesn't put more money in my pocket unless I can take on more clients, and it means moving clients to Telegram, which most of them don't use for work.",
+  "objection": "My clients' staff are on WhatsApp, not Telegram. Getting them to switch is the real work, and I'm the one who would have to chase them about it. Then I'd still have to retype everything from the sheet into Jurnal or Accurate.",
+  "would_change_my_mind": "If it worked inside the WhatsApp groups my clients already use, and exported straight into Accurate or Jurnal so I could take on a few more clients without hiring.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

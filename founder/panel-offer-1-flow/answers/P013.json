@@ -1,0 +1,13 @@
+{
+  "id": "P013",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "My admin already types it all into Excel for free, and if I really wanted a Telegram bot I'd get someone to build one. I might let the free 30 run, but I'm not paying $19 to $35 a month just because the sheet is a week behind.",
+  "objection": "Half of what I spend is cash to mechanics with a scribbled note or nothing at all, plus small fuel receipts. I doubt a bot reads that properly, and if my admin has to check every row anyway, I'm paying monthly for nothing I couldn't do in Excel.",
+  "would_change_my_mind": "If the free 30 showed it reading our handwritten mechanic notes and Indonesian fuel and parts receipts correctly, so my admin really stopped retyping and checking them.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 25,
+  "price_too_expensive": 45
+}

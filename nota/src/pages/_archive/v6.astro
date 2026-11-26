@@ -1,0 +1,304 @@
+---
+// Версия 6 лендинга: костяк и порядок рассказа из v2, факты из v3–v5. Тексты: src/data/content-v6.ts.
+import Base from '../../layouts/Base.astro';
+import Logo from '../../components/Logo.astro';
+import Icon from '../../components/Icon.astro';
+import ScreenSlot from '../../components/ScreenSlot.astro';
+import MiniReport from '../../components/MiniReport.astro';
+import { botLink } from '../../data/content';
+import { fmt } from '../../lib/fmt';
+import {
+  meta, cta, nav, hero, result, analytics, send, what, compare, reports, segments, reviews, data, pricing, faq, final, footer,
+} from '../../data/content-v6';
+---
+<Base title={meta.title} description={meta.description} noindex>
+  <header class="header">
+    <div class="wrap">
+      <a href="/" aria-label="Nota — на главную"><Logo height={30} /></a>
+      <nav aria-label="Разделы">{nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
+      <a class="btn btn--sm btn--dark" href={botLink('land6_header')}>Открыть в Telegram</a>
+    </div>
+  </header>
+
+  <main class="tight">
+    <!-- 1. Первый экран: архив → отчёт за 20 минут, QR, пример отчёта -->
+    <section class="hero hero2 hero3">
+      <div class="wrap split hero-split">
+        <div>
+          <span class="hero-eyebrow">{hero.eyebrow}</span>
+          <h1>{hero.title}</h1>
+          <p class="lead">{hero.lead}</p>
+          <div class="time-strip">
+            <div class="ts-item"><small>{hero.you.k}</small><b>{hero.you.v}</b><span>{hero.you.t}</span></div>
+            <span class="ts-arrow" aria-hidden="true">→</span>
+            <div class="ts-item ts-item--nota"><small>{hero.nota.k}</small><b>{hero.nota.v}</b><span>{hero.nota.t}</span></div>
+          </div>
+          <div class="cta-row cta-row--qr">
+            <a class="btn" href={botLink('land6_hero')}>{cta}</a>
+            <div class="cta-qr">
+              <img src="/screens/qr-bot.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="64" height="64" />
+              <span>{hero.qr}</span>
+            </div>
+          </div>
+          <p class="cta-note">{hero.note}</p>
+          <details class="howto-mini">
+            <summary>{hero.howto.summary}</summary>
+            <ul>{hero.howto.lines.map((l) => <li>{l}</li>)}</ul>
+          </details>
+        </div>
+        <figure class="hero-report">
+          <img src={hero.report.file} alt="Пример отчёта Nota по архиву: 96,15 млн рупий, 37 платежей, 2 дубля, 3 стоит проверить, категории и поставщики" width={hero.report.w} height={hero.report.h} fetchpriority="high" />
+          <figcaption>{hero.report.caption}</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 2. Что придёт через 20 минут -->
+    <section class="section" id="result">
+      <div class="wrap">
+        <h2 style="margin-bottom: 32px">{result.title}</h2>
+        <div class="grid" style="--min: 280px">
+          {result.items.map((r) => (
+            <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={r.icon} /></div><h3>{r.title}</h3></div><p>{r.text}</p></div>
+          ))}
+        </div>
+        <p class="note">{result.note}</p>
+        <div class="cta-row" style="margin-top: 24px"><a class="btn" href={botLink('land6_result')}>{cta}</a></div>
+      </div>
+    </section>
+
+    <!-- 3. Таблица, которая ведётся сама -->
+    <section class="section section--line" id="analytics">
+      <div class="wrap">
+        <h2>{analytics.title}</h2>
+        <p class="lead">{analytics.lead}</p>
+        <div class="an" data-an>
+          <div class="an-pick" role="tablist" aria-label="Листы таблицы">
+            {analytics.screens.map((sc, i) => (
+              <button type="button" role="tab" class="an-btn" id={`an-tab-${sc.id}`} aria-controls={`an-panel-${sc.id}`} aria-selected={i === 0 ? 'true' : 'false'}>
+                <small>{sc.tab}</small><b>{sc.label}</b><span>{sc.short}</span>
+              </button>
+            ))}
+          </div>
+          {analytics.screens.map((sc, i) => (
+            <div class:list={['an-panel', { on: i === 0 }]} role="tabpanel" id={`an-panel-${sc.id}`} aria-labelledby={`an-tab-${sc.id}`}>
+              <ScreenSlot file={sc.file} tab={sc.tab} tabs={analytics.tabs} alt={`Лист ${sc.tab} на тестовых данных`} w={sc.w} h={sc.h} mobile={sc.mobile} />
+              <ul class="an-points">{sc.points.map((t) => <li><Icon name="check" size={20} />{t}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+        <script is:inline>
+          (function () {
+            var root = document.querySelector('[data-an]');
+            if (!root) return;
+            root.classList.add('js');
+            var tabs = root.querySelectorAll('[role="tab"]');
+            var panels = root.querySelectorAll('[role="tabpanel"]');
+            function show(i) {
+              tabs.forEach(function (t, k) { t.setAttribute('aria-selected', k === i ? 'true' : 'false'); t.tabIndex = k === i ? 0 : -1; });
+              panels.forEach(function (p, k) { p.classList.toggle('on', k === i); });
+            }
+            tabs.forEach(function (t, i) {
+              t.addEventListener('click', function () { show(i); });
+              t.addEventListener('keydown', function (e) {
+                if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+                var n = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+                show(n); tabs[n].focus();
+              });
+            });
+            show(0);
+          })();
+        </script>
+        <p class="note">{analytics.note}</p>
+      </div>
+    </section>
+
+    <!-- 4. Как присылать документы дальше: четыре способа, группа по желанию -->
+    <section class="section section--paper" id="send">
+      <div class="wrap">
+        <h2 style="margin-bottom: 32px">{send.title}</h2>
+        <div class="grid" style="--min: 240px">
+          {send.items.map((c) => (
+            <div class="card send-card send-card--row">
+              <div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div>
+              <p>{c.text}</p>
+              <span class:list={['tag', `tag--${c.tone}`]}>{c.tag}</span>
+            </div>
+          ))}
+        </div>
+        <p class="note">{send.seen}</p>
+      </div>
+    </section>
+
+    <!-- 5. Что Nota делает с каждым документом -->
+    <section class="section section--line" id="what">
+      <div class="wrap">
+        <h2 style="margin-bottom: 32px">{what.title}</h2>
+        <div class="grid" style="--min: 300px">
+          {what.items.map((c) => (
+            <div class="card card--compact"><div class="send-head"><div class="card-icon"><Icon name={c.icon} /></div><h3>{c.title}</h3></div><p>{c.text}</p></div>
+          ))}
+        </div>
+        <div class="proof-stat"><b>{what.proof.value}</b><span>{what.proof.text}</span></div>
+      </div>
+    </section>
+
+    <!-- 6. Сравнение: накладная в 9:41 -->
+    <section class="section section--line">
+      <div class="wrap">
+        <h2 class="cmp-title">{compare.title}</h2>
+        <div class="cmp" role="table" aria-label="Сравнение: Nota, админ с Excel, приложение для расходов">
+          <div class="cmp-row cmp-head" role="row">
+            <div class="cmp-q" role="columnheader"><span class="sr-only">Вопрос</span></div>
+            {compare.options.map((o) => (
+              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="columnheader">{o.nota ? <Logo height={24} /> : o.name}</div>
+            ))}
+          </div>
+          <div class="cmp-row cmp-when" role="row">
+            <div class="cmp-q" role="rowheader">{compare.whenLabel}</div>
+            {compare.options.map((o) => (
+              <div class:list={['cmp-c', { 'cmp-c--nota': o.nota }]} role="cell">
+                <span class="cmp-who">{o.short ?? o.name}</span><b>{o.when}</b><small>{o.whenNote}</small>
+              </div>
+            ))}
+          </div>
+          {compare.rows.map((q, i) => (
+            <div class="cmp-row" role="row">
+              <div class="cmp-q" role="rowheader">{q}</div>
+              {compare.options.map((o) => {
+                const [m, t] = o.cells[i];
+                return (
+                  <div class:list={['cmp-c', `m-${m}`, { 'cmp-c--nota': o.nota }]} role="cell">
+                    <span class="vs-mark"><Icon name={m === 'yes' ? 'check' : m === 'no' ? 'x' : 'minus'} size={16} /></span>
+                    <span class="cmp-who">{o.short ?? o.name}</span>
+                    <span class="cmp-t">{t}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Отчёт каждый понедельник -->
+    <section class="section section--paper">
+      <div class="wrap">
+        <h2>{reports.title}</h2>
+        <p class="lead">{reports.lead}</p>
+        <div class="reports-row">
+          <MiniReport
+            title="Неделя · 3–9 ноя" period="Сравнение с прошлой неделей: +8%" total="21,70" sub="16 платежей"
+            marks={[{ n: '1', label: 'дубль', alert: true }, { n: '2', label: 'проверить', alert: true }, { n: '4', label: 'рукописных' }, { n: '0', label: 'не прочитано' }]}
+            bars={[3.1, 5.4, 2.2, 6.8, 2.9, 0.8, 0.5]}
+            cats={[['Материалы', '9 800 000', 45], ['Подрядчики', '6 200 000', 29], ['Без категории', '700 000', 3]]}
+          />
+          <MiniReport
+            title="Октябрь 2026" period="Сравнение с сентябрём: −4%" total="96,15" sub="72 платежа"
+            marks={[{ n: '0', label: 'дублей' }, { n: '3', label: 'проверить', alert: true }, { n: '8', label: 'рукописных' }, { n: '1', label: 'не прочитано' }]}
+            bars={[8.4, 33.6, 24.9, 21.3, 8.0]}
+            cats={[['Материалы', '44 230 000', 46], ['Зарплаты', '29 810 000', 31], ['Подрядчики', '14 420 000', 15]]}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Для кого -->
+    <section class="section">
+      <div class="wrap">
+        <h2 style="margin-bottom: 40px">{segments.title}</h2>
+        <div class="grid" style="--min: 250px">{segments.items.map((c) => <div class="card"><h3>{c.title}</h3><p>{c.text}</p></div>)}</div>
+        <p class="note">{segments.note}</p>
+      </div>
+    </section>
+
+    <!-- 9. Отзывы (заглушки до реальных текстов) -->
+    <section class="section section--paper">
+      <div class="wrap">
+        <h2 style="margin-bottom: 32px">{reviews.title}</h2>
+        <div class="grid reviews" style="--min: 250px">
+          {reviews.items.map((r) => (
+            <figure class="review">
+              <blockquote set:html={fmt(r.text)} />
+              <figcaption><b set:html={fmt(r.name)} /><span set:html={fmt(r.role)} /></figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Данные и кто делает -->
+    <section class="section section--dark">
+      <div class="wrap">
+        <h2>{data.title}</h2>
+        <div class="grid" style="--min: 300px; gap: 36px">
+          {data.items.map((d) => (
+            <div class="dark-item"><Icon name={d.icon} /><div><h3>{d.title}</h3><p set:html={fmt(d.text)} /></div></div>
+          ))}
+        </div>
+        <div class="who"><span>КТО ДЕЛАЕТ</span><p>{data.who} <span class="op-line" set:html={fmt(data.operator)} /></p></div>
+      </div>
+    </section>
+
+    <!-- 11. Цены -->
+    <section class="section section--paper" id="price">
+      <div class="wrap">
+        <h2>{pricing.title}</h2>
+        <p class="lead">{pricing.lead}</p>
+        <div class="grid" style="--min: 300px; gap: 24px">
+          {pricing.plans.map((p) => (
+            <div class:list={['plan', { 'plan--hl': p.highlight }]}>
+              {p.highlight && <div class="plan-badge">{p.highlight}</div>}
+              <h3>{p.name}</h3>
+              <div class="plan-price">{p.price}<small> / мес</small></div>
+              <div class="plan-unit">{p.unit}</div>
+              <p><b>{p.docs}</b><br /><span class="muted">{p.who}</span></p>
+              <ul class="check">{p.feats.map((f) => <li><Icon name="check" size={20} />{f}</li>)}</ul>
+              <a class:list={['btn', 'btn--sm', { 'btn--outline': p.outline }]} href={botLink(p.tag)}>{p.cta}</a>
+            </div>
+          ))}
+        </div>
+        <ul class="plan-facts">
+          <li>{pricing.common}</li>
+          <li>{pricing.hint}</li>
+          <li set:html={fmt(pricing.pay)} />
+          <li set:html={fmt(pricing.over)} />
+          <li>{pricing.note}</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 12. Вопросы -->
+    <section class="section" id="faq">
+      <div class="wrap">
+        <h2 style="margin-bottom: 24px">Вопросы</h2>
+        <div class="faq">{faq.map((f) => <details><summary>{f.q}</summary><p set:html={fmt(f.a)} /></details>)}</div>
+      </div>
+    </section>
+
+    <!-- Финал -->
+    <section class="section--dark final">
+      <div class="wrap">
+        <h2>{final.title}</h2>
+        <p>{final.lead}</p>
+        <a class="btn" href={botLink('land6_final')}>{cta}</a>
+        <div class="final-qr">
+          <img src="/screens/qr-bot.svg" alt="QR-код: открыть @NotaGetBot в Telegram" width="96" height="96" />
+          <span>Или наведите камеру телефона</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
+      <nav aria-label="Документы">
+        <a href={footer.terms}>Пользовательское соглашение <mark class="todo">ссылка</mark></a>
+        <a href={footer.privacy}>Политика конфиденциальности <mark class="todo">ссылка</mark></a>
+        <a href={botLink('land6_support')}>Поддержка в боте</a>
+      </nav>
+      <div class="op">{footer.operator} · © 2026</div>
+    </div>
+  </footer>
+</Base>

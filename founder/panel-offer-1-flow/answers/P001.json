@@ -1,0 +1,13 @@
+{
+  "id": "P001",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Nobody on my team records anything and I only catch problems late at night when a number looks wrong, so a sheet that fills itself from the chat we already use is worth $19 to me. The free 30 cost me nothing, and my staff send that many in a week or two, so I'd find out fast.",
+  "objection": "Half of what my staff send is faded warung notas and handwritten Indonesian bills. If the bot gets the amounts or suppliers wrong I'll be sitting up at midnight fixing rows, and then it's no better than scrolling the group.",
+  "would_change_my_mind": "If more than a handful of the free 30 come back with wrong amounts on the handwritten notas, I won't pay.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 49,
+  "price_too_expensive": 89
+}

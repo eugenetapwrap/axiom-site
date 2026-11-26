@@ -1,0 +1,13 @@
+{
+  "id": "P018",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I'm abroad and my money gets spent on site by people I can't watch, and right now I only find out something's wrong when it already feels off. Zoho or Excel only work if somebody types, and nobody does, so if this really turns the nota piling up in Telegram into a sheet and a Monday report, $35 a month is nothing next to one padded supply bill.",
+  "objection": "Can it actually read my staff's handwritten nota from the building-supply shop, with smudged Indonesian and rupiah totals, or will I end up checking every row against the photo anyway? If I still have to check everything myself, it's just a nicer pile of photos.",
+  "would_change_my_mind": "If the free 30 documents come back with wrong amounts or suppliers on the handwritten nota, I drop it and go back to scrolling the chat when something smells wrong.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 120
+}

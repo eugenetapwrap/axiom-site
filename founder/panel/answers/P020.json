@@ -1,0 +1,13 @@
+{
+  "id": "P020",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "convenience",
+  "reason": "I already scroll the site chats at night trying to work out where the materials money went, so if it just sits in the group and fills a sheet without my foremen doing anything, $45 a month is nothing next to one duplicated cement receipt. I'd run the free 40 on my real chat history first and only pay if the sheet actually matches what I know was spent.",
+  "objection": "Our site receipts are crumpled handwritten nota and blurry transfer screenshots in Indonesian; if it misreads half of them I'm back to checking everything by hand and paying for nothing, and after the free part nobody on my team will bother fixing its mistakes.",
+  "would_change_my_mind": "If during the free documents it gets more than a few of our handwritten nota wrong or misses a duplicate I already know about, I don't pay.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 79,
+  "price_too_expensive": 150
+}

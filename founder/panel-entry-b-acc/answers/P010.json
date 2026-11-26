@@ -1,0 +1,13 @@
+{
+  "id": "P010",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "convenience",
+  "reason": "It puts everything in a Google Sheet, but my work lives in Jurnal and Accurate, so I would still be retyping or importing every row by hand. I might forward a few nota to the free tier out of curiosity, but I would not pay for another sheet to clean up.",
+  "objection": "My clients will not want a bot in their group chats, and even if they did, the data stops in Google Sheets instead of my accounting system. I also doubt it reads the crumpled, handwritten nota my clients actually send.",
+  "would_change_my_mind": "A direct export or ready-made import file for Jurnal and Accurate, so I can forward the receipts myself without adding the bot to my clients' chats.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 35,
+  "price_too_expensive": 70
+}

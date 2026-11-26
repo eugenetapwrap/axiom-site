@@ -1,0 +1,93 @@
+---
+// Страница документа (/terms, /privacy, /refund и их версии /en/…, /id/…): шапка и подвал как у лендинга, узкая колонка текста.
+// Текст документа вставляется в .md-файл страницы (Markdown). Пока текста нет, показывается заглушка с планом документа и жёлтой меткой.
+import Base from './Base.astro';
+import Logo from '../components/Logo.astro';
+const { frontmatter } = Astro.props;
+const { title, description = '', updated = '', plan = [], lang = 'ru', slug = '' } = frontmatter;
+const html = await Astro.slots.render('default');
+const empty = !html.replace(/<!--[\s\S]*?-->/g, '').trim();
+const bot = 'https://t.me/NotaGetBot';
+const supportBot = 'https://t.me/NotaSuppBot';
+// Подписи шапки и подвала на языке документа. Русская версия — /terms, английская — /en/terms, индонезийская — /id/terms.
+const t = {
+  ru: { guide: 'Как пользоваться', home: 'Nota — на главную', open: 'Открыть в Telegram', openSm: 'В Telegram', rev: 'Редакция от', soon: 'текст появится', draft: 'черновик', prep: 'Документ готовится. Здесь будет:', q: 'Вопросы — в', qBot: 'боте @NotaGetBot', docs: 'Документы', terms: 'Пользовательское соглашение', privacy: 'Политика конфиденциальности', refund: 'Правила возврата', support: 'Поддержка в боте', langs: 'Язык документа' },
+  en: { guide: 'How to use Nota', home: 'Nota — home', open: 'Open in Telegram', openSm: 'Telegram', rev: 'Version of', soon: 'coming soon', draft: 'draft', prep: 'This document is being prepared. It will cover:', q: 'Questions? Ask in', qBot: 'the @NotaGetBot bot', docs: 'Documents', terms: 'Terms of Service', privacy: 'Privacy Policy', refund: 'Refund Policy', support: 'Support in the bot', langs: 'Document language' },
+  id: { guide: 'Cara menggunakan', home: 'Nota — beranda', open: 'Buka di Telegram', openSm: 'Telegram', rev: 'Versi', soon: 'segera hadir', draft: 'draf', prep: 'Dokumen sedang disiapkan. Isinya:', q: 'Pertanyaan? Tanyakan di', qBot: 'bot @NotaGetBot', docs: 'Dokumen', terms: 'Ketentuan Layanan', privacy: 'Kebijakan Privasi', refund: 'Kebijakan Pengembalian Dana', support: 'Dukungan di bot', langs: 'Bahasa dokumen' },
+}[lang as 'ru' | 'en' | 'id'];
+const pre = lang === 'ru' ? '' : `/${lang}`;
+const langs = slug ? [['ru', 'RU', `/${slug}`], ['en', 'EN', `/en/${slug}`], ['id', 'ID', `/id/${slug}`]] : [];
+import { homePath, type Lang } from '../data/landing-i18n';   // главная своего языка (25.11: английская — на /)
+---
+<Base title={`${title} — Nota`} description={description} noindex selfFonts lang={lang}>
+  <div class="doc">
+    <header class="header">
+      <div class="wrap">
+        <a class="logo-link" href={homePath[lang as Lang]} aria-label={t.home}><Logo height={30} /></a>
+        <a class="btn btn--sm btn--dark" href={bot} target="_blank" rel="noopener"><span class="hb-lg">{t.open}</span><span class="hb-sm">{t.openSm}</span></a>
+      </div>
+    </header>
+    <main class="doc-main">
+      <div class="wrap doc-col">
+        {langs.length > 0 && (
+          <nav class="doc-langs" aria-label={t.langs}>
+            {langs.map(([code, label, href]) => code === lang ? <span aria-current="true">{label}</span> : <a href={href} hreflang={code}>{label}</a>)}
+          </nav>
+        )}
+        <h1>{title}</h1>
+        <p class="doc-meta">{updated ? `${t.rev} ${updated}` : <mark class="todo">{empty ? t.soon : t.draft}</mark>}</p>
+        {empty ? (
+          <div class="doc-empty">
+            <p>{t.prep}</p>
+            <ul>{plan.map((x: string) => <li>{x}</li>)}</ul>
+            <p class="doc-q">{t.q} <a href={bot} target="_blank" rel="noopener">{t.qBot}</a>.</p>
+          </div>
+        ) : (
+          <article class="doc-body" set:html={html} />
+        )}
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="wrap">
+        <div class="brand"><Logo height={24} color="#F2F0EA" /><span>by Axiom</span></div>
+        <nav aria-label={t.docs}>
+          <a href={`${pre}/guide`}>{t.guide}</a>
+          <a href={`${pre}/terms`}>{t.terms}</a>
+          <a href={`${pre}/privacy`}>{t.privacy}</a>
+          <a href={`${pre}/refund`}>{t.refund}</a>
+          <a href={supportBot} target="_blank" rel="noopener">{t.support}</a>
+        </nav>
+        <div class="op">© 2026</div>
+      </div>
+    </footer>
+  </div>
+  <style is:global>
+    .doc .header .wrap { justify-content: space-between; }
+    .doc .header .btn--dark { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+    .doc .header .btn--dark:hover { background: var(--ink); color: #fff; box-shadow: none; }
+    .doc .footer nav a { text-decoration: none; }
+    .doc-main { padding: 48px 0 80px; }
+    .doc-col { max-width: 760px; }
+    .doc-langs { display: flex; gap: 14px; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; margin-bottom: 18px; }
+    .doc-langs a { color: var(--muted); text-decoration: none; }
+    .doc-langs a:hover { color: var(--ink); }
+    .doc-langs span { color: var(--ink); box-shadow: inset 0 -2px 0 currentColor; }
+    .doc-col h1 { font-size: clamp(32px, 4vw, 44px); line-height: 1.12; letter-spacing: -0.015em; text-wrap: balance; overflow-wrap: break-word; }
+    @media (max-width: 360px) { .doc-col h1 { font-size: 26px; } } /* «конфиденциальности» не влезала в 320 px */
+    .doc-meta { margin-top: 10px; font-size: 15px; color: var(--muted); }
+    .doc-empty { margin-top: 28px; padding: 22px 24px; border-radius: 18px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); font-size: 17px; }
+    .doc-empty ul { margin: 12px 0 0; padding-left: 22px; display: grid; gap: 6px; color: var(--ink); }
+    .doc-empty .doc-q { margin-top: 16px; font-size: 15px; color: var(--muted); }
+    .doc-body { margin-top: 28px; font-size: 17px; line-height: 1.65; }
+    .doc-body > * + * { margin-top: 14px; }
+    .doc-body h2 { font-size: 24px; line-height: 1.25; margin-top: 36px; }
+    .doc-body h3 { font-size: 19px; line-height: 1.3; margin-top: 26px; }
+    .doc-body ul, .doc-body ol { padding-left: 24px; }
+    .doc-empty ul, .doc-body ul { list-style: disc; }
+    .doc-body ol { list-style: decimal; }
+    .doc-body li + li { margin-top: 6px; }
+    .doc-body table { width: 100%; border-collapse: collapse; font-size: 15px; display: block; overflow-x: auto; }
+    .doc-body th, .doc-body td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+    @media (max-width: 760px) { .doc-main { padding: 32px 0 64px; } }
+  </style>
+</Base>

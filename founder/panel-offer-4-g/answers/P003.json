@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "Duplicates are the easy part, I already catch those by checking myself. What burned me was a nota with the price written up, and a bot reading a handwritten shop nota can't tell me the real price was lower. I might play with the free 30, but I wouldn't pay for something that only does what my Excel check already does.",
+  "objection": "My staff's nota are handwritten and messy. I don't believe a bot reads them right, and even if it does, a perfectly added-up nota can still be inflated. Totals that match don't mean nobody padded it.",
+  "would_change_my_mind": "If in the free 30 it reads our handwritten nota correctly and flags when a price is out of line with what we normally pay for the same item at the same shop.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 50,
+  "price_too_expensive": 100
+}

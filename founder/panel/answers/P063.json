@@ -1,0 +1,13 @@
+{
+  "id": "P063",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper already runs everything through Jurnal and it works well enough. I'm not moving my villa expenses to a Telegram bot from a small team just to save her a little typing.",
+  "objection": "Will this bot still be around in a year? If it shuts down, my records and my whole process go with it, and I'd have to retrain everyone.",
+  "would_change_my_mind": "If it pushed straight into Jurnal or Zoho, and my bookkeeper tried it on our old chat history and found duplicates she had missed, I'd think about it.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

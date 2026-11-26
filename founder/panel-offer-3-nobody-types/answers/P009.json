@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'd throw the free 30 receipts at it out of curiosity, but I wouldn't pay yet. Where I actually lost money was mechanics and staff padding cash receipts and handwritten notes, and a bot that types up a fake number neatly doesn't catch that. I'd still be checking every receipt myself.",
+  "objection": "It's a new little Telegram bot sitting in my staff group. I don't know who's behind it or if it'll still be running in a year, and reading a receipt is not the same as checking the mechanic really charged that much.",
+  "would_change_my_mind": "If during the free 30 it actually flags a duplicate or a padded total from my scooter repairs that I missed myself, I'd pay the $19 straight away.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 35,
+  "price_too_expensive": 60
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P005",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "My guys' nota from the toko bangunan are scribbled in pen, half in Indonesian shorthand, often faded or crumpled, and I'd bet the bot misreads the item names and totals so I end up checking every row anyway. I'd throw the free 30 at it out of curiosity, but I wouldn't pay $19 a month for something I'd still have to correct, when I could wire up n8n and ChatGPT to a sheet myself over a weekend.",
+  "objection": "Recognition will get handwritten and faded Indonesian nota wrong, wrong amounts or wrong materials, and if I have to fix it by hand it saves me nothing over typing it in myself.",
+  "would_change_my_mind": "If my staff's actual handwritten nota from the free 30 come back with the right totals and item names nearly every time, with only a few rows to fix, I'd pay rather than build and maintain my own bot.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

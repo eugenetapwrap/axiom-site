@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I'd throw my guys' nota at the free 30 to see what happens, but I'm not paying until I see it read their scrawled handwritten nota from the supply shop correctly. Right now Excel and my own eyes do the job for free.",
+  "objection": "The cheating I've actually caught wasn't duplicates or bad sums. It was a nota the shop wrote out with a padded number. A bot that copies the handwriting into a sheet just puts the fake number in a neat row, and then I trust it more than I should.",
+  "would_change_my_mind": "If it gets my own messy handwritten nota right in the free trial, and it flags prices way above what that supplier normally charges for the same item, not just duplicates.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

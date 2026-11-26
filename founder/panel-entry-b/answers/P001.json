@@ -1,0 +1,13 @@
+{
+  "id": "P001",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I might throw the free 30 at it because there's no card, but half of what my staff send is crumpled nota from the warung or handwritten Bahasa notes, and if I end up fixing rows at midnight that's the same job I already avoid. $19 isn't the problem, the checking is.",
+  "objection": "It will misread faded or handwritten Indonesian receipts and I will be the one correcting the sheet, so I still can't trust the totals without going back to the chat.",
+  "would_change_my_mind": "Seeing it get a week of my own staff's worst receipts right during the free 30, handwritten ones included, without me touching anything.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 35,
+  "price_too_expensive": 70
+}

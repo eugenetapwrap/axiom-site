@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I make every transfer myself, so my bank statement already is the record, and I can paste the screenshots into a sheet in five minutes a week. I'd maybe use the 30 free ones out of curiosity, but I won't pay $19 a month for that.",
+  "objection": "If a contractor sends the same invoice twice, that's a people problem and I'll catch it when I check my transfers, not a software problem. Paying monthly to get told about it is one more subscription I'd cancel by month three.",
+  "would_change_my_mind": "If it showed me on the first free batch that my site manager's receipts don't add up to what I wired, and it cost under $10 a month or a one-off fee per build.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

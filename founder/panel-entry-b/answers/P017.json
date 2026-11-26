@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "It needs my Google account and a seat in our work chat, and I'm not giving a bot I just found either of those. My admin already turns the transfer screenshots into a sheet, so I'm not paying $19 a month to hand my guests' and contractors' payment details to a stranger.",
+  "objection": "Who is behind @NotaGetBot and what happens to everything it reads in the group? Bank transfers, contractor names, amounts, and whatever else people say in that chat. 'Connect your Google account' is where I stop.",
+  "would_change_my_mind": "A version that never touches my Google account or sits in the group: I forward only the receipts I choose and get a file back, plus a clear, named company with a written promise that nothing is stored after processing.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 29
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P020",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I'd probably forward a few receipts to try the free 30, but it ends up in a Google Sheet anyway, and my friend and I could wire up n8n with ChatGPT in a weekend to do the same thing. I'm not paying $19 every month for something I can build and own myself.",
+  "objection": "It's a small new bot I'm giving my Google account and all my shop's spending to. If it shuts down or changes its prices next year, I'm stuck rebuilding everything anyway, so why not build it myself now.",
+  "would_change_my_mind": "If my homemade version kept getting the totals wrong on handwritten notes and bank screenshots, and Nota showed me it handles those properly. Some proof it will still be running in a year would help too, like a yearly plan or a way to export my setup.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 30
+}

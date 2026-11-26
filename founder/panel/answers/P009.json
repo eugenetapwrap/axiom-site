@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "My rental shop doesn't have that many receipts. Staff send them to the group, I look at them, and my partner and I go through the month together. A duplicate means I talk to the person, and a bot can't do that for me. I'd try the 40 free ones out of curiosity, but I wouldn't pay $19 a month for something I can do in an evening with a spreadsheet.",
+  "objection": "It's another subscription fixing a problem I don't really have. My volume is low, and if someone fiddles a receipt, that's about trust in my staff, not software.",
+  "would_change_my_mind": "If the free trial found real money in my old chat history, like duplicates or overcharges I'd missed that add up to more than a few months of the fee.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

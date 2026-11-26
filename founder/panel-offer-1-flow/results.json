@@ -1,0 +1,190 @@
+{
+ "business": "Nota (@NotaGetBot): a Telegram bot that collects receipts, invoices and handwritten delivery notes from work chats into the owner's Google Sheet and flags duplicates and arithmetic errors",
+ "seed": 843138,
+ "dealt": 20,
+ "answered": 20,
+ "skipped": [],
+ "buys": 4,
+ "passes": 16,
+ "buy_rate": 0.2,
+ "by_segment": [
+  [
+   "Remote investor in villas or a build, living abroad",
+   3,
+   0.6666666666666666
+  ],
+  [
+   "Café / restaurant owner",
+   3,
+   0.3333333333333333
+  ],
+  [
+   "Villa management company or villa rental operator",
+   5,
+   0.2
+  ],
+  [
+   "Construction / renovation contractor or developer",
+   6,
+   0.0
+  ],
+  [
+   "Shop or bike/scooter rental owner",
+   3,
+   0.0
+  ]
+ ],
+ "by_behaviour": [
+  [
+   "Burned before",
+   2,
+   0.5
+  ],
+  [
+   "Runs everything through chats",
+   5,
+   0.4
+  ],
+  [
+   "Has an admin with Excel",
+   4,
+   0.25
+  ],
+  [
+   "Price-sensitive",
+   2,
+   0.0
+  ],
+  [
+   "Tech-savvy DIY",
+   2,
+   0.0
+  ],
+  [
+   "Already uses an app",
+   2,
+   0.0
+  ],
+  [
+   "Privacy-wary",
+   2,
+   0.0
+  ],
+  [
+   "Delegates to a bookkeeper",
+   1,
+   0.0
+  ]
+ ],
+ "by_income": [
+  [
+   "$88,000 to $104,000",
+   7,
+   0.2857142857142857
+  ],
+  [
+   "$104,000 and up",
+   7,
+   0.2857142857142857
+  ],
+  [
+   "under $88,000",
+   6,
+   0.0
+  ]
+ ],
+ "why_not": [
+  [
+   "trust",
+   5,
+   [
+    "The mess in my Telegram groups is real, but I've lived with it for years and I only dig in when something smells wrong. I'm not putting an unknown bot into groups full of transfer screenshots, and I'm not building my bookkeeping around a tool from a small team I've never heard of.",
+    "I'm not putting some bot I never heard of into my work group and hooking it up to my Google account, whatever it says about only seeing one sheet. Half of what I spend is cash to mechanics with no receipt anyway, so my notebook does the job."
+   ],
+   [
+    "P010",
+    "P011"
+   ]
+  ],
+  [
+   "habit",
+   4,
+   [
+    "I might let it read the free 30 receipts out of curiosity, but my admin already does the spreadsheet in Excel every week, late or not, and I don't see us changing that and paying another monthly bill for it.",
+    "My bookkeeper and I already run everything through Zoho/Jurnal and it works well enough. A Google Sheet next to that is a second system someone has to reconcile, not less work. I might forward a few receipts to see it work, but I wouldn't pay for it."
+   ],
+   [
+    "P002",
+    "P007"
+   ]
+  ],
+  [
+   "price",
+   4,
+   [
+    "I'd throw it in the villa group and use up the free 30, sure, it costs nothing. But paying every month for something I keep telling myself I can rig with Excel or a quick bot of my own doesn't sit right, not this month.",
+    "My admin already types it all into Excel for free, and if I really wanted a Telegram bot I'd get someone to build one. I might let the free 30 run, but I'm not paying $19 to $35 a month just because the sheet is a week behind."
+   ],
+   [
+    "P008",
+    "P013"
+   ]
+  ],
+  [
+   "quality",
+   2,
+   [
+    "I'd throw my guys' nota at the free 30 to see what happens, but I'm not paying until I see it read their scrawled handwritten nota from the supply shop correctly. Right now Excel and my own eyes do the job for free.",
+    "Most of what my guys send is handwritten nota from the material shop, faded and half in Bahasa scribble, and I don't believe a bot reads those right. If I end up checking every row anyway, I'd rather wire up n8n with ChatGPT myself for a few dollars than pay $19 a month."
+   ],
+   [
+    "P003",
+    "P005"
+   ]
+  ],
+  [
+   "need",
+   1,
+   [
+    "I pay the contractors by bank transfer myself, so my bank app already lists every payment, and the screenshots are sitting in the group if I need to check one. I might let it eat the 30 free documents out of curiosity, but I would not put a card in for yet another monthly bill."
+   ],
+   [
+    "P004"
+   ]
+  ]
+ ],
+ "why_yes": [
+  [
+   "need",
+   4,
+   [
+    "Nobody on my team records anything and I only catch problems late at night when a number looks wrong, so a sheet that fills itself from the chat we already use is worth $19 to me. The free 30 cost me nothing, and my staff send that many in a week or two, so I'd find out fast.",
+    "I'm abroad and my admin's spreadsheet is always a week behind, so I end up scrolling the group chat at midnight trying to work out what was spent on the build. A sheet that fills itself and flags duplicates and wrong totals is exactly what I want, the price is nothing next to one padded invoice, and the 30 free documents cost me nothing to find out."
+   ],
+   [
+    "P001",
+    "P006"
+   ]
+  ]
+ ],
+ "flip": [
+  "If during the free 30 my admin told me herself that it caught up her backlog, got the numbers right, and that she would rather check the bot's sheet than keep typing.",
+  "If it gets my own messy handwritten nota right in the free trial, and it flags prices way above what that supplier normally charges for the same item, not just duplicates.",
+  "If during the free 30 it caught real money I would otherwise have paid twice or missed on the build, more than a few months of the fee, I would keep it for the length of the project.",
+  "If I put 30 of my staff's real handwritten nota through the free trial and almost all of them come out right without me touching them, I'd pay, because then it beats building and babysitting my own bot.",
+  "If it pushed the rows straight into Jurnal or Zoho so my bookkeeper never retypes anything, and I could see a real company behind it that's been running for a while.",
+  "If my accountant takes the sheet as is at month end and stops chasing me for missing receipts, then $19 is nothing next to that hassle and I'd pay.",
+  "Another villa operator in Bali I know telling me they've used it for six months or more without problems, plus a clear name and company behind the bot.",
+  "Someone I know here in Bali running a rental or a shop using it for a few months with no problems, and a way to use it with only receipts I forward myself, without connecting my Google account at all.",
+  "If the free 30 caught a duplicate or an inflated fuel or parts bill my admin missed, so it actually saved me money and didn't just save her typing time.",
+  "If the free 30 showed it reading our handwritten mechanic notes and Indonesian fuel and parts receipts correctly, so my admin really stopped retyping and checking them.",
+  "Another contractor or accountant in Bali I actually know running it with their team for a few months without problems, and showing me the sheet.",
+  "My bookkeeper runs it on one month of our real receipts and tells me she didn't have to chase anyone, or another contractor in Bali tells me he's used it for a year without problems.",
+  "One flat price under $20 a month for all my groups with no document limit, and seeing in the free month that the sheet was right without me fixing it.",
+  "A version that works without joining the group or logging into my Google account, so I just forward receipts and download the sheet, plus a real company name and a clear data-deletion policy. Then I'd let my admin try the free 30 and see if it actually saves her hours.",
+  "If it sent the rows straight into the app my bookkeeper already uses instead of its own Google Sheet, and in the free trial it actually caught a double-paid repair from my own chat.",
+  "If the free trial showed it reading our messy handwritten notes and Indonesian transfer screenshots far better than anything I could hack together, plus a cheap yearly plan with a clear promise of what happens to my sheet if they shut down."
+ ],
+ "purchases_first_month_per_buyer": 1.0,
+ "price_answers": 20
+}

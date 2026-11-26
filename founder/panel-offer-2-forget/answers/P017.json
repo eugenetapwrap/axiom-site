@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "My admin already collects the transfer screenshots and receipts from the group and types them into our sheet. $19 a month adds a bot on top of a job someone is already paid to do, so I don't see what I'd save.",
+  "objection": "The useful part is putting it in the work group, and I don't want a bot sitting in our staff chat reading everything, or touching my Google account, whatever it says about seeing only one sheet.",
+  "would_change_my_mind": "If my admin quit or kept making mistakes, and I could use it without adding it to the group chat or connecting Google, just forwarding receipts myself and exporting the sheet.",
+  "price_too_cheap": 2,
+  "price_cheap": 7,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

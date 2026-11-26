@@ -1,0 +1,13 @@
+{
+  "id": "P012",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I already pay an admin to put receipts into Excel. She's behind, sure, but she gets there, and half of what I spend on the scooters is cash to mechanics with no receipt at all, so a bot reading the chat would only see part of it. I might throw the free 30 at it out of curiosity, but I wouldn't start paying $19 a month for a job someone on my payroll already does.",
+  "objection": "$19 a month for something my admin already does. And the bot can't see the cash I hand the mechanics, so the report would make it look like I know where the money went when I don't.",
+  "would_change_my_mind": "If the free run on my own chat turned up real money I was losing, like a part paid for twice or a fuel receipt with the wrong amount, and it covered more than the $19 a month.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 20,
+  "price_too_expensive": 40
+}

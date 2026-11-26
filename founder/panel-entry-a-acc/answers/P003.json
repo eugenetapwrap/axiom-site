@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "My name is on these books, so I'd still have to check every row the bot reads against the original receipt, and that's most of the work I'd be paying it to do. I charge clients a fixed fee, so a tool only pays off if it lets me take on more clients, and a Google Sheet I have to double-check doesn't do that.",
+  "objection": "If it misreads an amount, misses a duplicate or files something under the wrong category and I don't catch it, the client blames me, not a Telegram bot. I'm also not keen on sending a client's whole work chat to a third party without asking them first.",
+  "would_change_my_mind": "Running one real client's full month through it and seeing it match my own books with almost no corrections, on one plan that covers all my clients instead of a document cap per business.",
+  "price_too_cheap": 5,
+  "price_cheap": 19,
+  "price_expensive": 49,
+  "price_too_expensive": 99
+}

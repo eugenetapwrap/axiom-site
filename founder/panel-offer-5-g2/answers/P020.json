@@ -1,0 +1,13 @@
+{
+  "id": "P020",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd run the free 30 receipts to see how it works, but $19 a month every month is a lot for a small rental shop when I could put together something like this in n8n with ChatGPT over a weekend. Writing to my own sheet is nice, but it doesn't do anything I can't do myself.",
+  "objection": "It's a tiny new bot. If it disappears in six months I'm back to building my own anyway, so why not build it now and own it.",
+  "would_change_my_mind": "If the free 30 caught a real duplicate or wrong total from my staff that I'd have missed, and read their handwritten notes properly, then paying would beat building it myself.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 15,
+  "price_too_expensive": 25
+}

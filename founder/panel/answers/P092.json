@@ -1,0 +1,13 @@
+{
+  "id": "P092",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My admin already puts the receipts into Excel. Yes, she is always behind, but it costs me nothing extra, and $19 every month is real money for a café my size. Maybe I try the 40 free ones, but I would not pay after.",
+  "objection": "I already pay someone to do this. Why pay again for a bot when Excel or something free does the same, even if it is slower?",
+  "would_change_my_mind": "If the free trial showed it caught duplicate or wrong receipts that cost me more than $19 a month, or if it let my admin spend her hours on something else.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

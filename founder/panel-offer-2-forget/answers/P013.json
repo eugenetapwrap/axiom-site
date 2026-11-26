@@ -1,0 +1,13 @@
+{
+  "id": "P013",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I already pay my admin to type the scooter receipts into Excel every week, and late or not it works and costs me nothing extra. I might throw a few receipts at the free 30 to see what happens, but I wouldn't pay $19 or $35 a month this month for something Zoho or a bot I could build myself might do.",
+  "objection": "Half my spending is cash to mechanics with a scribbled note or no receipt at all, plus fuel slips and parts from little shops. I doubt a bot reads a mechanic's handwriting in Indonesian correctly, and if my admin still has to check every row, I've saved nothing.",
+  "would_change_my_mind": "If the free 30 documents read my mechanics' handwritten notes and fuel slips correctly and my admin could stop the weekly typing, I'd pay the $35 tier.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 30,
+  "price_too_expensive": 60
+}

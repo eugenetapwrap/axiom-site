@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I'd send it a few nota for free, sure, but I'm not paying until I see it read my guys' scrawled handwritten nota from the supply shop correctly. And 'forward it and forget about it' is the opposite of how I run things since I caught someone padding receipts. Excel and my own checking cost me nothing.",
+  "objection": "Catching duplicates is fine, but the real trick on my sites is a nota with a bigger number written on it. A bot that just copies that number into a sheet doesn't stop that. I still have to check it against the shop myself, so what am I paying for?",
+  "would_change_my_mind": "If during the free 30 it reads a pile of my own messy Indonesian nota without mistakes and flags a real double-claim or a padded total I would have missed, then I'd pay the $35 without thinking twice.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 49,
+  "price_too_expensive": 100
+}

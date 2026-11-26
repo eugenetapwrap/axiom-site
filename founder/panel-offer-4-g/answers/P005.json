@@ -1,0 +1,13 @@
+{
+  "id": "P005",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "My guys bring back handwritten nota from the material shop, half of them faded or smudged with cement, and I don't believe any bot reads those right. If I end up checking every line anyway, I'd rather build my own n8n plus ChatGPT flow that I can tweak myself.",
+  "objection": "It will misread handwritten Indonesian nota, wrong totals, wrong item names, and I'll spend my evenings fixing the sheet instead of saving time.",
+  "would_change_my_mind": "Running my own staff's worst handwritten nota through the 30 free documents and seeing it get almost all the totals right without me fixing them.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 25,
+  "price_too_expensive": 45
+}

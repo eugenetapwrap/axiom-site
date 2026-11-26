@@ -1,0 +1,13 @@
+{
+  "id": "P019",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "My bookkeeper and I already use an expense app and it works well enough, so I don't want another bill and another sheet to check. Half of what I spend is cash to mechanics with no proper receipt anyway, so a receipt bot only covers part of my costs.",
+  "objection": "I don't believe it really catches a duplicate when the same parts receipt gets photographed twice from different angles, or a mechanic sends the same handwritten nota again a week later. If it's just a receipt-to-table bot, my current app already does that.",
+  "would_change_my_mind": "Seeing it catch real duplicates and wrong totals on my own scooter-parts receipts during the free 30, and sync into the app my bookkeeper already uses so I'm not running two systems.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 19,
+  "price_too_expensive": 35
+}

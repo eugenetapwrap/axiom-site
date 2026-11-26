@@ -1,0 +1,13 @@
+{
+  "id": "P077",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "My bookkeeper already collects the receipts every month and sorts them out, so I don't see what I'd be paying $19 for. Most of what I spend on the scooters is cash to mechanics anyway, and half of that has no receipt at all.",
+  "objection": "It's $19 a month for something my admin already does, and I'd still be paying the bookkeeper either way.",
+  "would_change_my_mind": "If my bookkeeper said it would cut her monthly fee or save her real hours, or if I found out mechanics were double-charging me on repairs.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

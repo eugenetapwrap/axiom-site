@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I might throw the 40 free documents at it out of curiosity, but I wouldn't pay. A brand-new bot from a team I've never heard of, sitting in my staff chats and my Google Drive, could vanish in six months, and I could put together something good enough with n8n and ChatGPT over a weekend.",
+  "objection": "Will this tiny product still exist next year? If it dies, my bookkeeping process dies with it. On top of that, it's reading every receipt and transfer screenshot in my work groups, and I don't know who's behind it.",
+  "would_change_my_mind": "Proof it will last and that I can leave cleanly: a real company I can name, other Bali businesses that have used it for a year, and an annual plan or guarantee. The duplicate detection on re-photographed receipts would also have to beat my own DIY version in the free trial.",
+  "price_too_cheap": 5,
+  "price_cheap": 10,
+  "price_expensive": 25,
+  "price_too_expensive": 45
+}

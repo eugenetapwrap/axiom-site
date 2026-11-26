@@ -1,0 +1,13 @@
+{
+  "id": "P015",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "Missing receipts at month end are a real headache, but I don't handle that stuff myself, my bookkeeper does. I'm not running my company's money trail through a new little bot nobody's heard of until I know it will still be here next year and my bookkeeper says it actually works.",
+  "objection": "Small apps like this vanish after a year, and then I'm the one who has to sort out the mess and move everything again. Plus my bookkeeper would have to accept it, and I don't want to change how they work.",
+  "would_change_my_mind": "My bookkeeper or another contractor I know telling me they've used it for a few months without problems.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 60,
+  "price_too_expensive": 150
+}

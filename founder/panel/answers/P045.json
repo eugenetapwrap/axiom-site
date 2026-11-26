@@ -1,0 +1,13 @@
+{
+  "id": "P045",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I might try the free 40 to see if it can read my staff's handwritten nota, but I would not pay. Duplicates and padded receipts are a people problem I handle by checking with my staff, and I already put the numbers in a sheet myself.",
+  "objection": "Another monthly subscription for something I can do with my own eyes and a free Google Sheet, and I doubt it reads messy handwritten Indonesian nota from the building shop correctly.",
+  "would_change_my_mind": "If the free trial showed it actually caught money leaking that I had missed, more than the $19 it costs each month.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

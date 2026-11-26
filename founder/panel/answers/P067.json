@@ -1,0 +1,13 @@
+{
+  "id": "P067",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I might throw the free 40 at it, but my guys' nota from the supply shop are scribbled in pencil, half in Indonesian shorthand, and often faded. If I still have to check every row by hand, it saves me nothing and I won't pay for it.",
+  "objection": "It will misread the handwritten nota, the item names and the amounts, and I'll end up fixing the sheet myself. Then it's just another subscription I cancel.",
+  "would_change_my_mind": "Running my own old chat archive through the free trial and seeing it get the handwritten supply-shop nota right, amounts and totals, with almost nothing for me to fix.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 25,
+  "price_too_expensive": 50
+}

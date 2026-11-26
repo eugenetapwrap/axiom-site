@@ -1,0 +1,13 @@
+{
+  "id": "P014",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The money is nothing, and yes, I need something to show my partner every month. But I'm not dropping an unknown bot into the group chats where my foremen talk suppliers, prices and client stuff, and I won't forward receipts myself because I never do.",
+  "objection": "Who is behind this bot, and what happens to everything it can see in my work chats? Saying it 'only takes payment documents' is just a promise. Once it's in the group and hooked to my Google account, I can't check what it really reads or keeps.",
+  "would_change_my_mind": "Another contractor or accountant in Bali I actually know running it with their team for a few months without problems, and showing me the sheet.",
+  "price_too_cheap": 5,
+  "price_cheap": 20,
+  "price_expensive": 80,
+  "price_too_expensive": 200
+}

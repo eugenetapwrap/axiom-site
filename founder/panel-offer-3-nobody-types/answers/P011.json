@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I am not adding some bot I never heard of to my work chat and linking it to my Google account, whatever it says about only seeing one sheet. Half of what I spend is cash to mechanics with no receipt anyway, so I would be giving up my privacy to track part of my costs.",
+  "objection": "Once a bot is in the group and hooked to my Google, I have no way to check what it reads or keeps. The promise that it only sees one sheet is just words from people I do not know.",
+  "would_change_my_mind": "If I could just forward receipts to it myself without adding it to any group or connecting my Google account, and get the sheet back as a file, I would try the free 30.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 15,
+  "price_too_expensive": 25
+}

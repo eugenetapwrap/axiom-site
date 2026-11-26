@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "need",
+  "reason": "I send the bank transfers myself, so my bank statement already tells me where the money went. I might throw the free 30 documents at it out of curiosity, but I would not pay every month for a sheet I can keep myself.",
+  "objection": "If I find a duplicate, that is a conversation with my contractor, not a software problem, and I am not paying a monthly fee to tell me what my own transfer history already shows.",
+  "would_change_my_mind": "If the free report actually caught a real overcharge or double payment on my build that I had missed, I would pay for the months the build is running and cancel afterwards.",
+  "price_too_cheap": 2,
+  "price_cheap": 5,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

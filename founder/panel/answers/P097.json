@@ -1,0 +1,13 @@
+{
+  "id": "P097",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "I've already caught someone re-sending the same receipt, and I can't watch the chat properly from abroad. I'd upload the old chat archive with the receipts I know were doubled, and if it flags them I'll pay the $19, because that costs less than one fake receipt.",
+  "objection": "Will it actually catch a receipt that was photographed again from a different angle or sent by another person, or is it just a bot that types receipts into a table? I'd also worry it misreads handwritten nota and I end up checking everything twice anyway.",
+  "would_change_my_mind": "If it misses the duplicates I already know about in my old chat history during the free trial, I'm out.",
+  "price_too_cheap": 3,
+  "price_cheap": 10,
+  "price_expensive": 30,
+  "price_too_expensive": 50
+}

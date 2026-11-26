@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I might push one client's chat through the free 30 documents just to see it, but a Google Sheet of categories doesn't save me the real work. I still have to re-key every receipt into Jurnal or Accurate with the invoice number, PPN and NPWP, so there's nothing here I can put my name on and resell to clients.",
+  "objection": "It does not export to Jurnal or Accurate and has no invoice number, VAT (PPN) or NPWP fields, and it's built for one business owner, not a firm with a separate chat for each of twenty-odd clients.",
+  "would_change_my_mind": "A direct export to Jurnal or Accurate with invoice number, PPN and NPWP pulled out of each receipt, plus one account where I can manage all my client chats and bill them myself at a margin.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P020",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "I'd throw the free 30 receipts at it to see how it reads them, but my shop doesn't have that many receipts a month, and paying $19 every month for something a friend and I could wire up with n8n and ChatGPT in a weekend doesn't make sense on my money.",
+  "objection": "It's a new little bot. If it disappears in six months I'm the one rebuilding everything, so why not build my own from the start and own it.",
+  "would_change_my_mind": "A cheaper small plan, around $7-9 a month for my volume, plus some proof it will still be running next year, like a lot of Bali businesses already using it or a promise that the sheet keeps working if the bot shuts down.",
+  "price_too_cheap": 2,
+  "price_cheap": 6,
+  "price_expensive": 12,
+  "price_too_expensive": 20
+}

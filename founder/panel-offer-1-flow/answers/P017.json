@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'm not putting a bot in the group where my staff talk about guests, owners and payments, and I'm not giving it my Google account either. My admin already puts the transfers into a sheet, so $19 a month to swap her for a bot I don't trust isn't worth it to me.",
+  "objection": "It sits in my work chat and gets into my Google Drive. 'Only sees the folder it creates' is just a promise from a bot I've never heard of. Who is behind it, and where do my receipts and bank screenshots end up?",
+  "would_change_my_mind": "A version that works without joining the group or logging into my Google account, so I just forward receipts and download the sheet, plus a real company name and a clear data-deletion policy. Then I'd let my admin try the free 30 and see if it actually saves her hours.",
+  "price_too_cheap": 4,
+  "price_cheap": 9,
+  "price_expensive": 25,
+  "price_too_expensive": 50
+}

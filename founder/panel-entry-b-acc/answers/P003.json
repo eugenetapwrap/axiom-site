@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I might put one client's receipts through the free 30 out of curiosity, but I'd still have to check every row against the original, because the books are mine to answer for. If I'm re-checking everything anyway, it saves me nothing on a fixed monthly fee and it doesn't let me take on another client.",
+  "objection": "If it misreads a handwritten nota or an Indonesian bank-transfer screenshot, or quietly counts a duplicate, that error ends up in the books I sign off on, not in the bot's. And it looks built for one business owner with one Google Sheet. I've got twenty-odd clients, and a few hundred documents each would blow through the 500 tier fast.",
+  "would_change_my_mind": "Run one real client's full month through it next to my own entries and have it come out matching, so I only need to spot-check rather than re-check every line, with a multi-client setup priced per firm instead of per document.",
+  "price_too_cheap": 5,
+  "price_cheap": 15,
+  "price_expensive": 49,
+  "price_too_expensive": 90
+}

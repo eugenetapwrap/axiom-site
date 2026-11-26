@@ -1,0 +1,13 @@
+{
+  "id": "P020",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "I'd use the 30 free receipts to see how well it reads them, but I won't pay $19 a month to a brand-new bot that could be gone next year. A friend and I could hook n8n and ChatGPT up to a Google Sheet in a weekend and I'd own it.",
+  "objection": "Will this little bot still be running in a year, or do I set up my staff and my sheet around it and then it disappears? At least the data sits in my own sheet, but I'd still have to rebuild the whole workflow.",
+  "would_change_my_mind": "Proof it will last, like a year of public track record or a clear promise that if it shuts down I keep the sheet and get the setup to run myself, plus a cheaper plan around $9 for a small shop like mine that sends maybe 60 receipts a month.",
+  "price_too_cheap": 3,
+  "price_cheap": 7,
+  "price_expensive": 15,
+  "price_too_expensive": 25
+}

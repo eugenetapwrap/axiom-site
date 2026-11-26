@@ -1,0 +1,13 @@
+{
+  "id": "P013",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "I already pay an admin who types everything into Excel once a week. It's behind, but it works and it costs me nothing extra. A lot of my spend is cash to mechanics with no receipt at all, so a bot that reads receipts only fixes part of the problem. I might throw a few fuel receipts at the free 30 to see what happens, but I wouldn't pay this month.",
+  "objection": "Half of what goes out on the scooters is cash to mechanics and roadside parts with no proper nota. If there's no paper, the bot sees nothing, and my admin still has to chase it and type it in. So why pay for a second system on top of Excel?",
+  "would_change_my_mind": "Seeing it on my own receipts during the free 30: a scribbled mechanic note and a fuel slip turned into correct rows in my sheet, plus proof it caught a duplicate or a wrong total my admin missed.",
+  "price_too_cheap": 3,
+  "price_cheap": 8,
+  "price_expensive": 25,
+  "price_too_expensive": 45
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P001",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "quality",
+  "reason": "I might throw the free 30 at it one night, but half of what my staff send is a crumpled handwritten nota from a warung or a hardware shop, and I don't believe it reads those right. If I end up checking every line anyway, I'm paying $19 to do the same job I already do in the group chat.",
+  "objection": "Recognition will get faded or handwritten Indonesian receipts wrong and I'll be the one fixing the sheet at midnight, which means I can't trust the totals it gives me.",
+  "would_change_my_mind": "If the free 30 come back with my real handwritten notas read correctly, totals right and a duplicate actually caught, with almost nothing for me to fix.",
+  "price_too_cheap": 5,
+  "price_cheap": 12,
+  "price_expensive": 45,
+  "price_too_expensive": 90
+}
