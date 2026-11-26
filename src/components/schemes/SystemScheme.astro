@@ -13,7 +13,6 @@ import { systemStages, systemAlways } from '../../content/schemes';
           <p class="ss__title">{s.title}</p>
           <p class="ss__who">{s.who}</p>
           <p class="ss__text">{t(s.text)}</p>
-          <p class="ss__tool mono">{s.tool}</p>
         </li>
       ))
     }
@@ -97,11 +96,6 @@ import { systemStages, systemAlways } from '../../content/schemes';
   .ss__text {
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
-  }
-  .ss__tool {
-    margin-top: var(--s-2);
-    font-size: 12px;
-    color: var(--c-muted);
   }
   .ss__always {
     display: grid;

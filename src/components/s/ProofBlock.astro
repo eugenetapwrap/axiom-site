@@ -34,9 +34,6 @@ import { results, about } from '../../content/site';
           <p class="founder__role">{about.founder.role} · {t(about.founder.text)}</p>
         </div>
       </div>
-      <ul class="roles">
-        {about.roles.map((r) => <li>{r}</li>)}
-      </ul>
     </div>
   </div>
 </section>
@@ -134,19 +131,5 @@ import { results, about } from '../../content/site';
   .founder__role {
     font-size: var(--fs-sm);
     color: var(--c-ink-2);
-  }
-  .roles {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s-2);
-  }
-  .roles li {
-    padding: 4px 12px;
-    border-radius: 999px;
-    background: var(--c-surface);
-    border: 1px solid var(--c-line);
-    font-size: var(--fs-xs);
-    font-weight: 500;
   }
 </style>
