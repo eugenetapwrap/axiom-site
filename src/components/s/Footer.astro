@@ -1,0 +1,33 @@
+---
+import { brand, footer } from '../../content/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <p><strong>{brand}</strong> · {footer.note}</p>
+    <p class="footer__legal">© {year} {footer.legal}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding: var(--s-6) 0;
+    background: var(--c-ink);
+    color: #c9d0d7;
+    font-size: var(--fs-sm);
+  }
+  .footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--s-3);
+  }
+  .footer strong {
+    color: #fff;
+    font-weight: 600;
+  }
+  .footer__legal {
+    color: #9aa3ad;
+  }
+</style>

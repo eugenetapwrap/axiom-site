@@ -1,33 +1,72 @@
 ---
+// Временная страница выбора варианта. После решения Евгения выбранный вариант станет главной.
 import Base from '../layouts/Base.astro';
-import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import Situations from '../components/Situations.astro';
-import Services from '../components/Services.astro';
-import Results from '../components/Results.astro';
-import Process from '../components/Process.astro';
-import Team from '../components/Team.astro';
-import Faq from '../components/Faq.astro';
-import Request from '../components/Request.astro';
-import Footer from '../components/Footer.astro';
-import { meta, brand, nav, headerCta } from '../content/ru';
+
+const variants = [
+  { href: '/a/', name: 'A · Схемы', text: 'Тёплый фон и зелёный. Каждая услуга со схемой: из чего состоит модель, как проходит аудит, как работает учёт.' },
+  { href: '/b/', name: 'B · Путь', text: 'Шаги на пунктирной линии, как на сайте Nota: модель → аудит → учёт → задачи. Линия проходит через всю страницу.' },
+  { href: '/c/', name: 'C · Коротко', text: 'Минимум текста: услуги строками, две схемы, Nota и заявка.' },
+];
 ---
 
-<Base title={meta.title} description={meta.description}>
-  <Header nav={nav} cta={headerCta} brand={brand} />
-  <main id="main">
-    <Hero />
-    <Situations />
-    <Services />
-    <Results />
-    <Process />
-    <Team />
-    <Faq />
-    <Request />
+<Base title="Axiom Consulting — варианты лендинга" description="Три варианта лендинга для выбора" noindex>
+  <main id="main" class="container pick">
+    <p class="eyebrow">Axiom Consulting · раунд 2</p>
+    <h1>Варианты лендинга</h1>
+    <ul>
+      {
+        variants.map((v) => (
+          <li>
+            <a href={v.href}>
+              <span class="pick__name">{v.name}</span>
+              <span class="pick__text">{v.text}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="pick__note">Тексты одинаковые во всех вариантах, отличаются подача и оформление. Факты на подтверждение подсвечиваются, если добавить к адресу #review.</p>
   </main>
-  <Footer />
-  <script is:inline>
-    // Режим ревью: ?review или #review подсвечивает факты, которые ждут подтверждения.
-    if (new URLSearchParams(location.search).has('review') || location.hash === '#review') document.documentElement.classList.add('review');
-  </script>
 </Base>
+
+<style>
+  .pick {
+    display: grid;
+    gap: var(--s-5);
+    padding-top: var(--s-8);
+    padding-bottom: var(--s-8);
+    max-width: 760px;
+  }
+  h1 {
+    font-size: var(--fs-2xl);
+  }
+  ul {
+    list-style: none;
+    display: grid;
+    gap: var(--s-3);
+  }
+  a {
+    display: grid;
+    gap: var(--s-1);
+    padding: var(--s-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-lg);
+    color: var(--c-ink);
+    text-decoration: none;
+  }
+  a:hover {
+    border-color: var(--c-ink);
+  }
+  .pick__name {
+    font-weight: 600;
+    font-size: var(--fs-lg);
+  }
+  .pick__text {
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+  }
+  .pick__note {
+    color: var(--c-muted);
+    font-size: var(--fs-sm);
+  }
+</style>

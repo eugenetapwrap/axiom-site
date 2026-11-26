@@ -1,0 +1,152 @@
+---
+// Результаты системы учёта, случаи из практики и команда — одной секцией.
+import { t } from '../../lib/typo';
+import { results, about } from '../../content/site';
+---
+
+<section class="section section--soft" id="results" aria-labelledby="results-title">
+  <div class="container proof">
+    <div class="proof__main">
+      <p class="eyebrow">{results.eyebrow}</p>
+      <h2 id="results-title" class="h2">{results.title}</h2>
+      <ul class="stats">
+        {
+          results.stats.map((s) => (
+            <li class:list={{ tbd: s.tbd }}>
+              <span class="stats__value">{s.value}</span>
+              <span class="stats__text">{t(s.text)}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <ul class="cases">
+        {results.cases.map((c) => <li class:list={{ tbd: c.tbd }}>{t(c.text)}</li>)}
+      </ul>
+    </div>
+    <div class="proof__team" id="team">
+      <p class="eyebrow">{about.eyebrow}</p>
+      <h3 class="team__title">{about.title}</h3>
+      <p class:list={['team__text', { tbd: about.tbd }]}>{t(about.text)}</p>
+      <div class:list={['founder', { tbd: about.founder.tbd }]}>
+        <div class="founder__photo" role="img" aria-label="Место для фото">Фото</div>
+        <div>
+          <p class="founder__name">{about.founder.name}</p>
+          <p class="founder__role">{about.founder.role} · {t(about.founder.text)}</p>
+        </div>
+      </div>
+      <ul class="roles">
+        {about.roles.map((r) => <li>{r}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .proof {
+    display: grid;
+    gap: var(--s-7);
+  }
+  @media (min-width: 1040px) {
+    .proof {
+      grid-template-columns: 1.5fr 1fr;
+      gap: var(--s-8);
+    }
+  }
+  .proof__main,
+  .proof__team {
+    display: grid;
+    gap: var(--s-4);
+    align-content: start;
+  }
+  .stats {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: var(--s-3);
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .stats li {
+    display: grid;
+    gap: 4px;
+    padding: var(--s-4) var(--s-5);
+    background: var(--c-surface);
+  }
+  .stats__value {
+    font-family: var(--f-mono);
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .stats__text {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .cases {
+    list-style: none;
+    display: grid;
+    gap: var(--s-2);
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .cases li {
+    position: relative;
+    padding-left: 18px;
+  }
+  .cases li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--c-muted);
+  }
+  .team__title {
+    font-size: var(--fs-xl);
+  }
+  .team__text {
+    color: var(--c-ink-2);
+  }
+  .founder {
+    display: flex;
+    gap: var(--s-4);
+    align-items: center;
+    padding: var(--s-4);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-lg);
+  }
+  .founder__photo {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--c-bg-soft);
+    color: var(--c-muted);
+    font-size: 12px;
+  }
+  .founder__name {
+    font-weight: 600;
+  }
+  .founder__role {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .roles {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+  .roles li {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+  }
+</style>

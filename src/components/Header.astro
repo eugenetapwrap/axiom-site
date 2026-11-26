@@ -27,7 +27,7 @@ const { nav, cta, brand } = Astro.props;
     position: sticky;
     top: env(safe-area-inset-top, 0px);
     z-index: 20;
-    background: rgba(255, 255, 255, 0.94);
+    background: color-mix(in srgb, var(--c-bg) 94%, transparent);
     backdrop-filter: saturate(1.2) blur(8px);
     border-bottom: 1px solid var(--c-line);
   }

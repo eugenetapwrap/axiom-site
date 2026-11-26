@@ -1,0 +1,391 @@
+---
+// Вариант B «Путь»: шаги на пунктирной линии, как на сайте Nota. Линия продолжается через все услуги.
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import NotaBlock from '../components/s/NotaBlock.astro';
+import ProofBlock from '../components/s/ProofBlock.astro';
+import StartBlock from '../components/s/StartBlock.astro';
+import Footer from '../components/s/Footer.astro';
+import ModelScheme from '../components/schemes/ModelScheme.astro';
+import AuditScheme from '../components/schemes/AuditScheme.astro';
+import SystemScheme from '../components/schemes/SystemScheme.astro';
+import { t } from '../lib/typo';
+import { meta, brand, nav, cta, heroes, services, path, sections } from '../content/site';
+
+const hero = heroes.b;
+const schemeFor: Record<string, { title: string; lead: string } | undefined> = {
+  model: sections.model,
+  audit: sections.audit,
+  control: sections.control,
+};
+
+// Жизненный цикл проекта и где какая услуга.
+const life = [
+  { stage: 'Земля и идея', service: 'Финансовая модель' },
+  { stage: 'Решение и деньги', service: 'Модель · Аудит' },
+  { stage: 'Стройка', service: 'Управленческий учёт' },
+  { stage: 'Продажи и сдача', service: 'Учёт · Модель по факту' },
+];
+---
+
+<Base title={meta.title} description={meta.description} theme="paper" noindex>
+  <Header nav={nav} cta={cta} brand={brand} />
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero__grid">
+        <div class="hero__text">
+          <p class="eyebrow">{hero.eyebrow}</p>
+          <h1 id="hero-title" class="hero__title">{t(hero.title)}</h1>
+          <p class="hero__lead">{t(hero.lead)}</p>
+          <ol class="path">
+            {
+              path.map((p, i) => (
+                <li class:list={{ done: p.num === '✓' }}>
+                  <span class="path__dot" aria-hidden="true">{p.num}</span>
+                  <a href={`#${services[i].id}`}>
+                    <span class="path__title">{p.title}</span>
+                    <span class="path__text">{t(p.text)}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href={cta.href}>{cta.label}</a>
+          </div>
+        </div>
+
+        <figure class="life" aria-label="Где в жизни проекта нужна каждая услуга">
+          <p class="life__title">Жизнь проекта</p>
+          <ol>
+            {
+              life.map((l, i) => (
+                <li>
+                  <span class="life__n mono">{i + 1}</span>
+                  <span class="life__stage">{l.stage}</span>
+                  <span class="life__service">{l.service}</span>
+                </li>
+              ))
+            }
+          </ol>
+          <figcaption class="life__note">На любом этапе можно подключить Nota для учёта чеков команды</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <div class="track">
+      {
+        services.map((s, i) => {
+          const sc = schemeFor[s.id];
+          return (
+            <section class:list={['step', { 'section--soft': i % 2 === 0 }]} id={s.id} aria-labelledby={`${s.id}-title`}>
+              <div class="container step__grid">
+                <span class="step__dot" aria-hidden="true">{path[i].num}</span>
+                <div class="step__body">
+                  <div class="step__top">
+                    <div class="step__head">
+                      <h2 id={`${s.id}-title`} class="h2">{s.name}</h2>
+                      <p class="lead">{t(s.line)}</p>
+                      {s.note && <p class:list={['step__note', { tbd: s.note.tbd }]}>{t(s.note.text)}</p>}
+                    </div>
+                    <div class="step__cols">
+                      <div>
+                        <p class="step__label">Когда нужна</p>
+                        <ul class="step__list">{s.when.map((w) => <li>{t(w)}</li>)}</ul>
+                      </div>
+                      <div>
+                        <p class="step__label">Результат</p>
+                        <ul class="step__list step__list--r">{s.result.map((r) => <li>{t(r)}</li>)}</ul>
+                      </div>
+                    </div>
+                  </div>
+                  {sc && (
+                    <div class="step__scheme">
+                      <h3 class="step__schemeTitle">{sc.title}</h3>
+                      <p class="step__schemeLead">{t(sc.lead)}</p>
+                      {s.id === 'model' && <ModelScheme id="b-model" />}
+                      {s.id === 'audit' && <AuditScheme />}
+                      {s.id === 'control' && <SystemScheme />}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          );
+        })
+      }
+    </div>
+
+    <NotaBlock />
+    <ProofBlock />
+    <StartBlock />
+  </main>
+  <Footer />
+  <script is:inline>
+    if (location.hash === '#review' || new URLSearchParams(location.search).has('review')) document.documentElement.classList.add('review');
+  </script>
+</Base>
+
+<style>
+  .hero {
+    padding: clamp(40px, 6vw, 80px) 0 clamp(40px, 5vw, 64px);
+  }
+  .hero__grid {
+    display: grid;
+    gap: var(--s-7);
+    align-items: start;
+  }
+  @media (min-width: 1040px) {
+    .hero__grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--s-8);
+      align-items: center;
+    }
+  }
+  .hero__text {
+    display: grid;
+    gap: var(--s-4);
+  }
+  .hero__title {
+    font-size: var(--fs-3xl);
+    line-height: var(--lh-tight);
+    letter-spacing: -0.025em;
+  }
+  .hero__lead {
+    font-size: var(--fs-lg);
+    color: var(--c-ink-2);
+  }
+  .hero__actions {
+    margin-top: var(--s-2);
+  }
+
+  /* Шаги на пунктирной линии */
+  .path {
+    list-style: none;
+    display: grid;
+    margin-top: var(--s-3);
+  }
+  .path li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: var(--s-4);
+    padding-bottom: var(--s-4);
+  }
+  .path li:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 13px;
+    top: 30px;
+    bottom: 2px;
+    border-left: 2px dashed var(--c-line-strong);
+  }
+  .path__dot {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--c-ink);
+    color: #fff;
+    font-family: var(--f-mono);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .path li.done .path__dot {
+    background: var(--c-accent);
+  }
+  .path a {
+    display: grid;
+    gap: 2px;
+    color: var(--c-ink);
+    text-decoration: none;
+    padding-top: 2px;
+  }
+  .path a:hover .path__title {
+    text-decoration: underline;
+  }
+  .path__title {
+    font-weight: 600;
+    font-size: var(--fs-lg);
+  }
+  .path__text {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+
+  /* Жизнь проекта */
+  .life {
+    margin: 0;
+    padding: var(--s-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-lg);
+    background: var(--c-bg-soft);
+  }
+  .life__title {
+    margin-bottom: var(--s-3);
+    font-family: var(--f-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-muted);
+  }
+  .life ol {
+    list-style: none;
+    display: grid;
+    gap: var(--s-2);
+  }
+  .life li {
+    display: grid;
+    grid-template-columns: 24px 1fr auto;
+    gap: var(--s-3);
+    align-items: center;
+    padding: var(--s-3) var(--s-4);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+  }
+  .life__n {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .life__stage {
+    font-weight: 600;
+  }
+  .life__service {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--c-accent-ink);
+    text-align: right;
+  }
+  .life__note {
+    margin-top: var(--s-3);
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+
+  /* Сквозная линия через услуги */
+  .step {
+    padding: var(--s-section) 0;
+    scroll-margin-top: 64px;
+  }
+  .step__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: var(--s-4);
+  }
+  @media (min-width: 720px) {
+    .step__grid {
+      gap: var(--s-6);
+    }
+  }
+  .step__grid::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--gutter) + 13px);
+    top: calc(-1 * var(--s-section));
+    bottom: calc(-1 * var(--s-section));
+    border-left: 2px dashed var(--c-line-strong);
+  }
+  .track .step:first-child .step__grid::before {
+    top: 14px;
+  }
+  .track .step:last-child .step__grid::before {
+    bottom: auto;
+    height: 14px;
+  }
+  .step__dot {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--c-ink);
+    color: #fff;
+    font-family: var(--f-mono);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .step__body {
+    min-width: 0;
+  }
+  .step__top {
+    display: grid;
+    gap: var(--s-5);
+  }
+  @media (min-width: 1040px) {
+    .step__top {
+      grid-template-columns: 1fr 1.1fr;
+      gap: var(--s-8);
+    }
+  }
+  .step__head {
+    display: grid;
+    gap: var(--s-3);
+  }
+  .step__note {
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+  .step__cols {
+    display: grid;
+    gap: var(--s-5);
+  }
+  @media (min-width: 640px) {
+    .step__cols {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .step__label {
+    margin-bottom: var(--s-2);
+    padding-bottom: var(--s-2);
+    border-bottom: 2px solid var(--c-ink);
+    font-family: var(--f-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-ink-2);
+  }
+  .step__list {
+    list-style: none;
+    display: grid;
+    gap: var(--s-2);
+    font-size: var(--fs-sm);
+  }
+  .step__list li {
+    position: relative;
+    padding-left: 16px;
+  }
+  .step__list li::before {
+    content: '';
+    position: absolute;
+    left: 1px;
+    top: 0.62em;
+    width: 7px;
+    height: 1px;
+    background: var(--c-ink-2);
+  }
+  .step__list--r li::before {
+    top: 0.5em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-accent);
+  }
+  .step__scheme {
+    display: grid;
+    gap: var(--s-2);
+    margin-top: var(--s-7);
+  }
+  .step__schemeTitle {
+    font-size: var(--fs-xl);
+  }
+  .step__schemeLead {
+    margin-bottom: var(--s-4);
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+</style>

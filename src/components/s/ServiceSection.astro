@@ -1,0 +1,134 @@
+---
+// Секция одной услуги: название, одна фраза, «Когда нужна», «Результат» и схема (слот).
+import { t } from '../../lib/typo';
+import { services } from '../../content/site';
+
+interface Props {
+  id: string;
+  soft?: boolean;
+  schemeTitle?: string;
+  schemeLead?: string;
+}
+const { id, soft = false, schemeTitle, schemeLead } = Astro.props;
+const s = services.find((x) => x.id === id)!;
+---
+
+<section class:list={['section', 'svc', { 'section--soft': soft }]} id={s.id} aria-labelledby={`${s.id}-title`}>
+  <div class="container">
+    <div class="svc__top">
+      <div class="svc__head">
+        <p class="eyebrow">{s.num} · Услуга</p>
+        <h2 id={`${s.id}-title`} class="h2">{s.name}</h2>
+        <p class="lead">{t(s.line)}</p>
+        {s.note && <p class:list={['svc__note', { tbd: s.note.tbd }]}>{t(s.note.text)}</p>}
+      </div>
+      <div class="svc__cols">
+        <div>
+          <p class="svc__label">Когда нужна</p>
+          <ul class="svc__list">
+            {s.when.map((w) => <li>{t(w)}</li>)}
+          </ul>
+        </div>
+        <div>
+          <p class="svc__label">Результат</p>
+          <ul class="svc__list svc__list--result">
+            {s.result.map((r) => <li>{t(r)}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {
+      Astro.slots.has('default') && (
+        <div class="svc__scheme">
+          {schemeTitle && <h3 class="svc__schemeTitle">{schemeTitle}</h3>}
+          {schemeLead && <p class="svc__schemeLead">{t(schemeLead)}</p>}
+          <slot />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .svc {
+    scroll-margin-top: 64px;
+  }
+  .svc__top {
+    display: grid;
+    gap: var(--s-6);
+  }
+  @media (min-width: 1040px) {
+    .svc__top {
+      grid-template-columns: 1fr 1.1fr;
+      gap: var(--s-8);
+      align-items: start;
+    }
+  }
+  .svc__head {
+    display: grid;
+    gap: var(--s-3);
+  }
+  .svc__note {
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+  }
+  .svc__cols {
+    display: grid;
+    gap: var(--s-5);
+  }
+  @media (min-width: 640px) {
+    .svc__cols {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .svc__label {
+    margin-bottom: var(--s-2);
+    padding-bottom: var(--s-2);
+    border-bottom: 2px solid var(--c-ink);
+    font-family: var(--f-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-ink-2);
+  }
+  .svc__list {
+    list-style: none;
+    display: grid;
+    gap: var(--s-2);
+    font-size: var(--fs-sm);
+  }
+  .svc__list li {
+    position: relative;
+    padding-left: 16px;
+  }
+  .svc__list li::before {
+    content: '';
+    position: absolute;
+    left: 1px;
+    top: 0.62em;
+    width: 7px;
+    height: 1px;
+    background: var(--c-ink-2);
+  }
+  .svc__list--result li::before {
+    top: 0.5em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-accent);
+  }
+  .svc__scheme {
+    display: grid;
+    gap: var(--s-2);
+    margin-top: var(--s-7);
+  }
+  .svc__schemeTitle {
+    font-size: var(--fs-xl);
+  }
+  .svc__schemeLead {
+    margin-bottom: var(--s-4);
+    color: var(--c-ink-2);
+    font-size: var(--fs-sm);
+  }
+</style>

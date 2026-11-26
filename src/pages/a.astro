@@ -1,0 +1,172 @@
+---
+// Вариант A «Схемы»: тёплый фон и зелёный акцент, каждая услуга со схемой.
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import ServiceSection from '../components/s/ServiceSection.astro';
+import NotaBlock from '../components/s/NotaBlock.astro';
+import ProofBlock from '../components/s/ProofBlock.astro';
+import StartBlock from '../components/s/StartBlock.astro';
+import Footer from '../components/s/Footer.astro';
+import ModelScheme from '../components/schemes/ModelScheme.astro';
+import AuditScheme from '../components/schemes/AuditScheme.astro';
+import SystemScheme from '../components/schemes/SystemScheme.astro';
+import { t } from '../lib/typo';
+import { meta, brand, nav, cta, heroes, services, nota, sections } from '../content/site';
+
+const hero = heroes.a;
+---
+
+<Base title={meta.title} description={meta.description} theme="warm" noindex>
+  <Header nav={nav} cta={cta} brand={brand} />
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero__grid">
+        <div class="hero__text">
+          <p class="eyebrow">{hero.eyebrow}</p>
+          <h1 id="hero-title" class="hero__title">{t(hero.title)}</h1>
+          <p class="hero__lead">{t(hero.lead)}</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href={cta.href}>{cta.label}</a>
+            <a class="btn btn--secondary" href="#model">Как устроена модель</a>
+          </div>
+        </div>
+        <nav class="index" id="services" aria-label="Услуги">
+          <p class="index__title">Услуги</p>
+          <ul>
+            {
+              services.map((s) => (
+                <li>
+                  <a href={`#${s.id}`}>
+                    <span class="index__num mono">{s.num}</span>
+                    <span class="index__name">{s.name}</span>
+                    <span class="index__line">{t(s.line)}</span>
+                  </a>
+                </li>
+              ))
+            }
+            <li class="index__product">
+              <a href="#nota">
+                <span class="index__num mono">→</span>
+                <span class="index__name">{nota.name}</span>
+                <span class="index__line">{t(nota.line)}</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+    <ServiceSection id="model" schemeTitle={sections.model.title} schemeLead={sections.model.lead} soft>
+      <ModelScheme id="a-model" />
+    </ServiceSection>
+
+    <ServiceSection id="audit" schemeTitle={sections.audit.title} schemeLead={sections.audit.lead}>
+      <AuditScheme />
+    </ServiceSection>
+
+    <ServiceSection id="control" schemeTitle={sections.control.title} schemeLead={sections.control.lead} soft>
+      <SystemScheme />
+    </ServiceSection>
+
+    <ServiceSection id="tasks" />
+
+    <NotaBlock />
+    <ProofBlock />
+    <StartBlock />
+  </main>
+  <Footer />
+  <script is:inline>
+    if (location.hash === '#review' || new URLSearchParams(location.search).has('review')) document.documentElement.classList.add('review');
+  </script>
+</Base>
+
+<style>
+  .hero {
+    padding: clamp(40px, 6vw, 88px) 0;
+  }
+  .hero__grid {
+    display: grid;
+    gap: var(--s-7);
+    align-items: center;
+  }
+  @media (min-width: 1040px) {
+    .hero__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-8);
+    }
+  }
+  .hero__text {
+    display: grid;
+    gap: var(--s-5);
+  }
+  .hero__title {
+    font-size: var(--fs-3xl);
+    line-height: var(--lh-tight);
+    letter-spacing: -0.025em;
+    max-width: 14ch;
+  }
+  .hero__lead {
+    font-size: var(--fs-lg);
+    color: var(--c-ink-2);
+    max-width: 44ch;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-2);
+  }
+  .index {
+    padding: var(--s-5);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-lg);
+  }
+  .index__title {
+    margin-bottom: var(--s-2);
+    font-family: var(--f-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-muted);
+  }
+  .index ul {
+    list-style: none;
+  }
+  .index a {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 2px var(--s-3);
+    padding: var(--s-3) var(--s-2);
+    border-top: 1px solid var(--c-line);
+    border-radius: var(--r-sm);
+    color: var(--c-ink);
+    text-decoration: none;
+  }
+  .index li:first-child a {
+    border-top: 0;
+  }
+  .index a:hover {
+    background: var(--c-accent-soft);
+  }
+  .index__num {
+    grid-row: span 2;
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+    padding-top: 3px;
+  }
+  .index__name {
+    font-weight: 600;
+  }
+  .index__line {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .index__product a {
+    margin-top: var(--s-2);
+    border-top: 1px dashed var(--c-line-strong);
+  }
+  .index__product .index__num {
+    color: var(--c-accent);
+  }
+</style>

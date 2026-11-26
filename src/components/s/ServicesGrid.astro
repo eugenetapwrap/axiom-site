@@ -1,0 +1,97 @@
+---
+import { t } from '../../lib/typo';
+import { services, sections } from '../../content/site';
+
+interface Props {
+  columns?: 2 | 4;
+}
+const { columns = 4 } = Astro.props;
+---
+
+<section class="section" id="services" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">{sections.services.eyebrow}</p>
+      <h2 id="services-title" class="h2">{sections.services.title}</h2>
+    </div>
+    <ul class:list={['grid', `grid--${columns}`]}>
+      {
+        services.map((s) => (
+          <li class="card">
+            <p class="card__num mono">{s.num}</p>
+            <h3 class="card__name">{s.name}</h3>
+            <p class="card__line">{t(s.line)}</p>
+            <ul class="card__list">
+              {s.result.map((r) => <li>{t(r)}</li>)}
+            </ul>
+            {s.note && <p class:list={['card__note', { tbd: s.note.tbd }]}>{t(s.note.text)}</p>}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .grid {
+    list-style: none;
+    display: grid;
+    gap: var(--s-4);
+  }
+  @media (min-width: 720px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .grid--4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .card {
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: var(--s-3);
+    padding: var(--s-5);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-lg);
+  }
+  .card__num {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .card__name {
+    font-size: var(--fs-xl);
+  }
+  .card__line {
+    color: var(--c-ink-2);
+  }
+  .card__list {
+    list-style: none;
+    display: grid;
+    gap: 6px;
+    align-content: start;
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--c-line);
+    font-size: var(--fs-sm);
+  }
+  .card__list li {
+    position: relative;
+    padding-left: 16px;
+  }
+  .card__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-accent);
+  }
+  .card__note {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+</style>

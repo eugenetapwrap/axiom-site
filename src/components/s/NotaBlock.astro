@@ -1,0 +1,108 @@
+---
+import { t } from '../../lib/typo';
+import { nota } from '../../content/site';
+---
+
+<section class="section" id="nota" aria-labelledby="nota-title">
+  <div class="container">
+    <div class="nota">
+      <div class="nota__text">
+        <p class="eyebrow">{nota.tag}</p>
+        <h2 id="nota-title" class="h2">{nota.title}</h2>
+        <p class="lead">{t(nota.line)}</p>
+        <div class="nota__actions">
+          <a class="btn btn--primary" href={nota.link.href} target="_blank" rel="noopener">{nota.link.label}</a>
+          <span class="nota__free">{t(nota.free)}</span>
+        </div>
+      </div>
+      <div class="nota__side">
+        <ul class="nota__points">
+          {nota.points.map((p) => <li>{t(p)}</li>)}
+        </ul>
+        <p class="nota__bridge">{t(nota.bridge)}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .nota {
+    display: grid;
+    gap: var(--s-6);
+    padding: clamp(24px, 4vw, 48px);
+    border-radius: var(--r-lg);
+    background: var(--c-ink);
+    color: #fff;
+  }
+  @media (min-width: 960px) {
+    .nota {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--s-8);
+      align-items: center;
+    }
+  }
+  .nota .eyebrow {
+    color: #aeb6bf;
+  }
+  .nota .lead {
+    color: #d5dbe1;
+  }
+  .nota__text {
+    display: grid;
+    gap: var(--s-4);
+  }
+  .nota__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-4);
+    margin-top: var(--s-2);
+  }
+  .nota .btn--primary {
+    background: #fff;
+    color: var(--c-ink);
+  }
+  .nota .btn--primary:hover {
+    background: #e9ecef;
+    color: var(--c-ink);
+  }
+  .nota .btn:focus-visible {
+    box-shadow: 0 0 0 3px var(--c-ink), 0 0 0 5px #fff;
+  }
+  .nota__free {
+    font-size: var(--fs-sm);
+    color: #aeb6bf;
+  }
+  .nota__side {
+    display: grid;
+    gap: var(--s-4);
+  }
+  .nota__points {
+    list-style: none;
+    display: grid;
+    gap: var(--s-3);
+  }
+  .nota__points li {
+    position: relative;
+    padding-left: 28px;
+  }
+  .nota__points li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    font-size: 12px;
+  }
+  .nota__bridge {
+    padding-top: var(--s-4);
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    font-size: var(--fs-sm);
+    color: #aeb6bf;
+  }
+</style>

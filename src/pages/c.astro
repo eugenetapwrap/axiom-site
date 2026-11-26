@@ -1,0 +1,209 @@
+---
+// Вариант C «Коротко»: минимум текста, услуги строками, две схемы, заявка.
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import NotaBlock from '../components/s/NotaBlock.astro';
+import ProofBlock from '../components/s/ProofBlock.astro';
+import StartBlock from '../components/s/StartBlock.astro';
+import Footer from '../components/s/Footer.astro';
+import ModelScheme from '../components/schemes/ModelScheme.astro';
+import SystemScheme from '../components/schemes/SystemScheme.astro';
+import { t } from '../lib/typo';
+import { meta, brand, nav, cta, heroes, services, sections, facts } from '../content/site';
+
+const hero = heroes.c;
+---
+
+<Base title={meta.title} description={meta.description} noindex>
+  <Header nav={nav} cta={cta} brand={brand} />
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero__grid">
+        <div class="hero__text">
+          <p class="eyebrow">{hero.eyebrow}</p>
+          <h1 id="hero-title" class="hero__title">{t(hero.title)}</h1>
+          <p class="hero__lead">{t(hero.lead)}</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href={cta.href}>{cta.label}</a>
+            <a class="btn btn--secondary" href="#services">Услуги</a>
+          </div>
+        </div>
+        <dl class="facts">
+          {
+            facts.map((f) => (
+              <div class:list={{ tbd: f.tbd }}>
+                <dt>{f.value}</dt>
+                <dd>{t(f.text)}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <section class="section section--soft" id="services" aria-labelledby="services-title">
+      <div class="container">
+        <h2 id="services-title" class="h2 rows__title">Услуги</h2>
+        <ul class="rows">
+          {
+            services.map((s) => (
+              <li class="row" id={s.id}>
+                <div class="row__name">
+                  <span class="mono">{s.num}</span>
+                  <h3>{s.name}</h3>
+                </div>
+                <p class="row__line">{t(s.line)}</p>
+                <ul class="row__result">
+                  {s.result.map((r) => <li>{t(r)}</li>)}
+                </ul>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="model" aria-labelledby="model-title">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">{sections.model.eyebrow}</p>
+          <h2 id="model-title" class="h2">{sections.model.title}</h2>
+          <p class="lead">{t(sections.model.lead)}</p>
+        </div>
+        <ModelScheme id="c-model" />
+      </div>
+    </section>
+
+    <section class="section section--soft" id="control" aria-labelledby="control-title">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">{sections.control.eyebrow}</p>
+          <h2 id="control-title" class="h2">{sections.control.title}</h2>
+          <p class="lead">{t(sections.control.lead)}</p>
+        </div>
+        <SystemScheme />
+      </div>
+    </section>
+
+    <NotaBlock />
+    <ProofBlock />
+    <StartBlock />
+  </main>
+  <Footer />
+  <script is:inline>
+    if (location.hash === '#review' || new URLSearchParams(location.search).has('review')) document.documentElement.classList.add('review');
+  </script>
+</Base>
+
+<style>
+  .hero {
+    padding: clamp(56px, 9vw, 128px) 0 clamp(48px, 7vw, 96px);
+  }
+  .hero__grid {
+    display: grid;
+    gap: var(--s-7);
+    align-items: end;
+  }
+  @media (min-width: 1040px) {
+    .hero__grid {
+      grid-template-columns: 1.6fr 1fr;
+      gap: var(--s-8);
+    }
+  }
+  .hero__text {
+    display: grid;
+    gap: var(--s-5);
+    justify-items: start;
+  }
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-5);
+    margin: 0;
+    padding-top: var(--s-5);
+    border-top: 2px solid var(--c-ink);
+  }
+  .facts dt {
+    font-family: var(--f-mono);
+    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .facts dd {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+  }
+  .hero__title {
+    font-size: var(--fs-3xl);
+    line-height: var(--lh-tight);
+    letter-spacing: -0.025em;
+    max-width: 18ch;
+  }
+  .hero__lead {
+    font-size: var(--fs-lg);
+    color: var(--c-ink-2);
+    max-width: 52ch;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+  }
+  .rows__title {
+    margin-bottom: var(--s-5);
+  }
+  .rows {
+    list-style: none;
+    border-top: 2px solid var(--c-ink);
+  }
+  .row {
+    display: grid;
+    gap: var(--s-3);
+    padding: var(--s-5) 0;
+    border-bottom: 1px solid var(--c-line);
+    scroll-margin-top: 72px;
+  }
+  @media (min-width: 900px) {
+    .row {
+      grid-template-columns: 1fr 1.2fr 1.3fr;
+      gap: var(--s-6);
+      align-items: start;
+    }
+  }
+  .row__name {
+    display: flex;
+    gap: var(--s-3);
+    align-items: baseline;
+  }
+  .row__name .mono {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .row__name h3 {
+    font-size: var(--fs-xl);
+  }
+  .row__line {
+    color: var(--c-ink-2);
+  }
+  .row__result {
+    list-style: none;
+    display: grid;
+    gap: 6px;
+    font-size: var(--fs-sm);
+  }
+  .row__result li {
+    position: relative;
+    padding-left: 16px;
+  }
+  .row__result li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-accent);
+  }
+</style>

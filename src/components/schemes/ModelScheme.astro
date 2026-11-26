@@ -85,9 +85,20 @@ const usedRoles = roles.filter((r) => modelScheme.columns.some((c) => c.blocks.s
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
         buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        let shown: HTMLElement | null = null;
         root.querySelectorAll<HTMLElement>('.ms__panel').forEach((p) => {
           p.hidden = p.id !== btn.dataset.target;
+          if (!p.hidden) shown = p;
         });
+        // На узком экране описание ниже блоков: прокручиваем к нему, если его не видно.
+        const panel = shown as HTMLElement | null;
+        if (panel) {
+          const r = panel.getBoundingClientRect();
+          if (r.top > window.innerHeight - 80 || r.bottom < 0) {
+            const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            panel.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'nearest' });
+          }
+        }
       });
     });
   });
@@ -159,7 +170,7 @@ const usedRoles = roles.filter((r) => modelScheme.columns.some((c) => c.blocks.s
     display: grid;
     gap: var(--s-2);
   }
-  @media (min-width: 640px) and (max-width: 1039px) {
+  @media (max-width: 1039px) {
     .ms__blocks {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }

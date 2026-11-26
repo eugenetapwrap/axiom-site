@@ -309,3 +309,12 @@ svg {
 .theme-warm .btn--primary:hover {
   background: var(--c-accent-ink);
 }
+
+/* Тема «бумага»: белый фон, графит и зелёный акцент. */
+.theme-paper {
+  --c-bg: #ffffff;
+  --c-bg-soft: #f5f6f3;
+  --c-accent: #0e5446;
+  --c-accent-ink: #0a3f35;
+  --c-accent-soft: #e6f0ec;
+}
