@@ -1,0 +1,218 @@
+---
+// Форма заявки. Отправка пока не подключена (решение Евгения 26.11.2026: «решим позже»),
+// поэтому после проверки полей форма показывает честное сообщение о демо-режиме.
+interface Option {
+  value: string;
+  label: string;
+}
+interface Props {
+  roleLabel: string;
+  roles: Option[];
+  taskLabel: string;
+  tasks: Option[];
+  submit: string;
+  privacy: string;
+  demoNote: string;
+}
+const { roleLabel, roles, taskLabel, tasks, submit, privacy, demoNote } = Astro.props;
+---
+
+<form class="form" id="lead-form" novalidate>
+  <div class="field">
+    <label for="f-name">Как к вам обращаться</label>
+    <input id="f-name" name="name" type="text" autocomplete="name" required />
+    <p class="err" id="f-name-err" hidden>Напишите имя</p>
+  </div>
+
+  <div class="field">
+    <label for="f-contact">Telegram, WhatsApp или e-mail</label>
+    <input id="f-contact" name="contact" type="text" autocomplete="email" required aria-describedby="f-contact-hint" />
+    <p class="hint" id="f-contact-hint">Ответим туда, где вам удобнее</p>
+    <p class="err" id="f-contact-err" hidden>Оставьте контакт, чтобы мы могли ответить</p>
+  </div>
+
+  <fieldset class="field">
+    <legend>{roleLabel}</legend>
+    <div class="chips">
+      {
+        roles.map((r, i) => (
+          <label class="chip">
+            <input type="radio" name="role" value={r.value} checked={i === 0} />
+            <span>{r.label}</span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+
+  <div class="field">
+    <label for="f-task">{taskLabel}</label>
+    <select id="f-task" name="task">
+      {tasks.map((t) => <option value={t.value}>{t.label}</option>)}
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="f-about">Коротко о проекте <span class="opt">(необязательно)</span></label>
+    <textarea id="f-about" name="about" rows="4" placeholder="Страна, тип объекта, стадия, что беспокоит"></textarea>
+  </div>
+
+  <button class="btn btn--primary form__submit" type="submit">{submit}</button>
+  <p class="form__privacy">{privacy}</p>
+
+  <div class="form__done" role="status" aria-live="polite" hidden>
+    <p class="form__done-title">Заявка заполнена</p>
+    <p>{demoNote}</p>
+  </div>
+</form>
+
+<script>
+  const form = document.getElementById('lead-form') as HTMLFormElement | null;
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let ok = true;
+      for (const id of ['f-name', 'f-contact']) {
+        const input = document.getElementById(id) as HTMLInputElement;
+        const err = document.getElementById(`${id}-err`) as HTMLElement;
+        const bad = !input.value.trim();
+        input.setAttribute('aria-invalid', String(bad));
+        if (bad) {
+          input.setAttribute('aria-describedby', `${id}-err`);
+        } else if (id === 'f-contact') {
+          input.setAttribute('aria-describedby', 'f-contact-hint');
+        } else {
+          input.removeAttribute('aria-describedby');
+        }
+        err.hidden = !bad;
+        if (bad && ok) {
+          input.focus();
+          ok = false;
+        }
+      }
+      if (!ok) return;
+      const done = form.querySelector('.form__done') as HTMLElement;
+      done.hidden = false;
+      done.setAttribute('tabindex', '-1');
+      done.focus();
+    });
+  }
+</script>
+
+<style>
+  .form {
+    display: grid;
+    gap: var(--s-5);
+  }
+  .field {
+    display: grid;
+    gap: var(--s-2);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  label,
+  legend {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    padding: 0;
+  }
+  legend {
+    margin-bottom: var(--s-2);
+  }
+  .opt {
+    font-weight: 400;
+    color: var(--c-muted);
+  }
+  input[type='text'],
+  select,
+  textarea {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    border: 1px solid var(--c-line-strong);
+    border-radius: var(--r-md);
+    background: #fff;
+    color: var(--c-ink);
+    font: inherit;
+    font-size: var(--fs-md);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 112px;
+  }
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    border-color: var(--c-accent);
+  }
+  input[aria-invalid='true'] {
+    border-color: var(--c-neg);
+  }
+  .hint {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .err {
+    font-size: var(--fs-xs);
+    color: var(--c-neg);
+    font-weight: 500;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+  .chip {
+    position: relative;
+    font-weight: 500;
+  }
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .chip span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 var(--s-4);
+    border: 1px solid var(--c-line-strong);
+    border-radius: 999px;
+    background: #fff;
+  }
+  .chip input:checked + span {
+    border-color: var(--c-ink);
+    background: var(--c-ink);
+    color: #fff;
+  }
+  .chip input:focus-visible + span {
+    box-shadow: var(--focus);
+  }
+  .form__submit {
+    justify-self: start;
+    min-width: 220px;
+  }
+  .form__privacy {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+    max-width: 52ch;
+  }
+  .form__done {
+    padding: var(--s-4);
+    border-radius: var(--r-md);
+    background: var(--c-pos-soft);
+    color: #0b4a2d;
+  }
+  .form__done:focus {
+    outline: none;
+    box-shadow: var(--focus);
+  }
+  .form__done-title {
+    font-weight: 600;
+    margin-bottom: var(--s-1);
+  }
+</style>

@@ -1,0 +1,229 @@
+---
+import { t } from '../lib/typo';
+import { services } from '../content/ru';
+import ModelMock from './mock/ModelMock.astro';
+import AuditMock from './mock/AuditMock.astro';
+import DashboardMock from './mock/DashboardMock.astro';
+
+// Модель уже показана на первом экране, поэтому в карточке модели вместо макета — состав файла.
+const modelSheets = ['Допущения', 'Бюджет', 'График стройки', 'Затраты', 'Продажи и рассрочки', 'Аренда', 'Налоги', 'Cash Flow', 'Показатели', 'Сценарии'];
+---
+
+<section class="section" id="services" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">{services.eyebrow}</p>
+      <h2 id="services-title" class="h2">{t(services.title)}</h2>
+      <p class="lead">{t(services.lead)}</p>
+    </div>
+
+    <div class="list">
+      {
+        services.items.map((s) => (
+          <article class:list={['svc', { 'svc--plain': !s.mock }]} id={s.id} aria-labelledby={`${s.id}-title`}>
+            <div class="svc__text">
+              <p class="svc__num mono">{s.num}</p>
+              <h3 id={`${s.id}-title`} class="svc__title">{t(s.title)}</h3>
+              <p class="svc__for">{t(s.for)}</p>
+
+              <div class="svc__cols">
+                <div>
+                  <p class="svc__label">Когда нужна</p>
+                  <ul class="svc__list">
+                    {s.when.map((w) => <li>{t(w)}</li>)}
+                  </ul>
+                </div>
+                <div>
+                  <p class="svc__label">Что вы получите</p>
+                  <ul class="svc__list svc__list--get">
+                    {s.get.map((g) => <li>{t(g)}</li>)}
+                  </ul>
+                </div>
+              </div>
+
+              {s.terms.length > 0 && (
+                <dl class="svc__terms">
+                  {s.terms.map((term) => (
+                    <div class:list={{ tbd: term.tbd }}>
+                      <dt>{term.label}</dt>
+                      <dd>{t(term.value)}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+
+              <a class="btn btn--secondary svc__cta" href="#request">{s.cta}</a>
+            </div>
+
+            {s.mock && (
+              <div class="svc__visual">
+                {s.mock === 'model' && (
+                  <div class="sheets" aria-label="Листы модели">
+                    <p class="sheets__title mono">Модель_проекта.xlsx</p>
+                    <ol>
+                      {modelSheets.map((name, i) => (
+                        <li><span class="mono">{String(i).padStart(2, '0')}</span>{name}</li>
+                      ))}
+                    </ol>
+                    <p class="sheets__note">+ сводка для инвестора на одной странице и пояснительная записка</p>
+                  </div>
+                )}
+                {s.mock === 'audit' && <AuditMock />}
+                {s.mock === 'dashboard' && <DashboardMock />}
+              </div>
+            )}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .list {
+    display: grid;
+    gap: var(--s-8);
+  }
+  .svc {
+    display: grid;
+    gap: var(--s-6);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--c-line);
+    scroll-margin-top: 88px;
+  }
+  @media (min-width: 1040px) {
+    .svc {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s-8);
+      align-items: start;
+    }
+    .svc:nth-child(even) .svc__visual {
+      order: -1;
+    }
+  }
+  .svc__text {
+    display: grid;
+    gap: var(--s-4);
+    align-content: start;
+  }
+  .svc__num {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+  .svc__title {
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  }
+  .svc__for {
+    color: var(--c-ink-2);
+  }
+  .svc__cols {
+    display: grid;
+    gap: var(--s-5);
+    margin-top: var(--s-2);
+  }
+  @media (min-width: 640px) {
+    .svc--plain .svc__cols {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .svc__label {
+    margin-bottom: var(--s-2);
+    font-size: var(--fs-xs);
+    font-family: var(--f-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-muted);
+  }
+  .svc__list {
+    list-style: none;
+    display: grid;
+    gap: var(--s-2);
+    font-size: var(--fs-sm);
+  }
+  .svc__list li {
+    position: relative;
+    padding-left: 18px;
+  }
+  .svc__list li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.62em;
+    width: 7px;
+    height: 1px;
+    background: var(--c-ink-2);
+  }
+  .svc__list--get li::before {
+    top: 0.45em;
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: var(--c-accent);
+  }
+  .svc__terms {
+    display: grid;
+    gap: var(--s-2);
+    margin: var(--s-2) 0 0;
+    padding: var(--s-4);
+    border-radius: var(--r-md);
+    background: var(--c-bg-soft);
+    font-size: var(--fs-sm);
+  }
+  .svc__terms div {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: var(--s-3);
+  }
+  .svc__terms dt {
+    color: var(--c-muted);
+  }
+  .svc__terms dd {
+    margin: 0;
+  }
+  .svc__cta {
+    justify-self: start;
+    margin-top: var(--s-2);
+  }
+  .svc__visual {
+    min-width: 0;
+  }
+  .sheets {
+    padding: var(--s-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-lg);
+    background: var(--c-surface);
+    box-shadow: var(--shadow-1);
+  }
+  .sheets__title {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    margin-bottom: var(--s-3);
+  }
+  .sheets ol {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    font-size: var(--fs-sm);
+  }
+  .sheets li {
+    display: flex;
+    gap: var(--s-3);
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--c-surface);
+  }
+  .sheets li .mono {
+    font-size: 12px;
+    color: var(--c-muted);
+  }
+  .sheets__note {
+    margin-top: var(--s-3);
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+</style>

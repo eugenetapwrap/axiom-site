@@ -1,0 +1,234 @@
+---
+// Макет экрана «Обзор финансов» системы учёта. Структура повторяет реальный дашборд Axiom,
+// все названия, суммы и люди вымышленные.
+import MockFrame from './MockFrame.astro';
+
+const kpis = [
+  { label: 'Чистая прибыль', value: '842 300', note: '18%' },
+  { label: 'Дебиторка', value: '286 400' },
+  { label: 'Ждут оплаты', value: '97 150', tone: 'neg' },
+  { label: 'НДС к уплате', value: '2 110' },
+];
+
+const stages = [
+  { title: 'Согласование', count: 38, total: '92 400' },
+  { title: 'К оплате', count: 5, total: '21 300' },
+  { title: 'В банке', count: 4, total: '12 700' },
+];
+
+const boq = [
+  { project: 'Виллы «Север»', boq: '1 840 000', issued: 96, paid: 91 },
+  { project: 'Апарт-отель «Лагуна»', boq: '2 310 000', issued: 78, paid: 70 },
+  { project: 'Таунхаусы «Риф»', boq: '912 000', issued: 100, paid: 99 },
+];
+---
+
+<MockFrame
+  title="Обзор финансов"
+  meta="USD"
+  tabs={['Обзор', 'Cash Flow', 'Платежи', 'План-факт', 'Аналитика']}
+  activeTab={0}
+>
+  <div class="dash">
+    <div class="kpis">
+      {
+        kpis.map((k) => (
+          <div class="kpi">
+            <span class="kpi__label">{k.label}</span>
+            <span class:list={['kpi__value', k.tone]}>
+              {k.value}
+              {k.note && <small>{k.note}</small>}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="alert" role="presentation">
+      <span class="alert__tag">Дубль</span>
+      <span>Счёт CV-1187 на 2 640 USD уже оплачен 14.10. Заявка остановлена до оплаты</span>
+    </div>
+
+    <div class="grid">
+      <div class="block">
+        <p class="block__title">Платежи по этапам</p>
+        <ul class="stages">
+          {
+            stages.map((s) => (
+              <li>
+                <span>{s.title}</span>
+                <span class="count">{s.count}</span>
+                <span class="mono">{s.total}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="block">
+        <p class="block__title">Смета (BOQ) и оплаты</p>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Проект</th>
+              <th scope="col">Выставлено</th>
+              <th scope="col">Оплачено</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              boq.map((r) => (
+                <tr>
+                  <td>{r.project}</td>
+                  <td class="mono">{r.issued}%</td>
+                  <td>
+                    <span class="bar">
+                      <i style={`width:${r.paid}%`} />
+                    </span>
+                    <span class="mono">{r.paid}%</span>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</MockFrame>
+
+<style>
+  .dash {
+    display: grid;
+    gap: var(--s-3);
+  }
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s-2);
+  }
+  @media (min-width: 560px) {
+    .kpis {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .kpi {
+    display: grid;
+    gap: 2px;
+    padding: 10px 12px;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+  }
+  .kpi__label {
+    color: var(--c-muted);
+    font-size: 12px;
+  }
+  .kpi__value {
+    font-family: var(--f-mono);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .kpi__value small {
+    margin-left: 6px;
+    font-size: 12px;
+    color: var(--c-pos);
+  }
+  .kpi__value.neg {
+    color: var(--c-neg);
+  }
+  .alert {
+    display: flex;
+    gap: var(--s-2);
+    align-items: baseline;
+    padding: 9px 12px;
+    border-radius: var(--r-md);
+    background: var(--c-neg-soft);
+    color: #6e1d17;
+  }
+  .alert__tag {
+    flex: none;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: var(--c-neg);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .grid {
+    display: grid;
+    gap: var(--s-3);
+  }
+  @media (min-width: 560px) {
+    .grid {
+      grid-template-columns: 0.8fr 1.2fr;
+    }
+  }
+  .block {
+    padding: 10px 12px;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+  }
+  .block__title {
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .stages {
+    list-style: none;
+    display: grid;
+  }
+  .stages li {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: var(--s-2);
+    align-items: center;
+    padding: 6px 0;
+    border-top: 1px solid var(--c-line);
+  }
+  .stages li:first-child {
+    border-top: 0;
+  }
+  .count {
+    min-width: 24px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: var(--c-bg-soft);
+    text-align: center;
+    font-size: 12px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th {
+    font-weight: 500;
+    color: var(--c-muted);
+    text-align: left;
+    padding: 0 0 4px;
+  }
+  td {
+    padding: 6px 0;
+    border-top: 1px solid var(--c-line);
+    white-space: nowrap;
+  }
+  td:first-child {
+    white-space: normal;
+    padding-right: 8px;
+  }
+  .bar {
+    display: inline-block;
+    width: 48px;
+    height: 5px;
+    margin-right: 6px;
+    vertical-align: middle;
+    border-radius: 3px;
+    background: var(--c-bg-soft);
+    overflow: hidden;
+  }
+  .bar i {
+    display: block;
+    height: 100%;
+    background: var(--c-pos);
+  }
+</style>

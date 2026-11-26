@@ -1,0 +1,107 @@
+---
+import { t } from '../lib/typo';
+import ModelMock from './mock/ModelMock.astro';
+import { hero } from '../content/ru';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero__grid">
+    <div class="hero__text">
+      <p class="eyebrow">{hero.eyebrow}</p>
+      <h1 id="hero-title" class="hero__title">{t(hero.title)}</h1>
+      <p class="hero__lead">{t(hero.lead)}</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href={hero.primary.href}>{hero.primary.label}</a>
+        <a class="btn btn--secondary" href={hero.secondary.href}>{hero.secondary.label}</a>
+      </div>
+    </div>
+    <div class="hero__visual">
+      <ModelMock />
+    </div>
+  </div>
+  <div class="container">
+    <ul class="facts">
+      {
+        hero.facts.map((f) => (
+          <li class:list={['fact', { tbd: f.tbd }]}>
+            <span class="fact__value">{f.value}</span>
+            <span class="fact__text">{t(f.text)}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: clamp(40px, 6vw, 88px) 0 clamp(40px, 5vw, 72px);
+    border-bottom: 1px solid var(--c-line);
+  }
+  .hero__grid {
+    display: grid;
+    gap: var(--s-7);
+    align-items: center;
+  }
+  @media (min-width: 1040px) {
+    .hero__grid {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: var(--s-8);
+    }
+  }
+  .hero__text {
+    display: grid;
+    gap: var(--s-5);
+  }
+  .hero__title {
+    font-size: var(--fs-3xl);
+    line-height: var(--lh-tight);
+    letter-spacing: -0.025em;
+    font-weight: 650;
+    max-width: 16ch;
+  }
+  .hero__lead {
+    font-size: var(--fs-lg);
+    color: var(--c-ink-2);
+    max-width: 56ch;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-2);
+  }
+  .hero__visual {
+    min-width: 0;
+  }
+  .facts {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s-5) var(--s-5);
+    margin-top: clamp(40px, 5vw, 72px);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--c-line);
+  }
+  @media (min-width: 860px) {
+    .facts {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .fact {
+    display: grid;
+    gap: var(--s-1);
+    align-content: start;
+  }
+  .fact__value {
+    font-family: var(--f-mono);
+    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .fact__text {
+    font-size: var(--fs-sm);
+    color: var(--c-ink-2);
+    max-width: 26ch;
+  }
+</style>

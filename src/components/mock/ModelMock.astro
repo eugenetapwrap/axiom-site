@@ -1,0 +1,193 @@
+---
+// Макет одностраничной сводки финмодели для инвестора. Цифры вымышленные, но согласованы между собой.
+import MockFrame from './MockFrame.astro';
+
+const kpis = [
+  { label: 'Вложения в проект', value: '$6,4 млн' },
+  { label: 'Пик вложений', value: '$6,9 млн', note: 'май 2028', accent: true },
+  { label: 'Прибыль', value: '$1,6 млн' },
+  { label: 'IRR', value: '19,8%' },
+  { label: 'MoIC', value: '1,25×' },
+  { label: 'Срок', value: '24 мес.' },
+];
+
+// Накопленный денежный поток по месяцам, тыс. USD.
+const flow = [
+  -900, -1150, -1400, -1600, -1800, -2350, -2850, -3200, -3550, -3800, -4050, -4750, -4980, -5200,
+  -5450, -5700, -6500, -6750, -6900, -5150, -3600, -2050, -700, 650, 1600,
+];
+const W = 480;
+const H = 150;
+const top = 2000;
+const bottom = -7400;
+const x = (i: number) => 16 + (i * (W - 32)) / (flow.length - 1);
+const y = (v: number) => 12 + ((top - v) / (top - bottom)) * (H - 24);
+const path = flow.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+const area = `${path} L${x(flow.length - 1).toFixed(1)},${y(0).toFixed(1)} L${x(0).toFixed(1)},${y(0).toFixed(1)} Z`;
+const peakI = flow.indexOf(Math.min(...flow));
+
+const prices = [
+  { y: '8%', p: '6 200' },
+  { y: '9%', p: '5 510' },
+  { y: '10%', p: '4 960', base: true },
+  { y: '11%', p: '4 510' },
+  { y: '12%', p: '4 130' },
+];
+---
+
+<MockFrame title="Апарт-отель_48 юнитов_модель.xlsx" meta="Сводка для инвестора">
+  <div class="model">
+    <dl class="kpis">
+      {
+        kpis.map((k) => (
+          <div class:list={['kpi', { 'kpi--accent': k.accent }]}>
+            <dt>{k.label}</dt>
+            <dd>
+              {k.value}
+              {k.note && <small>{k.note}</small>}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <div class="chart">
+      <p class="chart__title">Накопленный денежный поток, тыс. USD</p>
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="График: вложения растут до пика в мае 2028 года, затем продажи возвращают деньги и дают прибыль">
+        <line x1="16" x2={W - 16} y1={y(0)} y2={y(0)} class="zero" />
+        <path d={area} class="area" />
+        <path d={path} class="line" />
+        <circle cx={x(peakI)} cy={y(flow[peakI])} r="4" class="peak" />
+        <text x={x(peakI) - 6} y={y(flow[peakI]) + 2} text-anchor="end" class="lbl lbl--peak">пик −6 900</text>
+        <text x={x(flow.length - 1)} y={y(flow[flow.length - 1]) - 8} text-anchor="end" class="lbl">+1 600</text>
+        <text x="16" y={H - 2} class="lbl lbl--axis">2026</text>
+        <text x={W - 16} y={H - 2} text-anchor="end" class="lbl lbl--axis">2028</text>
+      </svg>
+    </div>
+
+    <div class="prices">
+      <p class="chart__title">Цена продажи от доходности, которую ждёт покупатель</p>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Доходность покупателя</th>
+            {prices.map((p) => <th scope="col" class:list={{ base: p.base }}>{p.y}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Цена, USD за м²</th>
+            {prices.map((p) => <td class:list={['mono', { base: p.base }]}>{p.p}</td>)}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</MockFrame>
+
+<style>
+  .model {
+    display: grid;
+    gap: var(--s-4);
+  }
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    margin: 0;
+    background: var(--c-line);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .kpi {
+    padding: 8px 10px;
+    background: var(--c-surface);
+  }
+  .kpi dt {
+    color: var(--c-muted);
+    font-size: 12px;
+  }
+  .kpi dd {
+    margin: 0;
+    font-family: var(--f-mono);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .kpi dd small {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--c-muted);
+  }
+  .kpi--accent {
+    background: var(--c-accent-soft);
+  }
+  .kpi--accent dd {
+    color: var(--c-accent-ink);
+  }
+  .chart__title {
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  svg {
+    width: 100%;
+    height: auto;
+  }
+  .zero {
+    stroke: var(--c-line-strong);
+    stroke-dasharray: 3 3;
+  }
+  .area {
+    fill: var(--c-accent-soft);
+  }
+  .line {
+    fill: none;
+    stroke: var(--c-accent);
+    stroke-width: 2;
+  }
+  .peak {
+    fill: var(--c-surface);
+    stroke: var(--c-accent);
+    stroke-width: 2;
+  }
+  .lbl {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    fill: var(--c-ink);
+  }
+  .lbl--peak {
+    fill: var(--c-accent-ink);
+    font-weight: 600;
+  }
+  .lbl--axis {
+    fill: var(--c-muted);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th,
+  td {
+    padding: 5px 4px;
+    border-top: 1px solid var(--c-line);
+    text-align: right;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  thead th {
+    border-top: 0;
+    color: var(--c-muted);
+  }
+  th[scope='row'],
+  thead th:first-child {
+    text-align: left;
+    color: var(--c-muted);
+    white-space: normal;
+  }
+  .base {
+    background: var(--c-accent-soft);
+    color: var(--c-accent-ink);
+    font-weight: 600;
+  }
+</style>

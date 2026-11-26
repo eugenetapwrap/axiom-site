@@ -1,35 +1,19 @@
 ---
 import '../styles/global.css';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import FloatingContact from '../components/FloatingContact.astro';
-import { site } from '../data/site';
 
 interface Props {
   title: string;
-  description?: string;
-  jsonLd?: object[];
+  description: string;
+  lang?: string;
+  skipLabel?: string;
 }
 
-const { title, description = site.description, jsonLd = [] } = Astro.props;
+const { title, description, lang = 'ru', skipLabel = 'Перейти к содержанию' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-
-const org = {
-  '@context': 'https://schema.org',
-  '@type': 'ProfessionalService',
-  name: site.name,
-  legalName: site.legalName,
-  url: Astro.site?.toString(),
-  description: site.description,
-  email: site.email,
-  areaServed: ['Indonesia', 'Thailand', 'United Arab Emirates', 'Uzbekistan', 'Southeast Asia', 'CIS'],
-  address: { '@type': 'PostalAddress', addressRegion: 'Bali', addressCountry: 'ID' },
-  sameAs: [site.telegramUrl],
-};
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -41,45 +25,17 @@ const org = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content="ru_RU" />
-    <meta name="theme-color" content="#faf9f6" />
+    <meta property="og:image" content={new URL('/og.png', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap&subset=cyrillic"
+      href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
     />
-    <script type="application/ld+json" set:html={JSON.stringify(org)} />
-    {jsonLd.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
   </head>
   <body>
-    <a class="visually-hidden" href="#main">Перейти к содержанию</a>
-    <Header />
-    <main id="main">
-      <slot />
-    </main>
-    <Footer />
-    <FloatingContact />
-    <script>
-      // Плавное появление блоков при прокрутке. При reduced-motion ничего не делаем.
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
-      if (!reduce && 'IntersectionObserver' in window) {
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.classList.add('is-in');
-              io.unobserve(e.target);
-            }
-          });
-        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-        els.forEach((el) => {
-          if (el.getBoundingClientRect().top > window.innerHeight) {
-            el.classList.add('reveal');
-            io.observe(el);
-          }
-        });
-      }
-    </script>
+    <a class="skip" href="#main">{skipLabel}</a>
+    <slot />
   </body>
 </html>

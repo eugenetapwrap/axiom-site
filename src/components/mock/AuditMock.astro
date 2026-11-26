@@ -1,0 +1,182 @@
+---
+// Макет фрагмента отчёта об аудите финмодели: итог и реестр замечаний. Всё вымышленное.
+import MockFrame from './MockFrame.astro';
+
+const before = [
+  { label: 'NPV', model: '$2,9 млн', fixed: '$1,2 млн' },
+  { label: 'Пик собственных денег', model: '$3,1 млн', fixed: '$4,0 млн' },
+];
+
+const rows = [
+  {
+    id: 'Т-07',
+    level: 'Критичное',
+    tone: 'neg',
+    text: 'Резерв на непредвиденные расходы: 0% в модели, 8% в смете',
+    cell: 'CF!F61',
+    impact: 'NPV −$1,1 млн',
+  },
+  {
+    id: 'Т-12',
+    level: 'Критичное',
+    tone: 'neg',
+    text: 'Накладные расходы обрываются на 48-м месяце из 60',
+    cell: 'Budget!K112',
+    impact: 'Прибыль −$0,6 млн',
+  },
+  {
+    id: 'Т-23',
+    level: 'Существенное',
+    tone: 'warn',
+    text: 'Рассрочка в плане продаж и в денежном потоке разная',
+    cell: 'Sales!D24',
+    impact: 'Пик +$0,9 млн',
+  },
+  {
+    id: 'Т-31',
+    level: 'Незначительное',
+    tone: 'muted',
+    text: 'Числа вписаны внутрь формул',
+    cell: 'KPI!C14',
+    impact: '—',
+  },
+];
+---
+
+<MockFrame title="Отчёт об аудите финмодели.pdf" meta="Реестр замечаний">
+  <div class="audit">
+    <div class="summary">
+      <p class="summary__title">Модель против исправленной модели</p>
+      <table class="cmp">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">В модели</th>
+            <th scope="col">После исправлений</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            before.map((r) => (
+              <tr>
+                <th scope="row">{r.label}</th>
+                <td class="mono">{r.model}</td>
+                <td class="mono strong">{r.fixed}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <ol class="rows">
+      {
+        rows.map((r) => (
+          <li class="row">
+            <span class="row__id mono">{r.id}</span>
+            <span class:list={['tag', `tag--${r.tone}`]}>{r.level}</span>
+            <span class="row__text">{r.text}</span>
+            <span class="row__cell mono">{r.cell}</span>
+            <span class="row__impact mono">{r.impact}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</MockFrame>
+
+<style>
+  .audit {
+    display: grid;
+    gap: var(--s-3);
+  }
+  .summary {
+    padding: 10px 12px;
+    border-radius: var(--r-md);
+    background: var(--c-bg-soft);
+  }
+  .summary__title {
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .cmp {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .cmp th,
+  .cmp td {
+    padding: 4px 0;
+    text-align: right;
+    font-weight: 500;
+  }
+  .cmp th[scope='row'],
+  .cmp thead th:first-child {
+    text-align: left;
+    color: var(--c-ink-2);
+  }
+  .cmp thead th {
+    color: var(--c-muted);
+  }
+  .strong {
+    color: var(--c-neg);
+    font-weight: 600;
+  }
+  .rows {
+    list-style: none;
+    display: grid;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas:
+      'id tag tag'
+      'text text text'
+      'cell cell impact';
+    gap: 4px 8px;
+    align-items: baseline;
+    padding: 9px 0;
+    border-top: 1px solid var(--c-line);
+  }
+  @media (min-width: 620px) {
+    .row {
+      grid-template-columns: 40px 104px 1fr 92px 112px;
+      grid-template-areas: 'id tag text cell impact';
+    }
+  }
+  .row__id {
+    grid-area: id;
+    color: var(--c-muted);
+  }
+  .tag {
+    grid-area: tag;
+    justify-self: start;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tag--neg {
+    background: var(--c-neg-soft);
+    color: var(--c-neg);
+  }
+  .tag--warn {
+    background: var(--c-warn-soft);
+    color: var(--c-warn);
+  }
+  .tag--muted {
+    background: var(--c-bg-soft);
+    color: var(--c-muted);
+  }
+  .row__text {
+    grid-area: text;
+  }
+  .row__cell {
+    grid-area: cell;
+    color: var(--c-accent-ink);
+  }
+  .row__impact {
+    grid-area: impact;
+    text-align: right;
+    font-weight: 600;
+  }
+</style>
